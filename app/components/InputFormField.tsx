@@ -26,12 +26,11 @@ const InputFormField: React.FC<InputFormFieldProps> = ({
                 control={control}
                 name={name}
                 render={({ field }) => (
-                    <FormItem>
-                        <div className="grid grid-cols-1 gap-2">
-                            <div className="grid grid-flow-col items-center text-sm gap-10">
+                    <FormItem
+                    >
+                        <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <Label
-                                        className="text-sm"
                                     >
                                         {label}:
                                     </Label>
@@ -45,7 +44,6 @@ const InputFormField: React.FC<InputFormFieldProps> = ({
                                     </FormControl>
                                     <FormMessage />
                                 </div>
-                            </div>
                         </div>
                     </FormItem>
                 )}
