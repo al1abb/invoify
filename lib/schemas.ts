@@ -3,7 +3,7 @@ import { z } from "zod";
 const ItemSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
-  quantity: z.number(),
+  quantity: z.coerce.number(),
   unitPrice: z.number(),
   total: z.number(),
 });
@@ -66,6 +66,7 @@ const InvoiceReceiverSchema = z.object({
 const InvoiceSchema = z.object({
   sender: InvoiceSenderSchema,
   receiver: InvoiceReceiverSchema,
+  details: InvoiceDetailsSchema,
 });
 
 export { InvoiceSchema };
