@@ -4,7 +4,7 @@ import { InvoiceCard } from "@/app/components";
 
 export default function Home() {
     return (
-        <main className="">
+        <main className="flex justify-center">
 			<InvoiceCard />
         </main>
     );

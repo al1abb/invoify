@@ -19,20 +19,11 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 // Custom components
-import { InputFormField } from ".";
+import { InputFormField, Items } from ".";
 import { Label } from "@/components/ui/label";
 
 const InvoiceCard = () => {
@@ -42,23 +33,37 @@ const InvoiceCard = () => {
             sender: {
                 name: "",
                 address: "",
-				zipCode: "",
-				city: "",
-				country: "",
-				email: "",
-				phone: "",
-				vatNumber: "",
+                zipCode: "",
+                city: "",
+                country: "",
+                email: "",
+                phone: "",
+                vatNumber: "",
             },
-			receiver: {
-				name: "",
-				address: "",
-				zipCode: "",
-				city: "",
-				country: "",
-				email: "",
-				phone: "",
-				vatNumber: "",
-			}
+            receiver: {
+                name: "",
+                address: "",
+                zipCode: "",
+                city: "",
+                country: "",
+                email: "",
+                phone: "",
+                vatNumber: "",
+            },
+            details: {
+                invoiceNumber: "",
+                invoiceDate: "",
+                dueDate: "",
+                items: [
+					{
+						name: "",
+						description: "",
+						quantity: 0,
+						unitPrice: 0,
+						total: 0,
+					}
+				],
+            },
         },
     });
 
@@ -197,10 +202,51 @@ const InvoiceCard = () => {
                                     />
                                 </div>
                             </div>
+
+                            <div className="flex flex-wrap gap-40">
+                                <div className="flex flex-col gap-2">
+                                    <Label
+                                        htmlFor="invoiceDetails"
+                                        className="text-xl font-semibold"
+                                    >
+                                        Invoice Details:
+                                    </Label>
+
+                                    <InputFormField
+                                        control={form.control}
+                                        name="details.invoiceNumber"
+                                        label="Invoice number"
+                                        placeholder="Invoice number"
+                                    />
+
+                                    <InputFormField
+                                        control={form.control}
+                                        name="details.invoiceDate"
+                                        label="Issued date"
+                                        placeholder="Issued date"
+                                    />
+
+                                    <InputFormField
+                                        control={form.control}
+                                        name="details.dueDate"
+                                        label="Due date"
+                                        placeholder="Due date"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+								<Items
+									control={form.control}
+									name="details.items"
+								/>
+                            </div>
+
                             <Button type="submit">Submit</Button>
                         </form>
                     </Form>
                 </CardContent>
+
                 <CardFooter>
                     <p>Card Footer</p>
                 </CardFooter>
