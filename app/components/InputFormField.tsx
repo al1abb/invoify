@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 interface InputFormFieldProps {
     control: Control<any>;
     name: string;
-    label: string;
-    placeholder: string;
+    label?: string;
+    placeholder?: string;
 }
 
 const InputFormField: React.FC<InputFormFieldProps> = ({
