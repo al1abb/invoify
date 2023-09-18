@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const ItemSchema = z.object({
-  itemName: z.string(),
+  name: z.string(),
   description: z.string().optional(),
   quantity: z.number(),
   unitPrice: z.number(),
@@ -42,31 +42,30 @@ const InvoiceDetailsSchema = z.object({
 });
 
 const InvoiceSenderSchema = z.object({
-  senderName: z.string(),
-  senderAddress: z.string(),
-  senderZipCode: z.string(),
-  senderCity: z.string(),
-  senderCountry: z.string(),
-  senderEmail: z.string(),
-  senderPhone: z.string(),
-  senderVATNumber: z.string().optional(),
+  name: z.string(),
+  address: z.string(),
+  zipCode: z.string(),
+  city: z.string(),
+  country: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  vatNumber: z.string().optional(),
 });
 
 const InvoiceReceiverSchema = z.object({
-  receiverName: z.string(),
-  receiverAddress: z.string(),
-  receiverZipCode: z.string(),
-  receiverCity: z.string(),
-  receiverCountry: z.string(),
-  receiverEmail: z.string(),
-  receiverPhone: z.string(),
-  receiverVATNumber: z.string().optional(),
+  name: z.string(),
+  address: z.string(),
+  zipCode: z.string(),
+  city: z.string(),
+  country: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  vatNumber: z.string().optional(),
 });
 
 const InvoiceSchema = z.object({
   sender: InvoiceSenderSchema,
   receiver: InvoiceReceiverSchema,
-  details: InvoiceDetailsSchema,
 });
 
 export { InvoiceSchema };
