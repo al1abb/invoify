@@ -21,10 +21,10 @@ import {
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 // Custom components
-import { InputFormField, Items } from ".";
-import { Label } from "@/components/ui/label";
+import { InputFormField, InvoiceFooter, Items } from ".";
 
 const InvoiceCard = () => {
     const form = useForm<z.infer<typeof InvoiceSchema>>({
@@ -63,6 +63,25 @@ const InvoiceCard = () => {
 						total: 0,
 					}
 				],
+                currency: "USD",
+                language: "English",
+                taxDetails: {
+                    taxRate: 0,
+                    taxRateType: "amount",
+                    taxID: "",
+                    totalTaxAmount: 0,
+                },
+                discountDetails: {
+                    discountRate: 0,
+                    discountRateType: "amount"
+                },
+                shippingDetails: {
+                    shippingCost: 0,
+                },
+                // subTotal: 0,
+                // totalAmount: 0,
+                additionalNotes: "",
+                paymentTerms: ""
             },
         },
     });
@@ -85,7 +104,7 @@ const InvoiceCard = () => {
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-8"
                         >
-                            <div className="flex flex-wrap justify-center gap-40">
+                            <div className="flex flex-wrap gap-40">
                                 <div className="flex flex-col gap-2">
                                     <Label
                                         htmlFor="billFrom"
@@ -240,6 +259,14 @@ const InvoiceCard = () => {
 									control={form.control}
 									name="details.items"
 								/>
+                            </div>
+
+                            <hr />
+
+                            <div>
+                                <InvoiceFooter 
+                                    control={form.control}
+                                />
                             </div>
 
                             <Button type="submit">Submit</Button>
