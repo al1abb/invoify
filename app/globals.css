@@ -78,3 +78,7 @@
 body {
   background-color: #FAFAFA;
 }
+
+hr {
+  border-width: 1px;
+}
