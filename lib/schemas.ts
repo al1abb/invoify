@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 const ItemSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   quantity: z.coerce.number(),
-  unitPrice: z.number(),
-  total: z.number(),
+  unitPrice: z.coerce.number(),
+  total: z.coerce.number(),
 });
 
 const TaxDetailsSchema = z.object({
@@ -32,11 +32,11 @@ const InvoiceDetailsSchema = z.object({
   currency: z.string(),
   language: z.string(),
   items: z.array(ItemSchema),
-  subTotal: z.number(),
   taxDetails: TaxDetailsSchema.optional(),
   discountDetails: DiscountDetailsSchema.optional(),
   shippingDetails: ShippingDetailsSchema.optional(),
-  totalAmount: z.number(),
+  // subTotal: z.number(), These will be automatically calculated
+  // totalAmount: z.number(),
   additionalNotes: z.string().optional(),
   paymentTerms: z.string(),
 });
