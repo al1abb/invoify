@@ -34,14 +34,16 @@ const Items: React.FC<ItemsProps> = ({ control, name }) => {
 
     return (
         <div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
                 <div>Item name</div>
                 <div>Qty</div>
                 <div>Unit price/Rate</div>
                 <div>Item total</div>
-            </div>
+            </div> */}
 
-            <div className="flex">
+            <hr />
+
+            <div className="flex mt-7">
                 <div className="flex flex-col gap-10">
                     {fields.map((field, index) => (
                         <SingleItem 
