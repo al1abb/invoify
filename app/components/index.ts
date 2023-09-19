@@ -6,4 +6,6 @@ import InputFormField from "./InputFormField";
 import Items from "./Items";
 import SingleItem from "./SingleItem";
 
-export { InvoiceCard, InputFormField, Items, SingleItem }
+import InvoiceFooter from "./InvoiceFooter";
+
+export { InvoiceCard, InputFormField, Items, SingleItem, InvoiceFooter }
