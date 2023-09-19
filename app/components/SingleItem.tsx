@@ -1,7 +1,11 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 
+// RHF
+import { Control, FieldValues, useForm, useWatch } from "react-hook-form";
+
+// Shadcn
 import {
     FormControl,
     FormField,
@@ -10,54 +14,64 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Control, FieldValues } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface SingleItemProps {
     control: Control<any>;
     name: string;
     field: FieldValues;
-    index: number,
+    index: number;
     removeField: (index: number) => void;
 }
 
-const SingleItem = ({ control, name, field, index, removeField }: SingleItemProps) => {
+const SingleItem = ({
+    control,
+    name,
+    field,
+    index,
+    removeField,
+}: SingleItemProps) => {
 
-    console.log("Field ID:", field.id);
-    console.log("Index:", index);
+    const { register, setValue, getValues, formState } = useForm();
     
-    // Initialize state for unitPrice, quantity, and total
-    const [unitPrice, setUnitPrice] = useState(field.unitPrice || 0);
-    const [quantity, setQuantity] = useState(field.quantity || 0);
-    const [total, setTotal] = useState(unitPrice * quantity);
+    // Get rate variable
+    const rate = useWatch({
+      name: `${name}[${index}].unitPrice`,
+      control,
+    });
 
-    // Update total when unitPrice or quantity change
-    useEffect(() => {
-        setTotal(unitPrice * quantity);
-    }, [unitPrice, quantity]);
+    // Get quantity variable
+    const quantity = useWatch({
+      name: `${name}[${index}].quantity`,
+      control,
+    });
 
-    // Handle changes in unitPrice and quantity
-    const handleUnitPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newUnitPrice = parseFloat(event.target.value);
-        setUnitPrice(newUnitPrice);
-    };
+    // useEffect(() => {
+    //     // Calculate total when rate or quantity changes
+    //     if (rate != undefined && quantity != undefined) {
+    //         const calculatedTotal = rate * quantity;
+    //         // setValue(`details.items[${index}].total`, calculatedTotal);
+    //     }
+    // }, [rate, quantity]);
 
-    const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newQuantity = parseFloat(event.target.value);
-        setQuantity(newQuantity);
-    };
-    
     return (
-        <>
-            <div className="flex gap-10" key={index}>
+        <div className="flex flex-col gap-y-5">
+            Item #{index + 1}
+            <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <FormField
                     control={control}
                     name={`${name}[${index}].name`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
+                            <Label>Name</Label>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
-                                        <Input {...field} placeholder="Item name" />
+                                        <Input
+                                            {...field}
+                                            placeholder="Item name"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </div>
@@ -70,10 +84,15 @@ const SingleItem = ({ control, name, field, index, removeField }: SingleItemProp
                     name={`${name}[${index}].quantity`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
+                            <Label>Qty</Label>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
-                                        <Input {...field} type="number" placeholder="Quantity" value={quantity} onChange={handleQuantityChange} />
+                                        <Input
+                                            {...field}
+                                            className="w-36"
+                                            placeholder="Quantity"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </div>
@@ -86,10 +105,15 @@ const SingleItem = ({ control, name, field, index, removeField }: SingleItemProp
                     name={`${name}[${index}].unitPrice`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
+                            <Label>Price per unit/Rate</Label>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
-                                        <Input {...field} type="number" placeholder="Unit price/Rate" value={unitPrice} onChange={handleUnitPriceChange} />
+                                        <Input
+                                            {...field}
+                                            className="w-36"
+                                            placeholder="Unit price/Rate"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </div>
@@ -102,15 +126,16 @@ const SingleItem = ({ control, name, field, index, removeField }: SingleItemProp
                     name={`${name}[${index}].total`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
+                            <Label>Total</Label>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
-                                        <Input 
-                                            {...field} 
-                                            type="number" 
-                                            readOnly 
-                                            placeholder="Item total" 
-                                            value={total.toFixed(2)}
+                                        <Input
+                                            {...field}
+                                            readOnly
+                                            className="w-36"
+                                            placeholder="Item total"
+                                            value={rate*quantity}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -120,9 +145,36 @@ const SingleItem = ({ control, name, field, index, removeField }: SingleItemProp
                     )}
                 />
             </div>
-            
-            <Button onClick={() => removeField(index)}>-</Button>
-        </>
+            <FormField
+                control={control}
+                name={`${name}[${index}].description`} // Generate unique name for each field
+                render={({ field }) => (
+                    <FormItem>
+                        <Label>Description</Label>
+                        <div className="flex justify-between gap-5 items-center text-sm">
+                            <div>
+                                <FormControl>
+                                    <Textarea
+                                        {...field}
+                                        placeholder="Item description"
+                                        className="w-96 h-0"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </div>
+                        </div>
+                    </FormItem>
+                )}
+            />
+            <div>
+                {index != 0 && (
+                    <Button onClick={() => removeField(index)}>
+                        Remove Item
+                    </Button>
+                )}
+            </div>
+            <hr />
+        </div>
     );
 };
 
