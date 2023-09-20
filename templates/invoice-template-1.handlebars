@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .invoice-details {
+            margin-top: 20px;
+        }
+
+        .sender, .receiver {
+            width: 50%;
+            float: left;
+        }
+
+        .details {
+            clear: both;
+            margin-top: 20px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items-table th, .items-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .totals {
+            margin-top: 20px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Invoice</div>
+        
+        <div class="invoice-details">
+            <div class="sender">
+                <h3>Sender:</h3>
+                <p>Name: {{sender.name}}</p>
+                <p>Address: {{sender.address}}</p>
+                <p>Zip Code: {{sender.zipCode}}</p>
+                <p>City: {{sender.city}}</p>
+                <p>Country: {{sender.country}}</p>
+                <p>Email: {{sender.email}}</p>
+                <p>Phone: {{sender.phone}}</p>
+                <p>VAT Number: {{sender.vatNumber}}</p>
+            </div>
+            
+            <div class="receiver">
+                <h3>Receiver:</h3>
+                <p>Name: {{receiver.name}}</p>
+                <p>Address: {{receiver.address}}</p>
+                <p>Zip Code: {{receiver.zipCode}}</p>
+                <p>City: {{receiver.city}}</p>
+                <p>Country: {{receiver.country}}</p>
+                <p>Email: {{receiver.email}}</p>
+                <p>Phone: {{receiver.phone}}</p>
+                <p>VAT Number: {{receiver.vatNumber}}</p>
+            </div>
+        </div>
+        
+        <div class="details">
+            <h3>Invoice Details:</h3>
+            <p>Invoice Number: {{details.invoiceNumber}}</p>
+            <p>Invoice Date: {{details.invoiceDate}}</p>
+            <p>Due Date: {{details.dueDate}}</p>
+            <p>Currency: {{details.currency}}</p>
+            <p>Language: {{details.language}}</p>
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each details.items}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{description}}</td>
+                            <td>{{quantity}}</td>
+                            <td>{{unitPrice}}</td>
+                            <td>{{total}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            
+            <div class="totals">
+                <p>Subtotal: {{details.subTotal}}</p>
+                <p>Total Amount: {{details.totalAmount}}</p>
+                <p>Additional Notes: {{details.additionalNotes}}</p>
+                <p>Payment Terms: {{details.paymentTerms}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
