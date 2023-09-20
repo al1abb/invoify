@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 
 // RHF
-import { Control, FieldValues, useForm, useWatch } from "react-hook-form";
+import { Control, FieldValues, UseFormSetValue, useForm, useWatch } from "react-hook-form";
 
-// Shadcn
+// Shadcn UI components
 import {
     FormControl,
     FormField,
@@ -23,6 +23,7 @@ interface SingleItemProps {
     field: FieldValues;
     index: number;
     removeField: (index: number) => void;
+    setValue: UseFormSetValue<any>;
 }
 
 const SingleItem = ({
@@ -31,9 +32,8 @@ const SingleItem = ({
     field,
     index,
     removeField,
+    setValue
 }: SingleItemProps) => {
-
-    const { register, setValue, getValues, formState } = useForm();
     
     // Get rate variable
     const rate = useWatch({
@@ -47,13 +47,13 @@ const SingleItem = ({
       control,
     });
 
-    // useEffect(() => {
-    //     // Calculate total when rate or quantity changes
-    //     if (rate != undefined && quantity != undefined) {
-    //         const calculatedTotal = rate * quantity;
-    //         // setValue(`details.items[${index}].total`, calculatedTotal);
-    //     }
-    // }, [rate, quantity]);
+    useEffect(() => {
+        // Calculate total when rate or quantity changes
+        if (rate != undefined && quantity != undefined) {
+            const calculatedTotal = rate * quantity;
+            setValue(`${name}[${index}].total`, calculatedTotal);
+        }
+    }, [rate, quantity]);
 
     return (
         <div className="flex flex-col gap-y-5">
@@ -135,7 +135,6 @@ const SingleItem = ({
                                             readOnly
                                             className="w-36"
                                             placeholder="Item total"
-                                            value={rate*quantity}
                                         />
                                     </FormControl>
                                     <FormMessage />

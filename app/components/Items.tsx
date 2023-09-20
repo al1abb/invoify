@@ -1,17 +1,21 @@
 "use client";
 
 import React from "react";
-import { Control, useFieldArray } from "react-hook-form";
+import { Control, UseFormSetValue, useFieldArray } from "react-hook-form";
 
+// UI Components
 import { Button } from "@/components/ui/button";
+
+// Custom components
 import { SingleItem } from ".";
 
 interface ItemsProps {
     control: Control<any>;
+    setValue: UseFormSetValue<any>;
     name: string;
 }
 
-const Items: React.FC<ItemsProps> = ({ control, name }) => {
+const Items: React.FC<ItemsProps> = ({ control, setValue, name }) => {
     const { fields, append, remove } = useFieldArray({
         control: control,
         name: name, // Match this name to the field in your schema
@@ -53,9 +57,10 @@ const Items: React.FC<ItemsProps> = ({ control, name }) => {
                             field={field}
                             index={index}
                             removeField={removeField}
+                            setValue={setValue}
                         />
                     ))}
-                    <Button onClick={addNewField}>Add item</Button>
+                    <Button type="button" onClick={addNewField}>Add item</Button>
                 </div>
             </div>
         </div>
