@@ -66,17 +66,15 @@ const InvoiceCard = () => {
                 currency: "USD",
                 language: "English",
                 taxDetails: {
-                    taxRate: 0,
-                    taxRateType: "amount",
+                    amount: 0,
                     taxID: "",
                     totalTaxAmount: 0,
                 },
                 discountDetails: {
-                    discountRate: 0,
-                    discountRateType: "amount"
+                    amount: 0,
                 },
                 shippingDetails: {
-                    shippingCost: 0,
+                    cost: 0,
                 },
                 // subTotal: 0,
                 // totalAmount: 0,
@@ -85,6 +83,8 @@ const InvoiceCard = () => {
             },
         },
     });
+
+    const { getValues, setValue } = form;
 
     const onSubmit = (values: z.infer<typeof InvoiceSchema>) => {
         console.log("VALUE");
@@ -116,8 +116,8 @@ const InvoiceCard = () => {
                                     <InputFormField
                                         control={form.control}
                                         name="sender.name"
-                                        label="Company"
-                                        placeholder="Your company"
+                                        label="Name"
+                                        placeholder="Your name"
                                     />
                                     <InputFormField
                                         control={form.control}
@@ -174,8 +174,8 @@ const InvoiceCard = () => {
                                     <InputFormField
                                         control={form.control}
                                         name="receiver.name"
-                                        label="Company"
-                                        placeholder="Receiver company"
+                                        label="Name"
+                                        placeholder="Receiver name"
                                     />
                                     <InputFormField
                                         control={form.control}
@@ -257,19 +257,22 @@ const InvoiceCard = () => {
                             <div>
 								<Items
 									control={form.control}
+                                    setValue={setValue}
 									name="details.items"
 								/>
                             </div>
 
                             <hr />
 
-                            <div>
+                            <div className="">
                                 <InvoiceFooter 
                                     control={form.control}
+                                    getValues={getValues}
+                                    setValue={setValue}
                                 />
                             </div>
 
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">Generate PDF</Button>
                         </form>
                     </Form>
                 </CardContent>
