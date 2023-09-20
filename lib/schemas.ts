@@ -9,19 +9,17 @@ const ItemSchema = z.object({
 });
 
 const TaxDetailsSchema = z.object({
-  taxRate: z.number().optional(),
-  taxRateType: z.enum(["percentage", "amount"]).optional(),
+  amount: z.coerce.number().optional(),
   taxID: z.string().optional(),
-  totalTaxAmount: z.number().optional(),
+  totalTaxAmount: z.coerce.number().optional(),
 });
 
 const DiscountDetailsSchema = z.object({
-  discountRate: z.number().optional(),
-  discountRateType: z.enum(["percentage", "amount"]).optional(),
+  amount: z.coerce.number().optional(),
 });
 
 const ShippingDetailsSchema = z.object({
-  shippingCost: z.number().optional(),
+  cost: z.coerce.number().optional(),
 });
 
 const InvoiceDetailsSchema = z.object({
@@ -35,8 +33,8 @@ const InvoiceDetailsSchema = z.object({
   taxDetails: TaxDetailsSchema.optional(),
   discountDetails: DiscountDetailsSchema.optional(),
   shippingDetails: ShippingDetailsSchema.optional(),
-  // subTotal: z.number(), These will be automatically calculated
-  // totalAmount: z.number(),
+  subTotal: z.coerce.number(),
+  totalAmount: z.coerce.number(),
   additionalNotes: z.string().optional(),
   paymentTerms: z.string(),
 });
