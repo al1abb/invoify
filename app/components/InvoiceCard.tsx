@@ -75,8 +75,8 @@ const InvoiceCard = () => {
             },
             details: {
                 invoiceNumber: "",
-                invoiceDate: "",
-                dueDate: "",
+                invoiceDate: new Date(),
+                dueDate: new Date(),
                 items: [
                     {
                         name: "",
