@@ -1,8 +1,7 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { Control } from "react-hook-form";
-import { Invoice } from "@/types";
 import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,12 +13,12 @@ interface InputFormFieldProps {
     placeholder?: string;
 }
 
-const InputFormField: React.FC<InputFormFieldProps> = ({
+const InputFormField = ({
     control,
     name,
     label,
     placeholder,
-}) => {
+}: InputFormFieldProps) => {
     return (
         <>
             <FormField
