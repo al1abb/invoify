@@ -67,14 +67,6 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
     const [shippingType, setShippingType] = useState("amount");
 
     useEffect(() => {
-        const totalSum: number = itemsArray.reduce(
-            (sum: number, item: any) => sum + item.total,
-            0
-        );
-
-        console.log("TOTALSUM", totalSum);
-        setSubTotal(totalSum);
-
         calculateTotal();
     }, [
         itemsArray,
@@ -95,6 +87,8 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
             (sum: number, item: any) => sum + item.total,
             0
         );
+        setValue("details.subTotal", totalSum);
+        setSubTotal(totalSum);
 
         let discountAmount: number = parseFloat(discount.amount) ?? 0;
         let taxAmount: number = parseFloat(tax.amount) ?? 0;
@@ -158,7 +152,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         setValue("details.discountDetails.amount", discountAmount);
         setValue("details.taxDetails.amount", taxAmount);
         setValue("details.shippingDetails.cost", shippingCost);
-        setValue("details.subTotal", subTotal);
+        
         setValue("details.totalAmount", total);
     };
 
@@ -288,7 +282,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                     <div className="flex justify-between items-center">
                         <div>Sub total</div>
 
-                        <div>{subTotal}</div>
+                        <div>{subTotal} { currency }</div>
                     </div>
                     <div className="flex justify-between items-center">
                         {discountSwitch && (
@@ -297,6 +291,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
 
                                 <div className="flex items-center gap-2">
                                     <Button
+                                        type="button"
                                         variant="ghost"
                                         size="icon"
                                         onClick={() =>
@@ -345,6 +340,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                                 <div>Tax</div>
                                 <div className="flex items-center gap-2">
                                     <Button
+                                        type="button"
                                         variant="ghost"
                                         size="icon"
                                         onClick={() =>
@@ -393,6 +389,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                                 <div>Shipping</div>
                                 <div className="flex items-center gap-2">
                                     <Button
+                                        type="button"
                                         variant="ghost"
                                         size="icon"
                                         onClick={() =>
@@ -438,7 +435,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                     <div className="flex justify-between items-center">
                         <div>Total Amount</div>
 
-                        <div>{totalAmount.toFixed(2)}</div>
+                        <div>{totalAmount.toFixed(2)} { currency }</div>
                     </div>
                 </div>
             </div>
