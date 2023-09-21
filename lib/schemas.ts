@@ -24,8 +24,8 @@ const ShippingDetailsSchema = z.object({
 
 const InvoiceDetailsSchema = z.object({
   invoiceNumber: z.string(),
-  invoiceDate: z.string(),
-  dueDate: z.string(),
+  invoiceDate: z.date(),
+  dueDate: z.date(),
   purchaseOrderNumber: z.string().optional(),
   currency: z.string(),
   language: z.string(),

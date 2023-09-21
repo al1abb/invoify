@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 
@@ -41,18 +41,17 @@ const DatePickerFormField = ({
     name,
     label,
     placeholder,
-    setValue
+    setValue,
 }: DatePickerFormFieldProps) => {
+    const [date, setDate] = useState<Date | null>(null);
 
-    const [date, setDate] = useState<Date | number>(0);
-
-    useEffect(() => {
-        if(date instanceof Date) {
-            const formattedDate = format(date as Date, "dd/MM/yyyy");
-            console.log("Formatted Date", formattedDate);
-            setValue(name, formattedDate);
-        }
-    }, [date])
+    // useEffect(() => {
+    //     if(date instanceof Date) {
+    //         const formattedDate = format(date as Date, "dd/MM/yyyy");
+    //         console.log("Formatted Date", formattedDate);
+    //         setValue(name, formattedDate);
+    //     }
+    // }, [date])
 
     return (
         <>
@@ -73,13 +72,13 @@ const DatePickerFormField = ({
                                                 variant={"outline"}
                                                 className={cn(
                                                     "w-[13.5rem]",
-                                                    !date &&
+                                                    !field.value &&
                                                         "text-muted-foreground"
                                                 )}
                                             >
                                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {date ? (
-                                                    format(date, "PPP")
+                                                {field.value ? (
+                                                    format(field.value, "PPP")
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -89,8 +88,12 @@ const DatePickerFormField = ({
                                     <PopoverContent className="w-auto p-0">
                                         <Calendar
                                             mode="single"
-                                            selected={date}
-                                            onSelect={setDate}
+                                            selected={field.value}
+                                            onSelect={field.onChange}
+                                            disabled={(date) =>
+                                                date > new Date() ||
+                                                date < new Date("1900-01-01")
+                                            }
                                             initialFocus
                                         />
                                     </PopoverContent>
