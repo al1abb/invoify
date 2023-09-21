@@ -47,6 +47,12 @@ const SingleItem = ({
       control,
     });
 
+    // Get currency variable
+    const currency = useWatch({
+        name: `details.currency`,
+        control,
+    });
+
     useEffect(() => {
         // Calculate total when rate or quantity changes
         if (rate != undefined && quantity != undefined) {
@@ -84,7 +90,7 @@ const SingleItem = ({
                     name={`${name}[${index}].quantity`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
-                            <Label>Qty</Label>
+                            <Label>Quantity</Label>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
@@ -105,7 +111,7 @@ const SingleItem = ({
                     name={`${name}[${index}].unitPrice`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
-                            <Label>Price per unit/Rate</Label>
+                            <Label>Rate</Label> <span className="text-xs">{`(in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
@@ -126,7 +132,7 @@ const SingleItem = ({
                     name={`${name}[${index}].total`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
-                            <Label>Total</Label>
+                            <Label>Total</Label> <span className="text-xs">{`(in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>

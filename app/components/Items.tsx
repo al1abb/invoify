@@ -15,7 +15,7 @@ interface ItemsProps {
     name: string;
 }
 
-const Items: React.FC<ItemsProps> = ({ control, setValue, name }) => {
+const Items = ({ control, setValue, name }: ItemsProps) => {
     const { fields, append, remove } = useFieldArray({
         control: control,
         name: name, // Match this name to the field in your schema
@@ -32,7 +32,6 @@ const Items: React.FC<ItemsProps> = ({ control, setValue, name }) => {
     };
 
     const removeField = (index: any) => {
-        console.log("Removing index:", index);
         remove(index)
     }
 
