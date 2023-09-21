@@ -3,104 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>Invoice</title>
+    <!-- Include Tailwind CSS via a link or import it based on your project setup -->
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <style>
-        /* Add your CSS styles here */
+        /* Additional custom styles can be added here if needed */
         body {
+            background-color: #f8f8f8;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ddd;
+            background-color: #fff;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-
         .header {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
+            color: #4a90e2;
         }
-
         .invoice-details {
+            display: flex;
             margin-top: 20px;
         }
-
         .sender, .receiver {
             width: 50%;
-            float: left;
+            padding: 0 10px;
         }
-
-        .details {
-            clear: both;
+        .sender h3, .receiver h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .sender p, .receiver p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .items {
             margin-top: 20px;
         }
-
+        .items h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
         .items-table {
             width: 100%;
+            margin-top: 10px;
             border-collapse: collapse;
         }
-
-        .items-table th, .items-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        .items-table th {
             text-align: left;
+            padding: 8px 0;
+            font-size: 14px;
+            color: #777;
+            border-bottom: 1px solid #ccc;
         }
-
+        .items-table td {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+        }
+        .additional-details {
+            display: flex;
+            margin-top: 20px;
+        }
+        .left, .right {
+            width: 50%;
+            padding: 0 10px;
+        }
+        .left h3, .right h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .left p, .right p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
         .totals {
             margin-top: 20px;
-            float: right;
+        }
+        .totals h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .totals p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .totals p.text-xl {
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <div class="header">Invoice</div>
         
         <div class="invoice-details">
-            <div class="sender">
-                <h3>Sender:</h3>
-                <p>Name: {{sender.name}}</p>
-                <p>Address: {{sender.address}}</p>
-                <p>Zip Code: {{sender.zipCode}}</p>
-                <p>City: {{sender.city}}</p>
-                <p>Country: {{sender.country}}</p>
-                <p>Email: {{sender.email}}</p>
-                <p>Phone: {{sender.phone}}</p>
-                <p>VAT Number: {{sender.vatNumber}}</p>
+            <div class="sender w-1/2 pr-4">
+                <h3 class="text-xl font-semibold">Sender:</h3>
+                <p class="text-gray-800">Name: {{sender.name}}</p>
+                <p class="text-gray-600">Address: {{sender.address}}</p>
+                <p class="text-gray-600">Zip Code: {{sender.zipCode}}</p>
+                <p class="text-gray-600">City: {{sender.city}}</p>
+                <p class="text-gray-600">Country: {{sender.country}}</p>
+                <p class="text-gray-600">Email: {{sender.email}}</p>
+                <p class="text-gray-600">Phone: {{sender.phone}}</p>
+                <p class="text-gray-600">VAT Number: {{sender.vatNumber}}</p>
             </div>
             
-            <div class="receiver">
-                <h3>Receiver:</h3>
-                <p>Name: {{receiver.name}}</p>
-                <p>Address: {{receiver.address}}</p>
-                <p>Zip Code: {{receiver.zipCode}}</p>
-                <p>City: {{receiver.city}}</p>
-                <p>Country: {{receiver.country}}</p>
-                <p>Email: {{receiver.email}}</p>
-                <p>Phone: {{receiver.phone}}</p>
-                <p>VAT Number: {{receiver.vatNumber}}</p>
+            <div class="receiver w-1/2 pl-4">
+                <h3 class="text-xl font-semibold">Receiver:</h3>
+                <p class="text-gray-800">Name: {{receiver.name}}</p>
+                <p class="text-gray-600">Address: {{receiver.address}}</p>
+                <p class="text-gray-600">Zip Code: {{receiver.zipCode}}</p>
+                <p class="text-gray-600">City: {{receiver.city}}</p>
+                <p class="text-gray-600">Country: {{receiver.country}}</p>
+                <p class="text-gray-600">Email: {{receiver.email}}</p>
+                <p class="text-gray-600">Phone: {{receiver.phone}}</p>
+                <p class="text-gray-600">VAT Number: {{receiver.vatNumber}}</p>
             </div>
         </div>
         
-        <div class="details">
-            <h3>Invoice Details:</h3>
-            <p>Invoice Number: {{details.invoiceNumber}}</p>
-            <p>Invoice Date: {{details.invoiceDate}}</p>
-            <p>Due Date: {{details.dueDate}}</p>
-            <p>Currency: {{details.currency}}</p>
-            <p>Language: {{details.language}}</p>
+        <div class="items mt-8">
+            <h3 class="text-xl font-semibold">Invoice Items:</h3>
             
-            <table class="items-table">
+            <table class="items-table mt-4 w-full">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total</th>
+                        <th class="text-left text-gray-600">Name</th>
+                        <th class="text-left text-gray-600">Description</th>
+                        <th class="text-left text-gray-600">Quantity</th>
+                        <th class="text-left text-gray-600">Unit Price</th>
+                        <th class="text-left text-gray-600">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,20 +150,42 @@
                             <td>{{name}}</td>
                             <td>{{description}}</td>
                             <td>{{quantity}}</td>
-                            <td>{{unitPrice}}</td>
-                            <td>{{total}}</td>
+                            <td>{{unitPrice}} {{ details.currency }}</td>
+                            <td>{{total}} {{ details.currency }}</td>
                         </tr>
                     {{/each}}
                 </tbody>
             </table>
-            
-            <div class="totals">
-                <p>Subtotal: {{details.subTotal}}</p>
-                <p>Total Amount: {{details.totalAmount}}</p>
-                <p>Additional Notes: {{details.additionalNotes}}</p>
-                <p>Payment Terms: {{details.paymentTerms}}</p>
+        </div>
+        
+        <div class="additional-details mt-8">
+            <div class="left">
+                <h3 class="text-xl font-semibold">Additional Notes:</h3>
+                <p class="text-gray-600">{{details.additionalNotes}}</p>
+            </div>
+            <div class="right mt-6">
+                <h3 class="text-xl font-semibold">Payment Details:</h3>
+                <p class="text-gray-600">Payment Terms: {{details.paymentTerms}}</p>
+                <p class="text-gray-600">Invoice Date: {{details.invoiceDate}}</p> <!-- Add Invoice Date -->
+                <p class="text-gray-600">Due Date: {{details.dueDate}}</p> <!-- Add Due Date -->
             </div>
         </div>
+        
+        <div class="totals mt-8">
+            <h3 class="text-xl font-semibold">Invoice Totals:</h3>
+            <p class="text-gray-600">Subtotal: {{details.subTotal}} {{ details.currency }}</p>
+            {{#if details.discountDetails.amount }}
+                <p class="text-gray-600">Discount: - {{details.discountDetails.amount}} {{ details.currency }}</p>
+            {{/if}}
+            {{#if details.taxDetails.amount }}
+                <p class="text-gray-600">Tax: + {{details.taxDetails.amount}} {{ details.currency }}</p>
+            {{/if}}
+            {{#if details.shippingDetails.cost }}
+                <p class="text-gray-600">Shipping: + {{details.shippingDetails.cost}} {{ details.currency }}</p>
+            {{/if}}
+            <p class="text-xl font-semibold">Total Amount: {{details.totalAmount}} {{ details.currency }}</p>
+        </div>
     </div>
+
 </body>
 </html>
