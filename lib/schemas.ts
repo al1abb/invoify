@@ -40,7 +40,7 @@ const InvoiceDetailsSchema = z.object({
 });
 
 const InvoiceSenderSchema = z.object({
-  name: z.string(),
+  name: z.string().min(2).max(50),
   address: z.string(),
   zipCode: z.string(),
   city: z.string(),
