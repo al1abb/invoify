@@ -23,10 +23,33 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+// Lucide React icons
+import { Loader2 } from "lucide-react";
+
 // Custom components
-import { InputFormField, InvoiceFooter, Items } from ".";
+import {
+    DatePickerFormField,
+    InputFormField,
+    InvoiceFooter,
+    Items,
+    PdfViewer,
+    SelectFormField,
+} from ".";
+
+// Hooks
+import { usePdfFunctions } from "../hooks/usePdfFunctions";
 
 const InvoiceCard = () => {
+    // const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
+
+    const {
+        invoicePdf,
+        invoicePdfLoading,
+        generatePdf,
+        downloadPdf,
+        previewPdfInTab,
+    } = usePdfFunctions();
+
     const form = useForm<z.infer<typeof InvoiceSchema>>({
         resolver: zodResolver(InvoiceSchema),
         defaultValues: {
@@ -55,14 +78,14 @@ const InvoiceCard = () => {
                 invoiceDate: "",
                 dueDate: "",
                 items: [
-					{
-						name: "",
-						description: "",
-						quantity: 0,
-						unitPrice: 0,
-						total: 0,
-					}
-				],
+                    {
+                        name: "",
+                        description: "",
+                        quantity: 0,
+                        unitPrice: 0,
+                        total: 0,
+                    },
+                ],
                 currency: "USD",
                 language: "English",
                 taxDetails: {
@@ -79,7 +102,7 @@ const InvoiceCard = () => {
                 // subTotal: 0,
                 // totalAmount: 0,
                 additionalNotes: "",
-                paymentTerms: ""
+                paymentTerms: "",
             },
         },
     });
@@ -89,6 +112,7 @@ const InvoiceCard = () => {
     const onSubmit = (values: z.infer<typeof InvoiceSchema>) => {
         console.log("VALUE");
         console.log(values);
+        generatePdf(values);
     };
 
     return (
@@ -238,47 +262,77 @@ const InvoiceCard = () => {
                                         placeholder="Invoice number"
                                     />
 
-                                    <InputFormField
+                                    <DatePickerFormField
                                         control={form.control}
                                         name="details.invoiceDate"
                                         label="Issued date"
                                         placeholder="Issued date"
+                                        setValue={setValue}
                                     />
 
-                                    <InputFormField
+                                    <DatePickerFormField
                                         control={form.control}
                                         name="details.dueDate"
                                         label="Due date"
                                         placeholder="Due date"
+                                        setValue={setValue}
+                                    />
+
+                                    <SelectFormField
+                                        control={form.control}
+                                        name="details.currency"
+                                        label="Currency"
+                                        placeholder="Select Currency"
                                     />
                                 </div>
                             </div>
 
                             <div>
-								<Items
-									control={form.control}
+                                <Items
+                                    control={form.control}
                                     setValue={setValue}
-									name="details.items"
-								/>
+                                    name="details.items"
+                                />
                             </div>
 
                             <hr />
 
                             <div className="">
-                                <InvoiceFooter 
+                                <InvoiceFooter
                                     control={form.control}
                                     getValues={getValues}
                                     setValue={setValue}
                                 />
                             </div>
 
-                            <Button type="submit">Generate PDF</Button>
+                            <Button type="submit" disabled={invoicePdfLoading}>
+                                {invoicePdfLoading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Please wait
+                                    </>
+                                ) : (
+                                    <span>Generate PDF</span>
+                                )}
+                            </Button>
                         </form>
                     </Form>
                 </CardContent>
 
                 <CardFooter>
-                    <p>Card Footer</p>
+                    {!invoicePdfLoading && invoicePdf.size != 0 && (
+                        <div className="w-full">
+                            <p>PDF Preview</p>
+                            <PdfViewer pdfData={invoicePdf} />
+
+                            <Button onClick={() => previewPdfInTab()}>
+                                Preview in a new Tab
+                            </Button>
+                            <Button onClick={() => downloadPdf()}>
+                                Download
+                            </Button>
+                        </div>
+                    )}
                 </CardFooter>
             </Card>
         </div>
