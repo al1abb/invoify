@@ -35,10 +35,16 @@ export async function POST(req: Request, res: Response) {
         // Close the Puppeteer browser
         await browser.close();
 
-        const response = new Response(pdf, {
+		// Convert the PDF buffer to base64
+        // const pdfBase64 = pdf.toString("base64");
+
+        // Create a Blob from the PDF data
+        const pdfBlob = new Blob([pdf], { type: "application/pdf" });
+
+        const response = new Response(pdfBlob, {
             headers: {
                 "Content-Type": "application/pdf",
-                "Content-Disposition": "attachment; filename=invoice.pdf",
+                "Content-Disposition": "inline; filename=invoice.pdf",
             },
             status: 200,
         });
