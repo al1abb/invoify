@@ -20,7 +20,11 @@ export async function POST(req: Request, res: Response) {
         const htmlContent = template(body);
 		
         // Create a Puppeteer browser instance
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            userDataDir: "/tmp/puppeteer",
+        });
+        
         const page: Page = await browser.newPage();
 
         // Set the HTML content of the page
