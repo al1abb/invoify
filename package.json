@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postinstall": "node node_modules/puppeteer/install.js",
     "start": "next start",
     "lint": "next lint"
   },
