@@ -4,6 +4,7 @@ import InvoiceCard from "./InvoiceCard";
 import InputFormField from "./form-fields/InputFormField";
 import SelectFormField from "./form-fields/SelectFormField";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
+import FileFormField from "./form-fields/FileFormField";
 
 import Items from "./Items";
 import SingleItem from "./SingleItem";
@@ -20,5 +21,6 @@ export {
     PdfViewer,
     InputFormField,
     SelectFormField,
-    DatePickerFormField
+    DatePickerFormField,
+    FileFormField
 };
