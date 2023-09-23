@@ -29,6 +29,7 @@ import { Loader2 } from "lucide-react";
 // Custom components
 import {
     DatePickerFormField,
+    FileFormField,
     InputFormField,
     InvoiceFooter,
     Items,
@@ -74,6 +75,7 @@ const InvoiceCard = () => {
                 vatNumber: "",
             },
             details: {
+                invoiceLogo: "",
                 invoiceNumber: "",
                 invoiceDate: new Date(),
                 dueDate: new Date(),
@@ -128,8 +130,16 @@ const InvoiceCard = () => {
                             onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-8"
                         >
+                            <FileFormField
+                                control={form.control}
+                                name="details.invoiceLogo"
+                                label="Invoice Logo"
+                                placeholder="Invoice Logo"
+                                setValue={setValue}
+                            />
                             <div className="flex flex-wrap gap-40">
                                 <div className="flex flex-col gap-2">
+
                                     <Label
                                         htmlFor="billFrom"
                                         className="text-xl font-semibold"

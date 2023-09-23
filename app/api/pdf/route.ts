@@ -7,24 +7,28 @@ export async function POST(req: Request, res: Response) {
     try {
         const body = await req.json();
 
-		// Assuming this API file is in the 'pages/api' directory
-		const templatePath = path.join(process.cwd(), "templates", "invoice-template-1.handlebars");
+        // Assuming this API file is in the 'pages/api' directory
+        const templatePath = path.join(
+            process.cwd(),
+            "templates",
+            "invoice-template-1.handlebars"
+        );
 
-		// Read the HTML template from a file
+        // Read the HTML template from a file
         const htmlTemplate = fs.readFileSync(templatePath, "utf8");
-		
-		// Compile the Handlebars template
-		const template = handlebars.compile(htmlTemplate);
-		
-		// Render the HTML with dynamic data
+
+        // Compile the Handlebars template
+        const template = handlebars.compile(htmlTemplate);
+
+        // Render the HTML with dynamic data
         const htmlContent = template(body);
-		
+
         // Create a Puppeteer browser instance
         const browser = await puppeteer.launch({
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             userDataDir: "/tmp/puppeteer",
         });
-        
+
         const page: Page = await browser.newPage();
 
         // Set the HTML content of the page
@@ -38,9 +42,6 @@ export async function POST(req: Request, res: Response) {
 
         // Close the Puppeteer browser
         await browser.close();
-
-		// Convert the PDF buffer to base64
-        // const pdfBase64 = pdf.toString("base64");
 
         // Create a Blob from the PDF data
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
@@ -57,6 +58,8 @@ export async function POST(req: Request, res: Response) {
         console.error(error);
 
         // Return an error response
-        return new Response(`Error generating PDF: \n ${error}`, { status: 500 });
+        return new Response(`Error generating PDF: \n${error}`, {
+            status: 500,
+        });
     }
 }
