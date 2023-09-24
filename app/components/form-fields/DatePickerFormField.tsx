@@ -32,26 +32,13 @@ interface DatePickerFormFieldProps {
     control: Control<any>;
     name: string;
     label?: string;
-    placeholder?: string;
-    setValue: UseFormSetValue<any>;
 }
 
 const DatePickerFormField = ({
     control,
     name,
     label,
-    placeholder,
-    setValue,
 }: DatePickerFormFieldProps) => {
-    const [date, setDate] = useState<Date | null>(null);
-
-    // useEffect(() => {
-    //     if(date instanceof Date) {
-    //         const formattedDate = format(date as Date, "dd/MM/yyyy");
-    //         console.log("Formatted Date", formattedDate);
-    //         setValue(name, formattedDate);
-    //     }
-    // }, [date])
 
     return (
         <>
@@ -91,7 +78,6 @@ const DatePickerFormField = ({
                                             selected={field.value}
                                             onSelect={field.onChange}
                                             disabled={(date) =>
-                                                date > new Date() ||
                                                 date < new Date("1900-01-01")
                                             }
                                             initialFocus

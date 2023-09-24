@@ -276,16 +276,12 @@ const InvoiceCard = () => {
                                         control={form.control}
                                         name="details.invoiceDate"
                                         label="Issued date"
-                                        placeholder="Issued date"
-                                        setValue={setValue}
                                     />
 
                                     <DatePickerFormField
                                         control={form.control}
                                         name="details.dueDate"
                                         label="Due date"
-                                        placeholder="Due date"
-                                        setValue={setValue}
                                     />
 
                                     <SelectFormField
