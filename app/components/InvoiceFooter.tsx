@@ -93,6 +93,11 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         let discountAmount: number = parseFloat(discount.amount) ?? 0;
         let taxAmount: number = parseFloat(tax.amount) ?? 0;
         let shippingCost: number = parseFloat(shipping.cost) ?? 0;
+
+        let discountAmountType: string = "amount";
+        let taxAmountType: string = "amount";
+        let shippingCostType: string = "amount";
+
         let total: number = totalSum;
 
         // Check if discountAmount and taxAmount are empty (set to zero) when fully deleted
@@ -118,8 +123,10 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         if (discountSwitch) {
             if (discountType == "amount") {
                 total -= discountAmount;
+                discountAmountType = "amount";
             } else {
                 total -= total * (discountAmount / 100);
+                discountAmountType = "percentage";
             }
         }
         else {
@@ -129,8 +136,10 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         if (taxSwitch) {
             if (taxType == "amount") {
                 total += taxAmount;
+                taxAmountType = "amount";
             } else {
                 total += total * (taxAmount / 100);
+                taxAmountType = "percentage";
             }
         }
         else {
@@ -140,8 +149,10 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         if (shippingSwitch) {
             if (shippingType == "amount") {
                 total += shippingCost;
+                shippingCostType = "amount";
             } else {
                 total += total * (shippingCost / 100);
+                shippingCostType = "percentage";
             }
         }
         else {
@@ -152,8 +163,12 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         setValue("details.discountDetails.amount", discountAmount);
         setValue("details.taxDetails.amount", taxAmount);
         setValue("details.shippingDetails.cost", shippingCost);
+
+        setValue("details.discountDetails.amountType", discountAmountType);
+        setValue("details.taxDetails.amountType", taxAmountType);
+        setValue("details.shippingDetails.costType", shippingCostType);
         
-        setValue("details.totalAmount", total);
+        setValue("details.totalAmount", total.toFixed(2));
     };
 
     const switchAmountType = (

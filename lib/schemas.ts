@@ -12,14 +12,17 @@ const TaxDetailsSchema = z.object({
     amount: z.coerce.number().optional(),
     taxID: z.string().optional(),
     totalTaxAmount: z.coerce.number().optional(),
+    amountType: z.string().optional(),
 });
 
 const DiscountDetailsSchema = z.object({
     amount: z.coerce.number().optional(),
+    amountType: z.string().optional(),
 });
 
 const ShippingDetailsSchema = z.object({
     cost: z.coerce.number().optional(),
+    costType: z.string().optional(),
 });
 
 const InvoiceDetailsSchema = z.object({
