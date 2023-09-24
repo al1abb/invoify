@@ -152,8 +152,8 @@
                             <td>{{name}}</td>
                             <td>{{description}}</td>
                             <td>{{quantity}}</td>
-                            <td>{{unitPrice}} {{ details.currency }}</td>
-                            <td>{{total}} {{ details.currency }}</td>
+                            <td>{{unitPrice}} {{../details.currency}}</td>
+                            <td>{{total}} {{../details.currency}}</td>
                         </tr>
                     {{/each}}
                 </tbody>
@@ -177,14 +177,41 @@
             <h3 class="text-xl font-semibold">Invoice Totals:</h3>
             <p class="text-gray-600">Subtotal: {{details.subTotal}} {{ details.currency }}</p>
             {{#if details.discountDetails.amount }}
-                <p class="text-gray-600">Discount: - {{details.discountDetails.amount}} {{ details.currency }}</p>
+                <p class="text-gray-600">
+                    Discount:
+
+                    {{#ifEquals details.discountDetails.amountType "amount"}}
+                        - {{details.discountDetails.amount}} {{ details.currency }}
+                    {{else}}
+                        - {{details.discountDetails.amount}}%
+                    {{/ifEquals}}
+                </p>
             {{/if}}
+
             {{#if details.taxDetails.amount }}
-                <p class="text-gray-600">Tax: + {{details.taxDetails.amount}} {{ details.currency }}</p>
+                <p class="text-gray-600">
+                    Tax:
+
+                    {{#ifEquals details.taxDetails.amountType "amount"}}
+                        + {{details.taxDetails.amount}} {{ details.currency }}
+                    {{else}}
+                        + {{details.taxDetails.amount}}%
+                    {{/ifEquals}}
+                </p>
             {{/if}}
+
             {{#if details.shippingDetails.cost }}
-                <p class="text-gray-600">Shipping: + {{details.shippingDetails.cost}} {{ details.currency }}</p>
+                <p class="text-gray-600">
+                    Shipping:
+
+                    {{#ifEquals details.shippingDetails.costType "amount"}}
+                        + {{details.shippingDetails.cost}} {{ details.currency }}
+                    {{else}}
+                        + {{details.shippingDetails.cost}}%
+                    {{/ifEquals}}
+                </p>
             {{/if}}
+
             <p class="text-xl font-semibold">Total Amount: {{details.totalAmount}} {{ details.currency }}</p>
         </div>
     </div>
