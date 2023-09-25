@@ -47,7 +47,7 @@ export async function POST(req: Request, res: Response) {
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
-            format: "Letter", // You can change the page format here
+            format: "A4", // You can change the page format here
             printBackground: true,
         });
 

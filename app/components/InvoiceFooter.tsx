@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // RHF imports
-import { Control, UseFormGetValues, UseFormSetValue, set, useWatch } from "react-hook-form";
+import {
+    Control,
+    UseFormGetValues,
+    UseFormSetValue,
+    set,
+    useWatch,
+} from "react-hook-form";
 
 // Shadcn components
 import {
@@ -18,6 +24,9 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+// React signature canvas
+import SignatureCanvas from "react-signature-canvas";
+
 // Icons
 import { Percent, RefreshCw } from "lucide-react";
 
@@ -27,13 +36,31 @@ interface InvoiceFooterProps {
     setValue: UseFormSetValue<any>;
 }
 
-const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => {
+const InvoiceFooter = ({
+    control,
+    getValues,
+    setValue,
+}: InvoiceFooterProps) => {
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
     const [taxSwitch, setTaxSwitch] = useState<boolean>(false);
     const [shippingSwitch, setShippingSwitch] = useState<boolean>(false);
 
     const [subTotal, setSubTotal] = useState<number>(0);
     const [totalAmount, setTotalAmount] = useState<number>(0);
+
+    const signatureRef = useRef<SignatureCanvas | null>(null);
+
+    const clearSignature = () => {
+        signatureRef.current?.clear();
+        setValue("details.signature", "");
+    };
+
+    const handleCanvasEnd = () => {
+        if(signatureRef.current) {
+            const canvas = signatureRef.current;
+            setValue("details.signature", canvas.toDataURL("base64"));
+        }
+    }
 
     // Get items array
     const itemsArray = useWatch({
@@ -128,8 +155,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                 total -= total * (discountAmount / 100);
                 discountAmountType = "percentage";
             }
-        }
-        else {
+        } else {
             discountAmount = 0;
         }
 
@@ -141,8 +167,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                 total += total * (taxAmount / 100);
                 taxAmountType = "percentage";
             }
-        }
-        else {
+        } else {
             taxAmount = 0;
         }
 
@@ -154,8 +179,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                 total += total * (shippingCost / 100);
                 shippingCostType = "percentage";
             }
-        }
-        else {
+        } else {
             shippingCost = 0;
         }
 
@@ -167,7 +191,7 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
         setValue("details.discountDetails.amountType", discountAmountType);
         setValue("details.taxDetails.amountType", taxAmountType);
         setValue("details.shippingDetails.costType", shippingCostType);
-        
+
         setValue("details.totalAmount", total.toFixed(2));
     };
 
@@ -297,7 +321,9 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                     <div className="flex justify-between items-center">
                         <div>Sub total</div>
 
-                        <div>{subTotal} { currency }</div>
+                        <div>
+                            {subTotal} {currency}
+                        </div>
                     </div>
                     <div className="flex justify-between items-center">
                         {discountSwitch && (
@@ -450,9 +476,32 @@ const InvoiceFooter = ({ control, getValues, setValue }: InvoiceFooterProps) => 
                     <div className="flex justify-between items-center">
                         <div>Total Amount</div>
 
-                        <div>{totalAmount.toFixed(2)} { currency }</div>
+                        <div>
+                            {totalAmount.toFixed(2)} {currency}
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div className="flex flex-col gap-y-5">
+                <Label>Signature</Label>
+                <SignatureCanvas
+                    ref={signatureRef}
+                    penColor="rgba(25, 25, 112, 1)"
+                    canvasProps={{ 
+                        width: 500, 
+                        height: 200,
+                        style: {
+                            backgroundColor: 'rgba(230, 230, 230, 1)',
+                            border: "2px solid black",
+                            borderRadius: "10px"
+                        }
+                    }}
+                    onEnd={handleCanvasEnd}
+                />
+                <Button type="button" onClick={clearSignature}>
+                    Clear Signature
+                </Button>
             </div>
         </div>
     );

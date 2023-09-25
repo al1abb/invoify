@@ -41,6 +41,7 @@ const InvoiceDetailsSchema = z.object({
     totalAmount: z.coerce.number(),
     additionalNotes: z.string().optional(),
     paymentTerms: z.string(),
+    signature: z.string().optional(),
 });
 
 const InvoiceSenderSchema = z.object({
