@@ -10,8 +10,8 @@ const PdfViewer = ({ pdfData }: PdfViewerProps) => {
     const pdfUrl = window.URL.createObjectURL(pdfData)
     return (
         <div className="w-full">
-            <AspectRatio ratio={1 / 1.4}>
-                <iframe className="w-full h-full" src={pdfUrl}></iframe>
+            <AspectRatio ratio={1 / 1.3}>
+                <iframe className="h-full w-full " src={pdfUrl} style={{ zoom: '100%' }}></iframe>
             </AspectRatio>
         </div>
     );
