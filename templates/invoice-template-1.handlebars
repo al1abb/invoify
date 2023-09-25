@@ -166,6 +166,10 @@
                 <p class="text-gray-600">Payment Terms: {{details.paymentTerms}}</p>
                 <p class="text-gray-600">Invoice Date: {{details.invoiceDate}}</p> <!-- Add Invoice Date -->
                 <p class="text-gray-600">Due Date: {{details.dueDate}}</p> <!-- Add Due Date -->
+
+                <div>
+                    <img src={{ details.signature }} height="100" width="auto" alt="">
+                </div>
             </div>
         </div>
         
@@ -209,11 +213,8 @@
             {{/if}}
 
             <p class="text-xl font-semibold">Total Amount: {{details.totalAmount}} {{ details.currency }}</p>
-
-            <div>
-                <img src={{ details.signature }} alt="">
-            </div>
         </div>
+
     </div>
 
 </body>
