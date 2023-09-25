@@ -12,12 +12,8 @@
             font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            background-color: transparent;
             padding: 20px;
-            background-color: #fff;
-            border: 1px solid #e5e5e5;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
         .header {
@@ -213,6 +209,10 @@
             {{/if}}
 
             <p class="text-xl font-semibold">Total Amount: {{details.totalAmount}} {{ details.currency }}</p>
+
+            <div>
+                <img src={{ details.signature }} alt="">
+            </div>
         </div>
     </div>
 
