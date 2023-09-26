@@ -17,6 +17,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
+// Icons
+import { Trash2 } from "lucide-react";
+
 interface SingleItemProps {
     control: Control<any>;
     name: string;
@@ -173,7 +176,8 @@ const SingleItem = ({
             />
             <div>
                 {index != 0 && (
-                    <Button onClick={() => removeField(index)}>
+                    <Button onClick={() => removeField(index)} className="w-fit gap-2" variant="destructive">
+                        <Trash2 />
                         Remove Item
                     </Button>
                 )}

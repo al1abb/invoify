@@ -9,7 +9,10 @@ import { Button } from "@/components/ui/button";
 // Custom components
 import { SingleItem } from ".";
 
-interface ItemsProps {
+// Icons
+import { Plus } from "lucide-react";
+
+type ItemsProps = {
     control: Control<any>;
     setValue: UseFormSetValue<any>;
     name: string;
@@ -59,7 +62,10 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
                             setValue={setValue}
                         />
                     ))}
-                    <Button type="button" onClick={addNewField}>Add item</Button>
+                    <Button type="button" onClick={addNewField} className="w-fit gap-2">
+                        <Plus />
+                        Add a new item
+                    </Button>
                 </div>
             </div>
         </div>
