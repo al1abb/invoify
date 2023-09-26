@@ -43,16 +43,7 @@ const DatePickerFormField = ({
 }: DatePickerFormFieldProps) => {
 
     const formatDate = (date: Date) => {
-        // const formattedDate = date.toLocaleDateString("en-US", {
-        //     year: "numeric",
-        //     month: "2-digit",
-        //     day: "2-digit",
-        // });
-
         const formattedDate = format(date, "MMMM dd yyyy");
-
-        // turn received date into a format where month is number, day is 2 digits and year is 4 digits
-
 
         return formattedDate;
     }
