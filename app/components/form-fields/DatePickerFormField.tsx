@@ -32,13 +32,30 @@ interface DatePickerFormFieldProps {
     control: Control<any>;
     name: string;
     label?: string;
+    setValue: UseFormSetValue<any>;
 }
 
 const DatePickerFormField = ({
     control,
     name,
     label,
+    setValue
 }: DatePickerFormFieldProps) => {
+
+    const formatDate = (date: Date) => {
+        // const formattedDate = date.toLocaleDateString("en-US", {
+        //     year: "numeric",
+        //     month: "2-digit",
+        //     day: "2-digit",
+        // });
+
+        const formattedDate = format(date, "MMMM dd yyyy");
+
+        // turn received date into a format where month is number, day is 2 digits and year is 4 digits
+
+
+        return formattedDate;
+    }
 
     return (
         <>
@@ -65,7 +82,7 @@ const DatePickerFormField = ({
                                             >
                                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                                 {field.value ? (
-                                                    format(field.value, "PPP")
+                                                    new Date(field.value).toDateString()
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -76,7 +93,14 @@ const DatePickerFormField = ({
                                         <Calendar
                                             mode="single"
                                             selected={field.value}
-                                            onSelect={field.onChange}
+                                            onSelect={
+                                                (date) => {
+                                                    if(date) {
+                                                        field.onChange(date)
+                                                        setValue(name, formatDate(date))
+                                                    }
+                                                }
+                                            }
                                             disabled={(date) =>
                                                 date < new Date("1900-01-01")
                                             }
@@ -95,3 +119,7 @@ const DatePickerFormField = ({
 };
 
 export default DatePickerFormField;
+
+// field.onChange
+// setValue(name, formatDate(date))
+// console.log(formatDate(date))

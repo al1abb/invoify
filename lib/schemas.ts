@@ -9,27 +9,33 @@ const ItemSchema = z.object({
 });
 
 const TaxDetailsSchema = z.object({
-    amount: z.coerce.number().optional(),
+    amount: z.coerce.number(),
     taxID: z.string().optional(),
-    totalTaxAmount: z.coerce.number().optional(),
-    amountType: z.string().optional(),
+    totalTaxAmount: z.coerce.number(),
+    amountType: z.string(),
 });
 
 const DiscountDetailsSchema = z.object({
-    amount: z.coerce.number().optional(),
-    amountType: z.string().optional(),
+    amount: z.coerce.number(),
+    amountType: z.string(),
 });
 
 const ShippingDetailsSchema = z.object({
-    cost: z.coerce.number().optional(),
-    costType: z.string().optional(),
+    cost: z.coerce.number(),
+    costType: z.string(),
 });
+
+const PaymentInformationSchema = z.object({
+    bankName: z.string(),
+    accountName: z.string(),
+    accountNumber: z.string(),
+})
 
 const InvoiceDetailsSchema = z.object({
     invoiceLogo: z.unknown(),
     invoiceNumber: z.string(),
-    invoiceDate: z.date(),
-    dueDate: z.date(),
+    invoiceDate: z.string(),
+    dueDate: z.string(),
     purchaseOrderNumber: z.string().optional(),
     currency: z.string(),
     language: z.string(),
@@ -42,6 +48,7 @@ const InvoiceDetailsSchema = z.object({
     additionalNotes: z.string().optional(),
     paymentTerms: z.string(),
     signature: z.string().optional(),
+    paymentInformation: PaymentInformationSchema.optional(),
 });
 
 const InvoiceSenderSchema = z.object({
