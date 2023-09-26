@@ -118,7 +118,7 @@ const InvoiceCard = () => {
     };
 
     return (
-        <div className="max-w-5xl pt-10">
+        <div className="max-w-screen-lg pt-10">
             <Card>
                 <CardHeader>
                     <CardTitle>INVOICE</CardTitle>
