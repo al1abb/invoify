@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 // Lucide React icons
-import { Loader2 } from "lucide-react";
+import { Download, Eye, FileInput, Loader2 } from "lucide-react";
 
 // Custom components
 import {
@@ -118,7 +118,7 @@ const InvoiceCard = () => {
     };
 
     return (
-        <div className="max-w-screen-lg pt-10">
+        <div className="pt-10">
             <Card>
                 <CardHeader>
                     <CardTitle>INVOICE</CardTitle>
@@ -313,14 +313,17 @@ const InvoiceCard = () => {
                                 />
                             </div>
 
-                            <Button type="submit" disabled={invoicePdfLoading}>
+                            <Button type="submit"  className="w-fit gap-2" disabled={invoicePdfLoading}>
                                 {invoicePdfLoading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         Please wait
                                     </>
                                 ) : (
-                                    <span>Generate PDF</span>
+                                    <>
+                                        <FileInput />
+                                        <span>Generate PDF</span>
+                                    </>
                                 )}
                             </Button>
                         </form>
@@ -329,16 +332,20 @@ const InvoiceCard = () => {
 
                 <CardFooter>
                     {!invoicePdfLoading && invoicePdf.size != 0 && (
-                        <div className="w-full">
+                        <div className="w-full h-full">
                             <p>PDF Preview</p>
                             <PdfViewer pdfData={invoicePdf} />
 
-                            <Button onClick={() => previewPdfInTab()}>
-                                Preview in a new Tab
-                            </Button>
-                            <Button onClick={() => downloadPdf()}>
-                                Download
-                            </Button>
+                            <div className="flex gap-2 py-3">
+                                <Button onClick={() => previewPdfInTab()} className="w-fit gap-2">
+                                    <Eye />
+                                    Preview in a new Tab
+                                </Button>
+                                <Button onClick={() => downloadPdf()} className="w-fit gap-2">
+                                    Download
+                                    <Download />
+                                </Button>
+                            </div>
                         </div>
                     )}
                 </CardFooter>
