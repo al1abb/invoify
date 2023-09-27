@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import SignatureCanvas from "react-signature-canvas";
 
 // Icons
-import { Percent, RefreshCw } from "lucide-react";
+import { FileMinus, Percent, RefreshCw } from "lucide-react";
 
 interface InvoiceFooterProps {
     control: Control<any>;
@@ -56,11 +56,11 @@ const InvoiceFooter = ({
     };
 
     const handleCanvasEnd = () => {
-        if(signatureRef.current) {
+        if (signatureRef.current) {
             const canvas = signatureRef.current;
             setValue("details.signature", canvas.toDataURL("base64"));
         }
-    }
+    };
 
     // Get items array
     const itemsArray = useWatch({
@@ -207,8 +207,8 @@ const InvoiceFooter = ({
     };
 
     return (
-        <div className="flex flex-wrap gap-5">
-            <div className="">
+        <div className="flex flex-wrap justify-around gap-5">
+            <div className="flex flex-col gap-3">
                 <FormField
                     control={control}
                     name="details.additionalNotes"
@@ -221,7 +221,7 @@ const InvoiceFooter = ({
                                         <Textarea
                                             {...field}
                                             placeholder="Your additional notes"
-                                            className="w-96 h-0"
+                                            className="h-0"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -242,7 +242,7 @@ const InvoiceFooter = ({
                                         <Textarea
                                             {...field}
                                             placeholder="Ex: Net 30"
-                                            className="w-96 h-0"
+                                            className="h-0"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -253,8 +253,8 @@ const InvoiceFooter = ({
                 />
             </div>
 
-            <div className="flex flex-col flex-1 justify-between">
-                <div className="flex justify-center gap-x-10">
+            <div className="flex flex-col gap-3 min-w-[25rem]">
+                <div className="flex justify-center gap-x-10 pb-6">
                     <FormField
                         control={control}
                         name="discount-switch"
@@ -317,7 +317,7 @@ const InvoiceFooter = ({
                     />
                 </div>
 
-                <div className="flex flex-col px-16 justify-center gap-y-3">
+                <div className="flex flex-col px-10 justify-around gap-y-3">
                     <div className="flex justify-between items-center">
                         <div>Sub total</div>
 
@@ -325,9 +325,9 @@ const InvoiceFooter = ({
                             {subTotal} {currency}
                         </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        {discountSwitch && (
-                            <>
+                    {discountSwitch && (
+                        <>
+                            <div className="flex justify-between items-center">
                                 <div>Discount</div>
 
                                 <div className="flex items-center gap-2">
@@ -371,13 +371,13 @@ const InvoiceFooter = ({
                                         <div>{currency}</div>
                                     )}
                                 </div>
-                            </>
-                        )}
-                    </div>
+                            </div>
+                        </>
+                    )}
 
-                    <div className="flex justify-between items-center">
-                        {taxSwitch && (
-                            <>
+                    {taxSwitch && (
+                        <>
+                            <div className="flex justify-between items-center">
                                 <div>Tax</div>
                                 <div className="flex items-center gap-2">
                                     <Button
@@ -420,13 +420,13 @@ const InvoiceFooter = ({
                                         <div>{currency}</div>
                                     )}
                                 </div>
-                            </>
-                        )}
-                    </div>
+                            </div>
+                        </>
+                    )}
 
-                    <div className="flex justify-between items-center">
-                        {shippingSwitch && (
-                            <>
+                    {shippingSwitch && (
+                        <>
+                            <div className="flex justify-between items-center">
                                 <div>Shipping</div>
                                 <div className="flex items-center gap-2">
                                     <Button
@@ -469,9 +469,9 @@ const InvoiceFooter = ({
                                         <div>{currency}</div>
                                     )}
                                 </div>
-                            </>
-                        )}
-                    </div>
+                            </div>
+                        </>
+                    )}
 
                     <div className="flex justify-between items-center">
                         <div>Total Amount</div>
@@ -488,18 +488,25 @@ const InvoiceFooter = ({
                 <SignatureCanvas
                     ref={signatureRef}
                     penColor="rgba(25, 25, 112, 1)"
-                    canvasProps={{ 
-                        width: 500, 
-                        height: 200,
+                    canvasProps={{
+                        width: "auto",
+                        height: "auto",
                         style: {
-                            backgroundColor: 'rgba(230, 230, 230, 1)',
+                            backgroundColor: "rgba(230, 230, 230, 1)",
                             border: "2px solid black",
-                            borderRadius: "10px"
-                        }
+                            borderRadius: "10px",
+                            cursor: "pointer",
+                        },
                     }}
                     onEnd={handleCanvasEnd}
                 />
-                <Button type="button" onClick={clearSignature}>
+                <Button
+                    type="button"
+                    onClick={clearSignature}
+                    className="w-fit gap-2"
+                    variant="destructive"
+                >
+                    <FileMinus />
                     Clear Signature
                 </Button>
             </div>
