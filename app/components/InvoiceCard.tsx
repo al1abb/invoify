@@ -39,6 +39,7 @@ import {
 
 // Hooks
 import { usePdfFunctions } from "../hooks/usePdfFunctions";
+import PaymentInformation from "./PaymentInformation";
 
 const InvoiceCard = () => {
     // const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
@@ -103,6 +104,11 @@ const InvoiceCard = () => {
                 },
                 // subTotal: 0,
                 // totalAmount: 0,
+                paymentInformation: {
+                    bankName: "",
+                    accountName: "",
+                    accountNumber: "",
+                },
                 additionalNotes: "",
                 paymentTerms: "",
             },
@@ -118,7 +124,7 @@ const InvoiceCard = () => {
     };
 
     return (
-        <div className="pt-10">
+        <div className="">
             <Card>
                 <CardHeader>
                     <CardTitle>INVOICE</CardTitle>
@@ -137,9 +143,8 @@ const InvoiceCard = () => {
                                 placeholder="Invoice Logo"
                                 setValue={setValue}
                             />
-                            <div className="flex flex-wrap gap-40">
+                            <div className="flex flex-wrap gap-20">
                                 <div className="flex flex-col gap-2">
-
                                     <Label
                                         htmlFor="billFrom"
                                         className="text-xl font-semibold"
@@ -254,9 +259,7 @@ const InvoiceCard = () => {
                                         placeholder="Receiver VAT Number"
                                     />
                                 </div>
-                            </div>
 
-                            <div className="flex flex-wrap gap-40">
                                 <div className="flex flex-col gap-2">
                                     <Label
                                         htmlFor="invoiceDetails"
@@ -295,11 +298,24 @@ const InvoiceCard = () => {
                                 </div>
                             </div>
 
+                            {/* <div className="flex flex-wrap gap-40">
+                            </div> */}
+
                             <div>
                                 <Items
                                     control={form.control}
                                     setValue={setValue}
                                     name="details.items"
+                                />
+                            </div>
+
+                            <hr />
+
+                            <div>
+                                <PaymentInformation
+                                    control={form.control}
+                                    name="details.paymentInformation"
+                                    label="Payment Information"
                                 />
                             </div>
 
@@ -313,7 +329,11 @@ const InvoiceCard = () => {
                                 />
                             </div>
 
-                            <Button type="submit"  className="w-fit gap-2" disabled={invoicePdfLoading}>
+                            <Button
+                                type="submit"
+                                className="w-fit gap-2"
+                                disabled={invoicePdfLoading}
+                            >
                                 {invoicePdfLoading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -337,11 +357,17 @@ const InvoiceCard = () => {
                             <PdfViewer pdfData={invoicePdf} />
 
                             <div className="flex gap-2 py-3">
-                                <Button onClick={() => previewPdfInTab()} className="w-fit gap-2">
+                                <Button
+                                    onClick={() => previewPdfInTab()}
+                                    className="w-fit gap-2"
+                                >
                                     <Eye />
                                     Preview in a new Tab
                                 </Button>
-                                <Button onClick={() => downloadPdf()} className="w-fit gap-2">
+                                <Button
+                                    onClick={() => downloadPdf()}
+                                    className="w-fit gap-2"
+                                >
                                     Download
                                     <Download />
                                 </Button>

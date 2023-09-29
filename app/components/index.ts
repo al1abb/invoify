@@ -8,6 +8,7 @@ import FileFormField from "./form-fields/FileFormField";
 
 import Items from "./Items";
 import SingleItem from "./SingleItem";
+import PaymentInformation from "./PaymentInformation";
 import InvoiceFooter from "./InvoiceFooter";
 
 // React-PDF
@@ -17,6 +18,7 @@ export {
     InvoiceCard,
     Items,
     SingleItem,
+    PaymentInformation,
     InvoiceFooter,
     PdfViewer,
     InputFormField,
