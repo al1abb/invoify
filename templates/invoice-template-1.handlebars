@@ -1,224 +1,3 @@
-{{!-- <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Invoice</title>
-    <!-- Include Tailwind CSS via a link or import it based on your project setup -->
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-    <style>
-        /* Additional custom styles can be added here if needed */
-        body {
-            background-color: #f8f8f8;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            background-color: transparent;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .header {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #4a90e2;
-        }
-        .invoice-details {
-            display: flex;
-            margin-top: 20px;
-        }
-        .sender, .receiver {
-            width: 50%;
-            padding: 0 10px;
-        }
-        .sender h3, .receiver h3 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .sender p, .receiver p {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .items {
-            margin-top: 20px;
-        }
-        .items h3 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .items-table {
-            width: 100%;
-            margin-top: 10px;
-            border-collapse: collapse;
-        }
-        .items-table th {
-            text-align: left;
-            padding: 8px 0;
-            font-size: 14px;
-            color: #777;
-            border-bottom: 1px solid #ccc;
-        }
-        .items-table td {
-            padding: 8px 0;
-            font-size: 14px;
-            color: #333;
-            border-bottom: 1px solid #ccc;
-        }
-        .additional-details {
-            display: flex;
-            margin-top: 20px;
-        }
-        .left, .right {
-            width: 50%;
-            padding: 0 10px;
-        }
-        .left h3, .right h3 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .left p, .right p {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .totals {
-            margin-top: 20px;
-        }
-        .totals h3 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .totals p {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .totals p.text-xl {
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="header">Invoice</div>
-
-        <img src={{ details.invoiceLogo }} height="100" alt="">
-        
-        <div class="invoice-details">
-            <div class="sender w-1/2 pr-4">
-                <h3 class="text-xl font-semibold">Sender:</h3>
-                <p class="text-gray-800">Name: {{sender.name}}</p>
-                <p class="text-gray-600">Address: {{sender.address}}</p>
-                <p class="text-gray-600">Zip Code: {{sender.zipCode}}</p>
-                <p class="text-gray-600">City: {{sender.city}}</p>
-                <p class="text-gray-600">Country: {{sender.country}}</p>
-                <p class="text-gray-600">Email: {{sender.email}}</p>
-                <p class="text-gray-600">Phone: {{sender.phone}}</p>
-                <p class="text-gray-600">VAT Number: {{sender.vatNumber}}</p>
-            </div>
-            
-            <div class="receiver w-1/2 pl-4">
-                <h3 class="text-xl font-semibold">Receiver:</h3>
-                <p class="text-gray-800">Name: {{receiver.name}}</p>
-                <p class="text-gray-600">Address: {{receiver.address}}</p>
-                <p class="text-gray-600">Zip Code: {{receiver.zipCode}}</p>
-                <p class="text-gray-600">City: {{receiver.city}}</p>
-                <p class="text-gray-600">Country: {{receiver.country}}</p>
-                <p class="text-gray-600">Email: {{receiver.email}}</p>
-                <p class="text-gray-600">Phone: {{receiver.phone}}</p>
-                <p class="text-gray-600">VAT Number: {{receiver.vatNumber}}</p>
-            </div>
-        </div>
-        
-        <div class="items mt-8">
-            <h3 class="text-xl font-semibold">Invoice Items:</h3>
-            
-            <table class="items-table mt-4 w-full">
-                <thead>
-                    <tr>
-                        <th class="text-left text-gray-600">Name</th>
-                        <th class="text-left text-gray-600">Description</th>
-                        <th class="text-left text-gray-600">Quantity</th>
-                        <th class="text-left text-gray-600">Unit Price</th>
-                        <th class="text-left text-gray-600">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each details.items}}
-                        <tr>
-                            <td>{{name}}</td>
-                            <td>{{description}}</td>
-                            <td>{{quantity}}</td>
-                            <td>{{unitPrice}} {{../details.currency}}</td>
-                            <td>{{total}} {{../details.currency}}</td>
-                        </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="additional-details mt-8">
-            <div class="left">
-                <h3 class="text-xl font-semibold">Additional Notes:</h3>
-                <p class="text-gray-600">{{details.additionalNotes}}</p>
-            </div>
-            <div class="right mt-6">
-                <h3 class="text-xl font-semibold">Payment Details:</h3>
-                <p class="text-gray-600">Payment Terms: {{details.paymentTerms}}</p>
-                <p class="text-gray-600">Invoice Date: {{details.invoiceDate}}</p> <!-- Add Invoice Date -->
-                <p class="text-gray-600">Due Date: {{details.dueDate}}</p> <!-- Add Due Date -->
-            </div>
-        </div>
-        
-        <div class="totals mt-8">
-            <h3 class="text-xl font-semibold">Invoice Totals:</h3>
-            <p class="text-gray-600">Subtotal: {{details.subTotal}} {{ details.currency }}</p>
-            {{#if details.discountDetails.amount }}
-                <p class="text-gray-600">
-                    Discount:
-
-                    {{#ifEquals details.discountDetails.amountType "amount"}}
-                        - {{details.discountDetails.amount}} {{ details.currency }}
-                    {{else}}
-                        - {{details.discountDetails.amount}}%
-                    {{/ifEquals}}
-                </p>
-            {{/if}}
-
-            {{#if details.taxDetails.amount }}
-                <p class="text-gray-600">
-                    Tax:
-
-                    {{#ifEquals details.taxDetails.amountType "amount"}}
-                        + {{details.taxDetails.amount}} {{ details.currency }}
-                    {{else}}
-                        + {{details.taxDetails.amount}}%
-                    {{/ifEquals}}
-                </p>
-            {{/if}}
-
-            {{#if details.shippingDetails.cost }}
-                <p class="text-gray-600">
-                    Shipping:
-
-                    {{#ifEquals details.shippingDetails.costType "amount"}}
-                        + {{details.shippingDetails.cost}} {{ details.currency }}
-                    {{else}}
-                        + {{details.shippingDetails.cost}}%
-                    {{/ifEquals}}
-                </p>
-            {{/if}}
-
-            <p class="text-xl font-semibold">Total Amount: {{details.totalAmount}} {{ details.currency }}</p>
-
-            <div>
-                <img src={{ details.signature }} height="100" alt="">
-            </div>
-        </div>
-    </div>
-
-</body>
-</html> --}}
-
 <html>
     <head>
         <!-- Include Tailwind CSS via a link or import it based on your project setup -->
@@ -275,9 +54,8 @@
                                 class="text-lg font-semibold text-gray-800 dark:text-gray-200"
                             >{{ receiver.name }}</h3>
                             <address class="mt-2 not-italic text-gray-500">
-                                {{ receiver.address }},<br />
-                                {{ receiver.zipCode }}, {{ receiver.city }},<br />
-                                {{ receiver.country }}<br />
+                                {{ receiver.address }}, {{ receiver.zipCode }}<br />
+                                {{ receiver.city }}, {{ receiver.country }}<br />
                             </address>
                         </div>
                         <!-- Col -->
@@ -311,9 +89,9 @@
                     <!-- End Grid -->
 
                     <!-- Table -->
-                    <div class="mt-6">
+                    <div class="mt-3">
                         <div
-                            class="border border-gray-200 p-4 rounded-lg space-y-4 dark:border-gray-700"
+                            class="border border-gray-200 p-1 rounded-lg space-y-1 dark:border-gray-700"
                         >
                             <div class="hidden sm:grid sm:grid-cols-5">
                                 <div
@@ -334,31 +112,35 @@
                                 class="hidden sm:block border-b border-gray-200 dark:border-gray-700"
                             ></div>
 
-                            <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                            <div class="grid grid-cols-3 sm:grid-cols-5 gap-y-1">
 
                                 {{#each details.items}}
                                     
-                                    <div class="col-span-full sm:col-span-2">
+                                    <div class="col-span-full sm:col-span-2 border-b border-gray-300">
                                         <p
                                             class="font-medium text-gray-800 dark:text-gray-200"
                                         >{{name}}</p>
+
+                                        <p class="text-xs text-gray-600 dark:text-gray-200">
+                                            {{ description }}
+                                        </p>
                                     </div>
                                     {{!-- <div>
                                         <p class="font-small text-gray-800">
                                             {{description}}
                                         </p>
                                     </div> --}}
-                                    <div>
+                                    <div class="border-b border-gray-300">
                                         <p
                                             class="text-gray-800 dark:text-gray-200"
                                         >{{quantity}}</p>
                                     </div>
-                                    <div>
+                                    <div class="border-b border-gray-300">
                                         <p
                                             class="text-gray-800 dark:text-gray-200"
                                         >{{unitPrice}} {{../details.currency}}</p>
                                     </div>
-                                    <div>
+                                    <div class="border-b border-gray-300">
                                         <p
                                             class="sm:text-right text-gray-800 dark:text-gray-200"
                                         >{{total}} {{../details.currency}}</p>
@@ -374,7 +156,7 @@
                     <!-- End Table -->
 
                     <!-- Flex -->
-                    <div class="mt-8 flex sm:justify-end">
+                    <div class="mt-2 flex sm:justify-end">
                         <div class="w-full max-w-2xl sm:text-right space-y-2">
                             <!-- Grid -->
                             <div
@@ -386,7 +168,7 @@
                                     >Subtotal:</dt>
                                     <dd
                                         class="col-span-2 text-gray-500"
-                                    >{{ details.subTotal }}</dd>
+                                    >{{ details.subTotal }} {{ details.currency }}</dd>
                                 </dl>
 
                                 {{#if details.discountDetails.amount }}
@@ -446,7 +228,7 @@
                                     >Total:</dt>
                                     <dd
                                         class="col-span-2 text-gray-500"
-                                    >{{ details.totalAmount }}</dd>
+                                    >{{ details.totalAmount }} {{ details.currency }}</dd>
                                 </dl>
 
                             </div>
@@ -460,7 +242,7 @@
                             <div class="my-2">
                                 <p class="font-semibold text-blue-600">Additional notes:</p>
                                 <p
-                                    class="font-semibold text-gray-800 dark:text-gray-200"
+                                    class="font-regular text-gray-800 dark:text-gray-200"
                                 >
                                     {{ details.additionalNotes }}
                                 </p>
@@ -470,16 +252,33 @@
                                 <p class="font-semibold text-blue-600">
                                     Payment terms:
                                 </p>
-                                <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                <p class="font-regular text-gray-800 dark:text-gray-200">
                                     {{ details.paymentTerms }}
+                                </p>
+                            </div>
+
+                            <div class="my-2">
+                                <p class="font-semibold text-md text-gray-800 dark:text-gray-200">
+                                    Please send the payment to this address
+                                    <p class="text-sm">
+                                        Bank: {{ details.paymentInformation.bankName }}
+                                    </p>
+
+                                    <p class="text-sm">
+                                        Account name: {{ details.paymentInformation.accountName }}
+                                    </p>
+
+                                    <p class="text-sm">
+                                        Account no: {{ details.paymentInformation.accountNumber }}
+                                    </p>
                                 </p>
                             </div>
                         </div>
 
-                        <p class="text-gray-500">If you have any questions
+                        <p class="text-gray-500 text-sm">If you have any questions
                             concerning this invoice, use the following contact
                             information:</p>
-                        <div class="mt-2">
+                        <div class="">
                             <p
                                 class="block text-sm font-medium text-gray-800 dark:text-gray-200"
                             >
@@ -493,12 +292,14 @@
                         </div>
                     </div>
 
-                    <div class="mt-6">
-                        <p class="font-semibold text-gray-800">
-                            Signature:
-                        </p>
-                        <img src={{ details.signature }} style="height: 100px" alt="">
-                    </div>
+                    {{#if details.signature }}
+                        <div class="mt-6">
+                            <p class="font-semibold text-gray-800">
+                                Signature:
+                            </p>
+                            <img src={{ details.signature }} style="height: 100px" alt="">
+                        </div>
+                    {{/if}}
 
                     {{!-- <p class="mt-5 text-sm text-gray-500">© 2022 Preline.</p> --}}
                 </div>
