@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import SignatureCanvas from "react-signature-canvas";
 
 // Icons
-import { FileMinus, Percent, RefreshCw } from "lucide-react";
+import { Percent, RefreshCw } from "lucide-react";
 
 interface InvoiceFooterProps {
     control: Control<any>;
@@ -484,7 +484,7 @@ const InvoiceFooter = ({
             </div>
 
             <div className="flex flex-col gap-y-5">
-                <Label>Signature</Label>
+                <Label>Signature:</Label>
                 <SignatureCanvas
                     ref={signatureRef}
                     penColor="rgba(25, 25, 112, 1)"
@@ -506,7 +506,6 @@ const InvoiceFooter = ({
                     className="w-fit gap-2"
                     variant="destructive"
                 >
-                    <FileMinus />
                     Clear Signature
                 </Button>
             </div>
