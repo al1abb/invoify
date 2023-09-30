@@ -1,5 +1,11 @@
 import { boolean, z } from "zod";
 
+const dateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+}
+
 const ItemSchema = z.object({
     name: z.string(),
     description: z.string().optional(),
@@ -34,8 +40,8 @@ const PaymentInformationSchema = z.object({
 const InvoiceDetailsSchema = z.object({
     invoiceLogo: z.unknown(),
     invoiceNumber: z.string(),
-    invoiceDate: z.string(),
-    dueDate: z.string(),
+    invoiceDate: z.date().transform((date) => new Date(date).toLocaleDateString(undefined, dateOptions)),
+    dueDate: z.date().transform((date) => new Date(date).toLocaleDateString(undefined, dateOptions)),
     purchaseOrderNumber: z.string().optional(),
     currency: z.string(),
     language: z.string(),

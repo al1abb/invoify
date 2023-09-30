@@ -73,7 +73,7 @@ const DatePickerFormField = ({
                                             >
                                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                                 {field.value ? (
-                                                    new Date(field.value).toDateString()
+                                                    format(field.value, "PPP")
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -84,14 +84,7 @@ const DatePickerFormField = ({
                                         <Calendar
                                             mode="single"
                                             selected={field.value}
-                                            onSelect={
-                                                (date) => {
-                                                    if(date) {
-                                                        field.onChange(date)
-                                                        setValue(name, formatDate(date))
-                                                    }
-                                                }
-                                            }
+                                            onSelect={field.onChange}
                                             disabled={(date) =>
                                                 date < new Date("1900-01-01")
                                             }
