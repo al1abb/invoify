@@ -40,12 +40,6 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
 
     return (
         <div>
-            {/* <div className="flex justify-between">
-                <div>Item name</div>
-                <div>Qty</div>
-                <div>Unit price/Rate</div>
-                <div>Item total</div>
-            </div> */}
 
             <hr />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // RHF
 import { Control, FieldValues, UseFormSetValue, useForm, useWatch } from "react-hook-form";
@@ -99,8 +99,10 @@ const SingleItem = ({
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            className="w-36"
+                                            className="w-[10rem]"
                                             placeholder="Quantity"
+                                            type="number"
+                                            min={0}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -120,8 +122,9 @@ const SingleItem = ({
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            className="w-36"
                                             placeholder="Unit price/Rate"
+                                            type="number"
+                                            min={0}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -142,7 +145,6 @@ const SingleItem = ({
                                         <Input
                                             {...field}
                                             readOnly
-                                            className="w-36"
                                             placeholder="Item total"
                                         />
                                     </FormControl>
@@ -165,7 +167,7 @@ const SingleItem = ({
                                     <Textarea
                                         {...field}
                                         placeholder="Item description"
-                                        className="w-96 h-0"
+                                        className="w-[15rem] h-0"
                                     />
                                 </FormControl>
                                 <FormMessage />
