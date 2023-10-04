@@ -30,6 +30,9 @@ import SignatureCanvas from "react-signature-canvas";
 // Icons
 import { Percent, RefreshCw } from "lucide-react";
 
+// Formatter
+import { formatNumberWithCommas } from "@/lib/formatter";
+
 interface InvoiceFooterProps {
     control: Control<any>;
     getValues: UseFormGetValues<any>;
@@ -192,7 +195,7 @@ const InvoiceFooter = ({
         setValue("details.taxDetails.amountType", taxAmountType);
         setValue("details.shippingDetails.costType", shippingCostType);
 
-        setValue("details.totalAmount", total.toFixed(2));
+        setValue("details.totalAmount", total);
     };
 
     const switchAmountType = (
@@ -221,7 +224,7 @@ const InvoiceFooter = ({
                                         <Textarea
                                             {...field}
                                             placeholder="Your additional notes"
-                                            className="h-0"
+                                            className="w-[15rem] h-0"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -242,7 +245,7 @@ const InvoiceFooter = ({
                                         <Textarea
                                             {...field}
                                             placeholder="Ex: Net 30"
-                                            className="h-0"
+                                            className="w-[15rem] h-0"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -253,7 +256,7 @@ const InvoiceFooter = ({
                 />
             </div>
 
-            <div className="flex flex-col gap-3 min-w-[25rem]">
+            <div className="flex flex-col gap-3 min-w-[22rem]">
                 <div className="flex justify-center gap-x-10 pb-6">
                     <FormField
                         control={control}
@@ -322,7 +325,7 @@ const InvoiceFooter = ({
                         <div>Sub total</div>
 
                         <div>
-                            {subTotal} {currency}
+                            {formatNumberWithCommas(subTotal)} {currency}
                         </div>
                     </div>
                     {discountSwitch && (
@@ -477,7 +480,7 @@ const InvoiceFooter = ({
                         <div>Total Amount</div>
 
                         <div>
-                            {totalAmount.toFixed(2)} {currency}
+                            {formatNumberWithCommas(totalAmount)} {currency}
                         </div>
                     </div>
                 </div>
