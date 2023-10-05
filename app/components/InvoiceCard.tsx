@@ -36,14 +36,15 @@ import {
     PdfViewer,
     SelectFormField,
 } from ".";
+import PaymentInformation from "./PaymentInformation";
 
 // Hooks
 import { usePdfFunctions } from "../hooks/usePdfFunctions";
-import PaymentInformation from "./PaymentInformation";
+
+// Variables
+import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
 const InvoiceCard = () => {
-    // const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
-
     const {
         invoicePdf,
         invoicePdfLoading,
@@ -54,65 +55,7 @@ const InvoiceCard = () => {
 
     const form = useForm<z.infer<typeof InvoiceSchema>>({
         resolver: zodResolver(InvoiceSchema),
-        defaultValues: {
-            sender: {
-                name: "",
-                address: "",
-                zipCode: "",
-                city: "",
-                country: "",
-                email: "",
-                phone: "",
-                vatNumber: "",
-            },
-            receiver: {
-                name: "",
-                address: "",
-                zipCode: "",
-                city: "",
-                country: "",
-                email: "",
-                phone: "",
-                vatNumber: "",
-            },
-            details: {
-                invoiceLogo: "",
-                invoiceNumber: "",
-                invoiceDate: "",
-                dueDate: "",
-                items: [
-                    {
-                        name: "",
-                        description: "",
-                        quantity: 0,
-                        unitPrice: 0,
-                        total: 0,
-                    },
-                ],
-                currency: "USD",
-                language: "English",
-                taxDetails: {
-                    amount: 0,
-                    taxID: "",
-                    totalTaxAmount: 0,
-                },
-                discountDetails: {
-                    amount: 0,
-                },
-                shippingDetails: {
-                    cost: 0,
-                },
-                // subTotal: 0,
-                // totalAmount: 0,
-                paymentInformation: {
-                    bankName: "",
-                    accountName: "",
-                    accountNumber: "",
-                },
-                additionalNotes: "",
-                paymentTerms: "",
-            },
-        },
+        defaultValues: FORM_DEFAULT_VALUES
     });
 
     const { getValues, setValue } = form;
