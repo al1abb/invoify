@@ -1,3 +1,7 @@
+// Navigation
+import BaseNavbar from "./navigation/BaseNavbar";
+import BaseFooter from "./navigation/BaseFooter";
+
 import InvoiceCard from "./InvoiceCard";
 
 // Form fields
@@ -15,6 +19,8 @@ import InvoiceFooter from "./InvoiceFooter";
 import PdfViewer from "./PdfViewer";
 
 export {
+    BaseNavbar,
+    BaseFooter,
     InvoiceCard,
     Items,
     SingleItem,
