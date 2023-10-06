@@ -5,7 +5,7 @@ import { Outfit } from 'next/font/google'
 const outfit = Outfit({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Invoice App',
+  title: 'Invoify',
   description: 'Invoice generating application',
 }
 

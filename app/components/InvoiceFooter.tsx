@@ -498,7 +498,6 @@ const InvoiceFooter = ({
                             backgroundColor: "rgba(230, 230, 230, 1)",
                             border: "2px solid black",
                             borderRadius: "10px",
-                            cursor: "pointer",
                         },
                     }}
                     onEnd={handleCanvasEnd}
