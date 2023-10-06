@@ -82,3 +82,19 @@ body {
 hr {
   border-width: 1px;
 }
+
+.custom-file-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 7rem;
+  width: 10rem;
+
+  background-color: #eeeeee;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+#logo-input {
+  display: none;
+}

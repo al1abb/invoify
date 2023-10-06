@@ -28,85 +28,80 @@ const FileFormField = ({
     placeholder,
     setValue,
 }: FileFormFieldProps) => {
+    const [base64Image, setBase64Image] = useState<string>("");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const logoImageRef = useRef<HTMLImageElement | null>(null);
-    const [imageExists, setImageExists] = useState(false);
-
-    const [base64Image, setBase64Image] = useState<string>("");
-
-    const removeLogo = () => {
-        // Clear the file input field
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-
-        // Reset imageExists to false
-        setImageExists(false);
-
-        // Clear the src attribute of the <img> element
-        if (logoImageRef.current) {
-            logoImageRef.current.src = "";
+    const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files![0];
+        console.log(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64String = event.target!.result as string;
+                setBase64Image(base64String);
+                setValue("details.invoiceLogo", base64String); // Set the value for form submission
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    useEffect(() => {
-        // setValue("details.invoiceLogo", base64Image);
-    }, [base64Image]);
+    const removeLogo = () => {
+        setBase64Image("");
+        setValue("details.invoiceLogo", "");
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
 
     return (
         <>
+            {label}:
             <FormField
                 control={control}
                 name={name}
                 render={({ field }) => (
                     <FormItem>
-                        <div className="flex flex-col items-start gap-5 text-sm">
+                        {base64Image ? (
+                            <img
+                                id="logoImage"
+                                src={base64Image}
+                                style={{
+                                    objectFit: "contain",
+                                    maxWidth: "15rem",
+                                    maxHeight: "15rem",
+                                    height: "100px",
+                                }}
+                            />
+                        ) : (
                             <div>
-                                <Label>{label}:</Label>
+                                <Label
+                                    htmlFor="logo-input"
+                                    className="custom-file-input"
+                                >
+                                    <>
+                                        Click to upload image
+                                        <FormControl>
+                                            <input
+                                                ref={fileInputRef}
+                                                type="file"
+                                                id="logo-input"
+                                                onChange={handleInvoiceChange}
+                                                accept="image/*"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </>
+                                </Label>
                             </div>
-                            <div>
-                                <FormControl>
-                                    <input
-                                        type="file"
-                                        onChange={(e) => {
-                                            const file = e.target.files![0];
-                                            if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (event) => {
-                                                    const base64String =
-                                                        event.target!
-                                                            .result as string;
-                                                    setBase64Image(
-                                                        base64String
-                                                    );
-                                                    field.onChange(
-                                                        base64String
-                                                    ); // Set the value for form submission
-                                                };
-                                                reader.readAsDataURL(file);
-                                            }
-                                        }}
-                                        accept="image/*"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </div>
-                        </div>
+                        )}
                     </FormItem>
                 )}
             />
-
-            {imageExists && (
+            {base64Image && (
                 <>
-                    <img
-                        id="logoImage"
-                        ref={logoImageRef}
-                        width={200}
-                        height={200}
-                    />
-
                     <Button
+                        type="button"
                         style={{ width: "fit-content" }}
                         onClick={removeLogo}
                     >
