@@ -2,8 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
+
 // Components
-import BaseNavbar from "./components/navigation/BaseNavbar";
+import { BaseNavbar, BaseFooter } from "./components";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
             <body className={outfit.className}>
                 <BaseNavbar />
                 {children}
+				<BaseFooter />
             </body>
         </html>
     );
