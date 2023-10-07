@@ -8,9 +8,9 @@ import z from "zod";
 
 // Form Schema
 import { InvoiceSchema } from "@/lib/schemas";
+import { pdfGenerationSuccess } from "@/lib/toasts";
 
 const usePdfFunctions = () => {
-
     const [invoicePdf, setInvoicePdf] = useState<string | null>(null);
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
@@ -19,28 +19,33 @@ const usePdfFunctions = () => {
      *
      * @param {typeof InvoiceSchema} data - The data used to generate the PDF.
      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
-     * 
+     *
      * @throws {Error} If there is an error generating the PDF.
      */
-    const generatePdf = useCallback(async (data: z.infer<typeof InvoiceSchema>) => {
-        setInvoicePdfLoading(true);
-        
-        try {
-            const response = await fetch(`${PDF_API}`, {
-                method: "POST",
-                body: JSON.stringify(data),
-            });
-    
-            const result = await response.blob()
-            const pdfUrl = window.URL.createObjectURL(result)
-            setInvoicePdf(pdfUrl);
-            
-        } catch(err) {
-            console.log(err)
-        } finally {
-            setInvoicePdfLoading(false);
-        }
-    }, [setInvoicePdf, setInvoicePdfLoading]);
+    const generatePdf = useCallback(
+        async (data: z.infer<typeof InvoiceSchema>) => {
+            setInvoicePdfLoading(true);
+
+            try {
+                const response = await fetch(`${PDF_API}`, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.blob();
+                const pdfUrl = window.URL.createObjectURL(result);
+                setInvoicePdf(pdfUrl);
+
+                // Toast
+                pdfGenerationSuccess();
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setInvoicePdfLoading(false);
+            }
+        },
+        [setInvoicePdf, setInvoicePdfLoading]
+    );
 
     /**
      * Downloads a PDF file.
@@ -82,7 +87,7 @@ const usePdfFunctions = () => {
         invoicePdfLoading,
         generatePdf,
         downloadPdf,
-        previewPdfInTab
+        previewPdfInTab,
     };
 };
 

@@ -44,12 +44,7 @@ import { usePdfFunctions } from "../hooks/usePdfFunctions";
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
-// Toast
-import { useToast } from "@/components/ui/use-toast";
-
 const InvoiceCard = () => {
-    const { toast } = useToast();
-
     const {
         invoicePdf,
         invoicePdfLoading,
@@ -68,15 +63,7 @@ const InvoiceCard = () => {
     const onSubmit = (values: z.infer<typeof InvoiceSchema>) => {
         console.log("VALUE");
         console.log(values);
-        generatePdf(values).finally(() => {
-            if(invoicePdf != null) {
-                toast({
-                    variant: "default",
-                    title: "Your invoice has been generated!",
-                    description: "You can preview or download it below.",
-                })
-            }
-        });
+        generatePdf(values);
     };
 
     return (
