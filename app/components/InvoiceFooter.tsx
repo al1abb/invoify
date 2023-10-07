@@ -35,13 +35,11 @@ import { formatNumberWithCommas } from "@/lib/formatter";
 
 interface InvoiceFooterProps {
     control: Control<any>;
-    getValues: UseFormGetValues<any>;
     setValue: UseFormSetValue<any>;
 }
 
 const InvoiceFooter = ({
     control,
-    getValues,
     setValue,
 }: InvoiceFooterProps) => {
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
@@ -492,8 +490,8 @@ const InvoiceFooter = ({
                     ref={signatureRef}
                     penColor="rgba(25, 25, 112, 1)"
                     canvasProps={{
-                        width: "auto",
                         height: "auto",
+                        width: "auto",
                         style: {
                             backgroundColor: "rgba(230, 230, 230, 1)",
                             border: "2px solid black",
