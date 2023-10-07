@@ -4,15 +4,14 @@ import path from "path";
 import handlebars from "handlebars";
 
 // Define a custom helper that checks for equality
-handlebars.registerHelper('ifEquals', function (
-    arg1: any,
-    arg2: any,
-    options: handlebars.HelperOptions
-) {
-    const context = options.data.root; // Use options.data.root to access the data context
+handlebars.registerHelper(
+    "ifEquals",
+    function (arg1: any, arg2: any, options: handlebars.HelperOptions) {
+        const context = options.data.root; // Use options.data.root to access the data context
 
-    return arg1 === arg2 ? options.fn(context) : options.inverse(context);
-});
+        return arg1 === arg2 ? options.fn(context) : options.inverse(context);
+    }
+);
 
 export async function POST(req: Request, res: Response) {
     try {
