@@ -44,7 +44,12 @@ import { usePdfFunctions } from "../hooks/usePdfFunctions";
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
+// Toast
+import { useToast } from "@/components/ui/use-toast";
+
 const InvoiceCard = () => {
+    const { toast } = useToast();
+
     const {
         invoicePdf,
         invoicePdfLoading,
@@ -55,7 +60,7 @@ const InvoiceCard = () => {
 
     const form = useForm<z.infer<typeof InvoiceSchema>>({
         resolver: zodResolver(InvoiceSchema),
-        defaultValues: FORM_DEFAULT_VALUES
+        defaultValues: FORM_DEFAULT_VALUES,
     });
 
     const { getValues, setValue } = form;
@@ -63,11 +68,19 @@ const InvoiceCard = () => {
     const onSubmit = (values: z.infer<typeof InvoiceSchema>) => {
         console.log("VALUE");
         console.log(values);
-        generatePdf(values);
+        generatePdf(values).finally(() => {
+            if(invoicePdf != null) {
+                toast({
+                    variant: "default",
+                    title: "Your invoice has been generated!",
+                    description: "You can preview or download it below.",
+                })
+            }
+        });
     };
 
     return (
-        <div className="">
+        <>
             <Card>
                 <CardHeader>
                     <CardTitle>INVOICE</CardTitle>
@@ -267,7 +280,6 @@ const InvoiceCard = () => {
                             <div className="">
                                 <InvoiceFooter
                                     control={form.control}
-                                    getValues={getValues}
                                     setValue={setValue}
                                 />
                             </div>
@@ -294,10 +306,10 @@ const InvoiceCard = () => {
                 </CardContent>
 
                 <CardFooter>
-                    {!invoicePdfLoading && invoicePdf.size != 0 && (
+                    {!invoicePdfLoading && invoicePdf != null && (
                         <div className="w-full h-full">
                             <p>PDF Preview</p>
-                            <PdfViewer pdfData={invoicePdf} />
+                            <PdfViewer pdfUrl={invoicePdf} />
 
                             <div className="flex gap-2 py-3">
                                 <Button
@@ -319,7 +331,7 @@ const InvoiceCard = () => {
                     )}
                 </CardFooter>
             </Card>
-        </div>
+        </>
     );
 };
 

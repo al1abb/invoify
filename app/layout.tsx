@@ -5,6 +5,7 @@ import { Outfit } from "next/font/google";
 
 // Components
 import { BaseNavbar, BaseFooter } from "./components";
+import { Toaster } from "@/components/ui/toaster";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -24,6 +25,9 @@ export default function RootLayout({
                 <BaseNavbar />
                 {children}
 				<BaseFooter />
+                
+                {/* Toast component */}
+                <Toaster />
             </body>
         </html>
     );

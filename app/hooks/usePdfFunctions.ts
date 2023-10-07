@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // Variables
 import { PDF_API } from "@/lib/variables";
 
+// Zod
+import z from "zod";
+
+// Form Schema
+import { InvoiceSchema } from "@/lib/schemas";
+
 const usePdfFunctions = () => {
-    const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
+
+    const [invoicePdf, setInvoicePdf] = useState<string | null>(null);
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
     /**
      * Generates a PDF using the provided data.
      *
-     * @param {any} data - The data used to generate the PDF.
+     * @param {typeof InvoiceSchema} data - The data used to generate the PDF.
      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
+     * 
+     * @throws {Error} If there is an error generating the PDF.
      */
-    const generatePdf = async (data: any) => {
+    const generatePdf = useCallback(async (data: z.infer<typeof InvoiceSchema>) => {
         setInvoicePdfLoading(true);
         
         try {
@@ -23,13 +32,15 @@ const usePdfFunctions = () => {
             });
     
             const result = await response.blob()
-            setInvoicePdf(result);
+            const pdfUrl = window.URL.createObjectURL(result)
+            setInvoicePdf(pdfUrl);
+            
         } catch(err) {
             console.log(err)
         } finally {
             setInvoicePdfLoading(false);
         }
-    };
+    }, [setInvoicePdf, setInvoicePdfLoading]);
 
     /**
      * Downloads a PDF file.
@@ -39,7 +50,7 @@ const usePdfFunctions = () => {
     const downloadPdf = () => {
         if (invoicePdf) {
             // Create a blob URL to trigger the download
-            const url = window.URL.createObjectURL(invoicePdf);
+            const url = invoicePdf;
 
             // Create an anchor element to initiate the download
             const a = document.createElement("a");
@@ -58,13 +69,11 @@ const usePdfFunctions = () => {
     /**
      * Generates a preview of a PDF file and opens it in a new browser tab.
      *
-     * @param {none} - This function does not accept any parameters.
      * @return {void} - This function does not return any value.
      */
     const previewPdfInTab = () => {
         if (invoicePdf) {
-            const url = window.URL.createObjectURL(invoicePdf);
-            window.open(url, "_blank");
+            window.open(invoicePdf, "_blank");
         }
     };
 
