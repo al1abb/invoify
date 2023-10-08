@@ -51,7 +51,6 @@ const InvoiceCard = () => {
         generatePdf,
         downloadPdf,
         previewPdfInTab,
-        savePdf,
     } = usePdfFunctions();
 
     const form = useForm<z.infer<typeof InvoiceSchema>>({
@@ -295,8 +294,7 @@ const InvoiceCard = () => {
 
                 <CardFooter>
                     {!invoicePdfLoading && invoicePdf.size != 0 && (
-                        <div className="w-full h-full">
-                            <p>PDF Preview</p>
+                        <div>
                             <PdfViewer pdfBlob={invoicePdf} />
 
                             <div className="flex gap-2 py-3">
@@ -313,12 +311,6 @@ const InvoiceCard = () => {
                                 >
                                     Download
                                     <Download />
-                                </Button>
-                                <Button
-                                    onClick={() => savePdf()}
-                                    className="w-fit gap-2"
-                                >
-                                    Save invoice
                                 </Button>
                             </div>
                         </div>

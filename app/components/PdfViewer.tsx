@@ -8,12 +8,17 @@ type PdfViewerProps = {
 const PdfViewer = ({ pdfBlob }: PdfViewerProps) => {
     const pdfUrl = window.URL.createObjectURL(pdfBlob);
     return (
-        <AspectRatio ratio={1 / 1}>
-            <iframe
-                className="w-full h-full"
-                src={`${pdfUrl}#toolbar=0&view=FitB`}
-            ></iframe>
-        </AspectRatio>
+        <>
+            <hr />
+            <p className="text-xl font-semibold my-2">PDF Preview</p>
+            <AspectRatio ratio={1 / 1.4}>
+                <iframe
+                    className="h-full w-full"
+                    src={`${pdfUrl}#toolbar=0`}
+                    allowTransparency={true}
+                ></iframe>
+            </AspectRatio>
+        </>
     );
 };
 

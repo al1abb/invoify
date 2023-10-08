@@ -82,19 +82,12 @@ const usePdfFunctions = () => {
         }
     };
 
-    const savePdf = () => {
-        if (invoicePdf) {
-            console.log(invoicePdf);
-        }
-    };
-
     return {
         invoicePdf,
         invoicePdfLoading,
         generatePdf,
         downloadPdf,
         previewPdfInTab,
-        savePdf,
     };
 };
 
