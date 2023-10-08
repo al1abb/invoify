@@ -2,13 +2,17 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type PdfViewerProps = {
-    pdfUrl: string;
-}
+    pdfBlob: Blob;
+};
 
-const PdfViewer = ({ pdfUrl }: PdfViewerProps) => {    
+const PdfViewer = ({ pdfBlob }: PdfViewerProps) => {
+    const pdfUrl = window.URL.createObjectURL(pdfBlob);
     return (
         <AspectRatio ratio={1 / 1}>
-            <iframe className="w-full h-full" src={`${pdfUrl}#toolbar=0&view=FitB&navpanes=0`}></iframe>
+            <iframe
+                className="w-full h-full"
+                src={`${pdfUrl}#toolbar=0&view=FitB`}
+            ></iframe>
         </AspectRatio>
     );
 };

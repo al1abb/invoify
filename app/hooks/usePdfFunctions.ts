@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 // Variables
 import { PDF_API } from "@/lib/variables";
@@ -11,7 +11,7 @@ import { InvoiceSchema } from "@/lib/schemas";
 import { pdfGenerationSuccess } from "@/lib/toasts";
 
 const usePdfFunctions = () => {
-    const [invoicePdf, setInvoicePdf] = useState<string | null>(null);
+    const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
     /**
@@ -33,8 +33,7 @@ const usePdfFunctions = () => {
                 });
 
                 const result = await response.blob();
-                const pdfUrl = window.URL.createObjectURL(result);
-                setInvoicePdf(pdfUrl);
+                setInvoicePdf(result);
 
                 // Toast
                 pdfGenerationSuccess();
@@ -55,7 +54,7 @@ const usePdfFunctions = () => {
     const downloadPdf = () => {
         if (invoicePdf) {
             // Create a blob URL to trigger the download
-            const url = invoicePdf;
+            const url = window.URL.createObjectURL(invoicePdf);
 
             // Create an anchor element to initiate the download
             const a = document.createElement("a");
@@ -78,7 +77,14 @@ const usePdfFunctions = () => {
      */
     const previewPdfInTab = () => {
         if (invoicePdf) {
-            window.open(invoicePdf, "_blank");
+            const url = window.URL.createObjectURL(invoicePdf);
+            window.open(url, "_blank");
+        }
+    };
+
+    const savePdf = () => {
+        if (invoicePdf) {
+            console.log(invoicePdf);
         }
     };
 
@@ -88,6 +94,7 @@ const usePdfFunctions = () => {
         generatePdf,
         downloadPdf,
         previewPdfInTab,
+        savePdf,
     };
 };
 
