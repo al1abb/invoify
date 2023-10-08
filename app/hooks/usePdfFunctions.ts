@@ -6,11 +6,19 @@ import { PDF_API } from "@/lib/variables";
 // Zod
 import z from "zod";
 
+// RHF
+import { UseFormGetValues } from "react-hook-form";
+
 // Form Schema
 import { InvoiceSchema } from "@/lib/schemas";
+
+// Toasts
 import { pdfGenerationSuccess } from "@/lib/toasts";
 
-const usePdfFunctions = () => {
+type ValuesType = z.infer<typeof InvoiceSchema>;
+type GetValuesType = UseFormGetValues<z.infer<typeof InvoiceSchema>>;
+
+const usePdfFunctions = (getValues: GetValuesType) => {
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
@@ -23,7 +31,7 @@ const usePdfFunctions = () => {
      * @throws {Error} If there is an error generating the PDF.
      */
     const generatePdf = useCallback(
-        async (data: z.infer<typeof InvoiceSchema>) => {
+        async (data: ValuesType) => {
             setInvoicePdfLoading(true);
 
             try {
@@ -82,12 +90,35 @@ const usePdfFunctions = () => {
         }
     };
 
+    const savePdf = () => {
+        if (invoicePdf) {
+            // Retrieve the existing array from local storage or initialize an empty array
+            const savedInvoicesJSON = localStorage.getItem("savedInvoices");
+            const savedInvoices = savedInvoicesJSON
+                ? JSON.parse(savedInvoicesJSON)
+                : [];
+
+            const formValues = getValues();
+
+            // Add the form values to the array
+            savedInvoices.push(formValues);
+
+            localStorage.setItem(
+                "savedInvoices",
+                JSON.stringify(savedInvoices)
+            );
+
+            console.log("Saved", savedInvoices);
+        }
+    };
+
     return {
         invoicePdf,
         invoicePdfLoading,
         generatePdf,
         downloadPdf,
         previewPdfInTab,
+        savePdf,
     };
 };
 

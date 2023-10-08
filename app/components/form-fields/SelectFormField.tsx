@@ -24,12 +24,12 @@ import {
 // Hooks
 import useCurrencies from "../../hooks/useCurrencies";
 
-interface SelectFormFieldProps {
+type SelectFormFieldProps = {
     control: Control<any>;
     name: string;
     label?: string;
     placeholder?: string;
-}
+};
 
 const SelectFormField = ({
     control,
