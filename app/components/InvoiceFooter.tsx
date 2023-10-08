@@ -38,10 +38,7 @@ interface InvoiceFooterProps {
     setValue: UseFormSetValue<any>;
 }
 
-const InvoiceFooter = ({
-    control,
-    setValue,
-}: InvoiceFooterProps) => {
+const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
     const [taxSwitch, setTaxSwitch] = useState<boolean>(false);
     const [shippingSwitch, setShippingSwitch] = useState<boolean>(false);
@@ -208,7 +205,7 @@ const InvoiceFooter = ({
     };
 
     return (
-        <div className="flex flex-wrap justify-around gap-5">
+        <div className="flex flex-wrap gap-5">
             <div className="flex flex-col gap-3">
                 <FormField
                     control={control}
