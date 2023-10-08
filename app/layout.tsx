@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
-
 // Components
 import { BaseNavbar, BaseFooter } from "./components";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,8 +23,8 @@ export default function RootLayout({
             <body className={outfit.className}>
                 <BaseNavbar />
                 {children}
-				<BaseFooter />
-                
+                <BaseFooter />
+
                 {/* Toast component */}
                 <Toaster />
             </body>
