@@ -6,8 +6,20 @@ import React from "react";
 import { Control } from "react-hook-form";
 
 // Shadcn components
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 // Hooks
 import useCurrencies from "../../hooks/useCurrencies";
@@ -19,8 +31,12 @@ interface SelectFormFieldProps {
     placeholder?: string;
 }
 
-const SelectFormField = ({ control, name, label, placeholder }: SelectFormFieldProps) => {
-
+const SelectFormField = ({
+    control,
+    name,
+    label,
+    placeholder,
+}: SelectFormFieldProps) => {
     const { currencies, currenciesLoading, fetchCurrencies } = useCurrencies();
 
     return (
@@ -30,9 +46,7 @@ const SelectFormField = ({ control, name, label, placeholder }: SelectFormFieldP
                 name={name}
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                            {label}:
-                        </FormLabel>
+                        <FormLabel>{label}:</FormLabel>
                         <Select
                             {...field}
                             onValueChange={field.onChange}
@@ -43,16 +57,24 @@ const SelectFormField = ({ control, name, label, placeholder }: SelectFormFieldP
                                     <SelectValue placeholder={placeholder} />
                                 </SelectTrigger>
                             </FormControl>
-                            <SelectContent style={{ overflowY: "auto", height: '200px' }}>
-                                {
-                                    !currenciesLoading && (
-                                        currencies.map((currency: any, idx: number) => (
-                                            <SelectItem key={idx} value={currency.code}>
-                                                {currency.name} {`(${currency.code})`}
+                            <SelectContent
+                                style={{
+                                    overflowY: "hidden",
+                                    height: "200px",
+                                }}
+                            >
+                                {!currenciesLoading &&
+                                    currencies.map(
+                                        (currency: any, idx: number) => (
+                                            <SelectItem
+                                                key={idx}
+                                                value={currency.code}
+                                            >
+                                                {currency.name}{" "}
+                                                {`(${currency.code})`}
                                             </SelectItem>
-                                        ))
-                                    )
-                                }
+                                        )
+                                    )}
                             </SelectContent>
                         </Select>
                         <FormMessage />
