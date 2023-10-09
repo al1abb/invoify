@@ -3,13 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // RHF imports
-import {
-    Control,
-    UseFormGetValues,
-    UseFormSetValue,
-    set,
-    useWatch,
-} from "react-hook-form";
+import { useWatch } from "react-hook-form";
 
 // Shadcn components
 import {
@@ -33,10 +27,13 @@ import { Percent, RefreshCw } from "lucide-react";
 // Formatter
 import { formatNumberWithCommas } from "@/lib/formatter";
 
-interface InvoiceFooterProps {
-    control: Control<any>;
-    setValue: UseFormSetValue<any>;
-}
+// Types
+import { ControlType, UseFormSetValueType } from "@/types";
+
+type InvoiceFooterProps = {
+    control: ControlType;
+    setValue: UseFormSetValueType;
+};
 
 const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
@@ -112,7 +109,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
             (sum: number, item: any) => sum + item.total,
             0
         );
-        setValue("details.subTotal", totalSum);
+        setValue("details.subTotal", totalSum.toString());
         setSubTotal(totalSum);
 
         let discountAmount: number = parseFloat(discount.amount) ?? 0;
@@ -190,7 +187,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         setValue("details.taxDetails.amountType", taxAmountType);
         setValue("details.shippingDetails.costType", shippingCostType);
 
-        setValue("details.totalAmount", total);
+        setValue("details.totalAmount", total.toString());
     };
 
     const switchAmountType = (

@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 
 // RHF
-import { Control, FieldValues, UseFormSetValue, useForm, useWatch } from "react-hook-form";
+import { UseFormSetValue, useWatch } from "react-hook-form";
 
 // Shadcn UI components
 import {
@@ -20,10 +20,12 @@ import { Label } from "@/components/ui/label";
 // Icons
 import { Trash2 } from "lucide-react";
 
+// Types
+import { ControlType, NameType } from "@/types";
+
 interface SingleItemProps {
-    control: Control<any>;
-    name: string;
-    field: FieldValues;
+    control: ControlType;
+    name: NameType;
     index: number;
     removeField: (index: number) => void;
     setValue: UseFormSetValue<any>;
@@ -32,22 +34,20 @@ interface SingleItemProps {
 const SingleItem = ({
     control,
     name,
-    field,
     index,
     removeField,
-    setValue
+    setValue,
 }: SingleItemProps) => {
-    
     // Get rate variable
     const rate = useWatch({
-      name: `${name}[${index}].unitPrice`,
-      control,
+        name: `${name}[${index}].unitPrice`,
+        control,
     });
 
     // Get quantity variable
     const quantity = useWatch({
-      name: `${name}[${index}].quantity`,
-      control,
+        name: `${name}[${index}].quantity`,
+        control,
     });
 
     // Get currency variable
@@ -116,7 +116,8 @@ const SingleItem = ({
                     name={`${name}[${index}].unitPrice`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
-                            <Label>Rate</Label> <span className="text-xs">{`(in ${currency})`}</span>
+                            <Label>Rate</Label>
+                            <span className="text-xs">{`(in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
@@ -138,7 +139,8 @@ const SingleItem = ({
                     name={`${name}[${index}].total`} // Generate unique name for each field
                     render={({ field }) => (
                         <FormItem>
-                            <Label>Total</Label> <span className="text-xs">{`(in ${currency})`}</span>
+                            <Label>Total</Label>
+                            <span className="text-xs">{`(in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
@@ -178,7 +180,11 @@ const SingleItem = ({
             />
             <div>
                 {index != 0 && (
-                    <Button onClick={() => removeField(index)} className="w-fit gap-2" variant="destructive">
+                    <Button
+                        onClick={() => removeField(index)}
+                        className="w-fit gap-2"
+                        variant="destructive"
+                    >
                         <Trash2 />
                         Remove Item
                     </Button>

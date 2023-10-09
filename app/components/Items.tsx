@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Control, UseFormSetValue, useFieldArray } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,14 @@ import { SingleItem } from ".";
 // Icons
 import { Plus } from "lucide-react";
 
+// Types
+import { ControlType, NameType, UseFormSetValueType } from "@/types";
+
 type ItemsProps = {
-    control: Control<any>;
-    setValue: UseFormSetValue<any>;
-    name: string;
-}
+    control: ControlType;
+    setValue: UseFormSetValueType;
+    name: NameType;
+};
 
 const Items = ({ control, setValue, name }: ItemsProps) => {
     const { fields, append, remove } = useFieldArray({
@@ -35,28 +38,30 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
     };
 
     const removeField = (index: any) => {
-        remove(index)
-    }
+        remove(index);
+    };
 
     return (
         <div>
-
             <hr />
 
             <div className="flex mt-7">
                 <div className="flex flex-col gap-10">
                     {fields.map((field, index) => (
-                        <SingleItem 
+                        <SingleItem
                             key={field.id}
                             control={control}
                             name={name}
-                            field={field}
                             index={index}
                             removeField={removeField}
                             setValue={setValue}
                         />
                     ))}
-                    <Button type="button" onClick={addNewField} className="w-fit gap-2">
+                    <Button
+                        type="button"
+                        onClick={addNewField}
+                        className="w-fit gap-2"
+                    >
                         <Plus />
                         Add a new item
                     </Button>
