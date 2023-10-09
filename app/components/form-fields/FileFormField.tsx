@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Control, UseFormSetValue } from "react-hook-form";
+import React, { useRef, useState } from "react";
+import { Control, FieldPath, UseFormSetValue } from "react-hook-form";
 
 // Shadcn components
 import {
@@ -13,12 +13,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+// Types
+import { ControlType, NameType, UseFormSetValueType } from "@/types";
+
 interface FileFormFieldProps {
-    control: Control<any>;
-    name: string;
+    control: ControlType;
+    name: NameType;
     label?: string;
     placeholder?: string;
-    setValue: UseFormSetValue<any>;
+    setValue: UseFormSetValueType;
 }
 
 const FileFormField = ({

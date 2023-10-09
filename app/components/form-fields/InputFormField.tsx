@@ -1,14 +1,21 @@
 "use client";
 
-import React from "react";
-import { Control } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+// Shadcn
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+// Types
+import { ControlType, NameType } from "@/types";
+
 interface InputFormFieldProps {
-    control: Control<any>;
-    name: string;
+    control: ControlType;
+    name: NameType;
     label?: string;
     placeholder?: string;
 }
@@ -25,24 +32,20 @@ const InputFormField = ({
                 control={control}
                 name={name}
                 render={({ field }) => (
-                    <FormItem
-                    >
+                    <FormItem>
                         <div className="flex justify-between gap-5 items-center text-sm">
-                                <div>
-                                    <Label
-                                    >
-                                        {label}:
-                                    </Label>
-                                </div>
-                                <div>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder={placeholder}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
+                            <div>
+                                <Label>{label}:</Label>
+                            </div>
+                            <div>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        placeholder={placeholder}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </div>
                         </div>
                     </FormItem>
                 )}

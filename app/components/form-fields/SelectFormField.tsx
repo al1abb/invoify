@@ -2,9 +2,6 @@
 
 import React from "react";
 
-// RHF
-import { Control } from "react-hook-form";
-
 // Shadcn components
 import {
     FormControl,
@@ -24,9 +21,12 @@ import {
 // Hooks
 import useCurrencies from "../../hooks/useCurrencies";
 
+// Types
+import { ControlType, NameType } from "@/types";
+
 type SelectFormFieldProps = {
-    control: Control<any>;
-    name: string;
+    control: ControlType;
+    name: NameType;
     label?: string;
     placeholder?: string;
 };
@@ -37,7 +37,7 @@ const SelectFormField = ({
     label,
     placeholder,
 }: SelectFormFieldProps) => {
-    const { currencies, currenciesLoading, fetchCurrencies } = useCurrencies();
+    const { currencies, currenciesLoading } = useCurrencies();
 
     return (
         <div>
