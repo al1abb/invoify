@@ -3,24 +3,24 @@ import { useCallback, useState } from "react";
 // Variables
 import { PDF_API } from "@/lib/variables";
 
-// Zod
-import z from "zod";
-
-// RHF
-import { UseFormGetValues } from "react-hook-form";
-
-// Form Schema
-import { InvoiceSchema } from "@/lib/schemas";
-
 // Toasts
 import { pdfGenerationSuccess } from "@/lib/toasts";
 
-type ValuesType = z.infer<typeof InvoiceSchema>;
-type GetValuesType = UseFormGetValues<z.infer<typeof InvoiceSchema>>;
+// Types
+import { GetValuesType, ValuesType } from "@/types";
 
 const usePdfFunctions = (getValues: GetValuesType) => {
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
+
+    // Saved invoices variables
+    const savedInvoicesJSON = localStorage.getItem("savedInvoices");
+    const savedInvoicesDefault = savedInvoicesJSON
+        ? JSON.parse(savedInvoicesJSON)
+        : [];
+
+    const [savedInvoices, setSavedInvoices] =
+        useState<ValuesType[]>(savedInvoicesDefault);
 
     /**
      * Generates a PDF using the provided data.
@@ -90,7 +90,12 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         }
     };
 
-    const savePdf = () => {
+    /**
+     * Saves the invoice data to local storage.
+     *
+     * @return {void} - This function does not return any value.
+     */
+    const saveInvoiceData = () => {
         if (invoicePdf) {
             // Retrieve the existing array from local storage or initialize an empty array
             const savedInvoicesJSON = localStorage.getItem("savedInvoices");
@@ -108,6 +113,7 @@ const usePdfFunctions = (getValues: GetValuesType) => {
                 JSON.stringify(savedInvoices)
             );
 
+            setSavedInvoices(savedInvoices);
             console.log("Saved", savedInvoices);
         }
     };
@@ -118,7 +124,8 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         generatePdf,
         downloadPdf,
         previewPdfInTab,
-        savePdf,
+        saveInvoiceData,
+        savedInvoices,
     };
 };
 
