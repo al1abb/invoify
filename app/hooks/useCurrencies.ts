@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 // Variables
-import { CURRENCIES } from '@/lib/variables';
+import { CURRENCIES } from "@/lib/variables";
 
 const useCurrencies = () => {
     const [currencies, setCurrencies] = useState<any>([]);
@@ -13,30 +13,30 @@ const useCurrencies = () => {
      * @return {Promise<void>} Promise that resolves when the currencies are fetched.
      */
     const fetchCurrencies = async () => {
-        setCurrenciesLoading(true)
+        setCurrenciesLoading(true);
 
         try {
             const response = await fetch(`${CURRENCIES}`);
-            const data = await response.json()
+            const data = await response.json();
 
             const currencyOptions = Object.keys(data).map((currencyCode) => {
                 const currencyName = data[currencyCode];
                 return { code: currencyCode, name: currencyName };
             });
 
-            setCurrencies(currencyOptions)
-        } catch(err) {
-            console.log(err)
+            setCurrencies(currencyOptions);
+        } catch (err) {
+            console.log(err);
         } finally {
-            setCurrenciesLoading(false)
+            setCurrenciesLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchCurrencies()
-    }, [])
+        fetchCurrencies();
+    }, []);
 
-    return { currencies, currenciesLoading, fetchCurrencies }
-}
+    return { currencies, currenciesLoading, fetchCurrencies };
+};
 
-export default useCurrencies
+export default useCurrencies;
