@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input";
 // Types
 import { ControlType, NameType } from "@/types";
 
-interface InputFormFieldProps {
+type InputFormFieldProps = {
     control: ControlType;
     name: NameType;
     label?: string;
     placeholder?: string;
-}
+};
 
 const InputFormField = ({
     control,

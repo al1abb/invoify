@@ -16,13 +16,13 @@ import { Button } from "@/components/ui/button";
 // Types
 import { ControlType, NameType, UseFormSetValueType } from "@/types";
 
-interface FileFormFieldProps {
+type FileFormFieldProps = {
     control: ControlType;
     name: NameType;
     label?: string;
     placeholder?: string;
     setValue: UseFormSetValueType;
-}
+};
 
 const FileFormField = ({
     control,
