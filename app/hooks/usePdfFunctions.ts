@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // Variables
 import { PDF_API } from "@/lib/variables";
@@ -13,14 +13,20 @@ const usePdfFunctions = (getValues: GetValuesType) => {
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
-    // Saved invoices variables
-    const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-    const savedInvoicesDefault = savedInvoicesJSON
-        ? JSON.parse(savedInvoicesJSON)
-        : [];
+    const [savedInvoices, setSavedInvoices] = useState<ValuesType[]>([]);
 
-    const [savedInvoices, setSavedInvoices] =
-        useState<ValuesType[]>(savedInvoicesDefault);
+    useEffect(() => {
+        let savedInvoicesDefault;
+        if (typeof window !== undefined) {
+            // Saved invoices variables
+            const savedInvoicesJSON =
+                window.localStorage.getItem("savedInvoices");
+            savedInvoicesDefault = savedInvoicesJSON
+                ? JSON.parse(savedInvoicesJSON)
+                : [];
+            setSavedInvoices(savedInvoicesDefault);
+        }
+    }, []);
 
     /**
      * Generates a PDF using the provided data.
