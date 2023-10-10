@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 // Shadcn
@@ -9,6 +11,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+
+// Formatter
+import { formatNumberWithCommas } from "@/lib/formatter";
+
+// Variables
+import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
 import { UseFormResetType, ValuesType } from "@/types";
@@ -24,13 +32,39 @@ const SavedInvoiceSelector = ({
     onSubmit,
     reset,
 }: SavedInvoiceSelectorProps) => {
+    // Update fields
     const updateFields = (selected: any) => {
-        selected.details.dueDate = new Date(selected.details.dueDate);
-        selected.details.invoiceDate = new Date(selected.details.invoiceDate);
+        selected.details.dueDate = new Date(
+            selected.details.dueDate
+        ).toLocaleDateString(undefined, DATE_OPTIONS);
+        selected.details.invoiceDate = new Date(
+            selected.details.invoiceDate
+        ).toLocaleDateString(undefined, DATE_OPTIONS);
+
         selected.details.invoiceLogo = "";
         selected.details.signature = "";
+
+        selected.details.subTotal = formatNumberWithCommas(
+            Number(selected.details.subTotal)
+        );
+        selected.details.totalAmount = formatNumberWithCommas(
+            Number(selected.details.totalAmount)
+        );
+
+        //? Might work if image input logic is moved to a separate hook
+        // Invoice logo
+        // const logoImage = document.getElementById(
+        //     "logoImage"
+        // ) as HTMLImageElement;
+
+        // console.log(logoImage);
+
+        // if (logoImage) {
+        //     logoImage.src = selected.details.invoiceLogo;
+        // }
     };
 
+    // Load saved invoice
     const handleSelectChange = (selectedInvoice: string) => {
         if (selectedInvoice) {
             const selected = JSON.parse(selectedInvoice);
