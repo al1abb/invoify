@@ -17,7 +17,6 @@ export async function POST(req: Request, res: Response) {
     try {
         const body = await req.json();
 
-        // Assuming this API file is in the 'pages/api' directory
         const templatePath = path.join(
             process.cwd(),
             "templates",
