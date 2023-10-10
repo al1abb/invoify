@@ -1,6 +1,12 @@
 export const PDF_API = process.env.NEXT_PUBLIC_PDF_API;
 export const CURRENCIES = process.env.NEXT_PUBLIC_CURRENCIES_API;
 
+export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+};
+
 export const FORM_DEFAULT_VALUES = {
     sender: {
         name: "",

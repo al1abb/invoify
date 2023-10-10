@@ -3,11 +3,8 @@ import { z } from "zod";
 // Formatter
 import { formatNumberWithCommas } from "./formatter";
 
-const dateOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-};
+// Variables
+import { DATE_OPTIONS } from "./variables";
 
 const ItemSchema = z.object({
     name: z.string().min(1),
@@ -46,12 +43,12 @@ const InvoiceDetailsSchema = z.object({
     invoiceDate: z
         .date()
         .transform((date) =>
-            new Date(date).toLocaleDateString(undefined, dateOptions)
+            new Date(date).toLocaleDateString(undefined, DATE_OPTIONS)
         ),
     dueDate: z
         .date()
         .transform((date) =>
-            new Date(date).toLocaleDateString(undefined, dateOptions)
+            new Date(date).toLocaleDateString(undefined, DATE_OPTIONS)
         ),
     purchaseOrderNumber: z.string().optional(),
     currency: z.string(),
