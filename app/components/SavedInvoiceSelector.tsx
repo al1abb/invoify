@@ -34,12 +34,8 @@ const SavedInvoiceSelector = ({
 }: SavedInvoiceSelectorProps) => {
     // Update fields
     const updateFields = (selected: any) => {
-        selected.details.dueDate = new Date(
-            selected.details.dueDate
-        ).toLocaleDateString(undefined, DATE_OPTIONS);
-        selected.details.invoiceDate = new Date(
-            selected.details.invoiceDate
-        ).toLocaleDateString(undefined, DATE_OPTIONS);
+        selected.details.dueDate = new Date(selected.details.dueDate);
+        selected.details.invoiceDate = new Date(selected.details.invoiceDate);
 
         selected.details.invoiceLogo = "";
         selected.details.signature = "";
@@ -64,12 +60,23 @@ const SavedInvoiceSelector = ({
         // }
     };
 
+    // Transform Dates
+    const transformDates = (selected: any) => {
+        selected.details.dueDate = new Date(
+            selected.details.dueDate
+        ).toLocaleDateString(undefined, DATE_OPTIONS);
+        selected.details.invoiceDate = new Date(
+            selected.details.invoiceDate
+        ).toLocaleDateString(undefined, DATE_OPTIONS);
+    };
+
     // Load saved invoice
     const handleSelectChange = (selectedInvoice: string) => {
         if (selectedInvoice) {
             const selected = JSON.parse(selectedInvoice);
             updateFields(selected);
             reset(selected);
+            transformDates(selected);
             onSubmit(selected);
         }
     };

@@ -35,7 +35,7 @@ export async function POST(req: Request, res: Response) {
         // Create a Puppeteer browser instance
         const browser = await puppeteer.launch({
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            userDataDir: "/tmp/puppeteer",
+            headless: true,
         });
 
         const page: Page = await browser.newPage();
