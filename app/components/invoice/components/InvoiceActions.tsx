@@ -11,10 +11,16 @@ import {
 import { Button } from "@/components/ui/button";
 
 // Lucide Icons
-import { Download, Eye, FileInput, Loader2, Save } from "lucide-react";
+import { Download, Eye, FileInput, Loader2, Plus, Save } from "lucide-react";
 
 // Components
 import { PdfViewer } from "../..";
+
+// Types
+import { UseFormResetType } from "@/types";
+
+// Variables
+import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
 type InvoiceActionsProps = {
     invoicePdfLoading: boolean;
@@ -22,6 +28,7 @@ type InvoiceActionsProps = {
     downloadPdf: () => void;
     previewPdfInTab: () => void;
     savePdf: () => void;
+    reset: UseFormResetType;
 };
 
 const InvoiceActions = ({
@@ -30,7 +37,11 @@ const InvoiceActions = ({
     downloadPdf,
     previewPdfInTab,
     savePdf,
+    reset,
 }: InvoiceActionsProps) => {
+    const newInvoice = () => {
+        reset(FORM_DEFAULT_VALUES);
+    };
     return (
         <div className="w-full xl:w-1/4">
             <Card className="sticky top-0">
@@ -38,10 +49,19 @@ const InvoiceActions = ({
                     <CardTitle>ACTIONS</CardTitle>
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
-                <div className="flex flex-col px-6 py-3 gap-y-1">
+                <div className="flex flex-col px-6 gap-y-1">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="gap-2"
+                        onClick={newInvoice}
+                    >
+                        <Plus />
+                        New Invoice
+                    </Button>
                     <Button
                         type="submit"
-                        className="w-fit gap-2"
+                        className="gap-2"
                         disabled={invoicePdfLoading}
                     >
                         {invoicePdfLoading ? (
