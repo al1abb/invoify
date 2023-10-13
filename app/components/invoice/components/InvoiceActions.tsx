@@ -11,7 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 
 // Lucide Icons
-import { Download, Eye, FileInput, Loader2, Plus, Save } from "lucide-react";
+import {
+    Download,
+    Eye,
+    FileInput,
+    Loader2,
+    Mail,
+    Plus,
+    Save,
+} from "lucide-react";
 
 // Components
 import { PdfViewer } from "../..";
@@ -28,6 +36,7 @@ type InvoiceActionsProps = {
     downloadPdf: () => void;
     previewPdfInTab: () => void;
     savePdf: () => void;
+    sendPdfToMail: (mail: string) => void;
     reset: UseFormResetType;
 };
 
@@ -37,6 +46,7 @@ const InvoiceActions = ({
     downloadPdf,
     previewPdfInTab,
     savePdf,
+    sendPdfToMail,
     reset,
 }: InvoiceActionsProps) => {
     const newInvoice = () => {
@@ -103,6 +113,16 @@ const InvoiceActions = ({
                                         size="icon"
                                     >
                                         <Save />
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            sendPdfToMail("some-mail@gmail.com")
+                                        }
+                                        size="icon"
+                                    >
+                                        <Mail />
                                     </Button>
                                 </div>
                             </div>

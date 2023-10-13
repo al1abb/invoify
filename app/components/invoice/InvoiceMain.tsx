@@ -35,11 +35,12 @@ const InvoiceMain = () => {
     const {
         invoicePdf,
         invoicePdfLoading,
+        savedInvoices,
         generatePdf,
         downloadPdf,
         previewPdfInTab,
         saveInvoiceData,
-        savedInvoices,
+        sendPdfToMail,
     } = usePdfFunctions(getValues);
 
     const onSubmit = (values: ValuesType) => {
@@ -67,6 +68,8 @@ const InvoiceMain = () => {
                             downloadPdf={downloadPdf}
                             previewPdfInTab={previewPdfInTab}
                             savePdf={saveInvoiceData}
+                            sendPdfToMail={sendPdfToMail}
+                            reset={reset}
                         />
                     </div>
                 </form>
