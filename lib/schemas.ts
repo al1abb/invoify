@@ -17,7 +17,6 @@ const ItemSchema = z.object({
 const TaxDetailsSchema = z.object({
     amount: z.coerce.number(),
     taxID: z.string(),
-    totalTaxAmount: z.coerce.number(),
     amountType: z.string(),
 });
 
