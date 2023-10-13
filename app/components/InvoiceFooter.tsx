@@ -15,14 +15,13 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// Custom components
+import { ChargeInput } from ".";
 
 // React signature canvas
 import SignatureCanvas from "react-signature-canvas";
-
-// Icons
-import { Percent, RefreshCw } from "lucide-react";
 
 // Formatter
 import { formatNumberWithCommas } from "@/lib/formatter";
@@ -36,13 +35,21 @@ type InvoiceFooterProps = {
 };
 
 const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
+    // Switch states. On/Off
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
     const [taxSwitch, setTaxSwitch] = useState<boolean>(false);
     const [shippingSwitch, setShippingSwitch] = useState<boolean>(false);
 
+    // Initial subtotal and total
     const [subTotal, setSubTotal] = useState<number>(0);
     const [totalAmount, setTotalAmount] = useState<number>(0);
 
+    // Types for discount, tax, and shipping. Amount | Percentage
+    const [discountType, setDiscountType] = useState("amount");
+    const [taxType, setTaxType] = useState("amount");
+    const [shippingType, setShippingType] = useState("amount");
+
+    // Signature
     const signatureRef = useRef<SignatureCanvas | null>(null);
 
     const clearSignature = () => {
@@ -57,7 +64,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         }
     };
 
-    // Get items array
+    // Form Fields
     const itemsArray = useWatch({
         name: `details.items`,
         control,
@@ -83,11 +90,40 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         control,
     });
 
-    // Switch variables for discount, tax, and shipping
-    const [discountType, setDiscountType] = useState("amount");
-    const [taxType, setTaxType] = useState("amount");
-    const [shippingType, setShippingType] = useState("amount");
+    // Charge check
+    useEffect(() => {
+        if (discount.amount) {
+            setDiscountSwitch(true);
+        }
 
+        if (tax.amount) {
+            setTaxSwitch(true);
+        }
+
+        if (shipping.cost) {
+            setShippingSwitch(true);
+        }
+
+        if (discount.amountType == "amount") {
+            setDiscountType("amount");
+        } else {
+            setDiscountType("percentage");
+        }
+
+        if (tax.amountType == "amount") {
+            setTaxType("amount");
+        } else {
+            setTaxType("percentage");
+        }
+
+        if (shipping.costType == "amount") {
+            setShippingType("amount");
+        } else {
+            setShippingType("percentage");
+        }
+    }, [discount.amount, tax.amount, shipping.cost]);
+
+    // Calculate total when values change
     useEffect(() => {
         calculateTotal();
     }, [
@@ -103,7 +139,8 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         shipping.cost,
     ]);
 
-    // Calculate Total amount in the invoice
+    // TODO: Maybe move this and other logic into a separate hook
+    // Calculate total amount in the invoice
     const calculateTotal = () => {
         const totalSum: number = itemsArray.reduce(
             (sum: number, item: any) => sum + item.total,
@@ -122,26 +159,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
 
         let total: number = totalSum;
 
-        // Check if discountAmount and taxAmount are empty (set to zero) when fully deleted
-        if (
-            discountAmount === null ||
-            discountAmount === undefined ||
-            isNaN(discountAmount)
-        ) {
-            discountAmount = 0;
-        }
-
-        if (taxAmount === null || taxAmount === undefined || isNaN(taxAmount)) {
-            taxAmount = 0;
-        }
-        if (
-            shippingCost === null ||
-            shippingCost === undefined ||
-            isNaN(shippingCost)
-        ) {
-            shippingCost = 0;
-        }
-
         if (discountSwitch) {
             if (discountType == "amount") {
                 total -= discountAmount;
@@ -150,8 +167,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                 total -= total * (discountAmount / 100);
                 discountAmountType = "percentage";
             }
-        } else {
-            discountAmount = 0;
         }
 
         if (taxSwitch) {
@@ -162,8 +177,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                 total += total * (taxAmount / 100);
                 taxAmountType = "percentage";
             }
-        } else {
-            taxAmount = 0;
         }
 
         if (shippingSwitch) {
@@ -174,8 +187,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                 total += total * (shippingCost / 100);
                 shippingCostType = "percentage";
             }
-        } else {
-            shippingCost = 0;
         }
 
         setTotalAmount(total);
@@ -321,151 +332,39 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                         </div>
                     </div>
                     {discountSwitch && (
-                        <>
-                            <div className="flex justify-between items-center">
-                                <div>Discount</div>
-
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() =>
-                                            switchAmountType(
-                                                discountType,
-                                                setDiscountType
-                                            )
-                                        }
-                                    >
-                                        <RefreshCw />
-                                    </Button>
-
-                                    <FormField
-                                        control={control}
-                                        name="details.discountDetails.amount"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex justify-between gap-5 items-center text-sm">
-                                                    <div>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                className="w-28"
-                                                                placeholder="Discount"
-                                                                type="number"
-                                                            />
-                                                        </FormControl>
-                                                    </div>
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    {discountType == "percentage" ? (
-                                        <Percent />
-                                    ) : (
-                                        <div>{currency}</div>
-                                    )}
-                                </div>
-                            </div>
-                        </>
+                        <ChargeInput
+                            label="Discount"
+                            control={control}
+                            name="details.discountDetails.amount"
+                            switchAmountType={switchAmountType}
+                            type={discountType}
+                            setType={setDiscountType}
+                            currency={currency}
+                        />
                     )}
 
                     {taxSwitch && (
-                        <>
-                            <div className="flex justify-between items-center">
-                                <div>Tax</div>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() =>
-                                            switchAmountType(
-                                                taxType,
-                                                setTaxType
-                                            )
-                                        }
-                                    >
-                                        <RefreshCw />
-                                    </Button>
-
-                                    <FormField
-                                        control={control}
-                                        name="details.taxDetails.amount"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex justify-between gap-5 items-center text-sm">
-                                                    <div>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                className="w-28"
-                                                                placeholder="Tax"
-                                                                type="number"
-                                                            />
-                                                        </FormControl>
-                                                    </div>
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    {taxType == "percentage" ? (
-                                        <Percent />
-                                    ) : (
-                                        <div>{currency}</div>
-                                    )}
-                                </div>
-                            </div>
-                        </>
+                        <ChargeInput
+                            label="Tax"
+                            control={control}
+                            name="details.taxDetails.amount"
+                            switchAmountType={switchAmountType}
+                            type={taxType}
+                            setType={setTaxType}
+                            currency={currency}
+                        />
                     )}
 
                     {shippingSwitch && (
-                        <>
-                            <div className="flex justify-between items-center">
-                                <div>Shipping</div>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() =>
-                                            switchAmountType(
-                                                shippingType,
-                                                setShippingType
-                                            )
-                                        }
-                                    >
-                                        <RefreshCw />
-                                    </Button>
-
-                                    <FormField
-                                        control={control}
-                                        name="details.shippingDetails.cost"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex justify-between gap-5 items-center text-sm">
-                                                    <div>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                className="w-28"
-                                                                placeholder="Cost"
-                                                                type="number"
-                                                            />
-                                                        </FormControl>
-                                                    </div>
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    {shippingType == "percentage" ? (
-                                        <Percent />
-                                    ) : (
-                                        <div>{currency}</div>
-                                    )}
-                                </div>
-                            </div>
-                        </>
+                        <ChargeInput
+                            label="Shipping"
+                            control={control}
+                            name="details.shippingDetails.cost"
+                            switchAmountType={switchAmountType}
+                            type={shippingType}
+                            setType={setShippingType}
+                            currency={currency}
+                        />
                     )}
 
                     <div className="flex justify-between items-center">
