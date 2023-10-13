@@ -46,14 +46,16 @@ export const FORM_DEFAULT_VALUES = {
         language: "English",
         taxDetails: {
             amount: 0,
+            amountType: "amount",
             taxID: "",
-            totalTaxAmount: 0,
         },
         discountDetails: {
             amount: 0,
+            amountType: "amount",
         },
         shippingDetails: {
             cost: 0,
+            costType: "amount",
         },
         paymentInformation: {
             bankName: "",
