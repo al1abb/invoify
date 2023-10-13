@@ -27,6 +27,7 @@
     "handlebars": "^4.7.8",
     "lucide-react": "^0.279.0",
     "next": "13.4.19",
+    "nodemailer": "^6.9.6",
     "pdfjs-dist": "^3.10.111",
     "postcss": "8.4.29",
     "puppeteer": "^21.3.1",
@@ -43,6 +44,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@types/nodemailer": "^6.4.11",
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7"
   }
