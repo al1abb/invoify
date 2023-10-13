@@ -4,7 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { PDF_API } from "@/lib/variables";
 
 // Toasts
-import { pdfGenerationSuccess } from "@/lib/toasts";
+import {
+    pdfGenerationSuccess,
+    saveInvoiceSuccess,
+    modifiedInvoiceSuccess,
+} from "@/lib/toasts";
 
 // Types
 import { GetValuesType, ValuesType } from "@/types";
@@ -111,8 +115,28 @@ const usePdfFunctions = (getValues: GetValuesType) => {
 
             const formValues = getValues();
 
-            // Add the form values to the array
-            savedInvoices.push(formValues);
+            const existingInvoiceIndex = savedInvoices.findIndex(
+                (invoice: ValuesType) => {
+                    return (
+                        invoice.details.invoiceNumber ===
+                        formValues.details.invoiceNumber
+                    );
+                }
+            );
+
+            // If invoice already exists
+            if (existingInvoiceIndex !== -1) {
+                savedInvoices[existingInvoiceIndex] = formValues;
+
+                // Toast
+                modifiedInvoiceSuccess();
+            } else {
+                // Add the form values to the array
+                savedInvoices.push(formValues);
+
+                // Toast
+                saveInvoiceSuccess();
+            }
 
             localStorage.setItem(
                 "savedInvoices",
@@ -124,14 +148,19 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         }
     };
 
+    const sendPdfToMail = (mail: string) => {
+        console.log("sendPdfToMail", mail);
+    };
+
     return {
         invoicePdf,
         invoicePdfLoading,
+        savedInvoices,
         generatePdf,
         downloadPdf,
         previewPdfInTab,
         saveInvoiceData,
-        savedInvoices,
+        sendPdfToMail,
     };
 };
 
