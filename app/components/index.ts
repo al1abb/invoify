@@ -17,10 +17,11 @@ import InputFormField from "./form-fields/InputFormField";
 import SelectFormField from "./form-fields/SelectFormField";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
 import FileFormField from "./form-fields/FileFormField";
+import ChargeInput from "./form-fields/ChargeInput";
 
 import SavedInvoiceSelector from "./SavedInvoiceSelector";
 
-// React-PDF
+// Pdf viewer
 import PdfViewer from "./PdfViewer";
 
 export {
@@ -33,10 +34,11 @@ export {
     SingleItem,
     PaymentInformation,
     InvoiceFooter,
-    PdfViewer,
     InputFormField,
     SelectFormField,
     DatePickerFormField,
     FileFormField,
+    ChargeInput,
     SavedInvoiceSelector,
+    PdfViewer,
 };
