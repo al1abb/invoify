@@ -89,7 +89,6 @@ const SavedInvoiceSelector = ({
                     <SelectValue placeholder="Load a saved invoice" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">Choose Item</SelectItem>
                     {savedInvoices.map((invoice, idx) => (
                         <SelectItem key={idx} value={JSON.stringify(invoice)}>
                             {invoice.details.invoiceNumber}
