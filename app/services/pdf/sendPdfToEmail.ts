@@ -20,7 +20,7 @@ const sendPdfToEmail = async (
             from: NODEMAILER_EMAIL,
             to: email,
             subject: "Your invoice PDF is ready",
-            html: content,
+            html: "",
         };
 
         await transporter.sendMail(mailOptions);
