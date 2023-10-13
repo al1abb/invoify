@@ -1,3 +1,8 @@
+"use client";
+
+import { useWatch } from "react-hook-form";
+import { useMemo } from "react";
+
 // Shadcn
 import {
     Card,
@@ -43,20 +48,35 @@ const InvoiceForm = ({
     reset,
     setValue,
 }: InvoiceFormProps) => {
+    // Get invoice number variable
+    const invoiceNumber = useWatch({
+        name: "details.invoiceNumber",
+        control,
+    });
+
+    const invoiceNumberLabel = useMemo(() => {
+        if (invoiceNumber) {
+            return `Working on #${invoiceNumber}`;
+        } else {
+            return "(New Invoice)";
+        }
+    }, [invoiceNumber]);
+
     return (
         <div className="w-full xl:w-3/4">
             <Card>
                 <CardHeader>
                     <CardTitle>INVOICE</CardTitle>
                     <CardDescription>Generate invoice</CardDescription>
+
+                    <small>{invoiceNumberLabel}</small>
+                </CardHeader>
+                <CardContent>
                     <SavedInvoiceSelector
                         savedInvoices={savedInvoices}
                         onSubmit={onSubmit}
                         reset={reset}
                     />
-                </CardHeader>
-
-                <CardContent>
                     <div className="space-y-8">
                         <FileFormField
                             control={control}
