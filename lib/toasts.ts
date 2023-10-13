@@ -4,8 +4,23 @@ function pdfGenerationSuccess() {
     toast({
         variant: "default",
         title: "Your invoice has been generated!",
-        description: "You can preview or download it below.",
+        description: "You can preview, download, or save it",
+    });
+}
+function saveInvoiceSuccess() {
+    toast({
+        variant: "default",
+        title: "Saved Invoice",
+        description: "Your invoice details are saved now",
     });
 }
 
-export { pdfGenerationSuccess };
+function modifiedInvoiceSuccess() {
+    toast({
+        variant: "default",
+        title: "Modified Invoice",
+        description: "Successfully modified your invoice",
+    });
+}
+
+export { pdfGenerationSuccess, saveInvoiceSuccess, modifiedInvoiceSuccess };
