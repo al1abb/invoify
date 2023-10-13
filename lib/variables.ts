@@ -1,6 +1,9 @@
 export const PDF_API = process.env.NEXT_PUBLIC_PDF_API;
 export const CURRENCIES = process.env.NEXT_PUBLIC_CURRENCIES_API;
 
+export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
+export const NODEMAILER_PW = process.env.NODEMAILER_PW;
+
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
