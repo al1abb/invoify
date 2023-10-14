@@ -1,15 +1,19 @@
+// APIs
 export const PDF_API = process.env.NEXT_PUBLIC_PDF_API;
 export const CURRENCIES = process.env.NEXT_PUBLIC_CURRENCIES_API;
 
+// Nodemailer
 export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
 export const NODEMAILER_PW = process.env.NODEMAILER_PW;
 
+// Form date options
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
 };
 
+// Form defaults
 export const FORM_DEFAULT_VALUES = {
     sender: {
         name: "",
