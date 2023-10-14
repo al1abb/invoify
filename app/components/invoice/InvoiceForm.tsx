@@ -23,7 +23,7 @@ import {
     PaymentInformation,
     SavedInvoiceSelector,
     SelectFormField,
-} from "../..";
+} from "..";
 
 // Types
 import {

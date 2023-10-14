@@ -7,7 +7,7 @@ import { useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
 // Custom components
-import { SingleItem } from ".";
+import { SingleItem } from "../..";
 
 // Icons
 import { Plus } from "lucide-react";

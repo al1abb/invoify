@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 // Components
-import { PdfViewer } from "../..";
+import { PdfViewer } from "..";
 
 // Types
 import { UseFormResetType } from "@/types";

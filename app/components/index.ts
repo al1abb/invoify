@@ -4,13 +4,16 @@ import BaseFooter from "./navigation/BaseFooter";
 
 // Invoice
 import InvoiceMain from "./invoice/InvoiceMain";
-import InvoiceForm from "./invoice/components/InvoiceForm";
-import InvoiceActions from "./invoice/components/InvoiceActions";
+import InvoiceForm from "./invoice/InvoiceForm";
+import InvoiceActions from "./invoice/InvoiceActions";
 
-import Items from "./Items";
-import SingleItem from "./SingleItem";
-import PaymentInformation from "./PaymentInformation";
-import InvoiceFooter from "./InvoiceFooter";
+// Invoice components
+import Items from "./invoice/components/Items";
+import SingleItem from "./invoice/components/SingleItem";
+import PaymentInformation from "./invoice/components/PaymentInformation";
+import InvoiceFooter from "./invoice/components/InvoiceFooter";
+import PdfViewer from "./invoice/components/PdfViewer";
+import SavedInvoiceSelector from "./invoice/components/SavedInvoiceSelector";
 
 // Form fields
 import InputFormField from "./form-fields/InputFormField";
@@ -18,11 +21,6 @@ import SelectFormField from "./form-fields/SelectFormField";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
 import FileFormField from "./form-fields/FileFormField";
 import ChargeInput from "./form-fields/ChargeInput";
-
-import SavedInvoiceSelector from "./SavedInvoiceSelector";
-
-// Pdf viewer
-import PdfViewer from "./PdfViewer";
 
 export {
     BaseNavbar,

@@ -18,7 +18,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 
 // Custom components
-import { ChargeInput } from ".";
+import { ChargeInput } from "../..";
 
 // React signature canvas
 import SignatureCanvas from "react-signature-canvas";
