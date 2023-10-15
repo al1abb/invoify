@@ -8,18 +8,9 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 // Lucide Icons
-import {
-    Download,
-    Eye,
-    FileInput,
-    Loader2,
-    Mail,
-    Plus,
-    Save,
-} from "lucide-react";
+import { Download, Eye, FileInput, Plus, Save } from "lucide-react";
 
 // Components
 import { PdfViewer, BaseButton, SendPdfToEmailModal } from "@/app/components";
@@ -29,6 +20,7 @@ import { UseFormResetType } from "@/types";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
+import { useRouter } from "next/navigation";
 
 type InvoiceActionsProps = {
     invoicePdfLoading: boolean;
@@ -49,8 +41,11 @@ const InvoiceActions = ({
     sendPdfToMail,
     reset,
 }: InvoiceActionsProps) => {
+    const router = useRouter();
+
     const newInvoice = () => {
         reset(FORM_DEFAULT_VALUES);
+        router.refresh();
     };
     return (
         <div className="w-full xl:w-1/4">
@@ -60,27 +55,24 @@ const InvoiceActions = ({
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
                 <div className="flex flex-col px-2 gap-y-1">
-                    <Button
-                        type="button"
+                    <BaseButton
+                        tooltipLabel="Get new invoice form"
                         variant="outline"
                         onClick={newInvoice}
+                        disabled={invoicePdfLoading}
                     >
                         <Plus />
                         New Invoice
-                    </Button>
-                    <Button type="submit" disabled={invoicePdfLoading}>
-                        {invoicePdfLoading ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Please wait
-                            </>
-                        ) : (
-                            <>
-                                <FileInput />
-                                <span>Generate PDF</span>
-                            </>
-                        )}
-                    </Button>
+                    </BaseButton>
+                    <BaseButton
+                        type="submit"
+                        tooltipLabel="Generate your invoice"
+                        loading={invoicePdfLoading}
+                        loadingText="Generating your invoice"
+                    >
+                        <FileInput />
+                        <span>Generate PDF</span>
+                    </BaseButton>
 
                     <div>
                         {!invoicePdfLoading && invoicePdf.size != 0 && (
