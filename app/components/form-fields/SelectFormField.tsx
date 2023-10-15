@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 
 // Hooks
-import useCurrencies from "../../hooks/useCurrencies";
+import useCurrencies from "@/app/hooks/useCurrencies";
 
 // Types
 import { ControlType, NameType } from "@/types";

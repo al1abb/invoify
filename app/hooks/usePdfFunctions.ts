@@ -168,6 +168,13 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         }
     };
 
+    /**
+     * Sends the invoice PDF to the specified email address
+     *
+     * @param email Email to send Invoice PDF
+     *
+     * @returns Promise<void>
+     */
     const sendPdfToMail = (email: string) => {
         const fd = new FormData();
         fd.append("email", email);

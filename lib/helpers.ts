@@ -13,6 +13,13 @@ const formatNumberWithCommas = (number: number) => {
     });
 };
 
+/**
+ * A method to validate an email address
+ *
+ * @param email Email to validate
+ *
+ * @returns A boolean indicating if the email is valid
+ */
 const isValidEmail = (email: string) => {
     // Regular expression for a simple email pattern
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

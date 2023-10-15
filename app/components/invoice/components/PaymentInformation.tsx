@@ -13,19 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType } from "@/types";
 
 type PaymentInformationProps = {
     control: ControlType;
-    name: NameType;
     label: string;
 };
 
-const PaymentInformation = ({
-    control,
-    name,
-    label,
-}: PaymentInformationProps) => {
+const PaymentInformation = ({ control, label }: PaymentInformationProps) => {
     return (
         <>
             <Label htmlFor="billFrom" className="text-xl font-semibold">

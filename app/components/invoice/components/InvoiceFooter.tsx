@@ -15,7 +15,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 
 // Custom components
 import { BaseButton, ChargeInput } from "@/app/components";
@@ -139,7 +138,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         shipping.cost,
     ]);
 
-    // TODO: Maybe move this and other logic into a separate hook
+    // TODO: Maybe move this and above useEffect logic into a separate hook
     // Calculate total amount in the invoice
     const calculateTotal = () => {
         const totalSum: number = itemsArray.reduce(

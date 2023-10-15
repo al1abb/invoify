@@ -40,7 +40,8 @@ const SavedInvoiceSelector = ({
     onSubmit,
     reset,
 }: SavedInvoiceSelectorProps) => {
-    // Update fields
+    // Update fields when selected invoice is changed.
+    // Reason: The fields don't go through validation when invoice loads
     const updateFields = (selected: any) => {
         selected.details.dueDate = new Date(selected.details.dueDate);
         selected.details.invoiceDate = new Date(selected.details.invoiceDate);
@@ -68,7 +69,7 @@ const SavedInvoiceSelector = ({
         // }
     };
 
-    // Transform Dates
+    // Transform date values
     const transformDates = (selected: any) => {
         selected.details.dueDate = new Date(
             selected.details.dueDate
@@ -78,7 +79,7 @@ const SavedInvoiceSelector = ({
         ).toLocaleDateString(undefined, DATE_OPTIONS);
     };
 
-    // Load saved invoice
+    // Load a saved invoice
     const handleSelectChange = (selectedInvoice: string) => {
         if (selectedInvoice) {
             const selected = JSON.parse(selectedInvoice);

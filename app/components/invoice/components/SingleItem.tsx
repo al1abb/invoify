@@ -23,13 +23,13 @@ import { Trash2 } from "lucide-react";
 // Types
 import { ControlType, NameType } from "@/types";
 
-interface SingleItemProps {
+type SingleItemProps = {
     control: ControlType;
     name: NameType;
     index: number;
     removeField: (index: number) => void;
     setValue: UseFormSetValue<any>;
-}
+};
 
 const SingleItem = ({
     control,
@@ -70,7 +70,7 @@ const SingleItem = ({
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <FormField
                     control={control}
-                    name={`${name}[${index}].name`} // Generate unique name for each field
+                    name={`${name}[${index}].name`}
                     render={({ field }) => (
                         <FormItem>
                             <Label>Name</Label>
@@ -90,7 +90,7 @@ const SingleItem = ({
                 />
                 <FormField
                     control={control}
-                    name={`${name}[${index}].quantity`} // Generate unique name for each field
+                    name={`${name}[${index}].quantity`}
                     render={({ field }) => (
                         <FormItem>
                             <Label>Quantity</Label>
@@ -113,7 +113,7 @@ const SingleItem = ({
                 />
                 <FormField
                     control={control}
-                    name={`${name}[${index}].unitPrice`} // Generate unique name for each field
+                    name={`${name}[${index}].unitPrice`}
                     render={({ field }) => (
                         <FormItem>
                             <Label>Rate</Label>
@@ -136,7 +136,7 @@ const SingleItem = ({
                 />
                 <FormField
                     control={control}
-                    name={`${name}[${index}].total`} // Generate unique name for each field
+                    name={`${name}[${index}].total`}
                     render={({ field }) => (
                         <FormItem>
                             <Label>Total</Label>
@@ -159,7 +159,7 @@ const SingleItem = ({
             </div>
             <FormField
                 control={control}
-                name={`${name}[${index}].description`} // Generate unique name for each field
+                name={`${name}[${index}].description`}
                 render={({ field }) => (
                     <FormItem>
                         <Label>Description</Label>

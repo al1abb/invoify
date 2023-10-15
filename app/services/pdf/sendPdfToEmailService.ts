@@ -18,7 +18,7 @@ const sendPdfToEmail = async (
     invoicePdf: Blob
 ): Promise<boolean> => {
     // Get email html content
-    const emailHTML = await SendPdfEmail(invoicePdf);
+    const emailHTML = await SendPdfEmail();
 
     // Convert Blob to ArrayBuffer
     const arrayBuffer = await new Response(invoicePdf).arrayBuffer();

@@ -1,7 +1,9 @@
 "use client";
 
-import { useWatch } from "react-hook-form";
 import { useMemo } from "react";
+
+// RHF
+import { useWatch } from "react-hook-form";
 
 // Shadcn
 import {
@@ -23,7 +25,7 @@ import {
     PaymentInformation,
     SavedInvoiceSelector,
     SelectFormField,
-} from "..";
+} from "@/app/components";
 
 // Types
 import {
@@ -254,14 +256,13 @@ const InvoiceForm = ({
                         <div>
                             <PaymentInformation
                                 control={control}
-                                name="details.paymentInformation"
                                 label="Payment Information"
                             />
                         </div>
 
                         <hr />
 
-                        <div className="">
+                        <div>
                             <InvoiceFooter
                                 control={control}
                                 setValue={setValue}

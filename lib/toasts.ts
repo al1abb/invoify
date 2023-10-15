@@ -23,7 +23,6 @@ const modifiedInvoiceSuccess = () => {
     });
 };
 
-// Sending to email
 const sendPdfSuccess = () => {
     toast({
         variant: "default",
