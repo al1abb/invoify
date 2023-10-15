@@ -117,7 +117,7 @@ const SingleItem = ({
                     render={({ field }) => (
                         <FormItem>
                             <Label>Rate</Label>
-                            <span className="text-xs">{`(in ${currency})`}</span>
+                            <span className="text-xs">{` (in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>
@@ -140,7 +140,7 @@ const SingleItem = ({
                     render={({ field }) => (
                         <FormItem>
                             <Label>Total</Label>
-                            <span className="text-xs">{`(in ${currency})`}</span>
+                            <span className="text-xs">{` (in ${currency})`}</span>
                             <div className="flex justify-between gap-5 items-center text-sm">
                                 <div>
                                     <FormControl>

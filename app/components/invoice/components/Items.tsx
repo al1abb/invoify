@@ -3,11 +3,8 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
-// UI Components
-import { Button } from "@/components/ui/button";
-
 // Custom components
-import { SingleItem } from "../..";
+import { BaseButton, SingleItem } from "@/app/components";
 
 // Icons
 import { Plus } from "lucide-react";
@@ -57,14 +54,14 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
                             setValue={setValue}
                         />
                     ))}
-                    <Button
-                        type="button"
-                        onClick={addNewField}
+                    <BaseButton
+                        tooltipLabel="Add a new item to the list"
                         className="w-fit gap-2"
+                        onClick={addNewField}
                     >
                         <Plus />
                         Add a new item
-                    </Button>
+                    </BaseButton>
                 </div>
             </div>
         </div>
