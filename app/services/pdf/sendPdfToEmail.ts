@@ -1,6 +1,9 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
+
+// Variables
 import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
-import SendPdfEmail from "@/app/components/templates/email/SendPdfEmail";
+
+import { SendPdfEmail } from "@/app/components";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -14,13 +17,26 @@ const sendPdfToEmail = async (
     email: string,
     invoicePdf: Blob
 ): Promise<boolean> => {
+    const emailHTML = await SendPdfEmail(invoicePdf);
+    // Convert Blob to ArrayBuffer
+    const arrayBuffer = await new Response(invoicePdf).arrayBuffer();
+
+    // Convert ArrayBuffer to Buffer
+    const pdfBuffer = Buffer.from(arrayBuffer);
+
     try {
         // sending email from own to own account
         const mailOptions: SendMailOptions = {
-            from: NODEMAILER_EMAIL,
+            from: "Invoify <" + NODEMAILER_EMAIL + ">",
             to: email,
             subject: "Your invoice PDF is ready",
-            html: "",
+            html: emailHTML,
+            attachments: [
+                {
+                    filename: "invoice.pdf",
+                    content: pdfBuffer,
+                },
+            ],
         };
 
         await transporter.sendMail(mailOptions);
