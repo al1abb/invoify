@@ -36,6 +36,7 @@ import {
 type InvoiceFormProps = {
     control: ControlType;
     savedInvoices: ValuesType[];
+    deleteInvoice: (id: number) => void;
     onSubmit: (values: ValuesType) => void;
     reset: UseFormResetType;
     setValue: UseFormSetValueType;
@@ -44,6 +45,7 @@ type InvoiceFormProps = {
 const InvoiceForm = ({
     control,
     savedInvoices,
+    deleteInvoice,
     onSubmit,
     reset,
     setValue,
@@ -74,6 +76,7 @@ const InvoiceForm = ({
                 <CardContent>
                     <SavedInvoiceSelector
                         savedInvoices={savedInvoices}
+                        deleteInvoice={deleteInvoice}
                         onSubmit={onSubmit}
                         reset={reset}
                     />

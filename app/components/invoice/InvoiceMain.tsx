@@ -41,6 +41,7 @@ const InvoiceMain = () => {
         downloadPdf,
         previewPdfInTab,
         saveInvoiceData,
+        deleteInvoice,
         sendPdfToMail,
     } = usePdfFunctions(getValues);
 
@@ -58,6 +59,7 @@ const InvoiceMain = () => {
                         <InvoiceForm
                             control={form.control}
                             savedInvoices={savedInvoices}
+                            deleteInvoice={deleteInvoice}
                             onSubmit={onSubmit}
                             reset={reset}
                             setValue={setValue}

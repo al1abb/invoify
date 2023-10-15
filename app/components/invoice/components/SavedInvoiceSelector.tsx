@@ -12,8 +12,14 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-// Formatter
-import { formatNumberWithCommas } from "@/lib/formatter";
+// Components
+import { BaseButton } from "@/app/components";
+
+// Icons
+import { Trash2 } from "lucide-react";
+
+// Helpers
+import { formatNumberWithCommas } from "@/lib/helpers";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
@@ -23,12 +29,14 @@ import { UseFormResetType, ValuesType } from "@/types";
 
 type SavedInvoiceSelectorProps = {
     savedInvoices: ValuesType[];
+    deleteInvoice: (id: number) => void;
     onSubmit: (values: ValuesType) => void;
     reset: UseFormResetType;
 };
 
 const SavedInvoiceSelector = ({
     savedInvoices,
+    deleteInvoice,
     onSubmit,
     reset,
 }: SavedInvoiceSelectorProps) => {
@@ -90,9 +98,23 @@ const SavedInvoiceSelector = ({
                 </SelectTrigger>
                 <SelectContent>
                     {savedInvoices.map((invoice, idx) => (
-                        <SelectItem key={idx} value={JSON.stringify(invoice)}>
-                            {invoice.details.invoiceNumber}
-                        </SelectItem>
+                        <div className="relative py-2">
+                            <SelectItem
+                                key={idx}
+                                value={JSON.stringify(invoice)}
+                            >
+                                {invoice.details.invoiceNumber}
+                            </SelectItem>
+
+                            <BaseButton
+                                size="icon"
+                                variant="destructive"
+                                onClick={() => deleteInvoice(idx)}
+                                className="absolute top-1 right-0"
+                            >
+                                <Trash2 />
+                            </BaseButton>
+                        </div>
                     ))}
 
                     {savedInvoices.length == 0 && <div>No saved invoices</div>}

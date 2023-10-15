@@ -146,7 +146,25 @@ const usePdfFunctions = (getValues: GetValuesType) => {
             );
 
             setSavedInvoices(savedInvoices);
-            console.log("Saved", savedInvoices);
+        }
+    };
+
+    /**
+     * Deletes an invoice from local storage based on given index number.
+     *
+     * @param index Index of the invoice to delete
+     *
+     * @return {void} - This function does not return any value
+     */
+    const deleteInvoice = (index: number) => {
+        if (index >= 0 && index < savedInvoices.length) {
+            const updatedInvoices = [...savedInvoices];
+            updatedInvoices.splice(index, 1);
+            setSavedInvoices(updatedInvoices);
+
+            const updatedInvoicesJSON = JSON.stringify(updatedInvoices);
+
+            localStorage.setItem("savedInvoices", updatedInvoicesJSON);
         }
     };
 
@@ -184,6 +202,7 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         downloadPdf,
         previewPdfInTab,
         saveInvoiceData,
+        deleteInvoice,
         sendPdfToMail,
     };
 };
