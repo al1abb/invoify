@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 // Components
-import { PdfViewer } from "..";
+import { PdfViewer, BaseButton, SendPdfToEmailModal } from "@/app/components";
 
 // Types
 import { UseFormResetType } from "@/types";
@@ -36,7 +36,7 @@ type InvoiceActionsProps = {
     downloadPdf: () => void;
     previewPdfInTab: () => void;
     savePdf: () => void;
-    sendPdfToMail: (mail: string) => void;
+    sendPdfToMail: (email: string) => Promise<void>;
     reset: UseFormResetType;
 };
 
@@ -59,21 +59,16 @@ const InvoiceActions = ({
                     <CardTitle>ACTIONS</CardTitle>
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
-                <div className="flex flex-col px-6 gap-y-1">
+                <div className="flex flex-col px-2 gap-y-1">
                     <Button
                         type="button"
                         variant="outline"
-                        className="gap-2"
                         onClick={newInvoice}
                     >
                         <Plus />
                         New Invoice
                     </Button>
-                    <Button
-                        type="submit"
-                        className="gap-2"
-                        disabled={invoicePdfLoading}
-                    >
+                    <Button type="submit" disabled={invoicePdfLoading}>
                         {invoicePdfLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -91,39 +86,32 @@ const InvoiceActions = ({
                         {!invoicePdfLoading && invoicePdf.size != 0 && (
                             <div>
                                 <PdfViewer pdfBlob={invoicePdf} />
-
                                 <div className="flex flex-row gap-2 py-3">
-                                    <Button
-                                        type="button"
-                                        onClick={() => previewPdfInTab()}
+                                    <BaseButton
+                                        tooltipLabel="Preview invoice in new tab"
+                                        onClick={previewPdfInTab}
                                         size="icon"
                                     >
                                         <Eye />
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        onClick={() => downloadPdf()}
+                                    </BaseButton>
+                                    <BaseButton
+                                        tooltipLabel="Download invoice PDF"
+                                        onClick={downloadPdf}
                                         size="icon"
                                     >
                                         <Download />
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        onClick={() => savePdf()}
+                                    </BaseButton>
+                                    <BaseButton
+                                        tooltipLabel="Save invoice in website"
+                                        onClick={savePdf}
                                         size="icon"
                                     >
                                         <Save />
-                                    </Button>
+                                    </BaseButton>
 
-                                    <Button
-                                        type="button"
-                                        onClick={() =>
-                                            sendPdfToMail("some-mail@gmail.com")
-                                        }
-                                        size="icon"
-                                    >
-                                        <Mail />
-                                    </Button>
+                                    <SendPdfToEmailModal
+                                        sendPdfToMail={sendPdfToMail}
+                                    />
                                 </div>
                             </div>
                         )}
