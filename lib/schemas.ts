@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-// Formatter
-import { formatNumberWithCommas } from "./formatter";
+// Helpers
+import { formatNumberWithCommas } from "./helpers";
 
 // Variables
 import { DATE_OPTIONS } from "./variables";
