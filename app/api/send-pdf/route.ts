@@ -7,7 +7,10 @@ export async function POST(req: Request, res: Response) {
         const email = fd.get("email");
         const invoicePdf = fd.get("invoicePdf");
 
-        const emailSent = await sendPdfToEmail(email, invoicePdf);
+        const emailSent = await sendPdfToEmail(
+            email as string,
+            invoicePdf as Blob
+        );
 
         if (emailSent) {
             return new Response("Email sent successfully", {
