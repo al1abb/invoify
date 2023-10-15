@@ -18,13 +18,13 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 
 // Custom components
-import { ChargeInput } from "../..";
+import { BaseButton, ChargeInput } from "@/app/components";
 
 // React signature canvas
 import SignatureCanvas from "react-signature-canvas";
 
-// Formatter
-import { formatNumberWithCommas } from "@/lib/formatter";
+// Helpers
+import { formatNumberWithCommas } from "@/lib/helpers";
 
 // Types
 import { ControlType, UseFormSetValueType } from "@/types";
@@ -393,14 +393,14 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                     }}
                     onEnd={handleCanvasEnd}
                 />
-                <Button
-                    type="button"
-                    onClick={clearSignature}
-                    className="w-fit gap-2"
+                <BaseButton
+                    tooltipLabel="Clear the signature board"
                     variant="destructive"
+                    className="w-fit gap-2"
+                    onClick={clearSignature}
                 >
                     Clear Signature
-                </Button>
+                </BaseButton>
             </div>
         </div>
     );
