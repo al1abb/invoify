@@ -2,9 +2,12 @@ import sendPdfToEmail from "@/app/services/pdf/sendPdfToEmail";
 
 export async function POST(req: Request, res: Response) {
     try {
-        const body = await req.json();
+        const fd = await req.formData();
 
-        const emailSent = await sendPdfToEmail(body.email, body.invoicePdf);
+        const email = fd.get("email");
+        const invoicePdf = fd.get("invoicePdf");
+
+        const emailSent = await sendPdfToEmail(email, invoicePdf);
 
         if (emailSent) {
             return new Response("Email sent successfully", {
@@ -16,6 +19,7 @@ export async function POST(req: Request, res: Response) {
             });
         }
     } catch (err) {
+        console.log(err);
         return new Response("Failed to send email", { status: 500 });
     }
 }
