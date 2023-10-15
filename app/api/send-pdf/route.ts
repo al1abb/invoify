@@ -1,4 +1,4 @@
-import sendPdfToEmail from "@/app/services/pdf/sendPdfToEmail";
+import sendPdfToEmail from "@/app/services/pdf/sendPdfToEmailService";
 
 export async function POST(req: Request, res: Response) {
     try {

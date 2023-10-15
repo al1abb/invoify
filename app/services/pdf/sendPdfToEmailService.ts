@@ -17,7 +17,9 @@ const sendPdfToEmail = async (
     email: string,
     invoicePdf: Blob
 ): Promise<boolean> => {
+    // Get email html content
     const emailHTML = await SendPdfEmail(invoicePdf);
+
     // Convert Blob to ArrayBuffer
     const arrayBuffer = await new Response(invoicePdf).arrayBuffer();
 
@@ -25,7 +27,6 @@ const sendPdfToEmail = async (
     const pdfBuffer = Buffer.from(arrayBuffer);
 
     try {
-        // sending email from own to own account
         const mailOptions: SendMailOptions = {
             from: "Invoify <" + NODEMAILER_EMAIL + ">",
             to: email,
