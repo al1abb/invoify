@@ -1,6 +1,7 @@
 // APIs
-export const PDF_API = process.env.NEXT_PUBLIC_PDF_API;
-export const CURRENCIES = process.env.NEXT_PUBLIC_CURRENCIES_API;
+export const PDF_API = "/api/pdf";
+export const SEND_PDF_API = "/api/send-pdf";
+export const CURRENCIES = "https://openexchangerates.org/api/currencies.json";
 
 // Nodemailer
 export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
