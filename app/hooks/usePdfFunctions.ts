@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 
 // Variables
-import { PDF_API } from "@/lib/variables";
+import { PDF_API, SEND_PDF_API } from "@/lib/variables";
 
 // Toasts
 import {
     pdfGenerationSuccess,
     saveInvoiceSuccess,
     modifiedInvoiceSuccess,
+    sendPdfSuccess,
+    sendPdfError,
 } from "@/lib/toasts";
 
 // Types
@@ -45,7 +47,7 @@ const usePdfFunctions = (getValues: GetValuesType) => {
             setInvoicePdfLoading(true);
 
             try {
-                const response = await fetch(`${PDF_API}`, {
+                const response = await fetch(PDF_API, {
                     method: "POST",
                     body: JSON.stringify(data),
                 });
@@ -148,8 +150,30 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         }
     };
 
-    const sendPdfToMail = (mail: string) => {
-        console.log("sendPdfToMail", mail);
+    const sendPdfToMail = (email: string) => {
+        const fd = new FormData();
+        fd.append("email", email);
+        fd.append("invoicePdf", invoicePdf, "invoice.pdf");
+
+        return fetch(SEND_PDF_API, {
+            method: "POST",
+            body: fd,
+        })
+            .then((res) => {
+                if (res.ok) {
+                    // Successful toast msg
+                    sendPdfSuccess();
+                } else {
+                    // Error toast msg
+                    sendPdfError();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+
+                // Error toast msg
+                sendPdfError();
+            });
     };
 
     return {
