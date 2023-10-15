@@ -13,10 +13,10 @@ import { InvoiceSchema } from "@/lib/schemas";
 import { Form } from "@/components/ui/form";
 
 // Custom components
-import { InvoiceActions, InvoiceForm } from "..";
+import { InvoiceActions, InvoiceForm } from "@/app/components";
 
 // Hooks
-import { usePdfFunctions } from "../../hooks/usePdfFunctions";
+import { usePdfFunctions } from "@/app/hooks/usePdfFunctions";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
