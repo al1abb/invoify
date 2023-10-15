@@ -3,9 +3,11 @@
 import React from "react";
 
 // Shadcn
-import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+// Components
+import { BaseButton } from "@/app/components";
 
 // Icons
 import { Percent, RefreshCw } from "lucide-react";
@@ -41,14 +43,13 @@ const ChargeInput = ({
                 <div>{label}</div>
 
                 <div className="flex items-center gap-2">
-                    <Button
-                        type="button"
+                    <BaseButton
                         variant="ghost"
                         size="icon"
                         onClick={() => switchAmountType(type, setType)}
                     >
                         <RefreshCw />
-                    </Button>
+                    </BaseButton>
 
                     <FormField
                         control={control}
