@@ -1,34 +1,24 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 
-type SendPdfEmailProps = {
-    invoicePdf: Blob;
-};
+type SendPdfEmailProps = Blob;
 
-const SendPdfEmail = ({ invoicePdf }: SendPdfEmailProps) => {
-    const url = window.URL.createObjectURL(invoicePdf);
+const SendPdfEmail = async (invoicePdf: SendPdfEmailProps) => {
+    const ReactDOMServer = (await import("react-dom/server")).default;
+    // const url = URL.createObjectURL(invoicePdf);
+    console.log("Email template variable:", invoicePdf);
 
-    const downloadPdf = () => {
-        // Create an anchor element to initiate the download
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "invoice.pdf";
-        document.body.appendChild(a);
-
-        // Trigger the download
-        a.click();
-
-        // Clean up the URL object
-        window.URL.revokeObjectURL(url);
-    };
-
-    return (
+    const content = (
         <>
             <p>Here is your PDF</p>
-            <iframe src={url}></iframe>
-            <Button onClick={downloadPdf}>Download the PDF</Button>
+            {/* <iframe src={invoicePdf}></iframe>
+            <a href={invoicePdf} download="invoice.pdf">
+                Download PDF
+            </a> */}
         </>
     );
+
+    const htmlContent = ReactDOMServer.renderToStaticMarkup(content);
+    return htmlContent;
 };
 
 export default SendPdfEmail;
