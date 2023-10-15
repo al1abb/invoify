@@ -30,6 +30,22 @@ const BaseButton = ({
     children,
     ...props
 }: BaseButtonProps) => {
+    const withoutTooltip = (
+        <>
+            {!loading ? (
+                <Button type={type} {...props}>
+                    {children}
+                </Button>
+            ) : (
+                <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {loadingText}
+                </Button>
+            )}
+        </>
+    );
+
+    if (!tooltipLabel) return withoutTooltip;
     return (
         <TooltipProvider>
             <Tooltip>
