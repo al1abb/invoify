@@ -22,6 +22,15 @@ import DatePickerFormField from "./form-fields/DatePickerFormField";
 import FileFormField from "./form-fields/FileFormField";
 import ChargeInput from "./form-fields/ChargeInput";
 
+// Reusable components
+import BaseButton from "./reusables/BaseButton";
+
+// Modals
+import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
+
+// Templates
+import SendPdfEmail from "./templates/email/SendPdfEmail";
+
 export {
     BaseNavbar,
     BaseFooter,
@@ -32,11 +41,14 @@ export {
     SingleItem,
     PaymentInformation,
     InvoiceFooter,
+    SavedInvoiceSelector,
+    PdfViewer,
     InputFormField,
     SelectFormField,
     DatePickerFormField,
     FileFormField,
     ChargeInput,
-    SavedInvoiceSelector,
-    PdfViewer,
+    BaseButton,
+    SendPdfToEmailModal,
+    SendPdfEmail,
 };
