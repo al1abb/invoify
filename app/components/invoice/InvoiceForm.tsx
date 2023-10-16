@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 
 // RHF
-import { useWatch } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // Shadcn
 import {
@@ -28,30 +28,21 @@ import {
 } from "@/app/components";
 
 // Types
-import {
-    ControlType,
-    UseFormResetType,
-    UseFormSetValueType,
-    ValuesType,
-} from "@/types";
+import { ValuesType } from "@/types";
 
 type InvoiceFormProps = {
-    control: ControlType;
     savedInvoices: ValuesType[];
     deleteInvoice: (id: number) => void;
     onSubmit: (values: ValuesType) => void;
-    reset: UseFormResetType;
-    setValue: UseFormSetValueType;
 };
 
 const InvoiceForm = ({
-    control,
     savedInvoices,
     deleteInvoice,
     onSubmit,
-    reset,
-    setValue,
 }: InvoiceFormProps) => {
+    const { control, reset, setValue } = useFormContext();
+
     // Get invoice number variable
     const invoiceNumber = useWatch({
         name: "details.invoiceNumber",
@@ -99,6 +90,7 @@ const InvoiceForm = ({
                                     Bill From:
                                 </Label>
 
+                                {/* // TODO: Remove control from these elements and apply it using useFormContext */}
                                 <InputFormField
                                     control={control}
                                     name="sender.name"
