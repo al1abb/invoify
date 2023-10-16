@@ -18,6 +18,12 @@ import { InvoiceActions, InvoiceForm } from "@/app/components";
 // Hooks
 import { usePdfFunctions } from "@/app/hooks/usePdfFunctions";
 
+// Context
+import {
+    InvoiceContextProvider,
+    useInvoiceContext,
+} from "@/app/contexts/InvoiceContext";
+
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
@@ -30,7 +36,7 @@ const InvoiceMain = () => {
         defaultValues: FORM_DEFAULT_VALUES,
     });
 
-    const { getValues, setValue, reset, handleSubmit } = form;
+    const { getValues, handleSubmit } = form;
 
     // TODO: Move this hook to invoice actions and pass getValues to InvoiceActions
     const {
@@ -40,7 +46,7 @@ const InvoiceMain = () => {
         generatePdf,
         downloadPdf,
         previewPdfInTab,
-        saveInvoiceData,
+        saveInvoice,
         deleteInvoice,
         sendPdfToMail,
     } = usePdfFunctions(getValues);
@@ -57,12 +63,9 @@ const InvoiceMain = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-wrap">
                         <InvoiceForm
-                            control={form.control}
                             savedInvoices={savedInvoices}
                             deleteInvoice={deleteInvoice}
                             onSubmit={onSubmit}
-                            reset={reset}
-                            setValue={setValue}
                         />
 
                         <InvoiceActions
@@ -70,9 +73,8 @@ const InvoiceMain = () => {
                             invoicePdf={invoicePdf}
                             downloadPdf={downloadPdf}
                             previewPdfInTab={previewPdfInTab}
-                            savePdf={saveInvoiceData}
+                            saveInvoice={saveInvoice}
                             sendPdfToMail={sendPdfToMail}
-                            reset={reset}
                         />
                     </div>
                 </form>
