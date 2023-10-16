@@ -3,6 +3,9 @@ import React from "react";
 
 import { useRouter } from "next/navigation";
 
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // Shadcn
 import {
     Card,
@@ -11,14 +14,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-// Lucide Icons
-import { Download, Eye, FileInput, Plus, Save } from "lucide-react";
-
 // Components
 import { PdfViewer, BaseButton, SendPdfToEmailModal } from "@/app/components";
 
-// Types
-import { UseFormResetType } from "@/types";
+// Lucide Icons
+import { Download, Eye, FileInput, Plus, Save } from "lucide-react";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
@@ -28,9 +28,8 @@ type InvoiceActionsProps = {
     invoicePdf: Blob;
     downloadPdf: () => void;
     previewPdfInTab: () => void;
-    savePdf: () => void;
+    saveInvoice: () => void;
     sendPdfToMail: (email: string) => Promise<void>;
-    reset: UseFormResetType;
 };
 
 const InvoiceActions = ({
@@ -38,11 +37,12 @@ const InvoiceActions = ({
     invoicePdf,
     downloadPdf,
     previewPdfInTab,
-    savePdf,
+    saveInvoice,
     sendPdfToMail,
-    reset,
 }: InvoiceActionsProps) => {
     const router = useRouter();
+
+    const { reset } = useFormContext();
 
     const newInvoice = () => {
         reset(FORM_DEFAULT_VALUES);
@@ -96,7 +96,7 @@ const InvoiceActions = ({
                                     </BaseButton>
                                     <BaseButton
                                         tooltipLabel="Save invoice in website"
-                                        onClick={savePdf}
+                                        onClick={saveInvoice}
                                         size="icon"
                                     >
                                         <Save />
