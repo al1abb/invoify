@@ -99,11 +99,8 @@ const SavedInvoiceSelector = ({
                 </SelectTrigger>
                 <SelectContent>
                     {savedInvoices.map((invoice, idx) => (
-                        <div className="relative py-2">
-                            <SelectItem
-                                key={idx}
-                                value={JSON.stringify(invoice)}
-                            >
+                        <div className="relative py-2" key={idx}>
+                            <SelectItem value={JSON.stringify(invoice)}>
                                 {invoice.details.invoiceNumber}
                             </SelectItem>
 
