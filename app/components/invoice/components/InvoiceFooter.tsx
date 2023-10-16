@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// RHF imports
+// RHF
 import { useWatch } from "react-hook-form";
 
 // Shadcn components
