@@ -51,48 +51,42 @@ const SendPdfToEmailModal = ({ sendPdfToMail }: SendPdfToEmailModalProps) => {
     };
 
     return (
-        <form>
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                    <BaseButton
-                        tooltipLabel="Send invoice PDF to mail"
-                        size="icon"
-                    >
-                        <Mail />
-                    </BaseButton>
-                </DialogTrigger>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <BaseButton tooltipLabel="Send invoice PDF to mail" size="icon">
+                    <Mail />
+                </BaseButton>
+            </DialogTrigger>
 
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Send to email</DialogTitle>
-                        <DialogDescription>
-                            Please specify the email address for invoice
-                            delivery.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <Label>Email</Label>
-                    <Input
-                        type="email"
-                        placeholder="Enter email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    ></Input>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Send to email</DialogTitle>
+                    <DialogDescription>
+                        Please specify the email address for invoice delivery.
+                    </DialogDescription>
+                </DialogHeader>
+                <Label>Email</Label>
+                <Input
+                    type="email"
+                    placeholder="Enter email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                ></Input>
 
-                    {!loading && error && (
-                        <small style={{ color: "red" }}>{error}</small>
-                    )}
+                {!loading && error && (
+                    <small style={{ color: "red" }}>{error}</small>
+                )}
 
-                    <BaseButton
-                        tooltipLabel="Send invoice PDF"
-                        loading={loading}
-                        loadingText="Sending email"
-                        onClick={handleSendPdf}
-                    >
-                        Send PDF
-                    </BaseButton>
-                </DialogContent>
-            </Dialog>
-        </form>
+                <BaseButton
+                    tooltipLabel="Send invoice PDF"
+                    loading={loading}
+                    loadingText="Sending email"
+                    onClick={handleSendPdf}
+                >
+                    Send PDF
+                </BaseButton>
+            </DialogContent>
+        </Dialog>
     );
 };
 
