@@ -15,7 +15,7 @@ import {
 // Types
 import { GetValuesType, ValuesType } from "@/types";
 
-const usePdfFunctions = (getValues: GetValuesType) => {
+const usePdfFunctions = (getValues?: GetValuesType) => {
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
@@ -107,45 +107,48 @@ const usePdfFunctions = (getValues: GetValuesType) => {
      *
      * @return {void} - This function does not return any value.
      */
-    const saveInvoiceData = () => {
+    const saveInvoice = () => {
         if (invoicePdf) {
-            // Retrieve the existing array from local storage or initialize an empty array
-            const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-            const savedInvoices = savedInvoicesJSON
-                ? JSON.parse(savedInvoicesJSON)
-                : [];
+            // If get values function is provided, allow to save the invoice
+            if (getValues) {
+                // Retrieve the existing array from local storage or initialize an empty array
+                const savedInvoicesJSON = localStorage.getItem("savedInvoices");
+                const savedInvoices = savedInvoicesJSON
+                    ? JSON.parse(savedInvoicesJSON)
+                    : [];
 
-            const formValues = getValues();
+                const formValues = getValues();
 
-            const existingInvoiceIndex = savedInvoices.findIndex(
-                (invoice: ValuesType) => {
-                    return (
-                        invoice.details.invoiceNumber ===
-                        formValues.details.invoiceNumber
-                    );
+                const existingInvoiceIndex = savedInvoices.findIndex(
+                    (invoice: ValuesType) => {
+                        return (
+                            invoice.details.invoiceNumber ===
+                            formValues.details.invoiceNumber
+                        );
+                    }
+                );
+
+                // If invoice already exists
+                if (existingInvoiceIndex !== -1) {
+                    savedInvoices[existingInvoiceIndex] = formValues;
+
+                    // Toast
+                    modifiedInvoiceSuccess();
+                } else {
+                    // Add the form values to the array
+                    savedInvoices.push(formValues);
+
+                    // Toast
+                    saveInvoiceSuccess();
                 }
-            );
 
-            // If invoice already exists
-            if (existingInvoiceIndex !== -1) {
-                savedInvoices[existingInvoiceIndex] = formValues;
+                localStorage.setItem(
+                    "savedInvoices",
+                    JSON.stringify(savedInvoices)
+                );
 
-                // Toast
-                modifiedInvoiceSuccess();
-            } else {
-                // Add the form values to the array
-                savedInvoices.push(formValues);
-
-                // Toast
-                saveInvoiceSuccess();
+                setSavedInvoices(savedInvoices);
             }
-
-            localStorage.setItem(
-                "savedInvoices",
-                JSON.stringify(savedInvoices)
-            );
-
-            setSavedInvoices(savedInvoices);
         }
     };
 
@@ -173,7 +176,7 @@ const usePdfFunctions = (getValues: GetValuesType) => {
      *
      * @param email Email to send Invoice PDF
      *
-     * @returns Promise<void>
+     * @returns {Promise<void>} Promise that resolves when the email is sent
      */
     const sendPdfToMail = (email: string) => {
         const fd = new FormData();
@@ -208,7 +211,7 @@ const usePdfFunctions = (getValues: GetValuesType) => {
         generatePdf,
         downloadPdf,
         previewPdfInTab,
-        saveInvoiceData,
+        saveInvoice,
         deleteInvoice,
         sendPdfToMail,
     };
