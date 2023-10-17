@@ -17,7 +17,7 @@ import SavedInvoiceSelector from "./invoice/components/SavedInvoiceSelector";
 
 // Form fields
 import InputFormField from "./form-fields/InputFormField";
-import SelectFormField from "./form-fields/SelectFormField";
+import SelectFormField from "./form-fields/CurrrencySelector";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
 import FileFormField from "./form-fields/FileFormField";
 import ChargeInput from "./form-fields/ChargeInput";
