@@ -1,13 +1,7 @@
 "use client";
 
 // RHF
-import { useForm } from "react-hook-form";
-
-// Zod imports
-import { zodResolver } from "@hookform/resolvers/zod";
-
-// Form schemas
-import { InvoiceSchema } from "@/lib/schemas";
+import { useFormContext } from "react-hook-form";
 
 // Shadcn
 import { Form } from "@/components/ui/form";
@@ -15,30 +9,16 @@ import { Form } from "@/components/ui/form";
 // Custom components
 import { InvoiceActions, InvoiceForm } from "@/app/components";
 
-// Hooks
-import { usePdfFunctions } from "@/app/hooks/usePdfFunctions";
-
 // Context
-import {
-    InvoiceContextProvider,
-    useInvoiceContext,
-} from "@/app/contexts/InvoiceContext";
-
-// Variables
-import { FORM_DEFAULT_VALUES } from "@/lib/variables";
+import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Types
 import { ValuesType } from "@/types";
 
 const InvoiceMain = () => {
-    const form = useForm<ValuesType>({
-        resolver: zodResolver(InvoiceSchema),
-        defaultValues: FORM_DEFAULT_VALUES,
-    });
+    const { handleSubmit } = useFormContext<ValuesType>();
 
-    const { getValues, handleSubmit } = form;
-
-    // TODO: Move this hook to invoice actions and pass getValues to InvoiceActions
+    //* Get the values from invoice context
     const {
         invoicePdf,
         invoicePdfLoading,
@@ -49,7 +29,7 @@ const InvoiceMain = () => {
         saveInvoice,
         deleteInvoice,
         sendPdfToMail,
-    } = usePdfFunctions(getValues);
+    } = useInvoiceContext();
 
     const onSubmit = (values: ValuesType) => {
         console.log("VALUE");
@@ -59,7 +39,7 @@ const InvoiceMain = () => {
 
     return (
         <>
-            <Form {...form}>
+            <Form {...useFormContext<ValuesType>()}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-wrap">
                         <InvoiceForm
