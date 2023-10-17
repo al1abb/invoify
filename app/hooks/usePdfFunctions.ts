@@ -1,220 +1,220 @@
-import { useCallback, useEffect, useState } from "react";
+// ? Original usePdfFunctions Hook (commented out)
+// ? Reason: Turned into a context (InvoiceContext) instead
 
-// Variables
-import { PDF_API, SEND_PDF_API } from "@/lib/variables";
+// import { useCallback, useEffect, useState } from "react";
 
-// Toasts
-import {
-    pdfGenerationSuccess,
-    saveInvoiceSuccess,
-    modifiedInvoiceSuccess,
-    sendPdfSuccess,
-    sendPdfError,
-} from "@/lib/toasts";
+// // Variables
+// import { PDF_API, SEND_PDF_API } from "@/lib/variables";
 
-// Types
-import { GetValuesType, ValuesType } from "@/types";
+// // Toasts
+// import {
+//     pdfGenerationSuccess,
+//     saveInvoiceSuccess,
+//     modifiedInvoiceSuccess,
+//     sendPdfSuccess,
+//     sendPdfError,
+// } from "@/lib/toasts";
 
-const usePdfFunctions = (getValues?: GetValuesType) => {
-    const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
-    const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
+// // Types
+// import { GetValuesType, ValuesType } from "@/types";
 
-    const [savedInvoices, setSavedInvoices] = useState<ValuesType[]>([]);
+// const usePdfFunctions = (getValues?: GetValuesType) => {
+//     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
+//     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
-    useEffect(() => {
-        let savedInvoicesDefault;
-        if (typeof window !== undefined) {
-            // Saved invoices variables
-            const savedInvoicesJSON =
-                window.localStorage.getItem("savedInvoices");
-            savedInvoicesDefault = savedInvoicesJSON
-                ? JSON.parse(savedInvoicesJSON)
-                : [];
-            setSavedInvoices(savedInvoicesDefault);
-        }
-    }, []);
+//     const [savedInvoices, setSavedInvoices] = useState<ValuesType[]>([]);
 
-    /**
-     * Generates a PDF using the provided data.
-     *
-     * @param {typeof InvoiceSchema} data - The data used to generate the PDF.
-     * @return {Promise<void>} A promise that resolves once the PDF has been generated.
-     *
-     * @throws {Error} If there is an error generating the PDF.
-     */
-    const generatePdf = useCallback(
-        async (data: ValuesType) => {
-            setInvoicePdfLoading(true);
+//     useEffect(() => {
+//         let savedInvoicesDefault;
+//         if (typeof window !== undefined) {
+//             // Saved invoices variables
+//             const savedInvoicesJSON =
+//                 window.localStorage.getItem("savedInvoices");
+//             savedInvoicesDefault = savedInvoicesJSON
+//                 ? JSON.parse(savedInvoicesJSON)
+//                 : [];
+//             setSavedInvoices(savedInvoicesDefault);
+//         }
+//     }, []);
 
-            try {
-                const response = await fetch(PDF_API, {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                });
+//     /**
+//      * Generates a PDF using the provided data.
+//      *
+//      * @param {typeof InvoiceSchema} data - The data used to generate the PDF.
+//      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
+//      *
+//      * @throws {Error} If there is an error generating the PDF.
+//      */
+//     const generatePdf = useCallback(async (data: ValuesType) => {
+//         setInvoicePdfLoading(true);
 
-                const result = await response.blob();
-                setInvoicePdf(result);
+//         try {
+//             const response = await fetch(PDF_API, {
+//                 method: "POST",
+//                 body: JSON.stringify(data),
+//             });
 
-                // Toast
-                pdfGenerationSuccess();
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setInvoicePdfLoading(false);
-            }
-        },
-        [setInvoicePdf, setInvoicePdfLoading]
-    );
+//             const result = await response.blob();
+//             setInvoicePdf(result);
 
-    /**
-     * Downloads a PDF file.
-     *
-     * @return {undefined} No return value.
-     */
-    const downloadPdf = () => {
-        if (invoicePdf) {
-            // Create a blob URL to trigger the download
-            const url = window.URL.createObjectURL(invoicePdf);
+//             // Toast
+//             pdfGenerationSuccess();
+//         } catch (err) {
+//             console.log(err);
+//         } finally {
+//             setInvoicePdfLoading(false);
+//         }
+//     }, []);
 
-            // Create an anchor element to initiate the download
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "invoice.pdf";
-            document.body.appendChild(a);
+//     /**
+//      * Downloads a PDF file.
+//      *
+//      * @return {undefined} No return value.
+//      */
+//     const downloadPdf = () => {
+//         if (invoicePdf) {
+//             // Create a blob URL to trigger the download
+//             const url = window.URL.createObjectURL(invoicePdf);
 
-            // Trigger the download
-            a.click();
+//             // Create an anchor element to initiate the download
+//             const a = document.createElement("a");
+//             a.href = url;
+//             a.download = "invoice.pdf";
+//             document.body.appendChild(a);
 
-            // Clean up the URL object
-            window.URL.revokeObjectURL(url);
-        }
-    };
+//             // Trigger the download
+//             a.click();
 
-    /**
-     * Generates a preview of a PDF file and opens it in a new browser tab.
-     *
-     * @return {void} - This function does not return any value.
-     */
-    const previewPdfInTab = () => {
-        if (invoicePdf) {
-            const url = window.URL.createObjectURL(invoicePdf);
-            window.open(url, "_blank");
-        }
-    };
+//             // Clean up the URL object
+//             window.URL.revokeObjectURL(url);
+//         }
+//     };
 
-    /**
-     * Saves the invoice data to local storage.
-     *
-     * @return {void} - This function does not return any value.
-     */
-    const saveInvoice = () => {
-        if (invoicePdf) {
-            // If get values function is provided, allow to save the invoice
-            if (getValues) {
-                // Retrieve the existing array from local storage or initialize an empty array
-                const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-                const savedInvoices = savedInvoicesJSON
-                    ? JSON.parse(savedInvoicesJSON)
-                    : [];
+//     /**
+//      * Generates a preview of a PDF file and opens it in a new browser tab.
+//      *
+//      * @return {void} - This function does not return any value.
+//      */
+//     const previewPdfInTab = () => {
+//         if (invoicePdf) {
+//             const url = window.URL.createObjectURL(invoicePdf);
+//             window.open(url, "_blank");
+//         }
+//     };
 
-                const formValues = getValues();
+//     /**
+//      * Saves the invoice data to local storage.
+//      *
+//      * @return {void} - This function does not return any value.
+//      */
+//     const saveInvoice = () => {
+//         if (invoicePdf) {
+//             // If get values function is provided, allow to save the invoice
+//             if (getValues) {
+//                 // Retrieve the existing array from local storage or initialize an empty array
+//                 const savedInvoicesJSON = localStorage.getItem("savedInvoices");
+//                 const savedInvoices = savedInvoicesJSON
+//                     ? JSON.parse(savedInvoicesJSON)
+//                     : [];
 
-                const existingInvoiceIndex = savedInvoices.findIndex(
-                    (invoice: ValuesType) => {
-                        return (
-                            invoice.details.invoiceNumber ===
-                            formValues.details.invoiceNumber
-                        );
-                    }
-                );
+//                 const formValues = getValues();
 
-                // If invoice already exists
-                if (existingInvoiceIndex !== -1) {
-                    savedInvoices[existingInvoiceIndex] = formValues;
+//                 const existingInvoiceIndex = savedInvoices.findIndex(
+//                     (invoice: ValuesType) => {
+//                         return (
+//                             invoice.details.invoiceNumber ===
+//                             formValues.details.invoiceNumber
+//                         );
+//                     }
+//                 );
 
-                    // Toast
-                    modifiedInvoiceSuccess();
-                } else {
-                    // Add the form values to the array
-                    savedInvoices.push(formValues);
+//                 // If invoice already exists
+//                 if (existingInvoiceIndex !== -1) {
+//                     savedInvoices[existingInvoiceIndex] = formValues;
 
-                    // Toast
-                    saveInvoiceSuccess();
-                }
+//                     // Toast
+//                     modifiedInvoiceSuccess();
+//                 } else {
+//                     // Add the form values to the array
+//                     savedInvoices.push(formValues);
 
-                localStorage.setItem(
-                    "savedInvoices",
-                    JSON.stringify(savedInvoices)
-                );
+//                     // Toast
+//                     saveInvoiceSuccess();
+//                 }
 
-                setSavedInvoices(savedInvoices);
-            }
-        }
-    };
+//                 localStorage.setItem(
+//                     "savedInvoices",
+//                     JSON.stringify(savedInvoices)
+//                 );
 
-    /**
-     * Deletes an invoice from local storage based on given index number.
-     *
-     * @param index Index of the invoice to delete
-     *
-     * @return {void} - This function does not return any value
-     */
-    const deleteInvoice = (index: number) => {
-        if (index >= 0 && index < savedInvoices.length) {
-            const updatedInvoices = [...savedInvoices];
-            updatedInvoices.splice(index, 1);
-            setSavedInvoices(updatedInvoices);
+//                 setSavedInvoices(savedInvoices);
+//             }
+//         }
+//     };
 
-            const updatedInvoicesJSON = JSON.stringify(updatedInvoices);
+//     /**
+//      * Deletes an invoice from local storage based on given index number.
+//      *
+//      * @param index Index of the invoice to delete
+//      *
+//      * @return {void} - This function does not return any value
+//      */
+//     const deleteInvoice = (index: number) => {
+//         if (index >= 0 && index < savedInvoices.length) {
+//             const updatedInvoices = [...savedInvoices];
+//             updatedInvoices.splice(index, 1);
+//             setSavedInvoices(updatedInvoices);
 
-            localStorage.setItem("savedInvoices", updatedInvoicesJSON);
-        }
-    };
+//             const updatedInvoicesJSON = JSON.stringify(updatedInvoices);
 
-    /**
-     * Sends the invoice PDF to the specified email address
-     *
-     * @param email Email to send Invoice PDF
-     *
-     * @returns {Promise<void>} Promise that resolves when the email is sent
-     */
-    const sendPdfToMail = (email: string) => {
-        const fd = new FormData();
-        fd.append("email", email);
-        fd.append("invoicePdf", invoicePdf, "invoice.pdf");
+//             localStorage.setItem("savedInvoices", updatedInvoicesJSON);
+//         }
+//     };
 
-        return fetch(SEND_PDF_API, {
-            method: "POST",
-            body: fd,
-        })
-            .then((res) => {
-                if (res.ok) {
-                    // Successful toast msg
-                    sendPdfSuccess();
-                } else {
-                    // Error toast msg
-                    sendPdfError();
-                }
-            })
-            .catch((error) => {
-                console.log(error);
+//     /**
+//      * Sends the invoice PDF to the specified email address
+//      *
+//      * @param email Email to send Invoice PDF
+//      *
+//      * @returns {Promise<void>} Promise that resolves when the email is sent
+//      */
+//     const sendPdfToMail = (email: string) => {
+//         const fd = new FormData();
+//         fd.append("email", email);
+//         fd.append("invoicePdf", invoicePdf, "invoice.pdf");
 
-                // Error toast msg
-                sendPdfError();
-            });
-    };
+//         return fetch(SEND_PDF_API, {
+//             method: "POST",
+//             body: fd,
+//         })
+//             .then((res) => {
+//                 if (res.ok) {
+//                     // Successful toast msg
+//                     sendPdfSuccess();
+//                 } else {
+//                     // Error toast msg
+//                     sendPdfError();
+//                 }
+//             })
+//             .catch((error) => {
+//                 console.log(error);
 
-    return {
-        invoicePdf,
-        invoicePdfLoading,
-        savedInvoices,
-        generatePdf,
-        downloadPdf,
-        previewPdfInTab,
-        saveInvoice,
-        deleteInvoice,
-        sendPdfToMail,
-    };
-};
+//                 // Error toast msg
+//                 sendPdfError();
+//             });
+//     };
 
-export { usePdfFunctions };
+//     return {
+//         invoicePdf,
+//         invoicePdfLoading,
+//         savedInvoices,
+//         generatePdf,
+//         downloadPdf,
+//         previewPdfInTab,
+//         saveInvoice,
+//         deleteInvoice,
+//         sendPdfToMail,
+//     };
+// };
+
+// export { usePdfFunctions };
