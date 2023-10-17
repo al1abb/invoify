@@ -14,14 +14,7 @@ import { GetValuesType, ValuesType } from "@/types";
 // Variables
 import { PDF_API, SEND_PDF_API } from "@/lib/variables";
 
-// Toasts
-import {
-    modifiedInvoiceSuccess,
-    pdfGenerationSuccess,
-    saveInvoiceSuccess,
-    sendPdfError,
-    sendPdfSuccess,
-} from "@/lib/toasts";
+import useToasts from "../hooks/useToasts";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),
@@ -38,18 +31,27 @@ const defaultInvoiceContext = {
 export const InvoiceContext = createContext(defaultInvoiceContext);
 
 export const useInvoiceContext = () => {
-    useContext(InvoiceContext);
+    return useContext(InvoiceContext);
 };
 
 type InvoiceContextProviderProps = {
-    children: React.ReactNode;
     getValues: GetValuesType;
+    children: React.ReactNode;
 };
 
 export const InvoiceContextProvider = ({
-    children,
     getValues,
+    children,
 }: InvoiceContextProviderProps) => {
+    // Toasts
+    const {
+        modifiedInvoiceSuccess,
+        pdfGenerationSuccess,
+        saveInvoiceSuccess,
+        sendPdfError,
+        sendPdfSuccess,
+    } = useToasts();
+
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
@@ -76,32 +78,26 @@ export const InvoiceContextProvider = ({
      *
      * @throws {Error} If there is an error generating the PDF.
      */
-    const generatePdf = useCallback(
-        async (data: ValuesType) => {
-            setInvoicePdfLoading(true);
+    const generatePdf = useCallback(async (data: ValuesType) => {
+        setInvoicePdfLoading(true);
 
-            console.log("USE CALLBACK");
-            console.log(invoicePdf);
+        try {
+            const response = await fetch(PDF_API, {
+                method: "POST",
+                body: JSON.stringify(data),
+            });
 
-            try {
-                const response = await fetch(PDF_API, {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                });
+            const result = await response.blob();
+            setInvoicePdf(result);
 
-                const result = await response.blob();
-                setInvoicePdf(result);
-
-                // Toast
-                pdfGenerationSuccess();
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setInvoicePdfLoading(false);
-            }
-        },
-        [setInvoicePdf, setInvoicePdfLoading]
-    );
+            // Toast
+            pdfGenerationSuccess({ previewPdfInTab, downloadPdf });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setInvoicePdfLoading(false);
+        }
+    }, []);
 
     /**
      * Downloads a PDF file.
@@ -230,14 +226,14 @@ export const InvoiceContextProvider = ({
                     sendPdfSuccess();
                 } else {
                     // Error toast msg
-                    sendPdfError();
+                    sendPdfError({ email, sendPdfToMail });
                 }
             })
             .catch((error) => {
                 console.log(error);
 
                 // Error toast msg
-                sendPdfError();
+                sendPdfError({ email, sendPdfToMail });
             });
     };
 
