@@ -15,6 +15,12 @@ const formatNumberWithCommas = (number: number) => {
     });
 };
 
+/**
+ * Turns a number into words
+ *
+ * @param price Number to format
+ * @returns Number in words
+ */
 const formatPriceToString = (price: number): string => {
     // Split the price into integer and fractional parts (Dollar and Cents)
     const integerPart = Math.floor(price);
@@ -40,6 +46,7 @@ const formatPriceToString = (price: number): string => {
 
     return result;
 };
+
 /**
  * A method to validate an email address
  *

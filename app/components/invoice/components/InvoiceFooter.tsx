@@ -39,6 +39,8 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
     const [taxSwitch, setTaxSwitch] = useState<boolean>(false);
     const [shippingSwitch, setShippingSwitch] = useState<boolean>(false);
 
+    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
+
     // Initial subtotal and total
     const [subTotal, setSubTotal] = useState<number>(0);
     const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -89,7 +91,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         control,
     });
 
-    // Charge check
     useEffect(() => {
         if (discount.amount) {
             setDiscountSwitch(true);
@@ -122,15 +123,12 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         }
     }, [discount.amount, tax.amount, shipping.cost]);
 
-    useEffect(() => {
-        console.log(formatPriceToString(150.05));
-    }, []);
-
     // Calculate total when values change
     useEffect(() => {
         calculateTotal();
     }, [
         itemsArray,
+        totalInWordsSwitch,
         discountSwitch,
         discountType,
         discount.amount,
@@ -202,7 +200,12 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         setValue("details.shippingDetails.costType", shippingCostType);
 
         setValue("details.totalAmount", total.toString());
-        setValue("details.totalAmountInWords", formatPriceToString(total));
+
+        if (totalInWordsSwitch) {
+            setValue("details.totalAmountInWords", formatPriceToString(total));
+        } else {
+            setValue("details.totalAmountInWords", "");
+        }
     };
 
     const switchAmountType = (
@@ -377,6 +380,17 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                         <div>
                             {formatNumberWithCommas(totalAmount)} {currency}
                         </div>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                        <p>Include total in words?</p>{" "}
+                        {totalInWordsSwitch ? "Yes" : "No"}
+                        <Switch
+                            checked={totalInWordsSwitch}
+                            onCheckedChange={(value) => {
+                                setTotalInWordsSwitch(value);
+                            }}
+                        />
                     </div>
                 </div>
             </div>

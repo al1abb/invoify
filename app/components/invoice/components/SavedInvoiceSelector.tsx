@@ -43,6 +43,8 @@ const SavedInvoiceSelector = ({
     // Update fields when selected invoice is changed.
     // Reason: The fields don't go through validation when invoice loads
     const updateFields = (selected: any) => {
+        // Next 2 lines are so that when invoice loads,
+        // the dates won't be in the wrong format
         selected.details.dueDate = new Date(selected.details.dueDate);
         selected.details.invoiceDate = new Date(selected.details.invoiceDate);
 
