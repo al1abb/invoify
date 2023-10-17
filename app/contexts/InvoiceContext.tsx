@@ -91,7 +91,7 @@ export const InvoiceContextProvider = ({
             setInvoicePdf(result);
 
             // Toast
-            pdfGenerationSuccess({ previewPdfInTab, downloadPdf });
+            pdfGenerationSuccess({ downloadPdf });
         } catch (err) {
             console.log(err);
         } finally {

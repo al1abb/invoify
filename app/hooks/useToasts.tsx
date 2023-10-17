@@ -3,7 +3,6 @@ import { toast } from "@/components/ui/use-toast";
 
 const useToasts = () => {
     type GenerationSuccessType = {
-        previewPdfInTab?: () => void;
         downloadPdf?: () => void;
     };
 
@@ -12,23 +11,15 @@ const useToasts = () => {
         sendPdfToMail: (email: string) => void;
     };
 
-    const pdfGenerationSuccess = ({
-        previewPdfInTab,
-        downloadPdf,
-    }: GenerationSuccessType) => {
+    const pdfGenerationSuccess = ({ downloadPdf }: GenerationSuccessType) => {
         toast({
             variant: "default",
             title: "Your invoice has been generated!",
             description: "You can preview, download, or save it",
             action: (
-                <div className="">
-                    <ToastAction onClick={previewPdfInTab} altText="Preview">
-                        <p>Preview</p>
-                    </ToastAction>
-                    <ToastAction onClick={downloadPdf} altText="Download">
-                        <p>Download</p>
-                    </ToastAction>
-                </div>
+                <ToastAction onClick={downloadPdf} altText="Download">
+                    <p>Download</p>
+                </ToastAction>
             ),
         });
     };
