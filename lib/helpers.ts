@@ -1,3 +1,5 @@
+import numberToWords from "number-to-words";
+
 /**
  * Formats a number with commas and decimal places
  *
@@ -13,6 +15,31 @@ const formatNumberWithCommas = (number: number) => {
     });
 };
 
+const formatPriceToString = (price: number): string => {
+    // Split the price into integer and fractional parts (Dollar and Cents)
+    const integerPart = Math.floor(price);
+    const fractionalPart = Math.round((price - integerPart) * 100);
+
+    // Convert the integer part to words with capitalized first letter
+    const integerPartInWords = numberToWords
+        .toWords(integerPart)
+        .replace(/^\w/, (c) => c.toUpperCase());
+
+    // Create the result string without fractional part if it's zero
+    let result = integerPartInWords;
+
+    // Append fractional part only if it's not zero
+    if (fractionalPart !== 0) {
+        result += ` and ${fractionalPart}/100`;
+    }
+
+    // Handle the case when both integer and fractional parts are zero
+    if (integerPart === 0 && fractionalPart === 0) {
+        return "Zero";
+    }
+
+    return result;
+};
 /**
  * A method to validate an email address
  *
@@ -26,4 +53,4 @@ const isValidEmail = (email: string) => {
     return emailRegex.test(email);
 };
 
-export { formatNumberWithCommas, isValidEmail };
+export { formatNumberWithCommas, formatPriceToString, isValidEmail };

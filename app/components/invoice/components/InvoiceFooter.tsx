@@ -23,7 +23,7 @@ import { BaseButton, ChargeInput } from "@/app/components";
 import SignatureCanvas from "react-signature-canvas";
 
 // Helpers
-import { formatNumberWithCommas } from "@/lib/helpers";
+import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
 
 // Types
 import { ControlType, UseFormSetValueType } from "@/types";
@@ -122,6 +122,10 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         }
     }, [discount.amount, tax.amount, shipping.cost]);
 
+    useEffect(() => {
+        console.log(formatPriceToString(150.05));
+    }, []);
+
     // Calculate total when values change
     useEffect(() => {
         calculateTotal();
@@ -198,6 +202,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         setValue("details.shippingDetails.costType", shippingCostType);
 
         setValue("details.totalAmount", total.toString());
+        setValue("details.totalAmountInWords", formatPriceToString(total));
     };
 
     const switchAmountType = (

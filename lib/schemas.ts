@@ -84,6 +84,7 @@ const InvoiceDetailsSchema = z.object({
     totalAmount: z.coerce.number().transform((value) => {
         return formatNumberWithCommas(value);
     }),
+    totalAmountInWords: z.string(),
     additionalNotes: z.string().optional(),
     paymentTerms: z.string().min(1),
     signature: z.string().optional(),
