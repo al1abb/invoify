@@ -231,6 +231,7 @@
                                     >{{ details.totalAmount }} {{ details.currency }}</dd>
                                 </dl>
 
+                                {{#if details.totalAmountInWords }}
                                 <dl class="grid sm:grid-cols-5 gap-x-3">
                                     <dt
                                         class="col-span-3 font-semibold text-gray-800 dark:text-gray-200"
@@ -239,6 +240,7 @@
                                         class="col-span-2 text-gray-500"
                                     ><em>{{ details.totalAmountInWords }} {{ details.currency }}</em></dd>
                                 </dl>
+                                {{/if}}
 
                             </div>
                             <!-- End Grid -->
