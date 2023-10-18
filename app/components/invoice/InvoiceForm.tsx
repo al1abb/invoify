@@ -24,7 +24,7 @@ import {
     Items,
     PaymentInformation,
     SavedInvoiceSelector,
-    SelectFormField,
+    CurrencySelector,
 } from "@/app/components";
 
 // Types
@@ -226,7 +226,7 @@ const InvoiceForm = ({
                                     label="Due date"
                                 />
 
-                                <SelectFormField
+                                <CurrencySelector
                                     control={control}
                                     name="details.currency"
                                     label="Currency"

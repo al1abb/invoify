@@ -13,11 +13,13 @@ import SingleItem from "./invoice/components/SingleItem";
 import PaymentInformation from "./invoice/components/PaymentInformation";
 import InvoiceFooter from "./invoice/components/InvoiceFooter";
 import PdfViewer from "./invoice/components/PdfViewer";
+
+// Custom Selectors
+import CurrencySelector from "./form-fields/CurrencySelector";
 import SavedInvoiceSelector from "./invoice/components/SavedInvoiceSelector";
 
 // Form fields
 import InputFormField from "./form-fields/InputFormField";
-import SelectFormField from "./form-fields/CurrrencySelector";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
 import FileFormField from "./form-fields/FileFormField";
 import ChargeInput from "./form-fields/ChargeInput";
@@ -29,10 +31,10 @@ import BaseButton from "./reusables/BaseButton";
 import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
 
 // Templates
-// --- Invoice
+// --- Invoice templates
 import InvoiceTemplate from "./templates/invoice-pdf/InvoiceTemplate";
 
-// --- Email
+// --- Email templates
 import SendPdfEmail from "./templates/email/SendPdfEmail";
 
 export {
@@ -45,10 +47,10 @@ export {
     SingleItem,
     PaymentInformation,
     InvoiceFooter,
+    CurrencySelector,
     SavedInvoiceSelector,
     PdfViewer,
     InputFormField,
-    SelectFormField,
     DatePickerFormField,
     FileFormField,
     ChargeInput,

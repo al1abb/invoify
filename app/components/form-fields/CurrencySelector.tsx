@@ -24,19 +24,19 @@ import useCurrencies from "@/app/hooks/useCurrencies";
 // Types
 import { ControlType, NameType } from "@/types";
 
-type SelectFormFieldProps = {
+type CurrencySelectorProps = {
     control: ControlType;
     name: NameType;
     label?: string;
     placeholder?: string;
 };
 
-const SelectFormField = ({
+const CurrencySelector = ({
     control,
     name,
     label,
     placeholder,
-}: SelectFormFieldProps) => {
+}: CurrencySelectorProps) => {
     const { currencies, currenciesLoading } = useCurrencies();
 
     return (
@@ -85,4 +85,4 @@ const SelectFormField = ({
     );
 };
 
-export default SelectFormField;
+export default CurrencySelector;
