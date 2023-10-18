@@ -1,47 +1,26 @@
 import puppeteer, { Page } from "puppeteer";
-import fs from "fs";
-import path from "path";
-import handlebars from "handlebars";
 
-// Define a custom helper that checks for equality
-handlebars.registerHelper(
-    "ifEquals",
-    function (arg1: any, arg2: any, options: handlebars.HelperOptions) {
-        const context = options.data.root; // Use options.data.root to access the data context
-
-        return arg1 === arg2 ? options.fn(context) : options.inverse(context);
-    }
-);
+// Templates
+import { InvoiceTemplate } from "@/app/components";
 
 export async function POST(req: Request, res: Response) {
+    const start = performance.now();
     try {
         const body = await req.json();
 
-        const templatePath = path.join(
-            process.cwd(),
-            "templates",
-            "invoice-template-1.handlebars"
-        );
-
         // Read the HTML template from a file
-        const htmlTemplate = fs.readFileSync(templatePath, "utf8");
-
-        // Compile the Handlebars template
-        const template = handlebars.compile(htmlTemplate);
-
-        // Render the HTML with dynamic data
-        const htmlContent = template(body);
+        const htmlTemplate = InvoiceTemplate(body);
 
         // Create a Puppeteer browser instance
         const browser = await puppeteer.launch({
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: true,
+            headless: "new",
         });
 
         const page: Page = await browser.newPage();
 
         // Set the HTML content of the page
-        await page.setContent(htmlContent);
+        await page.setContent(await htmlTemplate);
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
@@ -62,6 +41,11 @@ export async function POST(req: Request, res: Response) {
             },
             status: 200,
         });
+        const end = performance.now();
+        const responseTimeInSeconds = (end - start) / 1000;
+
+        console.log("Response from server", responseTimeInSeconds);
+
         return response;
     } catch (error) {
         console.error(error);
