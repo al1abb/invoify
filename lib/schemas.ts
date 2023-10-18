@@ -59,7 +59,7 @@ const ShippingDetailsSchema = z.object({
 });
 
 const InvoiceDetailsSchema = z.object({
-    invoiceLogo: z.unknown(),
+    invoiceLogo: z.string().optional(),
     invoiceNumber: z.string().min(1),
     invoiceDate: z
         .date()
