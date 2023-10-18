@@ -45,7 +45,7 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
             <hr />
 
             <div className="flex mt-7">
-                <div className="flex flex-col gap-10">
+                <div className="flex flex-col gap-10 w-full">
                     {fields.map((field, index) => (
                         <SingleItem
                             key={field.id}
