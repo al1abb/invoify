@@ -4,7 +4,6 @@ import puppeteer, { Page } from "puppeteer";
 import { InvoiceTemplate } from "@/app/components";
 
 export async function POST(req: Request, res: Response) {
-    const start = performance.now();
     try {
         const body = await req.json();
 
@@ -41,10 +40,6 @@ export async function POST(req: Request, res: Response) {
             },
             status: 200,
         });
-        const end = performance.now();
-        const responseTimeInSeconds = (end - start) / 1000;
-
-        console.log("Response from server", responseTimeInSeconds);
 
         return response;
     } catch (error) {
