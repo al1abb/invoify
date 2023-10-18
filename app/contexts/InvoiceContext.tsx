@@ -12,7 +12,7 @@ import React, {
 import useToasts from "../hooks/useToasts";
 
 // Variables
-import { PDF_API, SEND_PDF_API } from "@/lib/variables";
+import { GENERATE_PDF_API, SEND_PDF_API } from "@/lib/variables";
 
 // Types
 import { GetValuesType, ValuesType } from "@/types";
@@ -83,7 +83,7 @@ export const InvoiceContextProvider = ({
         setInvoicePdfLoading(true);
 
         try {
-            const response = await fetch(PDF_API, {
+            const response = await fetch(GENERATE_PDF_API, {
                 method: "POST",
                 body: JSON.stringify(data),
             });

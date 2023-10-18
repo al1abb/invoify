@@ -1,20 +1,32 @@
-// APIs
-export const PDF_API = "/api/pdf";
-export const SEND_PDF_API = "/api/send-pdf";
+/**
+ * API endpoints
+ */
+export const GENERATE_PDF_API = "/api/pdf/generate";
+export const SEND_PDF_API = "/api/pdf/send";
+
+/**
+ * External API endpoints
+ */
 export const CURRENCIES = "https://openexchangerates.org/api/currencies.json";
 
-// Nodemailer
+/**
+ * Nodemailer variables
+ */
 export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
 export const NODEMAILER_PW = process.env.NODEMAILER_PW;
 
-// Form date options
+/**
+ * Form date options
+ */
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
 };
 
-// Form defaults
+/**
+ * Form defaults
+ */
 export const FORM_DEFAULT_VALUES = {
     sender: {
         name: "",
