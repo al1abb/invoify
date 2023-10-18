@@ -29,6 +29,10 @@ import BaseButton from "./reusables/BaseButton";
 import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
 
 // Templates
+// --- Invoice
+import InvoiceTemplate from "./templates/invoice-pdf/InvoiceTemplate";
+
+// --- Email
 import SendPdfEmail from "./templates/email/SendPdfEmail";
 
 export {
@@ -50,5 +54,6 @@ export {
     ChargeInput,
     BaseButton,
     SendPdfToEmailModal,
+    InvoiceTemplate,
     SendPdfEmail,
 };
