@@ -2,25 +2,16 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 
 const useToasts = () => {
-    type GenerationSuccessType = {
-        downloadPdf?: () => void;
-    };
-
     type SendErrorType = {
         email: string;
         sendPdfToMail: (email: string) => void;
     };
 
-    const pdfGenerationSuccess = ({ downloadPdf }: GenerationSuccessType) => {
+    const pdfGenerationSuccess = () => {
         toast({
             variant: "default",
             title: "Your invoice has been generated!",
             description: "You can preview, download, or save it",
-            action: (
-                <ToastAction onClick={downloadPdf} altText="Download">
-                    <p>Download</p>
-                </ToastAction>
-            ),
         });
     };
 

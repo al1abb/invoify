@@ -8,13 +8,14 @@ import React, {
     useState,
 } from "react";
 
-// Types
-import { GetValuesType, ValuesType } from "@/types";
+// Hooks
+import useToasts from "../hooks/useToasts";
 
 // Variables
 import { PDF_API, SEND_PDF_API } from "@/lib/variables";
 
-import useToasts from "../hooks/useToasts";
+// Types
+import { GetValuesType, ValuesType } from "@/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),
@@ -91,7 +92,7 @@ export const InvoiceContextProvider = ({
             setInvoicePdf(result);
 
             // Toast
-            pdfGenerationSuccess({ downloadPdf });
+            pdfGenerationSuccess();
         } catch (err) {
             console.log(err);
         } finally {
@@ -102,10 +103,11 @@ export const InvoiceContextProvider = ({
     /**
      * Downloads a PDF file.
      *
-     * @return {undefined} No return value.
+     * @return {void} No return value.
      */
     const downloadPdf = () => {
-        if (invoicePdf) {
+        // Only download if there is an invoice
+        if (invoicePdf instanceof Blob && invoicePdf.size > 0) {
             // Create a blob URL to trigger the download
             const url = window.URL.createObjectURL(invoicePdf);
 
