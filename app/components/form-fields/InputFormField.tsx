@@ -5,9 +5,9 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 // Types
@@ -35,7 +35,7 @@ const InputFormField = ({
                     <FormItem>
                         <div className="flex justify-between gap-5 items-center text-sm">
                             <div>
-                                <Label>{label}:</Label>
+                                <FormLabel>{label}:</FormLabel>
                             </div>
                             <div>
                                 <FormControl>
