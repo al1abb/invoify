@@ -91,6 +91,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         control,
     });
 
+    // When loading if received values, turn on the switches
     useEffect(() => {
         if (discount.amount) {
             setDiscountSwitch(true);
@@ -123,19 +124,31 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         }
     }, [discount.amount, tax.amount, shipping.cost]);
 
+    // Check switches, if off set values to zero
+    useEffect(() => {
+        if (!discountSwitch) {
+            setValue("details.discountDetails.amount", 0);
+        }
+
+        if (!taxSwitch) {
+            setValue("details.taxDetails.amount", 0);
+        }
+
+        if (!shippingSwitch) {
+            setValue("details.shippingDetails.cost", 0);
+        }
+    }, [discountSwitch, taxSwitch, shippingSwitch]);
+
     // Calculate total when values change
     useEffect(() => {
         calculateTotal();
     }, [
         itemsArray,
         totalInWordsSwitch,
-        discountSwitch,
         discountType,
         discount.amount,
-        taxSwitch,
         taxType,
         tax.amount,
-        shippingSwitch,
         shippingType,
         shipping.cost,
     ]);
@@ -160,34 +173,28 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
 
         let total: number = totalSum;
 
-        if (discountSwitch) {
-            if (discountType == "amount") {
-                total -= discountAmount;
-                discountAmountType = "amount";
-            } else {
-                total -= total * (discountAmount / 100);
-                discountAmountType = "percentage";
-            }
+        if (discountType == "amount") {
+            total -= discountAmount;
+            discountAmountType = "amount";
+        } else {
+            total -= total * (discountAmount / 100);
+            discountAmountType = "percentage";
         }
 
-        if (taxSwitch) {
-            if (taxType == "amount") {
-                total += taxAmount;
-                taxAmountType = "amount";
-            } else {
-                total += total * (taxAmount / 100);
-                taxAmountType = "percentage";
-            }
+        if (taxType == "amount") {
+            total += taxAmount;
+            taxAmountType = "amount";
+        } else {
+            total += total * (taxAmount / 100);
+            taxAmountType = "percentage";
         }
 
-        if (shippingSwitch) {
-            if (shippingType == "amount") {
-                total += shippingCost;
-                shippingCostType = "amount";
-            } else {
-                total += total * (shippingCost / 100);
-                shippingCostType = "percentage";
-            }
+        if (shippingType == "amount") {
+            total += shippingCost;
+            shippingCostType = "amount";
+        } else {
+            total += total * (shippingCost / 100);
+            shippingCostType = "percentage";
         }
 
         setTotalAmount(total);
