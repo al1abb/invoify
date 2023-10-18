@@ -8,7 +8,7 @@ export async function POST(req: Request, res: Response) {
     try {
         const body = await req.json();
 
-        // Read the HTML template from a file
+        // Read the HTML template from a React component
         const htmlTemplate = InvoiceTemplate(body);
 
         // Create a Puppeteer browser instance
