@@ -11,7 +11,8 @@ const useToasts = () => {
         toast({
             variant: "default",
             title: "Your invoice has been generated!",
-            description: "You can preview, download, or save it",
+            description:
+                "You can preview, download, or save it from the actions tab",
         });
     };
 
