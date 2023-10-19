@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 // Shadcn components
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,8 @@ const DatePickerFormField = ({
     name,
     label,
 }: DatePickerFormFieldProps) => {
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
     return (
         <>
             <FormField
@@ -51,7 +53,10 @@ const DatePickerFormField = ({
                                 <Label>{label}:</Label>
                             </div>
                             <div>
-                                <Popover>
+                                <Popover
+                                    open={isPopoverOpen}
+                                    onOpenChange={setIsPopoverOpen}
+                                >
                                     <PopoverTrigger asChild>
                                         <FormControl>
                                             <Button
@@ -77,10 +82,18 @@ const DatePickerFormField = ({
                                     <PopoverContent className="w-auto p-0">
                                         <Calendar
                                             mode="single"
+                                            captionLayout="dropdown-buttons"
                                             selected={new Date(field.value)}
-                                            onSelect={field.onChange}
+                                            onSelect={(e) => {
+                                                field.onChange(e);
+                                                setIsPopoverOpen(false);
+                                            }}
                                             disabled={(date) =>
                                                 date < new Date("1900-01-01")
+                                            }
+                                            fromYear={1960}
+                                            toYear={
+                                                new Date().getFullYear() + 30
                                             }
                                             initialFocus
                                         />
