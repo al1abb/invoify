@@ -10,7 +10,12 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+
+// Components
+import { BaseButton } from "@/app/components";
+
+// Icons
+import { MousePointerClick } from "lucide-react";
 
 // Types
 import { ControlType, NameType, UseFormSetValueType } from "@/types";
@@ -57,7 +62,6 @@ const FileFormField = ({
 
     return (
         <>
-            {label}:
             <FormField
                 control={control}
                 name={name}
@@ -76,12 +80,16 @@ const FileFormField = ({
                             />
                         ) : (
                             <div>
+                                <Label>{label}:</Label>
                                 <Label
                                     htmlFor="logo-input"
                                     className="custom-file-input"
                                 >
                                     <>
-                                        Click to upload image
+                                        <div className="flex flex-col items-center">
+                                            <MousePointerClick />
+                                            <p>Click to upload image</p>
+                                        </div>
                                         <FormControl>
                                             <input
                                                 ref={fileInputRef}
@@ -101,13 +109,9 @@ const FileFormField = ({
             />
             {base64Image && (
                 <>
-                    <Button
-                        type="button"
-                        style={{ width: "fit-content" }}
-                        onClick={removeLogo}
-                    >
+                    <BaseButton variant="destructive" onClick={removeLogo}>
                         Remove logo
-                    </Button>
+                    </BaseButton>
                 </>
             )}
         </>
