@@ -17,17 +17,18 @@ import { Input } from "@/components/ui/input";
 // Components
 import { BaseButton } from "@/app/components";
 
-// Icons
-import { Mail } from "lucide-react";
-
 // Helpers
 import { isValidEmail } from "@/lib/helpers";
 
 type SendPdfToEmailModalProps = {
     sendPdfToMail: (email: string) => Promise<void>;
+    children: React.ReactNode;
 };
 
-const SendPdfToEmailModal = ({ sendPdfToMail }: SendPdfToEmailModalProps) => {
+const SendPdfToEmailModal = ({
+    sendPdfToMail,
+    children,
+}: SendPdfToEmailModalProps) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
@@ -52,11 +53,7 @@ const SendPdfToEmailModal = ({ sendPdfToMail }: SendPdfToEmailModalProps) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <BaseButton tooltipLabel="Send invoice PDF to mail" size="icon">
-                    <Mail />
-                </BaseButton>
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
 
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
