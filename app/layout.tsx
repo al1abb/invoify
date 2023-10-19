@@ -19,9 +19,22 @@ import Providers from "./contexts/Providers";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Invoify",
+    title: "Invoify | Free Invoice Generator",
     description: "Invoice generating application",
     icons: [{ rel: "icon", url: Favicon.src }],
+    keywords: [
+        "invoice",
+        "invoice generating",
+        "invoice generator",
+        "free invoice generator",
+        "invoice app",
+        "invoice generator app",
+    ],
+    viewport: "width=device-width, initial-scale=1",
+    robots: {
+        index: true,
+        follow: true,
+    },
 };
 
 export default function RootLayout({
