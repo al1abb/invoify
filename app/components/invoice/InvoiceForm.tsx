@@ -14,6 +14,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 // Components
 import {
@@ -51,9 +52,9 @@ const InvoiceForm = ({
 
     const invoiceNumberLabel = useMemo(() => {
         if (invoiceNumber) {
-            return `Working on #${invoiceNumber}`;
+            return `#${invoiceNumber}`;
         } else {
-            return "(New Invoice)";
+            return "New Invoice";
         }
     }, [invoiceNumber]);
 
@@ -61,10 +62,15 @@ const InvoiceForm = ({
         <div className="w-full xl:w-3/4">
             <Card>
                 <CardHeader>
-                    <CardTitle>INVOICE</CardTitle>
+                    <CardTitle className="flex items-center gap-3">
+                        INVOICE
+                        <Badge variant="secondary" className="w-fit">
+                            <p style={{ fontSize: "14px" }}>
+                                {invoiceNumberLabel}
+                            </p>
+                        </Badge>
+                    </CardTitle>
                     <CardDescription>Generate invoice</CardDescription>
-
-                    <small>{invoiceNumberLabel}</small>
                 </CardHeader>
                 <CardContent>
                     <SavedInvoiceSelector
