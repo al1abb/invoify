@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -21,7 +21,7 @@ import { PdfViewer, BaseButton, SendPdfToEmailModal } from "@/app/components";
 import { Download, Eye, FileInput, Plus, Save } from "lucide-react";
 
 // Variables
-import { FORM_DEFAULT_VALUES } from "@/lib/variables";
+import { FORM_DEFAULT_VALUES, FORM_FILL_VALUES } from "@/lib/variables";
 
 type InvoiceActionsProps = {
     invoicePdfLoading: boolean;
@@ -48,6 +48,12 @@ const InvoiceActions = ({
         reset(FORM_DEFAULT_VALUES);
         router.refresh();
     };
+
+    //? Form auto fill for testing
+    const devEnv = useMemo(() => {
+        return process.env.NODE_ENV === "development";
+    }, []);
+
     return (
         <div className="w-full xl:w-1/4">
             <Card className="sticky top-0">
@@ -56,6 +62,16 @@ const InvoiceActions = ({
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
                 <div className="flex flex-col px-2 gap-y-1">
+                    {devEnv && (
+                        <BaseButton
+                            tooltipLabel="Form Test Fill"
+                            variant="outline"
+                            onClick={() => reset(FORM_FILL_VALUES)}
+                            disabled={invoicePdfLoading}
+                        >
+                            Fill In the form (DEV)
+                        </BaseButton>
+                    )}
                     <BaseButton
                         tooltipLabel="Get new invoice form"
                         variant="outline"
