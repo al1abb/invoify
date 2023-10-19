@@ -113,3 +113,8 @@ svg,
 button {
     --tw-ring-offset-width: 0px !important;
 }
+
+/* For Customized Calendar */
+.rdp-vhidden {
+    @apply hidden;
+}
