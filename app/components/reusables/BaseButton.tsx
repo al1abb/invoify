@@ -55,7 +55,7 @@ const BaseButton = ({
                             {children}
                         </Button>
                     ) : (
-                        <Button disabled>
+                        <Button type={type} {...props} disabled>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             {loadingText}
                         </Button>
