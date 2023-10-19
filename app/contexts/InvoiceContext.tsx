@@ -74,7 +74,7 @@ export const InvoiceContextProvider = ({
     /**
      * Generates a PDF using the provided data.
      *
-     * @param {typeof InvoiceSchema} data - The data used to generate the PDF.
+     * @param {ValuesType} data - The data used to generate the PDF.
      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
      *
      * @throws {Error} If there is an error generating the PDF.
@@ -91,8 +91,10 @@ export const InvoiceContextProvider = ({
             const result = await response.blob();
             setInvoicePdf(result);
 
-            // Toast
-            pdfGenerationSuccess();
+            if (result) {
+                // Toast
+                pdfGenerationSuccess();
+            }
         } catch (err) {
             console.log(err);
         } finally {
