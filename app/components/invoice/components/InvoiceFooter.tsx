@@ -91,6 +91,11 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         control,
     });
 
+    const signature = useWatch({
+        name: "details.signature",
+        control,
+    });
+
     // When loading if received values, turn on the switches
     useEffect(() => {
         if (discount.amount) {
@@ -418,14 +423,16 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                     }}
                     onEnd={handleCanvasEnd}
                 />
-                <BaseButton
-                    tooltipLabel="Clear the signature board"
-                    variant="destructive"
-                    className="w-fit gap-2"
-                    onClick={clearSignature}
-                >
-                    Clear Signature
-                </BaseButton>
+                {signature && (
+                    <BaseButton
+                        tooltipLabel="Clear the signature board"
+                        variant="destructive"
+                        className="w-fit gap-2"
+                        onClick={clearSignature}
+                    >
+                        Clear Signature
+                    </BaseButton>
+                )}
             </div>
         </div>
     );
