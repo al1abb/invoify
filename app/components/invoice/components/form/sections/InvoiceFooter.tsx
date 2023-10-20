@@ -22,6 +22,9 @@ import { BaseButton, ChargeInput } from "@/app/components";
 // React signature canvas
 import SignatureCanvas from "react-signature-canvas";
 
+// Icons
+import { Eraser } from "lucide-react";
+
 // Helpers
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
 
@@ -430,6 +433,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                         className="w-fit gap-2"
                         onClick={clearSignature}
                     >
+                        <Eraser />
                         Clear Signature
                     </BaseButton>
                 )}
