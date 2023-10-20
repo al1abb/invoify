@@ -23,7 +23,7 @@ type ItemsProps = {
 const Items = ({ control, setValue, name }: ItemsProps) => {
     const { fields, append, remove } = useFieldArray({
         control: control,
-        name: name, // Match this name to the field in your schema
+        name: name,
     });
 
     const addNewField = () => {
