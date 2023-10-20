@@ -3,6 +3,7 @@ import nodemailer, { SendMailOptions } from "nodemailer";
 // Variables
 import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
 
+// Components
 import { SendPdfEmail } from "@/app/components";
 
 const transporter = nodemailer.createTransport({
@@ -28,7 +29,7 @@ const sendPdfToEmail = async (
 
     try {
         const mailOptions: SendMailOptions = {
-            from: "Invoify <" + NODEMAILER_EMAIL + ">",
+            from: "Invoify",
             to: email,
             subject: "Your invoice PDF is ready",
             html: emailHTML,
