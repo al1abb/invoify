@@ -102,6 +102,7 @@ const SingleItem = ({
                                             className="w-[10rem]"
                                             placeholder="Quantity"
                                             type="number"
+                                            step="any"
                                             min={0}
                                         />
                                     </FormControl>
@@ -125,6 +126,7 @@ const SingleItem = ({
                                             {...field}
                                             placeholder="Unit price/Rate"
                                             type="number"
+                                            step="any"
                                             min={0}
                                         />
                                     </FormControl>
@@ -179,6 +181,7 @@ const SingleItem = ({
                 )}
             />
             <div>
+                {/* Making sure that there is always at least 1 item */}
                 {index != 0 && (
                     <Button
                         onClick={() => removeField(index)}
