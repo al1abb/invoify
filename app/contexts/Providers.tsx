@@ -28,13 +28,9 @@ const Providers = ({ children }: ProvidersProps) => {
         defaultValues: FORM_DEFAULT_VALUES,
     });
 
-    const { getValues } = form;
-
     return (
         <FormProvider {...form}>
-            <InvoiceContextProvider getValues={getValues}>
-                {children}
-            </InvoiceContextProvider>
+            <InvoiceContextProvider>{children}</InvoiceContextProvider>
         </FormProvider>
     );
 };
