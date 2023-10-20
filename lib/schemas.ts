@@ -66,6 +66,11 @@ const fieldValidators = {
     }),
 };
 
+const CustomInputSchema = z.object({
+    key: z.string(),
+    value: z.string(),
+});
+
 const InvoiceSenderSchema = z.object({
     name: fieldValidators.name,
     address: fieldValidators.address,
@@ -75,6 +80,7 @@ const InvoiceSenderSchema = z.object({
     email: fieldValidators.email,
     phone: fieldValidators.phone,
     vatNumber: fieldValidators.stringOptional,
+    customInputs: z.array(CustomInputSchema).optional(),
 });
 
 const InvoiceReceiverSchema = z.object({
@@ -86,6 +92,7 @@ const InvoiceReceiverSchema = z.object({
     email: fieldValidators.email,
     phone: fieldValidators.phone,
     vatNumber: fieldValidators.stringOptional,
+    customInputs: z.array(CustomInputSchema).optional(),
 });
 
 const ItemSchema = z.object({
