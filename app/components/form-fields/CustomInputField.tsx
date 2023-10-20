@@ -36,19 +36,20 @@ const CustomInputField = ({
     const nameValue = `${location}[${index}].value`;
     return (
         <>
-            <div className="flex justify-between gap-5">
+            <div className="flex gap-2">
                 <FormField
                     control={control}
                     name={nameKey}
                     render={({ field }) => (
                         <FormItem>
-                            <div className="flex justify-between gap-5 items-center text-sm">
+                            <div className="flex justify-between items-center text-sm">
                                 <div>
                                     <FormControl>
                                         <Input
                                             {...field}
                                             placeholder="Key"
-                                            size={2}
+                                            size={7}
+                                            className="font-medium p-0 border-none"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -62,13 +63,13 @@ const CustomInputField = ({
                     name={nameValue}
                     render={({ field }) => (
                         <FormItem>
-                            <div className="flex justify-between gap-5 items-center text-sm">
+                            <div className="flex justify-between items-center text-sm">
                                 <div>
                                     <FormControl>
                                         <Input
                                             {...field}
                                             placeholder="Value"
-                                            size={10}
+                                            size={13}
                                         />
                                     </FormControl>
                                     <FormMessage />
