@@ -8,19 +8,29 @@ import React, {
     useState,
 } from "react";
 
+import { useRouter } from "next/navigation";
+
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // Hooks
 import useToasts from "../hooks/useToasts";
 
 // Variables
-import { GENERATE_PDF_API, SEND_PDF_API } from "@/lib/variables";
+import {
+    FORM_DEFAULT_VALUES,
+    GENERATE_PDF_API,
+    SEND_PDF_API,
+} from "@/lib/variables";
 
 // Types
-import { GetValuesType, ValuesType } from "@/types";
+import { ValuesType } from "@/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),
     invoicePdfLoading: false,
     savedInvoices: [] as ValuesType[],
+    newInvoice: () => {},
     generatePdf: async (data: ValuesType) => {},
     downloadPdf: () => {},
     previewPdfInTab: () => {},
@@ -36,14 +46,14 @@ export const useInvoiceContext = () => {
 };
 
 type InvoiceContextProviderProps = {
-    getValues: GetValuesType;
     children: React.ReactNode;
 };
 
 export const InvoiceContextProvider = ({
-    getValues,
     children,
 }: InvoiceContextProviderProps) => {
+    const router = useRouter();
+
     // Toasts
     const {
         modifiedInvoiceSuccess,
@@ -53,6 +63,10 @@ export const InvoiceContextProvider = ({
         sendPdfSuccess,
     } = useToasts();
 
+    // Get form values and methods from form context
+    const { getValues, reset } = useFormContext();
+
+    // Variables
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
@@ -70,6 +84,16 @@ export const InvoiceContextProvider = ({
             setSavedInvoices(savedInvoicesDefault);
         }
     }, []);
+
+    /**
+     * Generates a new invoice.
+     *
+     * @return {void} - This function does not return any value.
+     */
+    const newInvoice = () => {
+        reset(FORM_DEFAULT_VALUES);
+        router.refresh();
+    };
 
     /**
      * Generates a PDF using the provided data.
@@ -247,6 +271,7 @@ export const InvoiceContextProvider = ({
                 invoicePdf,
                 invoicePdfLoading,
                 savedInvoices,
+                newInvoice,
                 generatePdf,
                 downloadPdf,
                 previewPdfInTab,
