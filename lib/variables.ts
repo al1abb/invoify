@@ -37,6 +37,7 @@ export const FORM_DEFAULT_VALUES = {
         email: "",
         phone: "",
         vatNumber: "",
+        customInputs: [],
     },
     receiver: {
         name: "",
@@ -47,6 +48,7 @@ export const FORM_DEFAULT_VALUES = {
         email: "",
         phone: "",
         vatNumber: "",
+        customInputs: [],
     },
     details: {
         invoiceLogo: "",
