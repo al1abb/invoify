@@ -4,11 +4,13 @@ import {
     FieldPath,
     UseFormGetValues,
     UseFormReset,
+    UseFormReturn,
     UseFormSetValue,
 } from "react-hook-form";
 import { InvoiceSchema } from "./lib/schemas";
 
 export type ValuesType = z.infer<typeof InvoiceSchema>;
+export type FormType = UseFormReturn<ValuesType>;
 export type ControlType = Control<any>;
 export type NameType = FieldPath<ValuesType>;
 export type GetValuesType = UseFormGetValues<ValuesType>;
