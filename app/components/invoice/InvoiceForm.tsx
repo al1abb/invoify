@@ -13,19 +13,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 // Components
 import {
-    DatePickerFormField,
+    SavedInvoiceSelector,
     FileFormField,
-    InputFormField,
-    InvoiceFooter,
+    BillFromSection,
     Items,
     PaymentInformation,
-    SavedInvoiceSelector,
-    CurrencySelector,
+    InvoiceFooter,
+    BillToSection,
+    InvoiceDetails,
 } from "@/app/components";
 
 // Types
@@ -88,157 +87,11 @@ const InvoiceForm = ({
                             setValue={setValue}
                         />
                         <div className="flex flex-wrap gap-20">
-                            <div className="flex flex-col gap-2">
-                                <Label
-                                    htmlFor="billFrom"
-                                    className="text-xl font-semibold"
-                                >
-                                    Bill From:
-                                </Label>
+                            <BillFromSection />
 
-                                {/* // TODO: Remove control from these elements and apply it using useFormContext */}
-                                <InputFormField
-                                    control={control}
-                                    name="sender.name"
-                                    label="Name"
-                                    placeholder="Your name"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.address"
-                                    label="Address"
-                                    placeholder="Your address"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.zipCode"
-                                    label="Zip"
-                                    placeholder="Your zip code"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.city"
-                                    label="City"
-                                    placeholder="Your city"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.country"
-                                    label="Country"
-                                    placeholder="Your country"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.email"
-                                    label="Email"
-                                    placeholder="Your email"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.phone"
-                                    label="Phone"
-                                    placeholder="Your phone number"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="sender.vatNumber"
-                                    label="VAT Number"
-                                    placeholder="Your VAT Number"
-                                />
-                            </div>
+                            <BillToSection />
 
-                            <div className="flex flex-col gap-2">
-                                <Label
-                                    htmlFor="billTo"
-                                    className="text-xl font-semibold"
-                                >
-                                    Bill To:
-                                </Label>
-
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.name"
-                                    label="Name"
-                                    placeholder="Receiver name"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.address"
-                                    label="Address"
-                                    placeholder="Receiver address"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.zipCode"
-                                    label="Zip"
-                                    placeholder="Receiver zip code"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.city"
-                                    label="City"
-                                    placeholder="Receiver city"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.country"
-                                    label="Country"
-                                    placeholder="Receiver country"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.email"
-                                    label="Email"
-                                    placeholder="Receiver email"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.phone"
-                                    label="Phone"
-                                    placeholder="Receiver phone number"
-                                />
-                                <InputFormField
-                                    control={control}
-                                    name="receiver.vatNumber"
-                                    label="VAT Number"
-                                    placeholder="Receiver VAT Number"
-                                />
-                            </div>
-
-                            <div className="flex flex-col gap-2">
-                                <Label
-                                    htmlFor="invoiceDetails"
-                                    className="text-xl font-semibold"
-                                >
-                                    Invoice Details:
-                                </Label>
-
-                                <InputFormField
-                                    control={control}
-                                    name="details.invoiceNumber"
-                                    label="Invoice number"
-                                    placeholder="Invoice number"
-                                />
-
-                                <DatePickerFormField
-                                    control={control}
-                                    name="details.invoiceDate"
-                                    label="Issued date"
-                                />
-
-                                <DatePickerFormField
-                                    control={control}
-                                    name="details.dueDate"
-                                    label="Due date"
-                                />
-
-                                <CurrencySelector
-                                    control={control}
-                                    name="details.currency"
-                                    label="Currency"
-                                    placeholder="Select Currency"
-                                />
-                            </div>
+                            <InvoiceDetails />
                         </div>
 
                         <div>
