@@ -111,7 +111,8 @@ select,
 a,
 svg,
 button {
-    --tw-ring-offset-width: 0px !important;
+    /* --tw-ring-offset-width: 0px !important; */
+    --tw-ring-offset-color: "transparent" !important;
 }
 
 /* For Customized Calendar */
