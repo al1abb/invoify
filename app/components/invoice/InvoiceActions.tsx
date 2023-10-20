@@ -1,8 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
 
-import { useRouter } from "next/navigation";
-
 // RHF
 import { useFormContext } from "react-hook-form";
 
@@ -15,13 +13,18 @@ import {
 } from "@/components/ui/card";
 
 // Components
-import { PdfViewer, BaseButton, SendPdfToEmailModal } from "@/app/components";
+import {
+    PdfViewer,
+    BaseButton,
+    SendPdfToEmailModal,
+    NewInvoiceAlert,
+} from "@/app/components";
 
 // Lucide Icons
 import { Download, Eye, FileInput, Mail, Plus, Save } from "lucide-react";
 
 // Variables
-import { FORM_DEFAULT_VALUES, FORM_FILL_VALUES } from "@/lib/variables";
+import { FORM_FILL_VALUES } from "@/lib/variables";
 
 type InvoiceActionsProps = {
     invoicePdfLoading: boolean;
@@ -40,14 +43,8 @@ const InvoiceActions = ({
     saveInvoice,
     sendPdfToMail,
 }: InvoiceActionsProps) => {
-    const router = useRouter();
-
-    const { reset } = useFormContext();
-
-    const newInvoice = () => {
-        reset(FORM_DEFAULT_VALUES);
-        router.refresh();
-    };
+    //? DEV ONLY
+    const { reset, formState } = useFormContext();
 
     //? Form auto fill for testing
     const devEnv = useMemo(() => {
@@ -62,27 +59,34 @@ const InvoiceActions = ({
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
                 <div className="flex flex-col flex-wrap gap-2">
+                    {/* //? DEV ONLY */}
                     {devEnv && (
-                        <BaseButton
-                            tooltipLabel="Form Test Fill"
-                            variant="outline"
-                            onClick={() => reset(FORM_FILL_VALUES)}
-                            disabled={invoicePdfLoading}
-                            className="w-auto"
-                        >
-                            Fill in the form (DEV)
-                        </BaseButton>
+                        <div className="flex flex-col border-2 border-red-500">
+                            <b>DEV:</b>
+                            Form: {formState.isDirty ? "Dirty" : "Clean"}
+                            <BaseButton
+                                tooltipLabel="Form Test Fill"
+                                variant="outline"
+                                onClick={() => reset(FORM_FILL_VALUES)}
+                                disabled={invoicePdfLoading}
+                                className="w-auto"
+                            >
+                                Fill in the form
+                            </BaseButton>
+                        </div>
                     )}
-                    <BaseButton
-                        tooltipLabel="Get new invoice form"
-                        variant="outline"
-                        onClick={newInvoice}
-                        disabled={invoicePdfLoading}
-                        className="w-auto"
-                    >
-                        <Plus />
-                        New Invoice
-                    </BaseButton>
+
+                    <NewInvoiceAlert>
+                        <BaseButton
+                            tooltipLabel="Get new invoice form"
+                            variant="outline"
+                            disabled={invoicePdfLoading}
+                        >
+                            <Plus />
+                            New Invoice
+                        </BaseButton>
+                    </NewInvoiceAlert>
+
                     <BaseButton
                         type="submit"
                         tooltipLabel="Generate your invoice"
