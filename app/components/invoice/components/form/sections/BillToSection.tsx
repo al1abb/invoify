@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label";
 // Components
 import { BaseButton, CustomInputField, InputFormField } from "@/app/components";
 
+// Icons
+import { Plus } from "lucide-react";
+
 type BillToSectionProps = {};
 
 const BillToSection = (props: BillToSectionProps) => {
@@ -98,7 +101,14 @@ const BillToSection = (props: BillToSectionProps) => {
                 />
             ))}
 
-            <BaseButton size="sm" onClick={addNewCustomInput}>
+            <BaseButton
+                tooltipLabel="Add custom input to receiver"
+                size="sm"
+                variant="link"
+                className="w-fit"
+                onClick={addNewCustomInput}
+            >
+                <Plus />
                 Add Custom Input
             </BaseButton>
         </div>
