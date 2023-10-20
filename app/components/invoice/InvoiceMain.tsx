@@ -13,7 +13,7 @@ import { InvoiceActions, InvoiceForm } from "@/app/components";
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Types
-import { ValuesType } from "@/types";
+import { ValuesType } from "@/app/types/types";
 
 const InvoiceMain = () => {
     const { handleSubmit } = useFormContext<ValuesType>();

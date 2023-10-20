@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Trash2 } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType, NameType } from "@/app/types/types";
 
 type SingleItemProps = {
     control: ControlType;

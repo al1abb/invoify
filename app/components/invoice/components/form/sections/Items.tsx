@@ -12,7 +12,7 @@ import { BaseButton, SingleItem } from "@/app/components";
 import { Plus } from "lucide-react";
 
 // Types
-import { ControlType, NameType, UseFormSetValueType } from "@/types";
+import { ControlType, NameType, UseFormSetValueType } from "@/app/types/types";
 
 type ItemsProps = {
     control: ControlType;

@@ -28,7 +28,7 @@ import {
 } from "@/app/components";
 
 // Types
-import { ValuesType } from "@/types";
+import { ValuesType } from "@/app/types/types";
 
 type InvoiceFormProps = {
     savedInvoices: ValuesType[];

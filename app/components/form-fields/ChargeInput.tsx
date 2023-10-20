@@ -13,7 +13,7 @@ import { BaseButton } from "@/app/components";
 import { Percent, RefreshCw } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType, NameType } from "@/app/types/types";
 
 type ChargeInputProps = {
     label: string;

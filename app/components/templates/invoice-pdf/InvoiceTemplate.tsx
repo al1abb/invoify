@@ -1,7 +1,7 @@
 import React from "react";
 
 // Types
-import { ValuesType } from "@/types";
+import { ValuesType } from "@/app/types/types";
 
 const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;

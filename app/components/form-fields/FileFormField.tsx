@@ -18,7 +18,7 @@ import { BaseButton } from "@/app/components";
 import { MousePointerClick } from "lucide-react";
 
 // Types
-import { ControlType, NameType, UseFormSetValueType } from "@/types";
+import { ControlType, NameType, UseFormSetValueType } from "@/app/types/types";
 
 type FileFormFieldProps = {
     control: ControlType;

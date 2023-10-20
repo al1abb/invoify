@@ -22,7 +22,7 @@ import {
 import useCurrencies from "@/app/hooks/useCurrencies";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType, NameType } from "@/app/types/types";
 
 type CurrencySelectorProps = {
     control: ControlType;

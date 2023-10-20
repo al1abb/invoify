@@ -7,7 +7,7 @@ import {
     UseFormReturn,
     UseFormSetValue,
 } from "react-hook-form";
-import { InvoiceSchema } from "./lib/schemas";
+import { InvoiceSchema } from "../../lib/schemas";
 
 export type ValuesType = z.infer<typeof InvoiceSchema>;
 export type FormType = UseFormReturn<ValuesType>;

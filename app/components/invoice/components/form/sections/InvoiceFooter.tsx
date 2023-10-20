@@ -26,7 +26,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
 
 // Types
-import { ControlType, UseFormSetValueType } from "@/types";
+import { ControlType, UseFormSetValueType } from "@/app/types/types";
 
 type InvoiceFooterProps = {
     control: ControlType;

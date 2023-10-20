@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Types
-import { ControlType } from "@/types";
+import { ControlType } from "@/app/types/types";
 
 type PaymentInformationProps = {
     control: ControlType;

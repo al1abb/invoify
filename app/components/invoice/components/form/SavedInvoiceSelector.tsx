@@ -25,7 +25,7 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
-import { UseFormResetType, ValuesType } from "@/types";
+import { UseFormResetType, ValuesType } from "@/app/types/types";
 
 type SavedInvoiceSelectorProps = {
     savedInvoices: ValuesType[];

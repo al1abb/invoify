@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType, NameType } from "@/app/types/types";
 
 type InputFormFieldProps = {
     control: ControlType;

@@ -24,7 +24,7 @@ import {
 } from "@/lib/variables";
 
 // Types
-import { ValuesType } from "@/types";
+import { ValuesType } from "@/app/types/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),

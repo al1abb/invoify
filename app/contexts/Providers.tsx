@@ -13,7 +13,7 @@ import { InvoiceSchema } from "@/lib/schemas";
 import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
 
 // Types
-import { ValuesType } from "@/types";
+import { ValuesType } from "@/app/types/types";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";

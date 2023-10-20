@@ -26,7 +26,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/types";
+import { ControlType, NameType } from "@/app/types/types";
 
 type DatePickerFormFieldProps = {
     control: ControlType;
