@@ -150,6 +150,8 @@ const SingleItem = ({
                                             {...field}
                                             readOnly
                                             placeholder="Item total"
+                                            className="border-none font-medium text-lg"
+                                            size={10}
                                         />
                                     </FormControl>
                                     <FormMessage />
