@@ -138,8 +138,10 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
     // TODO: Maybe move this and above useEffect logic into a separate hook
     // Calculate total amount in the invoice
     const calculateTotal = () => {
+        // Here parseFloat fixes a bug where an extra zero appears
+        // at the beginning of subTotal caused by toFixed(2) in item.total in single item
         const totalSum: number = itemsArray.reduce(
-            (sum: number, item: any) => sum + item.total,
+            (sum: number, item: any) => sum + parseFloat(item.total),
             0
         );
         setValue("details.subTotal", totalSum.toString());

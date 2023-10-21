@@ -60,7 +60,7 @@ const SingleItem = ({
         // Calculate total when rate or quantity changes
         if (rate != undefined && quantity != undefined) {
             const calculatedTotal = rate * quantity;
-            setValue(`${name}[${index}].total`, calculatedTotal);
+            setValue(`${name}[${index}].total`, calculatedTotal.toFixed(2));
         }
     }, [rate, quantity]);
 
