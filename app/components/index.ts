@@ -39,6 +39,7 @@ import BaseButton from "./reusables/BaseButton";
 
 //* Modals
 import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
+import SignatureModal from "./modals/SignatureModal";
 
 // --- Alerts
 import NewInvoiceAlert from "./modals/alerts/NewInvoiceAlert";
@@ -73,6 +74,7 @@ export {
     CustomInputField,
     BaseButton,
     SendPdfToEmailModal,
+    SignatureModal,
     NewInvoiceAlert,
     InvoiceTemplate,
     SendPdfEmail,
