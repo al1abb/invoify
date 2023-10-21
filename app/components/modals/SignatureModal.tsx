@@ -43,6 +43,13 @@ const SignatureModal = (props: SignatureModalProps) => {
     // Modal state
     const [open, setOpen] = useState(false);
 
+    // Modal tabs
+    const [tab, setTab] = useState("draw");
+
+    const onTabChange = (value: string) => {
+        setTab(value);
+    };
+
     const {
         signatureData,
         signatureRef,
@@ -62,7 +69,7 @@ const SignatureModal = (props: SignatureModalProps) => {
         name: "details.signature",
     });
 
-    // When opening modal apply signatureData to the canvas when it's available
+    // When opening modal or switching tabs, apply signatureData to the canvas when it's available
     // Persists the signature
     useEffect(() => {
         if (open && signatureData) {
@@ -72,9 +79,9 @@ const SignatureModal = (props: SignatureModalProps) => {
                 if (canvas) {
                     canvas.fromDataURL(signatureData);
                 }
-            }, 100);
+            }, 50);
         }
-    }, [open]);
+    }, [open, tab]);
 
     return (
         <>
@@ -104,7 +111,7 @@ const SignatureModal = (props: SignatureModalProps) => {
 
                 <DialogContent className="select-none">
                     <DialogTitle>Signature</DialogTitle>
-                    <Tabs defaultValue="draw">
+                    <Tabs value={tab} onValueChange={onTabChange}>
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value="draw">Draw</TabsTrigger>
                             <TabsTrigger value="type">Type</TabsTrigger>
