@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // RHF
 import { useWatch } from "react-hook-form";
@@ -17,13 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
 // Custom components
-import { BaseButton, ChargeInput } from "@/app/components";
-
-// React signature canvas
-import SignatureCanvas from "react-signature-canvas";
-
-// Icons
-import { Eraser } from "lucide-react";
+import { ChargeInput, SignatureModal } from "@/app/components";
 
 // Helpers
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
@@ -53,21 +47,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
     const [taxType, setTaxType] = useState("amount");
     const [shippingType, setShippingType] = useState("amount");
 
-    // Signature
-    const signatureRef = useRef<SignatureCanvas | null>(null);
-
-    const clearSignature = () => {
-        signatureRef.current?.clear();
-        setValue("details.signature", "");
-    };
-
-    const handleCanvasEnd = () => {
-        if (signatureRef.current) {
-            const canvas = signatureRef.current;
-            setValue("details.signature", canvas.toDataURL("base64"));
-        }
-    };
-
     // Form Fields
     const itemsArray = useWatch({
         name: `details.items`,
@@ -91,11 +70,6 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
 
     const currency = useWatch({
         name: `details.currency`,
-        control,
-    });
-
-    const signature = useWatch({
-        name: "details.signature",
         control,
     });
 
@@ -410,34 +384,7 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-y-5">
-                <Label>Signature:</Label>
-                <SignatureCanvas
-                    ref={signatureRef}
-                    penColor="rgba(25, 25, 112, 1)"
-                    canvasProps={{
-                        height: "auto",
-                        width: "auto",
-                        style: {
-                            backgroundColor: "rgba(230, 230, 230, 1)",
-                            border: "2px solid black",
-                            borderRadius: "10px",
-                        },
-                    }}
-                    onEnd={handleCanvasEnd}
-                />
-                {signature && (
-                    <BaseButton
-                        tooltipLabel="Clear the signature board"
-                        variant="destructive"
-                        className="w-fit gap-2"
-                        onClick={clearSignature}
-                    >
-                        <Eraser />
-                        Clear Signature
-                    </BaseButton>
-                )}
-            </div>
+            <SignatureModal />
         </div>
     );
 };
