@@ -26,6 +26,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Components
@@ -52,6 +53,7 @@ const SignatureModal = (props: SignatureModalProps) => {
         setTab(value);
     };
 
+    // Signature variables
     const {
         signatureData,
         signatureRef,
@@ -60,20 +62,35 @@ const SignatureModal = (props: SignatureModalProps) => {
         handleColorButtonClick,
         clearSignature,
         handleCanvasEnd,
+        typedSignature,
+        setTypedSignature,
+        typedSignatureFontSize,
     } = useSignature();
-
-    const handleSaveSignature = () => {
-        handleCanvasEnd();
-
-        // This setValue was removed from handleCanvasEnd and put here to prevent
-        // the signature from showing updated drawing every time drawing stops
-        setValue("details.signature", signatureData, { shouldDirty: true });
-        setOpen(false);
-    };
 
     const signature = useWatch({
         name: "details.signature",
     });
+
+    /**
+     * Function that handles signature save logic for all tabs (draw, type, upload)
+     */
+    const handleSaveSignature = () => {
+        if (tab == "draw") {
+            handleCanvasEnd();
+
+            // This setValue was removed from handleCanvasEnd and put here to prevent
+            // the signature from showing updated drawing every time drawing stops
+            setValue("details.signature", signatureData, { shouldDirty: true });
+            setOpen(false);
+        }
+
+        if (tab == "type") {
+            setValue("details.signature", typedSignature, {
+                shouldDirty: true,
+            });
+            setOpen(false);
+        }
+    };
 
     // When opening modal or switching tabs, apply signatureData to the canvas when it's available
     // Persists the signature
@@ -105,7 +122,8 @@ const SignatureModal = (props: SignatureModalProps) => {
                             />
                         ) : (
                             <canvas
-                                className="border rounded-lg hover:border-blue-500"
+                                style={{ backgroundColor: "#efefef" }}
+                                className="border rounded-md hover:border-blue-500"
                                 width={300}
                                 height="auto"
                             ></canvas>
@@ -115,12 +133,15 @@ const SignatureModal = (props: SignatureModalProps) => {
 
                 <DialogContent className="select-none">
                     <DialogTitle>Signature</DialogTitle>
+
                     <Tabs value={tab} onValueChange={onTabChange}>
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value="draw">Draw</TabsTrigger>
                             <TabsTrigger value="type">Type</TabsTrigger>
                             <TabsTrigger value="upload">Upload</TabsTrigger>
                         </TabsList>
+
+                        {/* DRAW */}
                         <TabsContent value="draw">
                             <Card className="border-none shadow-none">
                                 <CardContent className="space-y-2 p-0">
@@ -199,23 +220,58 @@ const SignatureModal = (props: SignatureModalProps) => {
                                 </div>
                             </Card>
                         </TabsContent>
+
+                        {/* TYPE */}
                         <TabsContent value="type">
                             <Card className="border-none shadow-none">
-                                <CardHeader>
-                                    <CardTitle>Password</CardTitle>
-                                    <CardDescription>
-                                        Change your password here. After saving,
-                                        you'll be logged out.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-2">
-                                    Password
+                                <CardContent className="space-y-2 p-0">
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                            maxWidth: "600px",
+                                            margin: "0 auto",
+                                        }}
+                                    >
+                                        <div className="relative">
+                                            <canvas
+                                                style={{
+                                                    background: "#efefef",
+                                                    borderRadius: "10px",
+                                                    width: "100%",
+                                                    height: "15rem",
+                                                }}
+                                            ></canvas>
+                                            <Input
+                                                className="absolute top-0 left-0 z-10 bg-transparent h-full w-full mx-auto text-center"
+                                                style={{
+                                                    fontSize: `${typedSignatureFontSize}px`,
+                                                }}
+                                                type="text"
+                                                value={typedSignature}
+                                                onChange={(
+                                                    e: React.ChangeEvent<HTMLInputElement>
+                                                ) =>
+                                                    setTypedSignature(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </div>
                                 </CardContent>
-                                <CardFooter>
-                                    <BaseButton>Save password</BaseButton>
-                                </CardFooter>
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <BaseButton
+                                        tooltipLabel="Save changes"
+                                        disabled={!typedSignature}
+                                        onClick={handleSaveSignature}
+                                    >
+                                        Save
+                                    </BaseButton>
+                                </div>
                             </Card>
                         </TabsContent>
+
+                        {/* UPLOAD */}
                         <TabsContent value="upload">
                             <Card className="border-none shadow-none">
                                 <CardHeader>
