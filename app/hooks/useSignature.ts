@@ -42,7 +42,6 @@ export function useSignature() {
             // Previously base64 was sent in parameter
             const dataUrl = signatureRef.current.toDataURL("image/png");
             setSignatureData(dataUrl);
-            setValue("details.signature", dataUrl);
         }
     }, []);
 

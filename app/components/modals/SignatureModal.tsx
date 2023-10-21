@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 // RHF
-import { useWatch } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // Signature canvas
 import SignatureCanvas from "react-signature-canvas";
@@ -40,6 +40,8 @@ import { useSignature } from "@/app/hooks/useSignature";
 type SignatureModalProps = {};
 
 const SignatureModal = (props: SignatureModalProps) => {
+    const { setValue } = useFormContext();
+
     // Modal state
     const [open, setOpen] = useState(false);
 
@@ -62,6 +64,10 @@ const SignatureModal = (props: SignatureModalProps) => {
 
     const handleSaveSignature = () => {
         handleCanvasEnd();
+
+        // This setValue was removed from handleCanvasEnd and put here to prevent
+        // the signature from showing updated drawing every time drawing stops
+        setValue("details.signature", signatureData, { shouldDirty: true });
         setOpen(false);
     };
 
@@ -86,27 +92,25 @@ const SignatureModal = (props: SignatureModalProps) => {
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger>
-                    {signatureData && signature ? (
-                        <div>
-                            <Label>Signature</Label>
+                <DialogTrigger className="flex justify-start">
+                    <div>
+                        <Label>Signature</Label>
+
+                        {signatureData && signature ? (
                             <img
                                 className="border rounded-lg hover:border-blue-500"
                                 src={signatureData}
-                                width={200}
+                                width={300}
                                 alt=""
                             />
-                        </div>
-                    ) : (
-                        <div>
-                            <Label>Signature</Label>
+                        ) : (
                             <canvas
                                 className="border rounded-lg hover:border-blue-500"
-                                width={200}
-                                height={100}
+                                width={300}
+                                height="auto"
                             ></canvas>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </DialogTrigger>
 
                 <DialogContent className="select-none">
