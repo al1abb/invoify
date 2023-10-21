@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
 // Signature Canvas
@@ -6,6 +6,10 @@ import SignatureCanvas from "react-signature-canvas";
 
 export function useSignature() {
     const { setValue } = useFormContext();
+
+    /**
+     * * DRAWING SIGNATURE
+     */
 
     // Signature in base64
     const [signatureData, setSignatureData] = useState("");
@@ -25,10 +29,18 @@ export function useSignature() {
     ];
     const [selectedColor, setSelectedColor] = useState<string>(colors[0].name);
 
+    /**
+     * Function that sets selected color
+     *
+     * @param color Color to be selected as string. Ex: "red"
+     */
     const handleColorButtonClick = (color: string) => {
         setSelectedColor(color);
     };
 
+    /**
+     * Function that clears drawn signature canvas
+     */
     const clearSignature = useCallback(() => {
         if (signatureRef.current) {
             signatureRef.current.clear();
@@ -37,6 +49,9 @@ export function useSignature() {
         }
     }, []);
 
+    /**
+     * Function that fires every time canvas drawing stops
+     */
     const handleCanvasEnd = useCallback(() => {
         if (signatureRef.current) {
             // Previously base64 was sent in parameter
@@ -44,6 +59,38 @@ export function useSignature() {
             setSignatureData(dataUrl);
         }
     }, []);
+
+    /**
+     * * TYPED SIGNATURE
+     */
+
+    const [typedSignature, setTypedSignature] = useState<string>("");
+
+    /**
+     * Font size calculator for typed signature
+     *
+     * @param text Text in signature input
+     *
+     * @returns Font size that should be used
+     */
+    const calculateFontSize = (text: string) => {
+        const initialFontSize = 100;
+        const canvasWidth = 300;
+        let fontSize = initialFontSize;
+        const textWidth = text.length * (initialFontSize / 2); // Adjust as needed for font width
+
+        if (textWidth > canvasWidth - 20) {
+            // Gradually decrease font size as text approaches canvas width
+            fontSize = (canvasWidth - 20) / text.length / 0.4; // You can adjust the decrease rate
+        }
+
+        return fontSize;
+    };
+
+    const typedSignatureFontSize = useMemo(
+        () => calculateFontSize(typedSignature),
+        [typedSignature]
+    );
 
     return {
         signatureData,
@@ -53,5 +100,8 @@ export function useSignature() {
         handleColorButtonClick,
         clearSignature,
         handleCanvasEnd,
+        typedSignature,
+        setTypedSignature,
+        typedSignatureFontSize,
     };
 }
