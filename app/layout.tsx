@@ -2,7 +2,13 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 // Font
-import { Outfit } from "next/font/google";
+import {
+    Alex_Brush,
+    Dancing_Script,
+    Great_Vibes,
+    Outfit,
+    Parisienne,
+} from "next/font/google";
 
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
@@ -16,7 +22,37 @@ import { BaseNavbar, BaseFooter } from "@/app/components";
 // Context
 import Providers from "./contexts/Providers";
 
+// Fonts
 const outfit = Outfit({ subsets: ["latin"] });
+
+// Signature fonts
+const dancingScript = Dancing_Script({
+    subsets: ["latin"],
+    weight: "400",
+    variable: "--font-dancing-script",
+    preload: true,
+});
+
+const parisienne = Parisienne({
+    subsets: ["latin"],
+    weight: "400",
+    variable: "--font-parisienne",
+    preload: true,
+});
+
+const greatVibes = Great_Vibes({
+    subsets: ["latin"],
+    weight: "400",
+    variable: "--font-great-vibes",
+    preload: true,
+});
+
+const alexBrush = Alex_Brush({
+    subsets: ["latin"],
+    weight: "400",
+    variable: "--font-alex-brush",
+    preload: true,
+});
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
@@ -44,7 +80,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={outfit.className}>
+            <body
+                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable}`}
+            >
                 <Providers>
                     <BaseNavbar />
                     {children}
