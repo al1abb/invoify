@@ -66,6 +66,25 @@ export function useSignature() {
 
     const [typedSignature, setTypedSignature] = useState<string>("");
 
+    const typedSignatureFonts = [
+        {
+            name: "Dancing Script",
+            variable: "var(--font-dancing-script)",
+        },
+        { name: "Parisienne", variable: "var(--font-parisienne)" },
+        {
+            name: "Great Vibes",
+            variable: "var(--font-great-vibes)",
+        },
+        {
+            name: "Alex Brush",
+            variable: "var(--font-alex-brush)",
+        },
+    ];
+    const [selectedFont, setSelectedFont] = useState<string>(
+        typedSignatureFonts[0].variable
+    );
+
     /**
      * Font size calculator for typed signature
      *
@@ -102,6 +121,9 @@ export function useSignature() {
         handleCanvasEnd,
         typedSignature,
         setTypedSignature,
+        typedSignatureFonts,
+        selectedFont,
+        setSelectedFont,
         typedSignatureFontSize,
     };
 }
