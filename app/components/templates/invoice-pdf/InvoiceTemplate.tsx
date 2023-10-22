@@ -5,7 +5,7 @@ import { ValuesType } from "@/app/types/types";
 
 const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;
-
+    const isDataUrl = (str: string) => str.startsWith("data:");
     const content = (
         <>
             <link
@@ -276,7 +276,8 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                             </div>
                         </div>
 
-                        {details.signature && (
+                        {/* Signature */}
+                        {details?.signature && isDataUrl(details?.signature) ? (
                             <div className="mt-6">
                                 <p className="font-semibold text-gray-800">
                                     Signature:
@@ -287,7 +288,14 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                                     alt=""
                                 />
                             </div>
-                        )}
+                        ) : details.signature ? (
+                            <div className="mt-6">
+                                <p className="font-semibold text-gray-800">
+                                    Signature:
+                                </p>
+                                <p>{details.signature}</p>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>
