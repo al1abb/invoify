@@ -33,10 +33,17 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { Check, Eraser } from "lucide-react";
+import { Check, Eraser, FileSignature } from "lucide-react";
 
 // Hooks
 import { useSignature } from "@/app/hooks/useSignature";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 type SignatureModalProps = {};
 
@@ -64,6 +71,9 @@ const SignatureModal = (props: SignatureModalProps) => {
         handleCanvasEnd,
         typedSignature,
         setTypedSignature,
+        typedSignatureFonts,
+        selectedFont,
+        setSelectedFont,
         typedSignatureFontSize,
     } = useSignature();
 
@@ -115,18 +125,33 @@ const SignatureModal = (props: SignatureModalProps) => {
 
                         {signatureData && signature ? (
                             <img
-                                className="border rounded-lg hover:border-blue-500"
+                                className="border border-black rounded-md hover:border-blue-500"
                                 src={signatureData}
                                 width={300}
                                 alt=""
                             />
+                        ) : typedSignature ? (
+                            <div className="flex justify-center items-center w-[300px]">
+                                <p
+                                    style={{
+                                        fontFamily: selectedFont,
+                                        fontSize: 55,
+                                    }}
+                                >
+                                    {typedSignature}
+                                </p>
+                            </div>
                         ) : (
-                            <canvas
-                                style={{ backgroundColor: "#efefef" }}
-                                className="border rounded-md hover:border-blue-500"
-                                width={300}
-                                height="auto"
-                            ></canvas>
+                            <div
+                                style={{
+                                    backgroundColor: "#efefef",
+                                    width: "300px",
+                                }}
+                                className="flex flex-col justify-center items-center h-[155px] border border-black rounded-md hover:border-blue-500"
+                            >
+                                <FileSignature />
+                                <p>Click to add signature</p>
+                            </div>
                         )}
                     </div>
                 </DialogTrigger>
@@ -152,6 +177,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                                             margin: "0 auto",
                                         }}
                                     >
+                                        {/* Signature Canvas to draw signature */}
                                         <SignatureCanvas
                                             velocityFilterWeight={1} // Adjust the velocityFilterWeight to make the pen lighter
                                             minWidth={1.4} // Adjust the minWidth for a finer line
@@ -173,6 +199,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                                 </CardContent>
                                 <div className="flex justify-between gap-2 pt-2">
                                     <div className="flex gap-2">
+                                        {/* Color selector */}
                                         {colors.map((color) => (
                                             <BaseButton
                                                 key={color.name}
@@ -242,24 +269,58 @@ const SignatureModal = (props: SignatureModalProps) => {
                                                 }}
                                             ></canvas>
                                             <Input
-                                                className="absolute top-0 left-0 z-10 bg-transparent h-full w-full mx-auto text-center"
+                                                className="absolute top-0 left-0 z-10 bg-transparent h-full w-full text-center"
                                                 style={{
                                                     fontSize: `${typedSignatureFontSize}px`,
+                                                    fontFamily: selectedFont,
                                                 }}
                                                 type="text"
                                                 value={typedSignature}
                                                 onChange={(
                                                     e: React.ChangeEvent<HTMLInputElement>
-                                                ) =>
+                                                ) => {
                                                     setTypedSignature(
                                                         e.target.value
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                             />
                                         </div>
                                     </div>
                                 </CardContent>
                                 <div className="flex justify-end gap-2 pt-2">
+                                    <div className="flex gap-2">
+                                        {/* Font select */}
+                                        <Select
+                                            defaultValue={
+                                                typedSignatureFonts[0].variable
+                                            }
+                                            onValueChange={setSelectedFont}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select Font" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {typedSignatureFonts.map(
+                                                    (font) => (
+                                                        <SelectItem
+                                                            key={font.name}
+                                                            value={
+                                                                font.variable
+                                                            }
+                                                            style={{
+                                                                fontFamily:
+                                                                    selectedFont,
+                                                                fontSize: 24,
+                                                            }}
+                                                            className="py-2"
+                                                        >
+                                                            {font.name}
+                                                        </SelectItem>
+                                                    )
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                     <BaseButton
                                         tooltipLabel="Save changes"
                                         disabled={!typedSignature}
