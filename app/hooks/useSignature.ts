@@ -5,13 +5,14 @@ import { useFormContext } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
 export function useSignature() {
+    // Form context
     const { setValue } = useFormContext();
 
     /**
      * * DRAWING SIGNATURE
      */
 
-    // Signature in base64
+    // Signature in base64 or as string
     const [signatureData, setSignatureData] = useState("");
 
     // Signature
@@ -66,6 +67,7 @@ export function useSignature() {
 
     const [typedSignature, setTypedSignature] = useState<string>("");
 
+    //? Move these to variables
     const typedSignatureFonts = [
         {
             name: "Dancing Script",
