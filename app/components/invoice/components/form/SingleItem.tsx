@@ -56,6 +56,12 @@ const SingleItem = ({
         control,
     });
 
+    // Get currency variable
+    const total = useWatch({
+        name: `${name}[${index}].total`,
+        control,
+    });
+
     useEffect(() => {
         // Calculate total when rate or quantity changes
         if (rate != undefined && quantity != undefined) {
@@ -136,30 +142,19 @@ const SingleItem = ({
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={control}
-                    name={`${name}[${index}].total`}
-                    render={({ field }) => (
-                        <FormItem>
-                            <Label>Total</Label>
-                            <span className="text-xs">{` (in ${currency})`}</span>
-                            <div className="flex justify-between gap-5 items-center text-sm">
-                                <div>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            readOnly
-                                            placeholder="Item total"
-                                            className="border-none font-medium text-lg"
-                                            size={10}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
-                            </div>
-                        </FormItem>
-                    )}
-                />
+
+                <div className="flex flex-col justify-between">
+                    <div>
+                        <Label>Total</Label>
+                    </div>
+                    <Input
+                        value={`${total} ${currency}`}
+                        readOnly
+                        placeholder="Item total"
+                        className="border-none font-medium text-lg"
+                        size={10}
+                    />
+                </div>
             </div>
             <FormField
                 control={control}
