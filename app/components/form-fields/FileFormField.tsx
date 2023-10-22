@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { MousePointerClick } from "lucide-react";
+import { Image } from "lucide-react";
 
 // Types
 import { ControlType, NameType, UseFormSetValueType } from "@/app/types/types";
@@ -83,11 +83,11 @@ const FileFormField = ({
                                 <Label>{label}:</Label>
                                 <Label
                                     htmlFor="logo-input"
-                                    className="custom-file-input"
+                                    className="custom-file-input cursor-pointer border border-black rounded-md hover:border-blue-500"
                                 >
                                     <>
                                         <div className="flex flex-col items-center">
-                                            <MousePointerClick />
+                                            <Image />
                                             <p>Click to upload image</p>
                                         </div>
                                         <FormControl>
