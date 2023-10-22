@@ -275,6 +275,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                                                     fontFamily: selectedFont,
                                                 }}
                                                 type="text"
+                                                placeholder="Signature"
                                                 value={typedSignature}
                                                 onChange={(
                                                     e: React.ChangeEvent<HTMLInputElement>
