@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
@@ -67,6 +67,8 @@ const SignatureModal = (props: SignatureModalProps) => {
         name: "details.signature",
     });
 
+    const typedSignatureRef = useRef<HTMLInputElement | null>(null);
+
     /**
      * Function that handles signature save logic for all tabs (draw, type, upload)
      */
@@ -84,6 +86,7 @@ const SignatureModal = (props: SignatureModalProps) => {
             setValue("details.signature", typedSignature, {
                 shouldDirty: true,
             });
+
             setOpen(false);
         }
     };
@@ -173,6 +176,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                             setTypedSignature={setTypedSignature}
                             typedSignatureFonts={typedSignatureFonts}
                             handleSaveSignature={handleSaveSignature}
+                            inputRef={typedSignatureRef}
                         />
 
                         {/* UPLOAD */}
