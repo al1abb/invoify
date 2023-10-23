@@ -31,6 +31,9 @@ import { FileSignature } from "lucide-react";
 // Hooks
 import { useSignature } from "@/app/hooks/useSignature";
 
+// Helpers
+import { isDataUrl } from "@/lib/helpers";
+
 type SignatureModalProps = {};
 
 const SignatureModal = (props: SignatureModalProps) => {
@@ -112,14 +115,14 @@ const SignatureModal = (props: SignatureModalProps) => {
                     <div>
                         <Label>Signature</Label>
 
-                        {signatureData && signature ? (
+                        {signature && isDataUrl(signature) ? (
                             <img
                                 className="border border-black rounded-md hover:border-blue-500"
-                                src={signatureData}
+                                src={signature}
                                 width={300}
                                 alt=""
                             />
-                        ) : typedSignature ? (
+                        ) : signature && typedSignature ? (
                             <div className="flex justify-center items-center w-[300px]">
                                 <p
                                     style={{
@@ -127,7 +130,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                                         fontSize: 55,
                                     }}
                                 >
-                                    {typedSignature}
+                                    {signature}
                                 </p>
                             </div>
                         ) : (

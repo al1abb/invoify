@@ -1,11 +1,13 @@
 import React from "react";
 
+// Helpers
+import { isDataUrl } from "@/lib/helpers";
+
 // Types
 import { ValuesType } from "@/app/types/types";
 
 const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;
-    const isDataUrl = (str: string) => str.startsWith("data:");
     const content = (
         <>
             <link
@@ -293,7 +295,9 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                                 <p className="font-semibold text-gray-800">
                                     Signature:
                                 </p>
-                                <p>{details.signature}</p>
+                                <p style={{ fontSize: 25 }}>
+                                    {details.signature}
+                                </p>
                             </div>
                         ) : null}
                     </div>
