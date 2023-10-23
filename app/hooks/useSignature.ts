@@ -4,6 +4,9 @@ import { useFormContext } from "react-hook-form";
 // Signature Canvas
 import SignatureCanvas from "react-signature-canvas";
 
+// Types
+import { SignatureColor, SignatureFont } from "@/app/types/types";
+
 export function useSignature() {
     // Form context
     const { setValue } = useFormContext();
@@ -19,7 +22,7 @@ export function useSignature() {
     const signatureRef = useRef<SignatureCanvas | null>(null);
 
     // Colors
-    const colors = [
+    const colors: SignatureColor[] = [
         { name: "black", label: "Black", color: "rgb(0, 0, 0)" },
         { name: "blue", label: "Blue", color: "rgb(0, 0, 255)" },
         {
@@ -68,7 +71,7 @@ export function useSignature() {
     const [typedSignature, setTypedSignature] = useState<string>("");
 
     //? Move these to variables
-    const typedSignatureFonts = [
+    const typedSignatureFonts: SignatureFont[] = [
         {
             name: "Dancing Script",
             variable: "var(--font-dancing-script)",
