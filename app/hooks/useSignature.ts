@@ -1,4 +1,6 @@
 import { useState, useRef, useCallback, useMemo } from "react";
+
+// RHF
 import { useFormContext } from "react-hook-form";
 
 // Signature Canvas
@@ -6,6 +8,9 @@ import SignatureCanvas from "react-signature-canvas";
 
 // Types
 import { SignatureColor, SignatureFont } from "@/app/types/types";
+
+// Variables
+import { SIGNATURE_COLORS, SIGNATURE_FONTS } from "@/lib/variables";
 
 export function useSignature() {
     // Form context
@@ -22,15 +27,7 @@ export function useSignature() {
     const signatureRef = useRef<SignatureCanvas | null>(null);
 
     // Colors
-    const colors: SignatureColor[] = [
-        { name: "black", label: "Black", color: "rgb(0, 0, 0)" },
-        { name: "blue", label: "Blue", color: "rgb(0, 0, 255)" },
-        {
-            name: "red",
-            label: "Red",
-            color: "rgb(255, 0, 0)",
-        },
-    ];
+    const colors: SignatureColor[] = SIGNATURE_COLORS;
     const [selectedColor, setSelectedColor] = useState<string>(colors[0].name);
 
     /**
@@ -70,22 +67,7 @@ export function useSignature() {
 
     const [typedSignature, setTypedSignature] = useState<string>("");
 
-    //? Move these to variables
-    const typedSignatureFonts: SignatureFont[] = [
-        {
-            name: "Dancing Script",
-            variable: "var(--font-dancing-script)",
-        },
-        { name: "Parisienne", variable: "var(--font-parisienne)" },
-        {
-            name: "Great Vibes",
-            variable: "var(--font-great-vibes)",
-        },
-        {
-            name: "Alex Brush",
-            variable: "var(--font-alex-brush)",
-        },
-    ];
+    const typedSignatureFonts: SignatureFont[] = SIGNATURE_FONTS;
     const [selectedFont, setSelectedFont] = useState<string>(
         typedSignatureFonts[0].variable
     );
@@ -94,7 +76,6 @@ export function useSignature() {
      * Font size calculator for typed signature
      *
      * @param text Text in signature input
-     *
      * @returns Font size that should be used
      */
     const calculateFontSize = (text: string) => {
@@ -111,6 +92,9 @@ export function useSignature() {
         return fontSize;
     };
 
+    /**
+     * Memoized typed signature font size
+     */
     const typedSignatureFontSize = useMemo(
         () => calculateFontSize(typedSignature),
         [typedSignature]

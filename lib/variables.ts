@@ -16,6 +16,35 @@ export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
 export const NODEMAILER_PW = process.env.NODEMAILER_PW;
 
 /**
+ * Signature variables
+ */
+export const SIGNATURE_COLORS = [
+    { name: "black", label: "Black", color: "rgb(0, 0, 0)" },
+    { name: "blue", label: "Blue", color: "rgb(0, 0, 255)" },
+    {
+        name: "red",
+        label: "Red",
+        color: "rgb(255, 0, 0)",
+    },
+];
+
+export const SIGNATURE_FONTS = [
+    {
+        name: "Dancing Script",
+        variable: "var(--font-dancing-script)",
+    },
+    { name: "Parisienne", variable: "var(--font-parisienne)" },
+    {
+        name: "Great Vibes",
+        variable: "var(--font-great-vibes)",
+    },
+    {
+        name: "Alex Brush",
+        variable: "var(--font-alex-brush)",
+    },
+];
+
+/**
  * Form date options
  */
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {

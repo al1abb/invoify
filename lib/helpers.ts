@@ -4,7 +4,6 @@ import numberToWords from "number-to-words";
  * Formats a number with commas and decimal places
  *
  * @param number Number to format
- *
  * @returns A styled number to be displayed on the invoice
  */
 const formatNumberWithCommas = (number: number) => {
@@ -51,7 +50,6 @@ const formatPriceToString = (price: number): string => {
  * A method to validate an email address
  *
  * @param email Email to validate
- *
  * @returns A boolean indicating if the email is valid
  */
 const isValidEmail = (email: string) => {
