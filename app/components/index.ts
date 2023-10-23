@@ -39,7 +39,18 @@ import BaseButton from "./reusables/BaseButton";
 
 //* Modals
 import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
-import SignatureModal from "./modals/SignatureModal";
+
+// --- Signature
+import SignatureModal from "./modals/signature/SignatureModal";
+
+// ---/--- Signature tabs
+import DrawSignature from "./modals/signature/tabs/DrawSignature";
+import TypeSignature from "./modals/signature/tabs/TypeSignature";
+import UploadSignature from "./modals/signature/tabs/UploadSignature";
+
+// ---/--- Signature components
+import SignatureColorSelector from "./modals/signature/components/SignatureColorSelector";
+import SignatureFontSelector from "./modals/signature/components/SignatureFontSelector";
 
 // --- Alerts
 import NewInvoiceAlert from "./modals/alerts/NewInvoiceAlert";
@@ -75,6 +86,11 @@ export {
     BaseButton,
     SendPdfToEmailModal,
     SignatureModal,
+    DrawSignature,
+    TypeSignature,
+    UploadSignature,
+    SignatureColorSelector,
+    SignatureFontSelector,
     NewInvoiceAlert,
     InvoiceTemplate,
     SendPdfEmail,
