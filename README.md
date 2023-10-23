@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Invoify
+
+Invoify is a web-based invoice generator application built with Next.js, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices for your business.
+
+## Table of Contents
+
+- [Invoify](#invoify)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Demo](#demo)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+
+## Features
+
+- Create and manage invoices.
+- Export invoices directly or send to an email in PDF format.
+- User-friendly interface for easy navigation.
+- Customizable invoice templates (*Coming soon*).
+- Export invoices in various formats (XLSX, CSV, Docx) (*Coming soon*).
+
+## Demo
+
+Visit our [live demo](https://invoify.vercel.app) to see Invoify in action.
+
+**Note**: Please be aware that there is a known issue with Puppeteer and PDF generation in the current demo. You can find more information and updates on this issue [here](https://github.com/aliabb01/invoify/issues/4).
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get Invoify up and running on your local machine.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js and npm installed on your system.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Clone the repository:
 
-## Learn More
+   ```bash
+   git clone https://github.com/aliabb01/invoify.git
+   cd invoify
+2. Install dependencies
+   
+   ```
+   npm install
+   ```
+3. Start development server
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```
+    npm run dev
+    ```
+4. Open your web browser and access the application at
+    
+    ```
+    http://localhost:3000
+    ```
