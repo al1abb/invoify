@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 // Helpers
-import { formatNumberWithCommas } from "./helpers";
+import { formatNumberWithCommas } from "@/lib/helpers";
 
 // Variables
-import { DATE_OPTIONS } from "./variables";
+import { DATE_OPTIONS } from "@/lib/variables";
 
 // TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
 // Field Validators
