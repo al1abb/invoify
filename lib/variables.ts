@@ -1,3 +1,6 @@
+// Types
+import { SignatureColor, SignatureFont } from "@/app/types/types";
+
 /**
  * API endpoints
  */
@@ -18,7 +21,7 @@ export const NODEMAILER_PW = process.env.NODEMAILER_PW;
 /**
  * Signature variables
  */
-export const SIGNATURE_COLORS = [
+export const SIGNATURE_COLORS: SignatureColor[] = [
     { name: "black", label: "Black", color: "rgb(0, 0, 0)" },
     { name: "blue", label: "Blue", color: "rgb(0, 0, 255)" },
     {
@@ -28,7 +31,7 @@ export const SIGNATURE_COLORS = [
     },
 ];
 
-export const SIGNATURE_FONTS = [
+export const SIGNATURE_FONTS: SignatureFont[] = [
     {
         name: "Dancing Script",
         variable: "var(--font-dancing-script)",
