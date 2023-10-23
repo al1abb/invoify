@@ -58,4 +58,11 @@ const isValidEmail = (email: string) => {
     return emailRegex.test(email);
 };
 
-export { formatNumberWithCommas, formatPriceToString, isValidEmail };
+/**
+ * A method to check if a string is a data URL
+ * @param str String to check
+ * @returns Boolean indicating if the string is a data URL
+ */
+const isDataUrl = (str: string) => str.startsWith("data:");
+
+export { formatNumberWithCommas, formatPriceToString, isValidEmail, isDataUrl };
