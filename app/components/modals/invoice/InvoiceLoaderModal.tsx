@@ -34,7 +34,7 @@ const InvoiceLoaderModal = (props: InvoiceLoaderModalProps) => {
                 <BaseButton
                     variant="outline"
                     tooltipLabel="Open load invoice menu"
-                    className="w-fit flex gap-2"
+                    className="flex gap-2"
                     disabled={invoicePdfLoading}
                 >
                     <Upload />

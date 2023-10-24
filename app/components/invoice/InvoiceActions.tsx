@@ -59,6 +59,7 @@ const InvoiceActions = ({
                     <CardTitle>ACTIONS</CardTitle>
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
+
                 <div className="flex flex-col flex-wrap gap-2">
                     {/* //? DEV ONLY */}
                     {devEnv && (
@@ -70,7 +71,6 @@ const InvoiceActions = ({
                                 variant="outline"
                                 onClick={() => reset(FORM_FILL_VALUES)}
                                 disabled={invoicePdfLoading}
-                                className="w-auto"
                             >
                                 Fill in the form
                             </BaseButton>
@@ -97,10 +97,10 @@ const InvoiceActions = ({
 
                     <BaseButton
                         type="submit"
+                        size="lg"
                         tooltipLabel="Generate your invoice"
                         loading={invoicePdfLoading}
                         loadingText="Generating your invoice"
-                        className="w-auto"
                     >
                         <FileInput />
                         <span>Generate PDF</span>
