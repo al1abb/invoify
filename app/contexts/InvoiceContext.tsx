@@ -21,6 +21,7 @@ import {
     FORM_DEFAULT_VALUES,
     GENERATE_PDF_API,
     SEND_PDF_API,
+    SHORT_DATE_OPTIONS,
 } from "@/lib/variables";
 
 // Types
@@ -190,7 +191,13 @@ export const InvoiceContextProvider = ({
                     ? JSON.parse(savedInvoicesJSON)
                     : [];
 
+                const updatedDate = new Date().toLocaleDateString(
+                    undefined,
+                    SHORT_DATE_OPTIONS
+                );
+
                 const formValues = getValues();
+                formValues.updatedAt = updatedDate;
 
                 const existingInvoiceIndex = savedInvoices.findIndex(
                     (invoice: ValuesType) => {

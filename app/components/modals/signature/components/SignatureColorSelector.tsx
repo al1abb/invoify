@@ -24,16 +24,16 @@ const SignatureColorSelector = ({
         <div className="flex gap-2">
             {colors.map((color) => (
                 <BaseButton
-                    key={color.name}
+                    key={color.color}
                     size="icon"
                     tooltipLabel={color.label}
                     style={{
                         backgroundColor: color.color,
                     }}
                     className="flex justify-center items-center h-6 w-6 rounded-full"
-                    onClick={() => handleColorButtonClick(color.name)}
+                    onClick={() => handleColorButtonClick(color.color)}
                 >
-                    {selectedColor === color.name && (
+                    {selectedColor === color.color && (
                         <span className="text-white">
                             <Check size={16} />
                         </span>

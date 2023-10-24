@@ -28,7 +28,7 @@ export function useSignature() {
 
     // Colors
     const colors: SignatureColor[] = SIGNATURE_COLORS;
-    const [selectedColor, setSelectedColor] = useState<string>(colors[0].name);
+    const [selectedColor, setSelectedColor] = useState<string>(colors[0].color);
 
     /**
      * Function that sets selected color
