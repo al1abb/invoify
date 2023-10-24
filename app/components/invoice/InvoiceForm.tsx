@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 
 // Components
 import {
-    SavedInvoiceSelector,
     FileFormField,
     BillFromSection,
     Items,
@@ -27,21 +26,10 @@ import {
     InvoiceDetails,
 } from "@/app/components";
 
-// Types
-import { ValuesType } from "@/app/types/types";
+type InvoiceFormProps = {};
 
-type InvoiceFormProps = {
-    savedInvoices: ValuesType[];
-    deleteInvoice: (id: number) => void;
-    onSubmit: (values: ValuesType) => void;
-};
-
-const InvoiceForm = ({
-    savedInvoices,
-    deleteInvoice,
-    onSubmit,
-}: InvoiceFormProps) => {
-    const { control, reset, setValue } = useFormContext();
+const InvoiceForm = ({}: InvoiceFormProps) => {
+    const { control, setValue } = useFormContext();
 
     // Get invoice number variable
     const invoiceNumber = useWatch({
@@ -72,12 +60,6 @@ const InvoiceForm = ({
                     <CardDescription>Generate invoice</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <SavedInvoiceSelector
-                        savedInvoices={savedInvoices}
-                        deleteInvoice={deleteInvoice}
-                        onSubmit={onSubmit}
-                        reset={reset}
-                    />
                     <div className="space-y-8">
                         <FileFormField
                             control={control}
