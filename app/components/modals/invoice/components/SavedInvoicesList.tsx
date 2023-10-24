@@ -7,6 +7,7 @@ import { useFormContext } from "react-hook-form";
 
 // Shadcn
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 // Components
 import { BaseButton } from "@/app/components";
@@ -104,18 +105,26 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                     >
                         <div className="text-lg font-semibold">
                             <FileText size={20} />
-                            Invoice #{invoice.details.invoiceNumber}
+                            <Badge variant="secondary" className="">
+                                <p style={{ fontSize: "16px" }}>
+                                    #{invoice.details.invoiceNumber}
+                                </p>
+                            </Badge>
                         </div>
+                        <small>{invoice.updatedAt}</small>
                         <div className="text-gray-600">
                             <p>From: {invoice.sender.name}</p>
                             <p>To: {invoice.receiver.name}</p>
-                            <p>Total: ${invoice.details.totalAmount}</p>
+                            <p>
+                                Total: <b>${invoice.details.totalAmount}</b>
+                            </p>
                         </div>
 
                         {/* Remove Invoice Button */}
                         <BaseButton
+                            className="mt-3"
                             size="icon"
-                            variant="outline"
+                            variant="destructive"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 deleteInvoice(idx);
