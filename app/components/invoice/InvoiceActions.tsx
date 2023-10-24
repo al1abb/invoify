@@ -18,6 +18,7 @@ import {
     BaseButton,
     SendPdfToEmailModal,
     NewInvoiceAlert,
+    InvoiceLoaderModal,
 } from "@/app/components";
 
 // Lucide Icons
@@ -75,6 +76,13 @@ const InvoiceActions = ({
                             </BaseButton>
                         </div>
                     )}
+
+                    <div className="flex flex-row gap-5">
+                        <InvoiceLoaderModal />
+
+                        {/* InvoiceExportModal here */}
+                        {/* <InvoiceLoaderModal /> */}
+                    </div>
 
                     <NewInvoiceAlert>
                         <BaseButton
