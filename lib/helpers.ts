@@ -15,7 +15,7 @@ const formatNumberWithCommas = (number: number) => {
 };
 
 /**
- * Turns a number into words
+ * Turns a number into words for invoices
  *
  * @param price Number to format
  * @returns Number in words

@@ -292,10 +292,14 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                             </div>
                         ) : details.signature ? (
                             <div className="mt-6">
-                                <p className="font-semibold text-gray-800">
-                                    Signature:
-                                </p>
-                                <p style={{ fontSize: 25 }}>
+                                <p className="text-gray-800">Signature:</p>
+                                <p
+                                    style={{
+                                        fontSize: 25,
+                                        fontWeight: 400,
+                                        fontFamily: "Dancing Script, cursive",
+                                    }}
+                                >
                                     {details.signature}
                                 </p>
                             </div>
