@@ -31,7 +31,7 @@ import PdfViewer from "./invoice/components/actions/PdfViewer";
 
 // Custom Selectors
 import CurrencySelector from "./form-fields/CurrencySelector";
-import SavedInvoiceSelector from "./invoice/components/form/SavedInvoiceSelector";
+import SavedInvoicesList from "./modals/invoice/components/SavedInvoicesList";
 
 // Form fields
 import InputFormField from "./form-fields/InputFormField";
@@ -46,7 +46,8 @@ import BaseButton from "./reusables/BaseButton";
 /* =========================
    * Modals & Alerts
    ========================= */
-import SendPdfToEmailModal from "./modals/SendPdfToEmailModal";
+import SendPdfToEmailModal from "./modals/email/SendPdfToEmailModal";
+import InvoiceLoaderModal from "./modals/invoice/InvoiceLoaderModal";
 
 // Signature
 import SignatureModal from "./modals/signature/SignatureModal";
@@ -86,7 +87,7 @@ export {
     PaymentInformation,
     InvoiceFooter,
     CurrencySelector,
-    SavedInvoiceSelector,
+    SavedInvoicesList,
     PdfViewer,
     InputFormField,
     DatePickerFormField,
@@ -95,6 +96,7 @@ export {
     CustomInputField,
     BaseButton,
     SendPdfToEmailModal,
+    InvoiceLoaderModal,
     SignatureModal,
     DrawSignature,
     TypeSignature,
