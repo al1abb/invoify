@@ -23,11 +23,11 @@ export const NODEMAILER_PW = process.env.NODEMAILER_PW;
  */
 export const SIGNATURE_COLORS: SignatureColor[] = [
     { name: "black", label: "Black", color: "rgb(0, 0, 0)" },
-    { name: "blue", label: "Blue", color: "rgb(0, 0, 255)" },
+    { name: "dark blue", label: "Dark Blue", color: "rgb(0, 0, 128)" },
     {
-        name: "red",
-        label: "Red",
-        color: "rgb(255, 0, 0)",
+        name: "crimson",
+        label: "Crimson",
+        color: "#DC143C",
     },
 ];
 
@@ -53,6 +53,12 @@ export const SIGNATURE_FONTS: SignatureFont[] = [
 export const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
+    day: "numeric",
+};
+
+export const SHORT_DATE_OPTIONS: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
     day: "numeric",
 };
 
