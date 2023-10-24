@@ -33,7 +33,7 @@ const BaseButton = ({
     const withoutTooltip = (
         <>
             {!loading ? (
-                <Button type={type} {...props}>
+                <Button className="flex gap-2" type={type} {...props}>
                     {children}
                 </Button>
             ) : (
@@ -51,7 +51,7 @@ const BaseButton = ({
             <Tooltip>
                 <TooltipTrigger asChild>
                     {!loading ? (
-                        <Button type={type} {...props}>
+                        <Button className="flex gap-2" type={type} {...props}>
                             {children}
                         </Button>
                     ) : (

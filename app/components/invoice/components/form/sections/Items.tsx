@@ -58,7 +58,7 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
                     ))}
                     <BaseButton
                         tooltipLabel="Add a new item to the list"
-                        className="w-fit gap-2"
+                        className="w-fit"
                         onClick={addNewField}
                     >
                         <Plus />
