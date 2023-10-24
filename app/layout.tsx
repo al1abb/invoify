@@ -23,7 +23,7 @@ import { BaseNavbar, BaseFooter } from "@/app/components";
 import Providers from "./contexts/Providers";
 
 // Fonts
-const outfit = Outfit({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"], display: "swap" });
 
 // Signature fonts
 const dancingScript = Dancing_Script({
@@ -31,6 +31,7 @@ const dancingScript = Dancing_Script({
     weight: "400",
     variable: "--font-dancing-script",
     preload: true,
+    display: "swap",
 });
 
 const parisienne = Parisienne({
@@ -38,6 +39,7 @@ const parisienne = Parisienne({
     weight: "400",
     variable: "--font-parisienne",
     preload: true,
+    display: "swap",
 });
 
 const greatVibes = Great_Vibes({
@@ -45,6 +47,7 @@ const greatVibes = Great_Vibes({
     weight: "400",
     variable: "--font-great-vibes",
     preload: true,
+    display: "swap",
 });
 
 const alexBrush = Alex_Brush({
@@ -52,6 +55,7 @@ const alexBrush = Alex_Brush({
     weight: "400",
     variable: "--font-alex-brush",
     preload: true,
+    display: "swap",
 });
 
 export const metadata: Metadata = {
