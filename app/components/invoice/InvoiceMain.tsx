@@ -22,31 +22,19 @@ const InvoiceMain = () => {
     const {
         invoicePdf,
         invoicePdfLoading,
-        savedInvoices,
-        generatePdf,
+        onFormSubmit,
         downloadPdf,
         previewPdfInTab,
         saveInvoice,
-        deleteInvoice,
         sendPdfToMail,
     } = useInvoiceContext();
-
-    const onSubmit = (values: ValuesType) => {
-        console.log("VALUE");
-        console.log(values);
-        generatePdf(values);
-    };
 
     return (
         <>
             <Form {...useFormContext<ValuesType>()}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onFormSubmit)}>
                     <div className="flex flex-wrap">
-                        <InvoiceForm
-                            savedInvoices={savedInvoices}
-                            deleteInvoice={deleteInvoice}
-                            onSubmit={onSubmit}
-                        />
+                        <InvoiceForm />
 
                         <InvoiceActions
                             invoicePdfLoading={invoicePdfLoading}

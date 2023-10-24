@@ -30,6 +30,7 @@ const defaultInvoiceContext = {
     invoicePdf: new Blob(),
     invoicePdfLoading: false,
     savedInvoices: [] as ValuesType[],
+    onFormSubmit: (values: ValuesType) => {},
     newInvoice: () => {},
     generatePdf: async (data: ValuesType) => {},
     downloadPdf: () => {},
@@ -84,6 +85,17 @@ export const InvoiceContextProvider = ({
             setSavedInvoices(savedInvoicesDefault);
         }
     }, []);
+
+    /**
+     * Handles form submission.
+     *
+     * @param values - The form data used to generate the PDF.
+     */
+    const onFormSubmit = (values: ValuesType) => {
+        console.log("VALUE");
+        console.log(values);
+        generatePdf(values);
+    };
 
     /**
      * Generates a new invoice.
@@ -271,6 +283,7 @@ export const InvoiceContextProvider = ({
                 invoicePdf,
                 invoicePdfLoading,
                 savedInvoices,
+                onFormSubmit,
                 newInvoice,
                 generatePdf,
                 downloadPdf,
