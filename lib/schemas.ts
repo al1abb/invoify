@@ -150,6 +150,7 @@ const InvoiceSchema = z.object({
     sender: InvoiceSenderSchema,
     receiver: InvoiceReceiverSchema,
     details: InvoiceDetailsSchema,
+    updatedAt: fieldValidators.stringOptional,
 });
 
 export { InvoiceSchema };
