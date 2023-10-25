@@ -125,6 +125,11 @@ const ShippingDetailsSchema = z.object({
     costType: fieldValidators.string,
 });
 
+const SignatureSchema = z.object({
+    data: fieldValidators.string,
+    fontFamily: fieldValidators.string,
+});
+
 const InvoiceDetailsSchema = z.object({
     invoiceLogo: fieldValidators.stringOptional,
     invoiceNumber: fieldValidators.stringMin1,
@@ -143,7 +148,7 @@ const InvoiceDetailsSchema = z.object({
     totalAmountInWords: fieldValidators.string,
     additionalNotes: fieldValidators.stringOptional,
     paymentTerms: fieldValidators.stringMin1,
-    signature: fieldValidators.stringOptional,
+    signature: SignatureSchema.optional(),
 });
 
 const InvoiceSchema = z.object({
