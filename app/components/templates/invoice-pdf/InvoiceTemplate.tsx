@@ -10,9 +10,9 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;
 
     // Instead of fetching all fonts, get the specific one user selected
-    const fontHref = `https://fonts.googleapis.com/css2?family=${
-        details!.signature!.fontFamily
-    }&display=swap`;
+    const fontHref = details.signature?.fontFamily
+        ? `https://fonts.googleapis.com/css2?family=${details?.signature?.fontFamily}&display=swap`
+        : "";
 
     const heading = (
         <>
@@ -21,13 +21,20 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                 rel="stylesheet"
             />
 
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link
-                rel="preconnect"
-                href="https://fonts.gstatic.com"
-                crossOrigin="anonymous"
-            />
-            <link href={fontHref} rel="stylesheet" />
+            {details.signature?.fontFamily && (
+                <>
+                    <link
+                        rel="preconnect"
+                        href="https://fonts.googleapis.com"
+                    />
+                    <link
+                        rel="preconnect"
+                        href="https://fonts.gstatic.com"
+                        crossOrigin="anonymous"
+                    />
+                    <link href={fontHref} rel="stylesheet" />
+                </>
+            )}
         </>
     );
     const content = (
