@@ -103,6 +103,26 @@ export function useSignature() {
         [typedSignature]
     );
 
+    /**
+     * * UPLOAD SIGNATURE
+     */
+    const uploadSignatureRef = useRef<HTMLInputElement | null>(null);
+    const [uploadSignatureImg, setUploadSignatureImg] = useState<string>("");
+
+    const handleUploadSignatureChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = e.target.files![0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64String = event.target!.result as string;
+                setUploadSignatureImg(base64String);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return {
         signatureData,
         signatureRef,
@@ -117,5 +137,8 @@ export function useSignature() {
         selectedFont,
         setSelectedFont,
         typedSignatureFontSize,
+        uploadSignatureRef,
+        uploadSignatureImg,
+        handleUploadSignatureChange,
     };
 }

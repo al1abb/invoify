@@ -64,6 +64,9 @@ const SignatureModal = (props: SignatureModalProps) => {
         selectedFont,
         setSelectedFont,
         typedSignatureFontSize,
+        uploadSignatureRef,
+        uploadSignatureImg,
+        handleUploadSignatureChange,
     } = useSignature();
 
     const signature = useWatch({
@@ -100,6 +103,13 @@ const SignatureModal = (props: SignatureModalProps) => {
                 }
             );
 
+            setOpen(false);
+        }
+
+        if (tab == "upload") {
+            setValue("details.signature.data", uploadSignatureImg, {
+                shouldDirty: true,
+            });
             setOpen(false);
         }
     };
@@ -194,7 +204,11 @@ const SignatureModal = (props: SignatureModalProps) => {
 
                         {/* UPLOAD */}
                         <UploadSignature
-                            signatureData={signatureData}
+                            uploadSignatureRef={uploadSignatureRef}
+                            uploadSignatureImg={uploadSignatureImg}
+                            handleUploadSignatureChange={
+                                handleUploadSignatureChange
+                            }
                             handleSaveSignature={handleSaveSignature}
                         />
                     </Tabs>

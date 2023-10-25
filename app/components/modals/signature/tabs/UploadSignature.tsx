@@ -14,23 +14,64 @@ import { TabsContent } from "@/components/ui/tabs";
 // Components
 import { BaseButton } from "@/app/components";
 
-type UploadSignatureProps = {};
+type UploadSignatureProps = {
+    uploadSignatureRef: React.RefObject<HTMLInputElement>;
+    uploadSignatureImg: string;
+    handleUploadSignatureChange: (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => void;
+    handleSaveSignature: () => void;
+};
 
-const UploadSignature = (props: UploadSignatureProps) => {
+const UploadSignature = ({
+    uploadSignatureRef,
+    uploadSignatureImg,
+    handleUploadSignatureChange,
+    handleSaveSignature,
+}: UploadSignatureProps) => {
     return (
         <TabsContent value="upload">
             <Card className="border-none shadow-none">
-                <CardHeader>
-                    <CardTitle>Password</CardTitle>
-                    <CardDescription>
-                        Change your password here. After saving, you'll be
-                        logged out.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">Upload</CardContent>
-                <CardFooter>
-                    <BaseButton>Save password</BaseButton>
-                </CardFooter>
+                <CardContent className="space-y-2 p-0">
+                    <div
+                        style={{
+                            width: "100%",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                        }}
+                    >
+                        {uploadSignatureImg ? (
+                            <img
+                                style={{
+                                    borderRadius: "10px",
+                                    width: "100%",
+                                    height: "15rem",
+                                }}
+                                width={300}
+                                src={uploadSignatureImg}
+                            />
+                        ) : (
+                            <div>Upload image</div>
+                        )}
+                        {/* Upload file here */}
+                        <input
+                            ref={uploadSignatureRef}
+                            type="file"
+                            onChange={handleUploadSignatureChange}
+                            accept="image/*"
+                        />
+                    </div>
+                </CardContent>
+                <div className="flex justify-between gap-2 pt-2">
+                    {/* Buttons and operations */}
+                    <BaseButton
+                        tooltipLabel="Save changes"
+                        disabled={!uploadSignatureImg}
+                        onClick={handleSaveSignature}
+                    >
+                        Save
+                    </BaseButton>
+                </div>
             </Card>
         </TabsContent>
     );
