@@ -27,7 +27,9 @@ const SignatureFontSelector = ({
         <div className="flex gap-2">
             {/* Font select */}
             <Select
-                defaultValue={typedSignatureFonts[0].variable}
+                defaultValue={
+                    selectedFont.variable ?? typedSignatureFonts[0].variable
+                }
                 onValueChange={(fontVariable) => {
                     // Find the selected font object based on the variable
                     const selectedFontObject = typedSignatureFonts.find(

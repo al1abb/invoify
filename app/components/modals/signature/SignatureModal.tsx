@@ -84,6 +84,7 @@ const SignatureModal = (props: SignatureModalProps) => {
             setValue("details.signature.data", signatureData, {
                 shouldDirty: true,
             });
+
             setOpen(false);
         }
 
@@ -192,7 +193,10 @@ const SignatureModal = (props: SignatureModalProps) => {
                         />
 
                         {/* UPLOAD */}
-                        <UploadSignature />
+                        <UploadSignature
+                            signatureData={signatureData}
+                            handleSaveSignature={handleSaveSignature}
+                        />
                     </Tabs>
                 </DialogContent>
             </Dialog>
