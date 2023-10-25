@@ -8,12 +8,31 @@ import { ValuesType } from "@/app/types/types";
 
 const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;
-    const content = (
+
+    // Instead of fetching all fonts, get the specific one user selected
+    const fontHref = `https://fonts.googleapis.com/css2?family=${
+        details!.signature!.fontFamily
+    }&display=swap`;
+
+    const heading = (
         <>
             <link
                 href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
                 rel="stylesheet"
             />
+
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link
+                rel="preconnect"
+                href="https://fonts.gstatic.com"
+                crossOrigin="anonymous"
+            />
+            <link href={fontHref} rel="stylesheet" />
+        </>
+    );
+    const content = (
+        <>
+            {heading}
             <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-1">
                 <div className="sm:w-11/12 lg:w-3/4 mx-auto">
                     <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl dark:bg-gray-800">
@@ -279,28 +298,29 @@ const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
                         </div>
 
                         {/* Signature */}
-                        {details?.signature && isDataUrl(details?.signature) ? (
+                        {details?.signature?.data &&
+                        isDataUrl(details?.signature?.data) ? (
                             <div className="mt-6">
                                 <p className="font-semibold text-gray-800">
                                     Signature:
                                 </p>
                                 <img
-                                    src={details.signature}
+                                    src={details.signature.data}
                                     style={{ height: "100px" }}
                                     alt=""
                                 />
                             </div>
-                        ) : details.signature ? (
+                        ) : details.signature?.data ? (
                             <div className="mt-6">
                                 <p className="text-gray-800">Signature:</p>
                                 <p
                                     style={{
-                                        fontSize: 25,
+                                        fontSize: 30,
                                         fontWeight: 400,
-                                        fontFamily: "Dancing Script, cursive",
+                                        fontFamily: `${details.signature.fontFamily}, cursive`,
                                     }}
                                 >
-                                    {details.signature}
+                                    {details.signature.data}
                                 </p>
                             </div>
                         ) : null}
