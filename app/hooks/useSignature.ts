@@ -71,8 +71,8 @@ export function useSignature() {
     // All available fonts for typed signature input
     const typedSignatureFonts: SignatureFont[] = SIGNATURE_FONTS;
 
-    const [selectedFont, setSelectedFont] = useState<string>(
-        typedSignatureFonts[0].variable
+    const [selectedFont, setSelectedFont] = useState<SignatureFont>(
+        typedSignatureFonts[0]
     );
 
     /**
