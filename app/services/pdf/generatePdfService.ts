@@ -19,7 +19,7 @@ const generatePdf = async (body: ValuesType) => {
     const page: Page = await browser.newPage();
 
     // Set the HTML content of the page
-    await page.setContent(await htmlTemplate);
+    await page.setContent(await htmlTemplate, { waitUntil: "networkidle0" });
 
     // Generate the PDF
     const pdf: Buffer = await page.pdf({
