@@ -7,8 +7,8 @@ import React, { RefObject } from "react";
 
 type TypeSignatureProps = {
     typedSignatureFontSize: number | string;
-    selectedFont: string;
-    setSelectedFont: (value: string) => void;
+    selectedFont: SignatureFont;
+    setSelectedFont: (value: SignatureFont) => void;
     typedSignature: string;
     setTypedSignature: (value: string) => void;
     typedSignatureFonts: SignatureFont[];
@@ -40,7 +40,7 @@ const TypeSignature = ({
                             className="bg-transparent h-full text-center"
                             style={{
                                 fontSize: `${typedSignatureFontSize}px`,
-                                fontFamily: selectedFont,
+                                fontFamily: selectedFont.variable,
                             }}
                             type="text"
                             placeholder="Signature"

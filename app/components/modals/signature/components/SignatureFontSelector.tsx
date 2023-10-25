@@ -14,8 +14,8 @@ import { SignatureFont } from "@/app/types/types";
 
 type SignatureFontSelectorProps = {
     typedSignatureFonts: SignatureFont[];
-    selectedFont: string;
-    setSelectedFont: (value: string) => void;
+    selectedFont: SignatureFont;
+    setSelectedFont: (value: SignatureFont) => void;
 };
 
 const SignatureFontSelector = ({
@@ -28,7 +28,16 @@ const SignatureFontSelector = ({
             {/* Font select */}
             <Select
                 defaultValue={typedSignatureFonts[0].variable}
-                onValueChange={setSelectedFont}
+                onValueChange={(fontVariable) => {
+                    // Find the selected font object based on the variable
+                    const selectedFontObject = typedSignatureFonts.find(
+                        (font) => font.variable === fontVariable
+                    );
+
+                    if (selectedFontObject) {
+                        setSelectedFont(selectedFontObject);
+                    }
+                }}
             >
                 <SelectTrigger>
                     <SelectValue placeholder="Select Font" />
@@ -39,7 +48,7 @@ const SignatureFontSelector = ({
                             key={font.name}
                             value={font.variable}
                             style={{
-                                fontFamily: selectedFont,
+                                fontFamily: selectedFont.variable,
                                 fontSize: 24,
                             }}
                             className="py-2"

@@ -67,7 +67,7 @@ const SignatureModal = (props: SignatureModalProps) => {
     } = useSignature();
 
     const signature = useWatch({
-        name: "details.signature",
+        name: "details.signature.data",
     });
 
     const typedSignatureRef = useRef<HTMLInputElement | null>(null);
@@ -81,14 +81,23 @@ const SignatureModal = (props: SignatureModalProps) => {
 
             // This setValue was removed from handleCanvasEnd and put here to prevent
             // the signature from showing updated drawing every time drawing stops
-            setValue("details.signature", signatureData, { shouldDirty: true });
+            setValue("details.signature.data", signatureData, {
+                shouldDirty: true,
+            });
             setOpen(false);
         }
 
         if (tab == "type") {
-            setValue("details.signature", typedSignature, {
-                shouldDirty: true,
-            });
+            setValue(
+                "details.signature",
+                {
+                    data: typedSignature,
+                    fontFamily: selectedFont.name,
+                },
+                {
+                    shouldDirty: true,
+                }
+            );
 
             setOpen(false);
         }
@@ -126,7 +135,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                             <div className="flex justify-center items-center w-[300px]">
                                 <p
                                     style={{
-                                        fontFamily: selectedFont,
+                                        fontFamily: selectedFont.variable,
                                         fontSize: 55,
                                     }}
                                 >
