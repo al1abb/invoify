@@ -197,7 +197,7 @@ export const InvoiceContextProvider = ({
                 );
 
                 const formValues = getValues();
-                formValues.updatedAt = updatedDate;
+                formValues.details.updatedAt = updatedDate;
 
                 const existingInvoiceIndex = savedInvoices.findIndex(
                     (invoice: ValuesType) => {
