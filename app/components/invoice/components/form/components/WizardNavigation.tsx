@@ -15,9 +15,9 @@ const WizardNavigation = (props: Props) => {
         useWizard();
     return (
         <div className="flex justify-end gap-5">
-            <BaseButton disabled={isFirstStep} onClick={previousStep}>
-                Prev
-            </BaseButton>
+            {!isFirstStep && (
+                <BaseButton onClick={previousStep}>Prev</BaseButton>
+            )}
             <BaseButton disabled={isLastStep} onClick={nextStep}>
                 Next
             </BaseButton>
