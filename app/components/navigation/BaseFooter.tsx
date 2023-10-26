@@ -1,9 +1,20 @@
-import React from 'react'
+import React from "react";
 
 const BaseFooter = () => {
-  return (
-    <div>This is the footer</div>
-  )
-}
+    return (
+        <div className="container">
+            <p>
+                Developed by{" "}
+                <a
+                    href="https://github.com/aliabb01"
+                    target="_blank"
+                    style={{ textDecoration: "underline" }}
+                >
+                    Ali Abbasov
+                </a>
+            </p>
+        </div>
+    );
+};
 
-export default BaseFooter
+export default BaseFooter;
