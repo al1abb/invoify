@@ -46,38 +46,49 @@ const CurrencySelector = ({
                 name={name}
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>{label}:</FormLabel>
-                        <Select
-                            {...field}
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                        >
-                            <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder={placeholder} />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent
-                                style={{
-                                    overflowY: "hidden",
-                                    height: "200px",
-                                }}
-                            >
-                                {!currenciesLoading &&
-                                    currencies.map(
-                                        (currency: any, idx: number) => (
-                                            <SelectItem
-                                                key={idx}
-                                                value={currency.code}
-                                            >
-                                                {currency.name}{" "}
-                                                {`(${currency.code})`}
-                                            </SelectItem>
-                                        )
-                                    )}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
+                        <div className="flex justify-between gap-5 items-center text-sm">
+                            <div>
+                                <FormLabel>{label}:</FormLabel>
+                            </div>
+                            <div>
+                                <Select
+                                    {...field}
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger className="w-[13rem]">
+                                            <SelectValue
+                                                placeholder={placeholder}
+                                            />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent
+                                        style={{
+                                            overflowY: "hidden",
+                                            height: "200px",
+                                        }}
+                                    >
+                                        {!currenciesLoading &&
+                                            currencies.map(
+                                                (
+                                                    currency: any,
+                                                    idx: number
+                                                ) => (
+                                                    <SelectItem
+                                                        key={idx}
+                                                        value={currency.code}
+                                                    >
+                                                        {currency.name}{" "}
+                                                        {`(${currency.code})`}
+                                                    </SelectItem>
+                                                )
+                                            )}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </div>
+                        </div>
                     </FormItem>
                 )}
             />
