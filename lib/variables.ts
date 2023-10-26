@@ -185,5 +185,8 @@ export const FORM_FILL_VALUES = {
         },
         additionalNotes: "Thanks for business",
         paymentTerms: "Net 30",
+        signature: {
+            data: "",
+        },
     },
 };
