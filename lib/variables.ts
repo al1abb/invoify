@@ -75,7 +75,6 @@ export const FORM_DEFAULT_VALUES = {
         country: "",
         email: "",
         phone: "",
-        vatNumber: "",
         customInputs: [],
     },
     receiver: {
@@ -86,7 +85,6 @@ export const FORM_DEFAULT_VALUES = {
         country: "",
         email: "",
         phone: "",
-        vatNumber: "",
         customInputs: [],
     },
     details: {
@@ -141,7 +139,6 @@ export const FORM_FILL_VALUES = {
         country: "USA",
         email: "gKp8w@example.com",
         phone: "123-456-7890",
-        vatNumber: "123456789",
     },
     receiver: {
         name: "Jane Doe",
@@ -151,7 +148,6 @@ export const FORM_FILL_VALUES = {
         country: "USA",
         email: "gKp8w@example.com",
         phone: "123-456-7890",
-        vatNumber: "123456789",
     },
     details: {
         invoiceLogo: "",
