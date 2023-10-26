@@ -20,6 +20,7 @@ const BillToSection = (props: BillToSectionProps) => {
     const { control } = useFormContext();
 
     const CUSTOM_INPUT_NAME = "receiver.customInputs";
+
     const { fields, append, remove } = useFieldArray({
         control: control,
         name: CUSTOM_INPUT_NAME,
@@ -83,12 +84,6 @@ const BillToSection = (props: BillToSectionProps) => {
                 name="receiver.phone"
                 label="Phone"
                 placeholder="Receiver phone number"
-            />
-            <InputFormField
-                control={control}
-                name="receiver.vatNumber"
-                label="VAT Number"
-                placeholder="Receiver VAT Number"
             />
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}

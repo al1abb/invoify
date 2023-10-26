@@ -85,12 +85,6 @@ const BillFromSection = (props: BillFromSectionProps) => {
                 label="Phone"
                 placeholder="Your phone number"
             />
-            <InputFormField
-                control={control}
-                name="sender.vatNumber"
-                label="VAT Number"
-                placeholder="Your VAT Number"
-            />
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
             {fields?.map((field, index) => (

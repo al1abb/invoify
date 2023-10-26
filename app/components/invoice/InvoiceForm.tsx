@@ -68,7 +68,7 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
                             placeholder="Invoice Logo"
                             setValue={setValue}
                         />
-                        <div className="flex flex-wrap gap-20">
+                        <div className="flex flex-wrap gap-x-52 gap-y-10">
                             <BillFromSection />
 
                             <BillToSection />
