@@ -2,6 +2,9 @@
 
 import React from "react";
 
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // Shadcn
 import {
     FormControl,
@@ -12,19 +15,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-// Types
-import { ControlType } from "@/app/types/types";
+type PaymentInformationProps = {};
 
-type PaymentInformationProps = {
-    control: ControlType;
-    label: string;
-};
-
-const PaymentInformation = ({ control, label }: PaymentInformationProps) => {
+const PaymentInformation = (props: PaymentInformationProps) => {
+    const { control } = useFormContext();
     return (
         <>
             <Label htmlFor="billFrom" className="text-xl font-semibold">
-                {label}:
+                Payment Information:
             </Label>
             <div className="flex flex-wrap gap-10 mt-5">
                 <FormField
