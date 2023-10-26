@@ -2,6 +2,9 @@
 
 import React, { useRef, useState } from "react";
 
+// RHF
+import { useWatch } from "react-hook-form";
+
 // Shadcn components
 import {
     FormControl,
@@ -35,7 +38,12 @@ const FileFormField = ({
     placeholder,
     setValue,
 }: FileFormFieldProps) => {
-    const [base64Image, setBase64Image] = useState<string>("");
+    const logoImage = useWatch({
+        name: "details.invoiceLogo",
+        control,
+    });
+
+    const [base64Image, setBase64Image] = useState<string>(logoImage ?? "");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {

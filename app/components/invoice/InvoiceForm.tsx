@@ -15,15 +15,18 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+// React Wizard
+import { Wizard } from "react-use-wizard";
+
 // Components
 import {
-    FileFormField,
+    WizardStep,
     BillFromSection,
+    BillToSection,
+    InvoiceDetails,
     Items,
     PaymentInformation,
     InvoiceFooter,
-    BillToSection,
-    InvoiceDetails,
 } from "@/app/components";
 
 type InvoiceFormProps = {};
@@ -61,46 +64,32 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-8">
-                        <FileFormField
-                            control={control}
-                            name="details.invoiceLogo"
-                            label="Invoice Logo"
-                            placeholder="Invoice Logo"
-                            setValue={setValue}
-                        />
-                        <div className="flex flex-wrap gap-x-52 gap-y-10">
-                            <BillFromSection />
+                        <Wizard>
+                            <WizardStep>
+                                <div className="flex flex-wrap gap-x-52 gap-y-10">
+                                    <BillFromSection />
 
-                            <BillToSection />
+                                    <BillToSection />
+                                </div>
+                            </WizardStep>
+                            <WizardStep>
+                                <div className="flex flex-wrap gap-y-10">
+                                    <InvoiceDetails />
+                                </div>
+                            </WizardStep>
 
-                            <InvoiceDetails />
-                        </div>
+                            <WizardStep>
+                                <Items />
+                            </WizardStep>
 
-                        <div>
-                            <Items
-                                control={control}
-                                setValue={setValue}
-                                name="details.items"
-                            />
-                        </div>
+                            <WizardStep>
+                                <PaymentInformation />
+                            </WizardStep>
 
-                        <hr />
-
-                        <div>
-                            <PaymentInformation
-                                control={control}
-                                label="Payment Information"
-                            />
-                        </div>
-
-                        <hr />
-
-                        <div>
-                            <InvoiceFooter
-                                control={control}
-                                setValue={setValue}
-                            />
-                        </div>
+                            <WizardStep>
+                                <InvoiceFooter />
+                            </WizardStep>
+                        </Wizard>
                     </div>
                 </CardContent>
             </Card>

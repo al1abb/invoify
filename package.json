@@ -43,6 +43,7 @@
         "react-hook-form": "^7.46.1",
         "react-pdf": "^7.3.3",
         "react-signature-canvas": "^1.0.6",
+        "react-use-wizard": "^2.2.4",
         "tailwind-merge": "^1.14.0",
         "tailwindcss": "3.3.3",
         "tailwindcss-animate": "^1.0.7",

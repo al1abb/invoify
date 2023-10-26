@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 // RHF
-import { useWatch } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // Shadcn components
 import {
@@ -22,30 +22,10 @@ import { ChargeInput, SignatureModal } from "@/app/components";
 // Helpers
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
 
-// Types
-import { ControlType, UseFormSetValueType } from "@/app/types/types";
+type InvoiceFooterProps = {};
 
-type InvoiceFooterProps = {
-    control: ControlType;
-    setValue: UseFormSetValueType;
-};
-
-const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
-    // Switch states. On/Off
-    const [discountSwitch, setDiscountSwitch] = useState<boolean>(false);
-    const [taxSwitch, setTaxSwitch] = useState<boolean>(false);
-    const [shippingSwitch, setShippingSwitch] = useState<boolean>(false);
-
-    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
-
-    // Initial subtotal and total
-    const [subTotal, setSubTotal] = useState<number>(0);
-    const [totalAmount, setTotalAmount] = useState<number>(0);
-
-    // Types for discount, tax, and shipping. Amount | Percentage
-    const [discountType, setDiscountType] = useState("amount");
-    const [taxType, setTaxType] = useState("amount");
-    const [shippingType, setShippingType] = useState("amount");
+const InvoiceFooter = (props: InvoiceFooterProps) => {
+    const { control, setValue } = useFormContext();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -72,6 +52,28 @@ const InvoiceFooter = ({ control, setValue }: InvoiceFooterProps) => {
         name: `details.currency`,
         control,
     });
+
+    // Switch states. On/Off
+    const [discountSwitch, setDiscountSwitch] = useState<boolean>(
+        discount.amount ? true : false
+    );
+    const [taxSwitch, setTaxSwitch] = useState<boolean>(
+        tax.amount ? true : false
+    );
+    const [shippingSwitch, setShippingSwitch] = useState<boolean>(
+        shipping.cost ? true : false
+    );
+
+    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
+
+    // Initial subtotal and total
+    const [subTotal, setSubTotal] = useState<number>(0);
+    const [totalAmount, setTotalAmount] = useState<number>(0);
+
+    // Types for discount, tax, and shipping. Amount | Percentage
+    const [discountType, setDiscountType] = useState("amount");
+    const [taxType, setTaxType] = useState("amount");
+    const [shippingType, setShippingType] = useState("amount");
 
     // When loading if received values, turn on the switches
     useEffect(() => {

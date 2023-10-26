@@ -5,11 +5,11 @@ import React, { useState } from "react";
 // Shadcn components
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
 import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import {
@@ -50,7 +50,7 @@ const DatePickerFormField = ({
                     <FormItem>
                         <div className="flex justify-between gap-5 items-center text-sm">
                             <div>
-                                <Label>{label}:</Label>
+                                <FormLabel>{label}:</FormLabel>
                             </div>
                             <div>
                                 <Popover
