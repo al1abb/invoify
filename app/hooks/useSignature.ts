@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 
 // RHF
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // Signature Canvas
 import SignatureCanvas from "react-signature-canvas";
@@ -16,12 +16,16 @@ export function useSignature() {
     // Form context
     const { setValue } = useFormContext();
 
+    const signature = useWatch({
+        name: "details.signature.data",
+    });
+
     /**
      * * DRAWING SIGNATURE
      */
 
     // Signature in base64 or as string
-    const [signatureData, setSignatureData] = useState("");
+    const [signatureData, setSignatureData] = useState(signature ?? "");
 
     // Signature
     const signatureRef = useRef<SignatureCanvas | null>(null);
@@ -66,7 +70,9 @@ export function useSignature() {
      */
 
     // Value in typed input
-    const [typedSignature, setTypedSignature] = useState<string>("");
+    const [typedSignature, setTypedSignature] = useState<string>(
+        signature ?? ""
+    );
 
     // All available fonts for typed signature input
     const typedSignatureFonts: SignatureFont[] = SIGNATURE_FONTS;
