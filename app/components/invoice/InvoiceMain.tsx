@@ -32,7 +32,11 @@ const InvoiceMain = () => {
     return (
         <>
             <Form {...useFormContext<ValuesType>()}>
-                <form onSubmit={handleSubmit(onFormSubmit)}>
+                <form
+                    onSubmit={handleSubmit(onFormSubmit, (err) => {
+                        console.log(err);
+                    })}
+                >
                     <div className="flex flex-wrap">
                         <InvoiceForm />
 
