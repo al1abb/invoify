@@ -94,7 +94,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
 
     return (
         <div>
-            <Label className="text-sm">Saved Invoices:</Label>
+            <Label className="text-md">Your Invoices:</Label>
 
             <div className="flex flex-wrap gap-4 py-5 overflow-y-auto max-h-72">
                 {savedInvoices.map((invoice, idx) => (
@@ -111,7 +111,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                 </p>
                             </Badge>
                         </div>
-                        <small>{invoice.updatedAt}</small>
+                        <small>{invoice.details.updatedAt}</small>
                         <div className="text-gray-600">
                             <p>From: {invoice.sender.name}</p>
                             <p>To: {invoice.receiver.name}</p>
@@ -135,7 +135,11 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                     </div>
                 ))}
 
-                {savedInvoices.length == 0 && <div>No saved invoices</div>}
+                {savedInvoices.length == 0 && (
+                    <div>
+                        <p>No saved invoices</p>
+                    </div>
+                )}
             </div>
         </div>
     );

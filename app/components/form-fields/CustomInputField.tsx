@@ -69,7 +69,7 @@ const CustomInputField = ({
                                         <Input
                                             {...field}
                                             placeholder="Value"
-                                            size={13}
+                                            size={8.8}
                                         />
                                     </FormControl>
                                     <FormMessage />
