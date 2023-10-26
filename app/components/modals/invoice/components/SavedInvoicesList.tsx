@@ -45,7 +45,9 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         selected.details.invoiceDate = new Date(selected.details.invoiceDate);
 
         selected.details.invoiceLogo = "";
-        selected.details.signature = "";
+        selected.details.signature = {
+            data: "",
+        };
 
         selected.details.subTotal = formatNumberWithCommas(
             Number(selected.details.subTotal)
