@@ -62,7 +62,7 @@ const DatePickerFormField = ({
                                             <Button
                                                 variant={"outline"}
                                                 className={cn(
-                                                    "w-[13.5rem]",
+                                                    "w-[13rem]",
                                                     !field.value &&
                                                         "text-muted-foreground"
                                                 )}

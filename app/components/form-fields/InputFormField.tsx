@@ -42,6 +42,7 @@ const InputFormField = ({
                                     <Input
                                         {...field}
                                         placeholder={placeholder}
+                                        className="w-[13rem]"
                                     />
                                 </FormControl>
                                 <FormMessage />
