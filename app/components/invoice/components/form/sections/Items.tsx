@@ -3,7 +3,10 @@
 import React from "react";
 
 // RHF
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
+
+// ShadCn
+import { Label } from "@/components/ui/label";
 
 // Custom components
 import { BaseButton, SingleItem } from "@/app/components";
@@ -11,19 +14,15 @@ import { BaseButton, SingleItem } from "@/app/components";
 // Icons
 import { Plus } from "lucide-react";
 
-// Types
-import { ControlType, NameType, UseFormSetValueType } from "@/app/types/types";
+type ItemsProps = {};
 
-type ItemsProps = {
-    control: ControlType;
-    setValue: UseFormSetValueType;
-    name: NameType;
-};
+const Items = (props: ItemsProps) => {
+    const { control, setValue } = useFormContext();
 
-const Items = ({ control, setValue, name }: ItemsProps) => {
+    const ITEMS_NAME = "details.items";
     const { fields, append, remove } = useFieldArray({
         control: control,
-        name: name,
+        name: ITEMS_NAME,
     });
 
     const addNewField = () => {
@@ -41,31 +40,28 @@ const Items = ({ control, setValue, name }: ItemsProps) => {
     };
 
     return (
-        <div>
-            <hr />
-
-            <div className="flex mt-7">
-                <div className="flex flex-col gap-10 w-full">
-                    {fields.map((field, index) => (
-                        <SingleItem
-                            key={field.id}
-                            control={control}
-                            name={name}
-                            index={index}
-                            removeField={removeField}
-                            setValue={setValue}
-                        />
-                    ))}
-                    <BaseButton
-                        tooltipLabel="Add a new item to the list"
-                        className="w-fit"
-                        onClick={addNewField}
-                    >
-                        <Plus />
-                        Add a new item
-                    </BaseButton>
-                </div>
-            </div>
+        <div className="flex flex-col gap-2 w-full">
+            <Label htmlFor="items" className="text-xl font-semibold">
+                Items:
+            </Label>
+            {fields.map((field, index) => (
+                <SingleItem
+                    key={field.id}
+                    control={control}
+                    name={ITEMS_NAME}
+                    index={index}
+                    removeField={removeField}
+                    setValue={setValue}
+                />
+            ))}
+            <BaseButton
+                tooltipLabel="Add a new item to the list"
+                className="w-fit"
+                onClick={addNewField}
+            >
+                <Plus />
+                Add a new item
+            </BaseButton>
         </div>
     );
 };
