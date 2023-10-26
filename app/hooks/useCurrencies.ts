@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Variables
-import { CURRENCIES } from "@/lib/variables";
+import { CURRENCIES_API } from "@/lib/variables";
 
 const useCurrencies = () => {
     const [currencies, setCurrencies] = useState<any>([]);
@@ -16,7 +16,7 @@ const useCurrencies = () => {
         setCurrenciesLoading(true);
 
         try {
-            const response = await fetch(`${CURRENCIES}`);
+            const response = await fetch(`${CURRENCIES_API}`);
             const data = await response.json();
 
             const currencyOptions = Object.keys(data).map((currencyCode) => {

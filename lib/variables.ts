@@ -10,7 +10,8 @@ export const SEND_PDF_API = "/api/pdf/send";
 /**
  * External API endpoints
  */
-export const CURRENCIES = "https://openexchangerates.org/api/currencies.json";
+export const CURRENCIES_API =
+    "https://openexchangerates.org/api/currencies.json";
 
 /**
  * Nodemailer variables
