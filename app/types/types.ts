@@ -7,10 +7,12 @@ import {
     UseFormReturn,
     UseFormSetValue,
 } from "react-hook-form";
-import { InvoiceSchema } from "../../lib/schemas";
+import { InvoiceSchema, ItemSchema } from "../../lib/schemas";
 
 // Form types
 export type ValuesType = z.infer<typeof InvoiceSchema>;
+export type ItemType = z.infer<typeof ItemSchema>;
+
 export type FormType = UseFormReturn<ValuesType>;
 export type ControlType = Control<any>;
 export type NameType = FieldPath<ValuesType>;
@@ -28,4 +30,11 @@ export type SignatureColor = {
 export type SignatureFont = {
     name: string;
     variable: string;
+};
+
+// Wizard types
+export type WizardStepType = {
+    id: number;
+    label: string;
+    isValid?: boolean;
 };
