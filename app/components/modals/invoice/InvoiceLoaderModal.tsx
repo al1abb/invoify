@@ -19,7 +19,7 @@ import { BaseButton, SavedInvoicesList } from "@/app/components";
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Icons
-import { Upload } from "lucide-react";
+import { FolderUp } from "lucide-react";
 
 type InvoiceLoaderModalProps = {};
 
@@ -37,7 +37,7 @@ const InvoiceLoaderModal = (props: InvoiceLoaderModalProps) => {
                     className="flex gap-2"
                     disabled={invoicePdfLoading}
                 >
-                    <Upload />
+                    <FolderUp />
                     Load invoice
                 </BaseButton>
             </DialogTrigger>
