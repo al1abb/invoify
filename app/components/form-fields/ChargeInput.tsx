@@ -2,7 +2,7 @@
 
 import React from "react";
 
-// Shadcn
+// ShadCn
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
