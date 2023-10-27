@@ -18,6 +18,7 @@ import useToasts from "../hooks/useToasts";
 
 // Variables
 import {
+    EXPORT_INVOICE_API,
     FORM_DEFAULT_VALUES,
     GENERATE_PDF_API,
     SEND_PDF_API,
@@ -39,6 +40,7 @@ const defaultInvoiceContext = {
     saveInvoice: () => {},
     deleteInvoice: (index: number) => {},
     sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
+    exportInvoice: (exportAs: string) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -72,6 +74,7 @@ export const InvoiceContextProvider = ({
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
+    // Saved invoices
     const [savedInvoices, setSavedInvoices] = useState<ValuesType[]>([]);
 
     useEffect(() => {
@@ -95,6 +98,8 @@ export const InvoiceContextProvider = ({
     const onFormSubmit = (values: ValuesType) => {
         console.log("VALUE");
         console.log(values);
+
+        // Call generate pdf service
         generatePdf(values);
     };
 
@@ -284,6 +289,36 @@ export const InvoiceContextProvider = ({
             });
     };
 
+    /**
+     * Export options
+     */
+
+    const exportInvoice = (exportAs: string) => {
+        switch (exportAs) {
+            case "JSON":
+                const formValues = getValues();
+                return fetch(EXPORT_INVOICE_API, {
+                    method: "POST",
+                    body: JSON.stringify(formValues),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then((res) => res.blob())
+                    .then((blob) => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = "invoice.json";
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch((error) => {
+                        console.error("Error downloading JSON:", error);
+                    });
+        }
+    };
+
     return (
         <InvoiceContext.Provider
             value={{
@@ -298,6 +333,7 @@ export const InvoiceContextProvider = ({
                 saveInvoice,
                 deleteInvoice,
                 sendPdfToMail,
+                exportInvoice,
             }}
         >
             {children}
