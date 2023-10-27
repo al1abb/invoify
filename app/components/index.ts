@@ -19,6 +19,7 @@ import InvoiceActions from "./invoice/InvoiceActions";
 import SingleItem from "./invoice/components/form/components/SingleItem";
 import WizardNavigation from "./invoice/components/form/components/WizardNavigation";
 import WizardStep from "./invoice/components/form/components/WizardStep";
+import WizardProgress from "./invoice/components/form/components/WizardProgress";
 
 // Form / Sections
 import BillFromSection from "./invoice/components/form/sections/BillFromSection";
@@ -88,6 +89,7 @@ export {
     SingleItem,
     WizardNavigation,
     WizardStep,
+    WizardProgress,
     PaymentInformation,
     InvoiceFooter,
     CurrencySelector,
