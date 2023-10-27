@@ -25,6 +25,7 @@ type NewInvoiceAlertProps = {
 };
 
 const NewInvoiceAlert = ({ children }: NewInvoiceAlertProps) => {
+    // Invoice context
     const { newInvoice } = useInvoiceContext();
 
     const [open, setOpen] = useState(false);

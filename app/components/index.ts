@@ -50,7 +50,10 @@ import BaseButton from "./reusables/BaseButton";
    * Modals & Alerts
    ========================= */
 import SendPdfToEmailModal from "./modals/email/SendPdfToEmailModal";
+
+// Import/Export
 import InvoiceLoaderModal from "./modals/invoice/InvoiceLoaderModal";
+import InvoiceExportModal from "./modals/invoice/InvoiceExportModal";
 
 // Signature
 import SignatureModal from "./modals/signature/SignatureModal";
@@ -103,6 +106,7 @@ export {
     BaseButton,
     SendPdfToEmailModal,
     InvoiceLoaderModal,
+    InvoiceExportModal,
     SignatureModal,
     DrawSignature,
     TypeSignature,
