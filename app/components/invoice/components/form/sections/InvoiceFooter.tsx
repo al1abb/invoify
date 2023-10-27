@@ -53,6 +53,11 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
         control,
     });
 
+    const totalInWords = useWatch({
+        name: `details.totalAmountInWords`,
+        control,
+    });
+
     // Switch states. On/Off
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(
         discount.amount ? true : false
@@ -64,7 +69,9 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
         shipping.cost ? true : false
     );
 
-    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
+    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(
+        totalInWords ? totalInWords : false
+    );
 
     // Initial subtotal and total
     const [subTotal, setSubTotal] = useState<number>(0);
