@@ -6,6 +6,7 @@ import { SignatureColor, SignatureFont } from "@/app/types/types";
  */
 export const GENERATE_PDF_API = "/api/pdf/generate";
 export const SEND_PDF_API = "/api/pdf/send";
+export const EXPORT_INVOICE_API = "/api/pdf/export";
 
 /**
  * External API endpoints
