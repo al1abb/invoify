@@ -13,9 +13,11 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+
+// Components
+import { BaseButton } from "@/app/components";
 
 // Icons
 import { Trash2 } from "lucide-react";
@@ -71,7 +73,7 @@ const SingleItem = ({
     }, [rate, quantity]);
 
     return (
-        <div className="flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-5 my-2">
             Item #{index + 1}
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <FormField
@@ -180,14 +182,14 @@ const SingleItem = ({
             <div>
                 {/* Making sure that there is always at least 1 item */}
                 {index != 0 && (
-                    <Button
-                        onClick={() => removeField(index)}
-                        className="w-fit gap-2"
+                    <BaseButton
                         variant="destructive"
+                        className="w-fit gap-2"
+                        onClick={() => removeField(index)}
                     >
                         <Trash2 />
                         Remove Item
-                    </Button>
+                    </BaseButton>
                 )}
             </div>
             <hr />
