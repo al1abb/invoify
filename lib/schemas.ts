@@ -158,4 +158,4 @@ const InvoiceSchema = z.object({
     details: InvoiceDetailsSchema,
 });
 
-export { InvoiceSchema };
+export { InvoiceSchema, ItemSchema };
