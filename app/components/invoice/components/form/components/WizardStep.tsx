@@ -6,18 +6,18 @@ import React from "react";
 import { useWizard } from "react-use-wizard";
 
 // Components
-import { WizardNavigation } from "@/app/components";
+import { WizardNavigation, WizardProgress } from "@/app/components";
 
 type WizardStepProps = {
     children: React.ReactNode;
 };
 
 const WizardStep = ({ children }: WizardStepProps) => {
-    const { activeStep, stepCount } = useWizard();
+    const wizard = useWizard();
     return (
         <div className="min-h-[25rem]">
-            Step: {activeStep + 1} / {stepCount}
-            <div>{children}</div>
+            <WizardProgress wizard={wizard} />
+            <div className="my-7">{children}</div>
             <WizardNavigation />
         </div>
     );
