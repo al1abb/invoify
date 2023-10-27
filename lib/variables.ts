@@ -123,6 +123,9 @@ export const FORM_DEFAULT_VALUES = {
         },
         additionalNotes: "",
         paymentTerms: "",
+        subTotal: 0,
+        totalAmount: 0,
+        totalAmountInWords: "",
     },
 };
 
