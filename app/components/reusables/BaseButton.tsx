@@ -19,7 +19,7 @@ type BaseButtonProps = {
     type?: "button" | "submit" | "reset";
     loading?: boolean;
     loadingText?: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 } & ButtonProps;
 
 const BaseButton = ({
