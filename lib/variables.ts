@@ -124,7 +124,7 @@ export const FORM_DEFAULT_VALUES = {
         },
         additionalNotes: "",
         paymentTerms: "",
-        totalAmountInWords: true,
+        totalAmountInWords: "",
     },
 };
 
