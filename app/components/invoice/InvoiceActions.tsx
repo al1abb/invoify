@@ -19,9 +19,10 @@ import {
     SendPdfToEmailModal,
     NewInvoiceAlert,
     InvoiceLoaderModal,
+    InvoiceExportModal,
 } from "@/app/components";
 
-// Lucide Icons
+// Icons
 import { Download, Eye, FileInput, Mail, Plus, Save } from "lucide-react";
 
 // Variables
@@ -78,10 +79,10 @@ const InvoiceActions = ({
                     )}
 
                     <div className="flex flex-row gap-5">
-                        <InvoiceLoaderModal />
+                        {/* Import & Export modals */}
 
-                        {/* InvoiceExportModal here */}
-                        {/* <InvoiceLoaderModal /> */}
+                        <InvoiceLoaderModal />
+                        <InvoiceExportModal />
                     </div>
 
                     <NewInvoiceAlert>
