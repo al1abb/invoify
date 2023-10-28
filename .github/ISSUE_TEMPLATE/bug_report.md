@@ -2,31 +2,53 @@
 name: Bug Report
 about: Create a bug report to help us improve
 title: "[BUG] "
+---
+
+#### Issue Summary
+
+[Concise description of the issue]
+
+#### Environment
+
+- **Browser/Platform:** [Insert Browser/Platform Name and Version]
+
+#### Steps to Reproduce
+
+1. [First step to reproduce the issue]
+2. [Second step to reproduce the issue]
+3. [And so on...]
+
+#### Expected Behavior
+
+[What you expected to happen]
+
+#### Actual Behavior
+
+[What actually happened]
+
+#### Screenshots/Logs
+
+[If applicable, include relevant screenshots or error logs]
+
+#### Additional Information
+
+[Include any additional information that may help in diagnosing the issue]
+
+#### Possible Solutions
+
+[If you have suggestions for how to fix the issue, provide them here]
 
 ---
 
-**Describe the bug:**
+#### Acceptance Criteria
 
-A clear and concise description of what the bug is.
+- [ ] The issue is confirmed and reproducible.
+- [ ] Relevant details about the environment are provided.
+- [ ] Steps to reproduce are clear and concise.
+- [ ] Expected and actual behavior are described.
+- [ ] Screenshots/logs (if applicable) are attached.
+- [ ] Any additional relevant information is included.
 
-**Steps to Reproduce:**
+---
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-**Expected Behavior:**
-
-A clear and concise description of what you expected to happen.
-
-**Screenshots:**
-
-If applicable, add screenshots to help explain the problem.
-
-**Additional Information:**
-
-- OS: [e.g., Windows]
-- Browser: [e.g., Chrome]
-- Version: [e.g., 22]
-- Any other relevant information
+[Note: Please replace the placeholders in square brackets with specific information related to your bug report.]
