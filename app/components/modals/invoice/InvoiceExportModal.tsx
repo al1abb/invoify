@@ -33,7 +33,7 @@ const InvoiceExportModal = (props: InvoiceExportModalProps) => {
                 <BaseButton
                     variant="outline"
                     tooltipLabel="Open load invoice menu"
-                    className="flex gap-2"
+                    className="flex gap-2 w-auto"
                     disabled={invoicePdfLoading}
                 >
                     <Import />
