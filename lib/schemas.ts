@@ -61,9 +61,14 @@ const fieldValidators = {
     stringMin1: z.string().min(1, { message: "Must be at least 1 character" }),
     stringToNumber: z.coerce.number(),
     stringOptional: z.string().optional(),
-    numWithCommas: z.coerce.number().transform((value) => {
-        return formatNumberWithCommas(value);
-    }),
+    numWithCommas: z.coerce
+        .number()
+        .nonnegative({
+            message: "Must be a positive number",
+        })
+        .transform((value) => {
+            return formatNumberWithCommas(value);
+        }),
 };
 
 const CustomInputSchema = z.object({

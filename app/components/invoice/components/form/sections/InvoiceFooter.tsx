@@ -23,12 +23,16 @@ import { ChargeInput, SignatureModal } from "@/app/components";
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
 
 // Types
-import { ItemType } from "@/app/types/types";
+import { InvoiceType, ItemType } from "@/app/types/types";
 
 type InvoiceFooterProps = {};
 
 const InvoiceFooter = (props: InvoiceFooterProps) => {
-    const { control, setValue } = useFormContext();
+    const {
+        control,
+        setValue,
+        formState: { errors },
+    } = useFormContext<InvoiceType>();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -63,13 +67,13 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
 
     // Switch states. On/Off
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(
-        discount.amount ? true : false
+        discount?.amount ? true : false
     );
     const [taxSwitch, setTaxSwitch] = useState<boolean>(
-        tax.amount ? true : false
+        tax?.amount ? true : false
     );
     const [shippingSwitch, setShippingSwitch] = useState<boolean>(
-        shipping.cost ? true : false
+        shipping?.cost ? true : false
     );
 
     // ? Old approach of using totalInWords variable
@@ -87,36 +91,36 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
 
     // When loading if received values, turn on the switches
     useEffect(() => {
-        if (discount.amount) {
+        if (discount?.amount) {
             setDiscountSwitch(true);
         }
 
-        if (tax.amount) {
+        if (tax?.amount) {
             setTaxSwitch(true);
         }
 
-        if (shipping.cost) {
+        if (shipping?.cost) {
             setShippingSwitch(true);
         }
 
-        if (discount.amountType == "amount") {
+        if (discount?.amountType == "amount") {
             setDiscountType("amount");
         } else {
             setDiscountType("percentage");
         }
 
-        if (tax.amountType == "amount") {
+        if (tax?.amountType == "amount") {
             setTaxType("amount");
         } else {
             setTaxType("percentage");
         }
 
-        if (shipping.costType == "amount") {
+        if (shipping?.costType == "amount") {
             setShippingType("amount");
         } else {
             setShippingType("percentage");
         }
-    }, [discount.amount, tax.amount, shipping.cost]);
+    }, [discount?.amount, tax?.amount, shipping?.cost]);
 
     // Check switches, if off set values to zero
     useEffect(() => {
@@ -140,11 +144,11 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
         itemsArray,
         totalInWordsSwitch,
         discountType,
-        discount.amount,
+        discount?.amount,
         taxType,
-        tax.amount,
+        tax?.amount,
         shippingType,
-        shipping.cost,
+        shipping?.cost,
     ]);
 
     // TODO: Maybe move this and above useEffect logic into a separate hook
@@ -158,12 +162,13 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
             0
         );
 
-        setValue("details.subTotal", totalSum);
+        setValue("details.subTotal", totalSum.toString());
         setSubTotal(totalSum);
 
-        let discountAmount: number = parseFloat(discount.amount) ?? 0;
-        let taxAmount: number = parseFloat(tax.amount) ?? 0;
-        let shippingCost: number = parseFloat(shipping.cost) ?? 0;
+        let discountAmount: number =
+            parseFloat(discount!.amount.toString()) ?? 0;
+        let taxAmount: number = parseFloat(tax!.amount.toString()) ?? 0;
+        let shippingCost: number = parseFloat(shipping!.cost.toString()) ?? 0;
 
         let discountAmountType: string = "amount";
         let taxAmountType: string = "amount";
@@ -273,66 +278,50 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
 
             <div className="flex flex-col gap-3 min-w-[22rem]">
                 <div className="flex justify-center gap-x-10 pb-6">
-                    <FormField
-                        control={control}
-                        name="discount-switch"
-                        render={({ field }) => (
-                            <FormItem>
-                                <Label>Discount</Label>
+                    <div>
+                        <Label>Discount</Label>
 
-                                <div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={discountSwitch}
-                                            onCheckedChange={(value) => {
-                                                setDiscountSwitch(value);
-                                            }}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={control}
-                        name="tax-switch"
-                        render={({ field }) => (
-                            <FormItem>
-                                <Label>Tax</Label>
+                        <div>
+                            <div>
+                                <Switch
+                                    checked={discountSwitch}
+                                    onCheckedChange={(value) => {
+                                        setDiscountSwitch(value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-                                <div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={taxSwitch}
-                                            onCheckedChange={(value) => {
-                                                setTaxSwitch(value);
-                                            }}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={control}
-                        name="shipping-switch"
-                        render={({ field }) => (
-                            <FormItem>
-                                <Label>Shipping</Label>
+                    <div>
+                        <Label>Tax</Label>
 
-                                <div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={shippingSwitch}
-                                            onCheckedChange={(value) => {
-                                                setShippingSwitch(value);
-                                            }}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </FormItem>
-                        )}
-                    />
+                        <div>
+                            <div>
+                                <Switch
+                                    checked={taxSwitch}
+                                    onCheckedChange={(value) => {
+                                        setTaxSwitch(value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <Label>Shipping</Label>
+
+                        <div>
+                            <div>
+                                <Switch
+                                    checked={shippingSwitch}
+                                    onCheckedChange={(value) => {
+                                        setShippingSwitch(value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="flex flex-col px-10 justify-around gap-y-3">
@@ -382,8 +371,14 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
                     <div className="flex justify-between items-center">
                         <div>Total Amount</div>
 
-                        <div>
-                            {formatNumberWithCommas(totalAmount)} {currency}
+                        <div className="">
+                            <p>
+                                {formatNumberWithCommas(totalAmount)} {currency}
+                            </p>
+
+                            <small className="text-sm font-medium text-destructive">
+                                {errors.details?.totalAmount?.message}
+                            </small>
                         </div>
                     </div>
 
