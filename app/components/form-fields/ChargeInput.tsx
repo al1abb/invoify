@@ -62,9 +62,10 @@ const ChargeInput = ({
                                             <Input
                                                 {...field}
                                                 className="w-28"
-                                                placeholder="Discount"
+                                                placeholder={label}
                                                 type="number"
                                                 min="0"
+                                                max="1000000"
                                             />
                                         </FormControl>
                                     </div>
