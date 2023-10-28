@@ -5,7 +5,7 @@ import React from "react";
 // RHF
 import { useFormContext } from "react-hook-form";
 
-// Shadcn
+// ShadCn
 import {
     FormControl,
     FormField,

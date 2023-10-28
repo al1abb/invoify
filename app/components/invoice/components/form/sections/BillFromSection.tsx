@@ -5,7 +5,7 @@ import React from "react";
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-// Shadcn
+// ShadCn
 import { Label } from "@/components/ui/label";
 
 // Components
@@ -32,7 +32,7 @@ const BillFromSection = (props: BillFromSectionProps) => {
         });
     };
 
-    const removeCustomInput = (index: any) => {
+    const removeCustomInput = (index: number) => {
         remove(index);
     };
 
