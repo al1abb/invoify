@@ -5,7 +5,7 @@ import React from "react";
 // RHF
 import { useFormContext } from "react-hook-form";
 
-// Shadcn
+// ShadCn
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
@@ -69,8 +69,8 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         // }
     };
 
-    // Transform date values
-    const transformDates = (selected: any) => {
+    // Transform date values for next submission
+    const transformDates = (selected: ValuesType) => {
         selected.details.dueDate = new Date(
             selected.details.dueDate
         ).toLocaleDateString(undefined, DATE_OPTIONS);
