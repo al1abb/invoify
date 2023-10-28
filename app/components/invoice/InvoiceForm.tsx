@@ -49,7 +49,7 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
     }, [invoiceNumber]);
 
     return (
-        <div className="w-full xl:w-3/4">
+        <div className="w-full xl:w-[71%]">
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-3">
@@ -66,7 +66,7 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
                     <div className="space-y-8">
                         <Wizard>
                             <WizardStep>
-                                <div className="flex flex-wrap gap-x-52 gap-y-10">
+                                <div className="flex flex-wrap gap-x-20 gap-y-10">
                                     <BillFromSection />
 
                                     <BillToSection />

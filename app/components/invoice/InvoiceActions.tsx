@@ -45,16 +45,8 @@ const InvoiceActions = ({
     saveInvoice,
     sendPdfToMail,
 }: InvoiceActionsProps) => {
-    //? DEV ONLY
-    const { reset, formState } = useFormContext();
-
-    //? Form auto fill for testing
-    const devEnv = useMemo(() => {
-        return process.env.NODE_ENV === "development";
-    }, []);
-
     return (
-        <div className="w-full xl:w-1/4">
+        <div className="w-full xl:w-[29%]">
             <Card className="sticky top-0 px-2">
                 <CardHeader>
                     <CardTitle>ACTIONS</CardTitle>
@@ -62,22 +54,6 @@ const InvoiceActions = ({
                 </CardHeader>
 
                 <div className="flex flex-col flex-wrap gap-2">
-                    {/* //? DEV ONLY */}
-                    {devEnv && (
-                        <div className="flex flex-col border-2 border-red-500">
-                            <b>DEV:</b>
-                            Form: {formState.isDirty ? "Dirty" : "Clean"}
-                            <BaseButton
-                                tooltipLabel="Form Test Fill"
-                                variant="outline"
-                                onClick={() => reset(FORM_FILL_VALUES)}
-                                disabled={invoicePdfLoading}
-                            >
-                                Fill in the form
-                            </BaseButton>
-                        </div>
-                    )}
-
                     <div className="flex flex-row gap-5">
                         {/* Import & Export modals */}
 
