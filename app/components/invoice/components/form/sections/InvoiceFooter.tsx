@@ -230,7 +230,8 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
     };
 
     return (
-        <div className="flex flex-wrap gap-5">
+        <div className="flex flex-wrap justify-between gap-y-5">
+            {/* Additional notes & Payment terms */}
             <div className="flex flex-col gap-3">
                 <FormField
                     control={control}
@@ -276,8 +277,10 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
                 />
             </div>
 
-            <div className="flex flex-col gap-3 min-w-[22rem]">
-                <div className="flex justify-center gap-x-10 pb-6">
+            {/* Charges */}
+            <div className="flex flex-col gap-3 min-w-[20rem]">
+                {/* Switches */}
+                <div className="flex justify-evenly pb-6">
                     <div>
                         <Label>Discount</Label>
 
@@ -324,7 +327,7 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
                     </div>
                 </div>
 
-                <div className="flex flex-col px-10 justify-around gap-y-3">
+                <div className="flex flex-col justify-center px-5 gap-y-3">
                     <div className="flex justify-between items-center">
                         <div>Sub total</div>
 
@@ -384,7 +387,7 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
 
                     <div className="flex justify-between items-center">
                         <p>Include total in words?</p>{" "}
-                        {totalInWordsSwitch ? "Yes" : "No"}
+                        <p>{totalInWordsSwitch ? "Yes" : "No"}</p>
                         <Switch
                             checked={totalInWordsSwitch}
                             onCheckedChange={(value) => {
