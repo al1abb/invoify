@@ -190,5 +190,6 @@ export const FORM_FILL_VALUES = {
         signature: {
             data: "",
         },
+        totalAmount: "0",
     },
 };
