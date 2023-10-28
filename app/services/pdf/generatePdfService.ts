@@ -7,8 +7,12 @@ import { InvoiceTemplate } from "@/app/components";
 import { InvoiceType } from "@/app/types/types";
 
 const generatePdf = async (body: InvoiceType) => {
+    const ReactDOMServer = (await import("react-dom/server")).default;
+
     // Read the HTML template from a React component
-    const htmlTemplate = InvoiceTemplate(body);
+    const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
+        InvoiceTemplate(body)
+    );
 
     // Create a Puppeteer browser instance
     const browser = await puppeteer.launch({

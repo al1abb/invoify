@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-// Shadcn components
+// ShadCn components
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type PdfViewerProps = {
@@ -13,7 +13,7 @@ const PdfViewer = ({ pdfBlob }: PdfViewerProps) => {
     }, [pdfBlob]);
     return (
         <>
-            <p className="text-xl font-semibold my-2">PDF Preview</p>
+            <p className="text-xl font-semibold my-2">PDF View</p>
             <AspectRatio ratio={1 / 1.4}>
                 <iframe
                     className="h-full w-full"
