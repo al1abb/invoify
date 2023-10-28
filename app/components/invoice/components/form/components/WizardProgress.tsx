@@ -72,7 +72,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
         },
         {
             id: 3,
-            label: "Payment Information",
+            label: "Payment Info",
             isValid: step4Valid,
         },
         {
@@ -83,7 +83,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     ];
 
     return (
-        <div className="flex justify-around items-center">
+        <div className="flex flex-wrap justify-around items-center gap-y-3">
             {steps.map((step, idx) => (
                 <React.Fragment key={step.id}>
                     <BaseButton
@@ -97,7 +97,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
                     </BaseButton>
 
                     {step.id != stepCount - 1 && (
-                        <div className="w-[4rem] h-0.5 bg-black"></div>
+                        <div className="w-[3rem] h-0.5 bg-black hidden md:block"></div>
                     )}
                 </React.Fragment>
             ))}
