@@ -2,7 +2,11 @@ import React from "react";
 
 import Image from "next/image";
 
+// Assets
 import logo from "@/public/assets/img/invoify-logo.svg";
+
+// Components
+import { DevDebug } from "@/app/components";
 
 const BaseNavbar = () => {
     return (
@@ -11,6 +15,10 @@ const BaseNavbar = () => {
                 <Image src={logo} alt="Invoify Logo" width={200} height={150} />
 
                 <p>Generate invoices with ease.</p>
+            </div>
+
+            <div>
+                <DevDebug />
             </div>
         </nav>
     );

@@ -79,6 +79,11 @@ import InvoiceTemplate from "./templates/invoice-pdf/InvoiceTemplate";
 // Email templates
 import SendPdfEmail from "./templates/email/SendPdfEmail";
 
+/* =========================
+   ? DEV ONLY
+   ========================= */
+import DevDebug from "./dev/DevDebug";
+
 export {
     BaseNavbar,
     BaseFooter,
@@ -116,4 +121,5 @@ export {
     NewInvoiceAlert,
     InvoiceTemplate,
     SendPdfEmail,
+    DevDebug,
 };
