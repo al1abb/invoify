@@ -34,7 +34,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
 
     const step3Valid = !errors.details?.items;
     const step4Valid = !errors.details?.paymentInformation;
-    const step5Valid = !errors.details;
+    const step5Valid = !errors.details?.paymentTerms;
 
     const returnButtonVariant = (step: WizardStepType) => {
         if (!step.isValid) {
