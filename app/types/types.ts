@@ -42,3 +42,8 @@ export type WizardStepType = {
     label: string;
     isValid?: boolean;
 };
+
+// Currency type
+export type CurrencyType = {
+    [currencyCode: string]: string;
+};

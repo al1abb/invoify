@@ -2,7 +2,7 @@
 
 import React from "react";
 
-// Shadcn components
+// ShadCn components
 import {
     FormControl,
     FormField,
@@ -22,7 +22,7 @@ import {
 import useCurrencies from "@/app/hooks/useCurrencies";
 
 // Types
-import { ControlType, NameType } from "@/app/types/types";
+import { ControlType, CurrencyType, NameType } from "@/app/types/types";
 
 type CurrencySelectorProps = {
     control: ControlType;
@@ -53,8 +53,8 @@ const CurrencySelector = ({
                             <div>
                                 <Select
                                     {...field}
-                                    onValueChange={field.onChange}
                                     defaultValue={field.value}
+                                    onValueChange={field.onChange}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="w-[13rem]">
@@ -72,7 +72,7 @@ const CurrencySelector = ({
                                         {!currenciesLoading &&
                                             currencies.map(
                                                 (
-                                                    currency: any,
+                                                    currency: CurrencyType,
                                                     idx: number
                                                 ) => (
                                                     <SelectItem
