@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
 
-// Shadcn components
+// ShadCn
 import {
     FormControl,
     FormField,
@@ -16,11 +16,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
-// Custom components
+// Components
 import { ChargeInput, SignatureModal } from "@/app/components";
 
 // Helpers
 import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
+
+// Types
+import { ItemType } from "@/app/types/types";
 
 type InvoiceFooterProps = {};
 
@@ -69,9 +72,9 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
         shipping.cost ? true : false
     );
 
-    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(
-        totalInWords ? totalInWords : false
-    );
+    // ? Old approach of using totalInWords variable
+    // totalInWords ? true : false
+    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
 
     // Initial subtotal and total
     const [subTotal, setSubTotal] = useState<number>(0);
@@ -147,13 +150,15 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
     // TODO: Maybe move this and above useEffect logic into a separate hook
     // Calculate total amount in the invoice
     const calculateTotal = () => {
-        // Here parseFloat fixes a bug where an extra zero appears
+        // Here Number fixes a bug where an extra zero appears
         // at the beginning of subTotal caused by toFixed(2) in item.total in single item
+        // Reason: toFixed(2) returns string, not a number instance
         const totalSum: number = itemsArray.reduce(
-            (sum: number, item: any) => sum + parseFloat(item.total),
+            (sum: number, item: ItemType) => sum + Number(item.total),
             0
         );
-        setValue("details.subTotal", totalSum.toString());
+
+        setValue("details.subTotal", totalSum);
         setSubTotal(totalSum);
 
         let discountAmount: number = parseFloat(discount.amount) ?? 0;
