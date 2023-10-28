@@ -42,7 +42,7 @@ const ChargeInput = ({
             <div className="flex justify-between items-center">
                 <div>{label}</div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                     <BaseButton
                         variant="ghost"
                         size="icon"
@@ -56,19 +56,17 @@ const ChargeInput = ({
                         name={name}
                         render={({ field }) => (
                             <FormItem>
-                                <div className="flex justify-between gap-5 items-center text-sm">
-                                    <div>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                className="w-28"
-                                                placeholder={label}
-                                                type="number"
-                                                min="0"
-                                                max="1000000"
-                                            />
-                                        </FormControl>
-                                    </div>
+                                <div className="flex justify-between items-center text-sm">
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            className="w-[7rem]"
+                                            placeholder={label}
+                                            type="number"
+                                            min="0"
+                                            max="1000000"
+                                        />
+                                    </FormControl>
                                 </div>
                             </FormItem>
                         )}
