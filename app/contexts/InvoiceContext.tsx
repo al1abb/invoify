@@ -26,15 +26,15 @@ import {
 } from "@/lib/variables";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),
     invoicePdfLoading: false,
-    savedInvoices: [] as ValuesType[],
-    onFormSubmit: (values: ValuesType) => {},
+    savedInvoices: [] as InvoiceType[],
+    onFormSubmit: (values: InvoiceType) => {},
     newInvoice: () => {},
-    generatePdf: async (data: ValuesType) => {},
+    generatePdf: async (data: InvoiceType) => {},
     downloadPdf: () => {},
     previewPdfInTab: () => {},
     saveInvoice: () => {},
@@ -75,7 +75,7 @@ export const InvoiceContextProvider = ({
     const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
     // Saved invoices
-    const [savedInvoices, setSavedInvoices] = useState<ValuesType[]>([]);
+    const [savedInvoices, setSavedInvoices] = useState<InvoiceType[]>([]);
 
     useEffect(() => {
         let savedInvoicesDefault;
@@ -95,7 +95,7 @@ export const InvoiceContextProvider = ({
      *
      * @param values - The form data used to generate the PDF.
      */
-    const onFormSubmit = (values: ValuesType) => {
+    const onFormSubmit = (values: InvoiceType) => {
         console.log("VALUE");
         console.log(values);
 
@@ -116,12 +116,12 @@ export const InvoiceContextProvider = ({
     /**
      * Generates a PDF using the provided data.
      *
-     * @param {ValuesType} data - The data used to generate the PDF.
+     * @param {InvoiceType} data - The data used to generate the PDF.
      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
      *
      * @throws {Error} If there is an error generating the PDF.
      */
-    const generatePdf = useCallback(async (data: ValuesType) => {
+    const generatePdf = useCallback(async (data: InvoiceType) => {
         setInvoicePdfLoading(true);
 
         try {
@@ -205,7 +205,7 @@ export const InvoiceContextProvider = ({
                 formValues.details.updatedAt = updatedDate;
 
                 const existingInvoiceIndex = savedInvoices.findIndex(
-                    (invoice: ValuesType) => {
+                    (invoice: InvoiceType) => {
                         return (
                             invoice.details.invoiceNumber ===
                             formValues.details.invoiceNumber

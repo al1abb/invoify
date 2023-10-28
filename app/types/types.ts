@@ -15,14 +15,14 @@ import {
 import { InvoiceSchema, ItemSchema } from "@/lib/schemas";
 
 // Form types
-export type ValuesType = z.infer<typeof InvoiceSchema>;
+export type InvoiceType = z.infer<typeof InvoiceSchema>;
 export type ItemType = z.infer<typeof ItemSchema>;
-export type FormType = UseFormReturn<ValuesType>;
+export type FormType = UseFormReturn<InvoiceType>;
 export type ControlType = Control<any>;
-export type NameType = FieldPath<ValuesType>;
-export type GetValuesType = UseFormGetValues<ValuesType>;
-export type UseFormSetValueType = UseFormSetValue<ValuesType>;
-export type UseFormResetType = UseFormReset<ValuesType>;
+export type NameType = FieldPath<InvoiceType>;
+export type GetValuesType = UseFormGetValues<InvoiceType>;
+export type UseFormSetValueType = UseFormSetValue<InvoiceType>;
+export type UseFormResetType = UseFormReset<InvoiceType>;
 
 // Signature types
 export type SignatureColor = {

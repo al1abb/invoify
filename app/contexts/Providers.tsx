@@ -2,9 +2,11 @@
 
 import React from "react";
 
-// Zod and RHF
-import { zodResolver } from "@hookform/resolvers/zod";
+// RHF
 import { FormProvider, useForm } from "react-hook-form";
+
+// Zod
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema
 import { InvoiceSchema } from "@/lib/schemas";
@@ -13,7 +15,7 @@ import { InvoiceSchema } from "@/lib/schemas";
 import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
@@ -23,7 +25,7 @@ type ProvidersProps = {
 };
 
 const Providers = ({ children }: ProvidersProps) => {
-    const form = useForm<ValuesType>({
+    const form = useForm<InvoiceType>({
         resolver: zodResolver(InvoiceSchema),
         defaultValues: FORM_DEFAULT_VALUES,
     });

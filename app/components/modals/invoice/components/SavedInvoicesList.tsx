@@ -25,7 +25,7 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
 type SavedInvoicesListProps = {
     setModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,7 +70,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     };
 
     // Transform date values for next submission
-    const transformDates = (selected: ValuesType) => {
+    const transformDates = (selected: InvoiceType) => {
         selected.details.dueDate = new Date(
             selected.details.dueDate
         ).toLocaleDateString(undefined, DATE_OPTIONS);
@@ -80,7 +80,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     };
 
     // Load a saved invoice
-    const handleSelect = (selectedInvoice: ValuesType) => {
+    const handleSelect = (selectedInvoice: InvoiceType) => {
         if (selectedInvoice) {
             updateFields(selectedInvoice);
             reset(selectedInvoice);

@@ -4,9 +4,9 @@ import puppeteer, { Page } from "puppeteer";
 import { InvoiceTemplate } from "@/app/components";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
-const generatePdf = async (body: ValuesType) => {
+const generatePdf = async (body: InvoiceType) => {
     // Read the HTML template from a React component
     const htmlTemplate = InvoiceTemplate(body);
 

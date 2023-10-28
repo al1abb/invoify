@@ -12,7 +12,7 @@ import { WizardValues } from "react-use-wizard";
 import { BaseButton } from "@/app/components";
 
 // Types
-import { ValuesType, WizardStepType } from "@/app/types/types";
+import { InvoiceType, WizardStepType } from "@/app/types/types";
 
 type WizardProgressProps = {
     wizard: WizardValues;
@@ -23,7 +23,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
 
     const {
         formState: { errors },
-    } = useFormContext<ValuesType>();
+    } = useFormContext<InvoiceType>();
 
     const step1Valid = !errors.sender && !errors.receiver;
     const step2Valid =

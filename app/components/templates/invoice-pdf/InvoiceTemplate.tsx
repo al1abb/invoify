@@ -4,9 +4,9 @@ import React from "react";
 import { isDataUrl } from "@/lib/helpers";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
-const InvoiceTemplate = async ({ details, sender, receiver }: ValuesType) => {
+const InvoiceTemplate = async ({ details, sender, receiver }: InvoiceType) => {
     const ReactDOMServer = (await import("react-dom/server")).default;
 
     // Instead of fetching all fonts, get the specific one user selected

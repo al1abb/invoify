@@ -3,7 +3,7 @@
 // RHF
 import { useFormContext } from "react-hook-form";
 
-// Shadcn
+// ShadCn
 import { Form } from "@/components/ui/form";
 
 // Custom components
@@ -13,10 +13,10 @@ import { InvoiceActions, InvoiceForm } from "@/app/components";
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Types
-import { ValuesType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
 const InvoiceMain = () => {
-    const { handleSubmit } = useFormContext<ValuesType>();
+    const { handleSubmit } = useFormContext<InvoiceType>();
 
     //* Get the values from invoice context
     const {
@@ -31,7 +31,7 @@ const InvoiceMain = () => {
 
     return (
         <>
-            <Form {...useFormContext<ValuesType>()}>
+            <Form {...useFormContext<InvoiceType>()}>
                 <form
                     onSubmit={handleSubmit(onFormSubmit, (err) => {
                         console.log(err);
