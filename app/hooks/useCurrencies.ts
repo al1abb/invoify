@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 // Variables
 import { CURRENCIES_API } from "@/lib/variables";
 
+// Type
+import { CurrencyType } from "../types/types";
+
 const useCurrencies = () => {
-    const [currencies, setCurrencies] = useState<any>([]);
+    const [currencies, setCurrencies] = useState<CurrencyType[]>([]);
     const [currenciesLoading, setCurrenciesLoading] = useState<boolean>(false);
 
     /**
@@ -36,7 +39,7 @@ const useCurrencies = () => {
         fetchCurrencies();
     }, []);
 
-    return { currencies, currenciesLoading, fetchCurrencies };
+    return { currencies, currenciesLoading };
 };
 
 export default useCurrencies;
