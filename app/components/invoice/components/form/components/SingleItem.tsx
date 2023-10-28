@@ -67,8 +67,8 @@ const SingleItem = ({
     useEffect(() => {
         // Calculate total when rate or quantity changes
         if (rate != undefined && quantity != undefined) {
-            const calculatedTotal = rate * quantity;
-            setValue(`${name}[${index}].total`, calculatedTotal.toFixed(2));
+            const calculatedTotal = (rate * quantity).toFixed(2);
+            setValue(`${name}[${index}].total`, calculatedTotal);
         }
     }, [rate, quantity]);
 
