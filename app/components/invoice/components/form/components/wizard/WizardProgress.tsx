@@ -77,7 +77,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
         },
         {
             id: 4,
-            label: "Final notes",
+            label: "Summary",
             isValid: step5Valid,
         },
     ];
