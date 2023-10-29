@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { BaseButton } from "@/app/components";
+import { BaseButton, InputFormField } from "@/app/components";
 
 // Icons
 import { Trash2 } from "lucide-react";
@@ -76,73 +76,33 @@ const SingleItem = ({
         <div className="flex flex-col gap-y-5 my-2">
             Item #{index + 1}
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
-                <FormField
+                <InputFormField
                     control={control}
                     name={`${name}[${index}].name`}
-                    render={({ field }) => (
-                        <FormItem>
-                            <Label>Name</Label>
-                            <div className="flex justify-between gap-5 items-center text-sm">
-                                <div>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="Item name"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
-                            </div>
-                        </FormItem>
-                    )}
+                    label="Name"
+                    placeholder="Item name"
+                    vertical
                 />
-                <FormField
+
+                <InputFormField
                     control={control}
                     name={`${name}[${index}].quantity`}
-                    render={({ field }) => (
-                        <FormItem>
-                            <Label>Quantity</Label>
-                            <div className="flex justify-between gap-5 items-center text-sm">
-                                <div>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            className="w-[10rem]"
-                                            placeholder="Quantity"
-                                            type="number"
-                                            step="any"
-                                            min={0}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
-                            </div>
-                        </FormItem>
-                    )}
+                    type="number"
+                    label="Quantity"
+                    placeholder="Quantity"
+                    className="w-[8rem]"
+                    vertical
                 />
-                <FormField
+
+                <InputFormField
                     control={control}
                     name={`${name}[${index}].unitPrice`}
-                    render={({ field }) => (
-                        <FormItem>
-                            <Label>Rate</Label>
-                            <span className="text-xs">{` (in ${currency})`}</span>
-                            <div className="flex justify-between gap-5 items-center text-sm">
-                                <div>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="Unit price/Rate"
-                                            type="number"
-                                            step="any"
-                                            min={0}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </div>
-                            </div>
-                        </FormItem>
-                    )}
+                    type="number"
+                    label="Rate"
+                    labelHelper={`(in ${currency})`}
+                    placeholder="Unit price/Rate"
+                    className="w-[8rem]"
+                    vertical
                 />
 
                 <div className="flex flex-col gap-2">
@@ -180,7 +140,7 @@ const SingleItem = ({
                 )}
             />
             <div>
-                {/* Making sure that there is always at least 1 item */}
+                {/* Not allowing deletion for first item and making sure that there is always at least 1 item */}
                 {index != 0 && (
                     <BaseButton
                         variant="destructive"
