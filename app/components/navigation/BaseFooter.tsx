@@ -2,7 +2,7 @@ import React from "react";
 
 const BaseFooter = () => {
     return (
-        <div className="container">
+        <div className="container py-10">
             <p>
                 Developed by{" "}
                 <a
