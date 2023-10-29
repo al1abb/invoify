@@ -1,6 +1,6 @@
 "use client";
 
-// Shadcn
+// ShadCn
 import {
     FormControl,
     FormField,
@@ -8,51 +8,84 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input, InputProps } from "@/components/ui/input";
 
 // Types
-import { ControlType, NameType } from "@/app/types/types";
+import { ControlType } from "@/app/types/types";
 
 type InputFormFieldProps = {
     control: ControlType;
-    name: NameType;
+    name: string;
     label?: string;
+    labelHelper?: string;
     placeholder?: string;
-};
+    vertical?: boolean;
+} & InputProps;
 
 const InputFormField = ({
     control,
     name,
     label,
+    labelHelper,
     placeholder,
+    vertical = false,
+    ...props
 }: InputFormFieldProps) => {
-    return (
-        <>
-            <FormField
-                control={control}
-                name={name}
-                render={({ field }) => (
-                    <FormItem>
-                        <div className="flex justify-between gap-5 items-center text-sm">
-                            <div>
-                                <FormLabel>{label}:</FormLabel>
-                            </div>
-                            <div>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder={placeholder}
-                                        className="w-[13rem]"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </div>
-                        </div>
-                    </FormItem>
-                )}
-            />
-        </>
+    const verticalInput = (
+        <FormField
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    {label && <FormLabel>{`${label}:`}</FormLabel>}
+
+                    {labelHelper && (
+                        <span className="text-xs"> {labelHelper}</span>
+                    )}
+
+                    <FormControl>
+                        <Input
+                            {...field}
+                            placeholder={placeholder}
+                            className="w-[13rem]"
+                            {...props}
+                        />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
     );
+
+    const horizontalInput = (
+        <FormField
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <div className="flex justify-between gap-5 items-center text-sm">
+                        {label && <FormLabel>{`${label}:`}</FormLabel>}
+                        {labelHelper && (
+                            <span className="text-xs"> {labelHelper}</span>
+                        )}
+
+                        <div>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    placeholder={placeholder}
+                                    className="w-[13rem]"
+                                    {...props}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </div>
+                    </div>
+                </FormItem>
+            )}
+        />
+    );
+    return vertical ? verticalInput : horizontalInput;
 };
 
 export default InputFormField;
