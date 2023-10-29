@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 // RHF
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 // ShadCn
 import {
@@ -14,225 +12,25 @@ import {
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 
 // Components
-import { ChargeInput, SignatureModal } from "@/app/components";
-
-// Helpers
-import { formatNumberWithCommas, formatPriceToString } from "@/lib/helpers";
+import { Charges, SignatureModal } from "@/app/components";
 
 // Types
-import { InvoiceType, ItemType } from "@/app/types/types";
+import { InvoiceType } from "@/app/types/types";
 
 type InvoiceFooterProps = {};
 
 const InvoiceFooter = (props: InvoiceFooterProps) => {
-    const {
-        control,
-        setValue,
-        formState: { errors },
-    } = useFormContext<InvoiceType>();
-
-    // Form Fields
-    const itemsArray = useWatch({
-        name: `details.items`,
-        control,
-    });
-
-    const discount = useWatch({
-        name: `details.discountDetails`,
-        control,
-    });
-
-    const tax = useWatch({
-        name: `details.taxDetails`,
-        control,
-    });
-
-    const shipping = useWatch({
-        name: `details.shippingDetails`,
-        control,
-    });
-
-    const currency = useWatch({
-        name: `details.currency`,
-        control,
-    });
-
-    const totalInWords = useWatch({
-        name: `details.totalAmountInWords`,
-        control,
-    });
-
-    // Switch states. On/Off
-    const [discountSwitch, setDiscountSwitch] = useState<boolean>(
-        discount?.amount ? true : false
-    );
-    const [taxSwitch, setTaxSwitch] = useState<boolean>(
-        tax?.amount ? true : false
-    );
-    const [shippingSwitch, setShippingSwitch] = useState<boolean>(
-        shipping?.cost ? true : false
-    );
-
-    // ? Old approach of using totalInWords variable
-    // totalInWords ? true : false
-    const [totalInWordsSwitch, setTotalInWordsSwitch] = useState<boolean>(true);
-
-    // Initial subtotal and total
-    const [subTotal, setSubTotal] = useState<number>(0);
-    const [totalAmount, setTotalAmount] = useState<number>(0);
-
-    // Types for discount, tax, and shipping. Amount | Percentage
-    const [discountType, setDiscountType] = useState("amount");
-    const [taxType, setTaxType] = useState("amount");
-    const [shippingType, setShippingType] = useState("amount");
-
-    // When loading if received values, turn on the switches
-    useEffect(() => {
-        if (discount?.amount) {
-            setDiscountSwitch(true);
-        }
-
-        if (tax?.amount) {
-            setTaxSwitch(true);
-        }
-
-        if (shipping?.cost) {
-            setShippingSwitch(true);
-        }
-
-        if (discount?.amountType == "amount") {
-            setDiscountType("amount");
-        } else {
-            setDiscountType("percentage");
-        }
-
-        if (tax?.amountType == "amount") {
-            setTaxType("amount");
-        } else {
-            setTaxType("percentage");
-        }
-
-        if (shipping?.costType == "amount") {
-            setShippingType("amount");
-        } else {
-            setShippingType("percentage");
-        }
-    }, [discount?.amount, tax?.amount, shipping?.cost]);
-
-    // Check switches, if off set values to zero
-    useEffect(() => {
-        if (!discountSwitch) {
-            setValue("details.discountDetails.amount", 0);
-        }
-
-        if (!taxSwitch) {
-            setValue("details.taxDetails.amount", 0);
-        }
-
-        if (!shippingSwitch) {
-            setValue("details.shippingDetails.cost", 0);
-        }
-    }, [discountSwitch, taxSwitch, shippingSwitch]);
-
-    // Calculate total when values change
-    useEffect(() => {
-        calculateTotal();
-    }, [
-        itemsArray,
-        totalInWordsSwitch,
-        discountType,
-        discount?.amount,
-        taxType,
-        tax?.amount,
-        shippingType,
-        shipping?.cost,
-    ]);
-
-    // TODO: Maybe move this and above useEffect logic into a separate hook
-    // Calculate total amount in the invoice
-    const calculateTotal = () => {
-        // Here Number fixes a bug where an extra zero appears
-        // at the beginning of subTotal caused by toFixed(2) in item.total in single item
-        // Reason: toFixed(2) returns string, not a number instance
-        const totalSum: number = itemsArray.reduce(
-            (sum: number, item: ItemType) => sum + Number(item.total),
-            0
-        );
-
-        setValue("details.subTotal", totalSum.toString());
-        setSubTotal(totalSum);
-
-        let discountAmount: number =
-            parseFloat(discount!.amount.toString()) ?? 0;
-        let taxAmount: number = parseFloat(tax!.amount.toString()) ?? 0;
-        let shippingCost: number = parseFloat(shipping!.cost.toString()) ?? 0;
-
-        let discountAmountType: string = "amount";
-        let taxAmountType: string = "amount";
-        let shippingCostType: string = "amount";
-
-        let total: number = totalSum;
-
-        if (discountType == "amount") {
-            total -= discountAmount;
-            discountAmountType = "amount";
-        } else {
-            total -= total * (discountAmount / 100);
-            discountAmountType = "percentage";
-        }
-
-        if (taxType == "amount") {
-            total += taxAmount;
-            taxAmountType = "amount";
-        } else {
-            total += total * (taxAmount / 100);
-            taxAmountType = "percentage";
-        }
-
-        if (shippingType == "amount") {
-            total += shippingCost;
-            shippingCostType = "amount";
-        } else {
-            total += total * (shippingCost / 100);
-            shippingCostType = "percentage";
-        }
-
-        setTotalAmount(total);
-        setValue("details.discountDetails.amount", discountAmount);
-        setValue("details.taxDetails.amount", taxAmount);
-        setValue("details.shippingDetails.cost", shippingCost);
-
-        setValue("details.discountDetails.amountType", discountAmountType);
-        setValue("details.taxDetails.amountType", taxAmountType);
-        setValue("details.shippingDetails.costType", shippingCostType);
-
-        setValue("details.totalAmount", total.toString());
-
-        if (totalInWordsSwitch) {
-            setValue("details.totalAmountInWords", formatPriceToString(total));
-        } else {
-            setValue("details.totalAmountInWords", "");
-        }
-    };
-
-    const switchAmountType = (
-        type: string,
-        setType: (type: string) => void
-    ) => {
-        if (type == "amount") {
-            setType("percentage");
-        } else {
-            setType("amount");
-        }
-    };
+    const { control, setValue } = useFormContext<InvoiceType>();
 
     return (
-        <div className="flex flex-wrap justify-between gap-y-5">
+        <div className="flex flex-wrap justify-around gap-y-10">
             {/* Additional notes & Payment terms */}
             <div className="flex flex-col gap-3">
+                <SignatureModal />
+
+                {/* Turn these into custom textarea components */}
                 <FormField
                     control={control}
                     name="details.additionalNotes"
@@ -277,128 +75,7 @@ const InvoiceFooter = (props: InvoiceFooterProps) => {
                 />
             </div>
 
-            {/* Charges */}
-            <div className="flex flex-col gap-3 min-w-[20rem]">
-                {/* Switches */}
-                <div className="flex justify-evenly pb-6">
-                    <div>
-                        <Label>Discount</Label>
-
-                        <div>
-                            <div>
-                                <Switch
-                                    checked={discountSwitch}
-                                    onCheckedChange={(value) => {
-                                        setDiscountSwitch(value);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <Label>Tax</Label>
-
-                        <div>
-                            <div>
-                                <Switch
-                                    checked={taxSwitch}
-                                    onCheckedChange={(value) => {
-                                        setTaxSwitch(value);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <Label>Shipping</Label>
-
-                        <div>
-                            <div>
-                                <Switch
-                                    checked={shippingSwitch}
-                                    onCheckedChange={(value) => {
-                                        setShippingSwitch(value);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex flex-col justify-center px-5 gap-y-3">
-                    <div className="flex justify-between items-center">
-                        <div>Sub total</div>
-
-                        <div>
-                            {formatNumberWithCommas(subTotal)} {currency}
-                        </div>
-                    </div>
-                    {discountSwitch && (
-                        <ChargeInput
-                            label="Discount"
-                            control={control}
-                            name="details.discountDetails.amount"
-                            switchAmountType={switchAmountType}
-                            type={discountType}
-                            setType={setDiscountType}
-                            currency={currency}
-                        />
-                    )}
-
-                    {taxSwitch && (
-                        <ChargeInput
-                            label="Tax"
-                            control={control}
-                            name="details.taxDetails.amount"
-                            switchAmountType={switchAmountType}
-                            type={taxType}
-                            setType={setTaxType}
-                            currency={currency}
-                        />
-                    )}
-
-                    {shippingSwitch && (
-                        <ChargeInput
-                            label="Shipping"
-                            control={control}
-                            name="details.shippingDetails.cost"
-                            switchAmountType={switchAmountType}
-                            type={shippingType}
-                            setType={setShippingType}
-                            currency={currency}
-                        />
-                    )}
-
-                    <div className="flex justify-between items-center">
-                        <div>Total Amount</div>
-
-                        <div className="">
-                            <p>
-                                {formatNumberWithCommas(totalAmount)} {currency}
-                            </p>
-
-                            <small className="text-sm font-medium text-destructive">
-                                {errors.details?.totalAmount?.message}
-                            </small>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                        <p>Include total in words?</p>{" "}
-                        <p>{totalInWordsSwitch ? "Yes" : "No"}</p>
-                        <Switch
-                            checked={totalInWordsSwitch}
-                            onCheckedChange={(value) => {
-                                setTotalInWordsSwitch(value);
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <SignatureModal />
+            <Charges />
         </div>
     );
 };
