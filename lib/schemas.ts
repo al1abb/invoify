@@ -11,7 +11,7 @@ import { DATE_OPTIONS } from "@/lib/variables";
 const fieldValidators = {
     name: z
         .string()
-        .min(2, { message: "Must at least 2 characters" })
+        .min(2, { message: "Must be at least 2 characters" })
         .max(50, { message: "Must be at most 50 characters" }),
     address: z
         .string()
