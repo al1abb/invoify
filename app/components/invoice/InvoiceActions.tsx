@@ -16,35 +16,25 @@ import {
 import {
     PdfViewer,
     BaseButton,
-    SendPdfToEmailModal,
     NewInvoiceAlert,
     InvoiceLoaderModal,
     InvoiceExportModal,
 } from "@/app/components";
 
+// Contexts
+import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+
 // Icons
-import { Download, Eye, FileInput, Mail, Plus, Save } from "lucide-react";
+import { FileInput, Plus } from "lucide-react";
 
-type InvoiceActionsProps = {
-    invoicePdfLoading: boolean;
-    invoicePdf: Blob;
-    downloadPdf: () => void;
-    previewPdfInTab: () => void;
-    saveInvoice: () => void;
-    sendPdfToMail: (email: string) => Promise<void>;
-};
+type InvoiceActionsProps = {};
 
-const InvoiceActions = ({
-    invoicePdfLoading,
-    invoicePdf,
-    downloadPdf,
-    previewPdfInTab,
-    saveInvoice,
-    sendPdfToMail,
-}: InvoiceActionsProps) => {
+const InvoiceActions = ({}: InvoiceActionsProps) => {
+    const { invoicePdfLoading, invoicePdf } = useInvoiceContext();
+
     return (
         <div className={`w-full xl:w-[29%]`}>
-            <Card className="sticky top-0 px-2">
+            <Card className="h-[100vh] sticky top-0 px-2">
                 <CardHeader>
                     <CardTitle>ACTIONS</CardTitle>
                     <CardDescription>Operations and preview</CardDescription>
