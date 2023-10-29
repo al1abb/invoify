@@ -37,7 +37,7 @@ const BillFromSection = (props: BillFromSectionProps) => {
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
             <Label htmlFor="billFrom" className="text-xl font-semibold">
                 Bill From:
             </Label>
