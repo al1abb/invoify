@@ -102,7 +102,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     const [taxType, setTaxType] = useState("amount");
     const [shippingType, setShippingType] = useState("amount");
 
-    // When loading if received values, turn on the switches
+    // When loading invoice, if received values, turn on the switches
     useEffect(() => {
         if (discount?.amount) {
             setDiscountSwitch(true);
@@ -164,8 +164,9 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         shipping?.cost,
     ]);
 
-    // TODO: Maybe move this and above useEffect logic into a separate hook
-    // Calculate total amount in the invoice
+    /**
+     * Calculates the subtotal, total, and the total amount in words on the invoice.
+     */
     const calculateTotal = () => {
         // Here Number fixes a bug where an extra zero appears
         // at the beginning of subTotal caused by toFixed(2) in item.total in single item

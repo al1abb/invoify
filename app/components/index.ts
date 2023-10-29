@@ -29,10 +29,10 @@ import BillToSection from "./invoice/components/form/sections/BillToSection";
 import InvoiceDetails from "./invoice/components/form/sections/InvoiceDetails";
 import Items from "./invoice/components/form/sections/Items";
 import PaymentInformation from "./invoice/components/form/sections/PaymentInformation";
-import InvoiceFooter from "./invoice/components/form/sections/InvoiceFooter";
+import InvoiceSummary from "./invoice/components/form/sections/InvoiceSummary";
 
 // Form / Sections / Footer
-import Charges from "./invoice/components/form/components/footer/Charges";
+import Charges from "./invoice/components/form/components/Charges";
 
 // Actions
 import PdfViewer from "./invoice/components/actions/PdfViewer";
@@ -104,7 +104,7 @@ export {
     WizardStep,
     WizardProgress,
     PaymentInformation,
-    InvoiceFooter,
+    InvoiceSummary as InvoiceFooter,
     Charges,
     CurrencySelector,
     SavedInvoicesList,

@@ -8,7 +8,7 @@ import { useFormContext } from "react-hook-form";
 // Context
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
-// Shadcn
+// ShadCn
 import {
     AlertDialog,
     AlertDialogAction,

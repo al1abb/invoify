@@ -49,8 +49,6 @@ const CustomInputField = ({
                     <Trash2 />
                 </BaseButton>
             </div>
-
-            {/* </div> */}
         </>
     );
 };
