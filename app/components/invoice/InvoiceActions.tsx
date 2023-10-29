@@ -25,9 +25,6 @@ import {
 // Icons
 import { Download, Eye, FileInput, Mail, Plus, Save } from "lucide-react";
 
-// Variables
-import { FORM_FILL_VALUES } from "@/lib/variables";
-
 type InvoiceActionsProps = {
     invoicePdfLoading: boolean;
     invoicePdf: Blob;
@@ -46,7 +43,7 @@ const InvoiceActions = ({
     sendPdfToMail,
 }: InvoiceActionsProps) => {
     return (
-        <div className="w-full xl:w-[29%]">
+        <div className={`w-full xl:w-[29%]`}>
             <Card className="sticky top-0 px-2">
                 <CardHeader>
                     <CardTitle>ACTIONS</CardTitle>
