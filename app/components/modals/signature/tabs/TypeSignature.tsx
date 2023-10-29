@@ -1,9 +1,15 @@
-import { BaseButton, SignatureFontSelector } from "@/app/components";
-import { SignatureFont } from "@/app/types/types";
+import React, { RefObject } from "react";
+
+// ShadCn
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TabsContent } from "@/components/ui/tabs";
-import React, { RefObject } from "react";
+
+// Components
+import { BaseButton, SignatureFontSelector } from "@/app/components";
+
+// Types
+import { SignatureFont } from "@/app/types/types";
 
 type TypeSignatureProps = {
     typedSignatureFontSize: number | string;

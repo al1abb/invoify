@@ -1,5 +1,8 @@
 "use client";
 
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // ShadCn
 import {
     FormControl,
@@ -10,11 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input, InputProps } from "@/components/ui/input";
 
-// Types
-import { ControlType } from "@/app/types/types";
-
 type InputFormFieldProps = {
-    control: ControlType;
     name: string;
     label?: string;
     labelHelper?: string;
@@ -23,7 +22,6 @@ type InputFormFieldProps = {
 } & InputProps;
 
 const InputFormField = ({
-    control,
     name,
     label,
     labelHelper,
@@ -31,6 +29,8 @@ const InputFormField = ({
     vertical = false,
     ...props
 }: InputFormFieldProps) => {
+    const { control } = useFormContext();
+
     const verticalInput = (
         <FormField
             control={control}

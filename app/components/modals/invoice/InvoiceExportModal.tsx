@@ -21,12 +21,15 @@ import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 // Icons
 import { Import } from "lucide-react";
 
+// Types
+import { ExportTypes } from "@/app/types/types";
+
 type InvoiceExportModalProps = {};
 
 const InvoiceExportModal = (props: InvoiceExportModalProps) => {
     const [open, setOpen] = useState(false);
 
-    const { invoicePdfLoading, exportInvoice } = useInvoiceContext();
+    const { invoicePdfLoading, exportInvoiceAs } = useInvoiceContext();
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -51,13 +54,22 @@ const InvoiceExportModal = (props: InvoiceExportModalProps) => {
 
                 {/* Export options here */}
 
-                <BaseButton
-                    tooltipLabel="Export Invoice as JSON"
-                    disabled={invoicePdfLoading}
-                    onClick={() => exportInvoice("JSON")}
-                >
-                    Export as JSON
-                </BaseButton>
+                <div className="flex flex-row gap-5">
+                    <BaseButton
+                        tooltipLabel="Export Invoice as JSON"
+                        disabled={invoicePdfLoading}
+                        onClick={() => exportInvoiceAs(ExportTypes.JSON)}
+                    >
+                        Export as JSON
+                    </BaseButton>
+                    <BaseButton
+                        tooltipLabel="Export Invoice as CSV"
+                        disabled={invoicePdfLoading}
+                        onClick={() => exportInvoiceAs(ExportTypes.CSV)}
+                    >
+                        Export as CSV
+                    </BaseButton>
+                </div>
             </DialogContent>
         </Dialog>
     );

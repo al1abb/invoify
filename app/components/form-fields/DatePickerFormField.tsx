@@ -2,7 +2,10 @@
 
 import React, { useState } from "react";
 
-// Shadcn components
+// RHF
+import { useFormContext } from "react-hook-form";
+
+// ShadCn components
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -26,19 +29,16 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/app/types/types";
+import { NameType } from "@/app/types/types";
 
 type DatePickerFormFieldProps = {
-    control: ControlType;
     name: NameType;
     label?: string;
 };
 
-const DatePickerFormField = ({
-    control,
-    name,
-    label,
-}: DatePickerFormFieldProps) => {
+const DatePickerFormField = ({ name, label }: DatePickerFormFieldProps) => {
+    const { control } = useFormContext();
+
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     return (

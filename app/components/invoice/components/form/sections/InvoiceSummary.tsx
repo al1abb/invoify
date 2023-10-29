@@ -21,8 +21,8 @@ import { InvoiceType } from "@/app/types/types";
 
 type InvoiceSummaryProps = {};
 
-const InvoiceSummary = (props: InvoiceSummaryProps) => {
-    const { control, setValue } = useFormContext<InvoiceType>();
+const InvoiceSummary = ({}: InvoiceSummaryProps) => {
+    const { control } = useFormContext<InvoiceType>();
 
     return (
         <>

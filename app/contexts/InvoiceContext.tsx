@@ -16,9 +16,11 @@ import { useFormContext } from "react-hook-form";
 // Hooks
 import useToasts from "../hooks/useToasts";
 
+// Services
+import { exportInvoice } from "@/app/services/pdf/exportInvoice";
+
 // Variables
 import {
-    EXPORT_INVOICE_API,
     FORM_DEFAULT_VALUES,
     GENERATE_PDF_API,
     SEND_PDF_API,
@@ -26,7 +28,7 @@ import {
 } from "@/lib/variables";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { ExportTypes, InvoiceType } from "@/app/types/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),
@@ -40,7 +42,7 @@ const defaultInvoiceContext = {
     saveInvoice: () => {},
     deleteInvoice: (index: number) => {},
     sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
-    exportInvoice: (exportAs: string) => {},
+    exportInvoiceAs: (exportAs: ExportTypes) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -68,7 +70,7 @@ export const InvoiceContextProvider = ({
     } = useToasts();
 
     // Get form values and methods from form context
-    const { getValues, reset } = useFormContext();
+    const { getValues, reset } = useFormContext<InvoiceType>();
 
     // Variables
     const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
@@ -290,33 +292,16 @@ export const InvoiceContextProvider = ({
     };
 
     /**
-     * Export options
+     * Export an invoice in the specified format.
+     * This function exports an invoice using the provided export format and form values.
+     *
+     * @param exportAs Export as type
      */
+    const exportInvoiceAs = (exportAs: ExportTypes) => {
+        const formValues = getValues();
 
-    const exportInvoice = (exportAs: string) => {
-        switch (exportAs) {
-            case "JSON":
-                const formValues = getValues();
-                return fetch(EXPORT_INVOICE_API, {
-                    method: "POST",
-                    body: JSON.stringify(formValues),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                    .then((res) => res.blob())
-                    .then((blob) => {
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement("a");
-                        a.href = url;
-                        a.download = "invoice.json";
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch((error) => {
-                        console.error("Error downloading JSON:", error);
-                    });
-        }
+        // Service to export invoice with given parameters
+        exportInvoice(exportAs, formValues);
     };
 
     return (
@@ -333,7 +318,7 @@ export const InvoiceContextProvider = ({
                 saveInvoice,
                 deleteInvoice,
                 sendPdfToMail,
-                exportInvoice,
+                exportInvoiceAs,
             }}
         >
             {children}

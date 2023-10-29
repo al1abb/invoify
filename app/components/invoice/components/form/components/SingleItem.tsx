@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 
 // RHF
-import { UseFormSetValue, useWatch } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // Shadcn UI components
 import {
@@ -23,23 +23,17 @@ import { BaseButton, InputFormField } from "@/app/components";
 import { Trash2 } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/app/types/types";
+import { NameType } from "@/app/types/types";
 
 type SingleItemProps = {
-    control: ControlType;
     name: NameType;
     index: number;
     removeField: (index: number) => void;
-    setValue: UseFormSetValue<any>;
 };
 
-const SingleItem = ({
-    control,
-    name,
-    index,
-    removeField,
-    setValue,
-}: SingleItemProps) => {
+const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
+    const { control, setValue } = useFormContext();
+
     // Get rate variable
     const rate = useWatch({
         name: `${name}[${index}].unitPrice`,
@@ -77,7 +71,6 @@ const SingleItem = ({
             Item #{index + 1}
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <InputFormField
-                    control={control}
                     name={`${name}[${index}].name`}
                     label="Name"
                     placeholder="Item name"
@@ -85,7 +78,6 @@ const SingleItem = ({
                 />
 
                 <InputFormField
-                    control={control}
                     name={`${name}[${index}].quantity`}
                     type="number"
                     label="Quantity"
@@ -95,7 +87,6 @@ const SingleItem = ({
                 />
 
                 <InputFormField
-                    control={control}
                     name={`${name}[${index}].unitPrice`}
                     type="number"
                     label="Rate"

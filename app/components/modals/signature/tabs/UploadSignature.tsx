@@ -1,18 +1,13 @@
 import React from "react";
 
 // ShadCn
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 
 // Components
 import { BaseButton } from "@/app/components";
+
+// Icons
 import { Trash2 } from "lucide-react";
 
 type UploadSignatureProps = {

@@ -5,7 +5,7 @@ import React from "react";
 // React Signature Canvas
 import SignatureCanvas from "react-signature-canvas";
 
-// Shadcn
+// ShadCn
 import { Card, CardContent } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 
@@ -71,6 +71,7 @@ const DrawSignature = ({
                     </div>
                 </CardContent>
                 <div className="flex justify-between gap-2 pt-2">
+                    {/* Color selector */}
                     <SignatureColorSelector
                         colors={colors}
                         selectedColor={selectedColor}

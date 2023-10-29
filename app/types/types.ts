@@ -17,6 +17,9 @@ import { InvoiceSchema, ItemSchema } from "@/lib/schemas";
 // Form types
 export type InvoiceType = z.infer<typeof InvoiceSchema>;
 export type ItemType = z.infer<typeof ItemSchema>;
+export type CurrencyType = {
+    [currencyCode: string]: string;
+};
 export type FormType = UseFormReturn<InvoiceType>;
 export type ControlType = Control<any>;
 export type NameType = FieldPath<InvoiceType>;
@@ -43,7 +46,8 @@ export type WizardStepType = {
     isValid?: boolean;
 };
 
-// Currency type
-export type CurrencyType = {
-    [currencyCode: string]: string;
-};
+// Export types
+export enum ExportTypes {
+    JSON = "JSON",
+    CSV = "CSV",
+}

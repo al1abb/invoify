@@ -1,6 +1,6 @@
 import React from "react";
 
-// Shadcn
+// ShadCn
 import {
     Select,
     SelectContent,
