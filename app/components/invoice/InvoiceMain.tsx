@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 // ShadCn
 import { Form } from "@/components/ui/form";
 
-// Custom components
+// Components
 import { InvoiceActions, InvoiceForm } from "@/app/components";
 
 // Context
@@ -18,16 +18,8 @@ import { InvoiceType } from "@/app/types/types";
 const InvoiceMain = () => {
     const { handleSubmit } = useFormContext<InvoiceType>();
 
-    //* Get the values from invoice context
-    const {
-        invoicePdf,
-        invoicePdfLoading,
-        onFormSubmit,
-        downloadPdf,
-        previewPdfInTab,
-        saveInvoice,
-        sendPdfToMail,
-    } = useInvoiceContext();
+    // Get the needed values from invoice context
+    const { onFormSubmit } = useInvoiceContext();
 
     return (
         <>
@@ -40,14 +32,7 @@ const InvoiceMain = () => {
                     <div className="flex flex-wrap">
                         <InvoiceForm />
 
-                        <InvoiceActions
-                            invoicePdfLoading={invoicePdfLoading}
-                            invoicePdf={invoicePdf}
-                            downloadPdf={downloadPdf}
-                            previewPdfInTab={previewPdfInTab}
-                            saveInvoice={saveInvoice}
-                            sendPdfToMail={sendPdfToMail}
-                        />
+                        <InvoiceActions />
                     </div>
                 </form>
             </Form>
