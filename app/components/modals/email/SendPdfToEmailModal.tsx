@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-// Shadcn
+// ShadCn
 import {
     Dialog,
     DialogContent,
