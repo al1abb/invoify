@@ -5,7 +5,7 @@ import { useMemo } from "react";
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
 
-// Shadcn
+// ShadCn
 import {
     Card,
     CardContent,
@@ -32,7 +32,7 @@ import {
 type InvoiceFormProps = {};
 
 const InvoiceForm = ({}: InvoiceFormProps) => {
-    const { control, setValue } = useFormContext();
+    const { control } = useFormContext();
 
     // Get invoice number variable
     const invoiceNumber = useWatch({

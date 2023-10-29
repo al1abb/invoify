@@ -2,6 +2,9 @@
 
 import React from "react";
 
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // ShadCn
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,11 +16,10 @@ import { BaseButton } from "@/app/components";
 import { Percent, RefreshCw } from "lucide-react";
 
 // Types
-import { ControlType, NameType } from "@/app/types/types";
+import { NameType } from "@/app/types/types";
 
 type ChargeInputProps = {
     label: string;
-    control: ControlType;
     name: NameType;
     switchAmountType: (
         type: string,
@@ -30,13 +32,14 @@ type ChargeInputProps = {
 
 const ChargeInput = ({
     label,
-    control,
     name,
     switchAmountType,
     type,
     setType,
     currency,
 }: ChargeInputProps) => {
+    const { control } = useFormContext();
+
     return (
         <>
             <div className="flex justify-between items-center">

@@ -16,7 +16,7 @@ import { Plus } from "lucide-react";
 
 type BillToSectionProps = {};
 
-const BillToSection = (props: BillToSectionProps) => {
+const BillToSection = ({}: BillToSectionProps) => {
     const { control } = useFormContext();
 
     const CUSTOM_INPUT_NAME = "receiver.customInputs";
@@ -44,43 +44,36 @@ const BillToSection = (props: BillToSectionProps) => {
             </Label>
 
             <InputFormField
-                control={control}
                 name="receiver.name"
                 label="Name"
                 placeholder="Receiver name"
             />
             <InputFormField
-                control={control}
                 name="receiver.address"
                 label="Address"
                 placeholder="Receiver address"
             />
             <InputFormField
-                control={control}
                 name="receiver.zipCode"
                 label="Zip"
                 placeholder="Receiver zip code"
             />
             <InputFormField
-                control={control}
                 name="receiver.city"
                 label="City"
                 placeholder="Receiver city"
             />
             <InputFormField
-                control={control}
                 name="receiver.country"
                 label="Country"
                 placeholder="Receiver country"
             />
             <InputFormField
-                control={control}
                 name="receiver.email"
                 label="Email"
                 placeholder="Receiver email"
             />
             <InputFormField
-                control={control}
                 name="receiver.phone"
                 label="Phone"
                 placeholder="Receiver phone number"

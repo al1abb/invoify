@@ -16,7 +16,7 @@ import { Plus } from "lucide-react";
 
 type BillFromSectionProps = {};
 
-const BillFromSection = (props: BillFromSectionProps) => {
+const BillFromSection = ({}: BillFromSectionProps) => {
     const { control } = useFormContext();
 
     const CUSTOM_INPUT_NAME = "sender.customInputs";
@@ -44,43 +44,36 @@ const BillFromSection = (props: BillFromSectionProps) => {
 
             {/* // TODO: Remove control from these elements and apply it using useFormContext */}
             <InputFormField
-                control={control}
                 name="sender.name"
                 label="Name"
                 placeholder="Your name"
             />
             <InputFormField
-                control={control}
                 name="sender.address"
                 label="Address"
                 placeholder="Your address"
             />
             <InputFormField
-                control={control}
                 name="sender.zipCode"
                 label="Zip"
                 placeholder="Your zip code"
             />
             <InputFormField
-                control={control}
                 name="sender.city"
                 label="City"
                 placeholder="Your city"
             />
             <InputFormField
-                control={control}
                 name="sender.country"
                 label="Country"
                 placeholder="Your country"
             />
             <InputFormField
-                control={control}
                 name="sender.email"
                 label="Email"
                 placeholder="Your email"
             />
             <InputFormField
-                control={control}
                 name="sender.phone"
                 label="Phone"
                 placeholder="Your phone number"

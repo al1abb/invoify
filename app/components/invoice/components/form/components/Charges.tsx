@@ -25,7 +25,6 @@ type ChargesProps = {};
 
 const Charges = ({}: ChargesProps) => {
     const {
-        control,
         formState: { errors },
     } = useFormContext<InvoiceType>();
 
@@ -122,7 +121,6 @@ const Charges = ({}: ChargesProps) => {
                     {discountSwitch && (
                         <ChargeInput
                             label="Discount"
-                            control={control}
                             name="details.discountDetails.amount"
                             switchAmountType={switchAmountType}
                             type={discountType}
@@ -134,7 +132,6 @@ const Charges = ({}: ChargesProps) => {
                     {taxSwitch && (
                         <ChargeInput
                             label="Tax"
-                            control={control}
                             name="details.taxDetails.amount"
                             switchAmountType={switchAmountType}
                             type={taxType}
@@ -146,7 +143,6 @@ const Charges = ({}: ChargesProps) => {
                     {shippingSwitch && (
                         <ChargeInput
                             label="Shipping"
-                            control={control}
                             name="details.shippingDetails.cost"
                             switchAmountType={switchAmountType}
                             type={shippingType}

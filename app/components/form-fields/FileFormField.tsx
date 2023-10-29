@@ -3,9 +3,9 @@
 import React, { useRef, useState } from "react";
 
 // RHF
-import { useWatch } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
-// Shadcn components
+// ShadCn components
 import {
     FormControl,
     FormField,
@@ -21,23 +21,16 @@ import { BaseButton } from "@/app/components";
 import { Image } from "lucide-react";
 
 // Types
-import { ControlType, NameType, UseFormSetValueType } from "@/app/types/types";
+import { NameType } from "@/app/types/types";
 
 type FileFormFieldProps = {
-    control: ControlType;
     name: NameType;
     label?: string;
-    placeholder?: string;
-    setValue: UseFormSetValueType;
 };
 
-const FileFormField = ({
-    control,
-    name,
-    label,
-    placeholder,
-    setValue,
-}: FileFormFieldProps) => {
+const FileFormField = ({ name, label }: FileFormFieldProps) => {
+    const { control, setValue } = useFormContext();
+
     const logoImage = useWatch({
         name: "details.invoiceLogo",
         control,

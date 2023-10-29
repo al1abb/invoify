@@ -8,7 +8,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 // ShadCn
 import { Label } from "@/components/ui/label";
 
-// Custom components
+// Components
 import { BaseButton, SingleItem } from "@/app/components";
 
 // Icons
@@ -16,10 +16,11 @@ import { Plus } from "lucide-react";
 
 type ItemsProps = {};
 
-const Items = (props: ItemsProps) => {
+const Items = ({}: ItemsProps) => {
     const { control, setValue } = useFormContext();
 
     const ITEMS_NAME = "details.items";
+
     const { fields, append, remove } = useFieldArray({
         control: control,
         name: ITEMS_NAME,
@@ -45,11 +46,9 @@ const Items = (props: ItemsProps) => {
             {fields.map((field, index) => (
                 <SingleItem
                     key={field.id}
-                    control={control}
                     name={ITEMS_NAME}
                     index={index}
                     removeField={removeField}
-                    setValue={setValue}
                 />
             ))}
             <BaseButton

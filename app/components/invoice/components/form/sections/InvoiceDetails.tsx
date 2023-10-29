@@ -2,10 +2,7 @@
 
 import React from "react";
 
-// RHF
-import { useFormContext } from "react-hook-form";
-
-// Shadcn
+// ShadCn
 import { Label } from "@/components/ui/label";
 
 // Components
@@ -18,9 +15,7 @@ import {
 
 type InvoiceDetailsProps = {};
 
-const InvoiceDetails = (props: InvoiceDetailsProps) => {
-    const { control, setValue } = useFormContext();
-
+const InvoiceDetails = ({}: InvoiceDetailsProps) => {
     return (
         <>
             <div className="flex flex-col gap-2">
@@ -31,34 +26,24 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
                     Invoice Details:
                 </Label>
                 <FileFormField
-                    control={control}
                     name="details.invoiceLogo"
                     label="Invoice Logo"
-                    placeholder="Invoice Logo"
-                    setValue={setValue}
                 />
 
                 <InputFormField
-                    control={control}
                     name="details.invoiceNumber"
                     label="Invoice number"
                     placeholder="Invoice number"
                 />
 
                 <DatePickerFormField
-                    control={control}
                     name="details.invoiceDate"
                     label="Issued date"
                 />
 
-                <DatePickerFormField
-                    control={control}
-                    name="details.dueDate"
-                    label="Due date"
-                />
+                <DatePickerFormField name="details.dueDate" label="Due date" />
 
                 <CurrencySelector
-                    control={control}
                     name="details.currency"
                     label="Currency"
                     placeholder="Select Currency"

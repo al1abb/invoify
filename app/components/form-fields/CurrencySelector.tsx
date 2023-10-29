@@ -2,6 +2,9 @@
 
 import React from "react";
 
+// RHF
+import { useFormContext } from "react-hook-form";
+
 // ShadCn components
 import {
     FormControl,
@@ -22,21 +25,21 @@ import {
 import useCurrencies from "@/app/hooks/useCurrencies";
 
 // Types
-import { ControlType, CurrencyType, NameType } from "@/app/types/types";
+import { CurrencyType, NameType } from "@/app/types/types";
 
 type CurrencySelectorProps = {
-    control: ControlType;
     name: NameType;
     label?: string;
     placeholder?: string;
 };
 
 const CurrencySelector = ({
-    control,
     name,
     label,
     placeholder,
 }: CurrencySelectorProps) => {
+    const { control } = useFormContext();
+
     const { currencies, currenciesLoading } = useCurrencies();
 
     return (

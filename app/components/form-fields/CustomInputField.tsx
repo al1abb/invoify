@@ -2,9 +2,6 @@
 
 import React from "react";
 
-// RHF
-import { useFormContext } from "react-hook-form";
-
 // Components
 import { BaseButton, InputFormField } from "@/app/components";
 
@@ -22,21 +19,18 @@ const CustomInputField = ({
     location,
     removeField,
 }: CustomInputFieldProps) => {
-    const { control } = useFormContext();
     const nameKey = `${location}[${index}].key`;
     const nameValue = `${location}[${index}].value`;
     return (
         <>
             <div className="flex items-center gap-2">
                 <InputFormField
-                    control={control}
                     name={nameKey}
                     placeholder="Name"
                     className="font-medium p-0 border-none h-[1.5rem] w-[4rem]"
                 />
 
                 <InputFormField
-                    control={control}
                     name={nameValue}
                     placeholder="Value"
                     className="w-[10rem]"
