@@ -89,7 +89,17 @@ export default function RootLayout({
             >
                 <Providers>
                     <BaseNavbar />
-                    {children}
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            minHeight: "100vh",
+                        }}
+                    >
+                        {children}
+                    </div>
+
                     <BaseFooter />
 
                     {/* Toast component */}
