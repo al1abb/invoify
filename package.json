@@ -54,6 +54,7 @@
         "@types/nodemailer": "^6.4.11",
         "@types/number-to-words": "^1.2.1",
         "@types/react": "^18.2.22",
-        "@types/react-dom": "^18.2.7"
+        "@types/react-dom": "^18.2.7",
+        "@types/react-signature-canvas": "^1.0.4"
     }
 }
