@@ -79,47 +79,12 @@ const InvoiceActions = ({
                         <FileInput />
                         <span>Generate PDF</span>
                     </BaseButton>
-                </div>
-                <div>
-                    {!invoicePdfLoading && invoicePdf.size != 0 && (
-                        <div>
-                            <PdfViewer pdfBlob={invoicePdf} />
-                            <div className="flex flex-row gap-2 py-3">
-                                <BaseButton
-                                    tooltipLabel="Preview invoice in new tab"
-                                    onClick={previewPdfInTab}
-                                    size="icon"
-                                >
-                                    <Eye />
-                                </BaseButton>
-                                <BaseButton
-                                    tooltipLabel="Download invoice PDF"
-                                    onClick={downloadPdf}
-                                    size="icon"
-                                >
-                                    <Download />
-                                </BaseButton>
-                                <BaseButton
-                                    tooltipLabel="Save invoice in website"
-                                    onClick={saveInvoice}
-                                    size="icon"
-                                >
-                                    <Save />
-                                </BaseButton>
 
-                                <SendPdfToEmailModal
-                                    sendPdfToMail={sendPdfToMail}
-                                >
-                                    <BaseButton
-                                        tooltipLabel="Send invoice PDF to mail"
-                                        size="icon"
-                                    >
-                                        <Mail />
-                                    </BaseButton>
-                                </SendPdfToEmailModal>
-                            </div>
-                        </div>
-                    )}
+                    <div>
+                        {!invoicePdfLoading && invoicePdf.size != 0 && (
+                            <PdfViewer pdfBlob={invoicePdf} />
+                        )}
+                    </div>
                 </div>
             </Card>
         </div>
