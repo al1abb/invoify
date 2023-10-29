@@ -67,6 +67,7 @@ const SignatureModal = (props: SignatureModalProps) => {
         uploadSignatureRef,
         uploadSignatureImg,
         handleUploadSignatureChange,
+        handleRemoveUploadedSignature,
     } = useSignature();
 
     const signature = useWatch({
@@ -209,6 +210,7 @@ const SignatureModal = (props: SignatureModalProps) => {
                             handleUploadSignatureChange={
                                 handleUploadSignatureChange
                             }
+                            handleRemoveUpload={handleRemoveUploadedSignature}
                             handleSaveSignature={handleSaveSignature}
                         />
                     </Tabs>

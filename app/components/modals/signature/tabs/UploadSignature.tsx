@@ -1,6 +1,6 @@
 import React from "react";
 
-// Shadcn
+// ShadCn
 import {
     Card,
     CardContent,
@@ -13,6 +13,7 @@ import { TabsContent } from "@/components/ui/tabs";
 
 // Components
 import { BaseButton } from "@/app/components";
+import { Trash2 } from "lucide-react";
 
 type UploadSignatureProps = {
     uploadSignatureRef: React.RefObject<HTMLInputElement>;
@@ -20,6 +21,7 @@ type UploadSignatureProps = {
     handleUploadSignatureChange: (
         e: React.ChangeEvent<HTMLInputElement>
     ) => void;
+    handleRemoveUpload: () => void;
     handleSaveSignature: () => void;
 };
 
@@ -27,19 +29,14 @@ const UploadSignature = ({
     uploadSignatureRef,
     uploadSignatureImg,
     handleUploadSignatureChange,
+    handleRemoveUpload,
     handleSaveSignature,
 }: UploadSignatureProps) => {
     return (
         <TabsContent value="upload">
             <Card className="border-none shadow-none">
                 <CardContent className="space-y-2 p-0">
-                    <div
-                        style={{
-                            width: "100%",
-                            maxWidth: "600px",
-                            margin: "0 auto",
-                        }}
-                    >
+                    <div style={{ height: "15rem" }}>
                         {uploadSignatureImg ? (
                             <img
                                 style={{
@@ -62,8 +59,18 @@ const UploadSignature = ({
                         />
                     </div>
                 </CardContent>
-                <div className="flex justify-between gap-2 pt-2">
+                <div className="flex justify-end gap-2 pt-2">
                     {/* Buttons and operations */}
+                    {uploadSignatureImg && (
+                        <BaseButton
+                            tooltipLabel="Remove signature image"
+                            variant="outline"
+                            onClick={handleRemoveUpload}
+                        >
+                            <Trash2 />
+                            Remove
+                        </BaseButton>
+                    )}
                     <BaseButton
                         tooltipLabel="Save changes"
                         disabled={!uploadSignatureImg}

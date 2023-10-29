@@ -115,6 +115,10 @@ export function useSignature() {
     const uploadSignatureRef = useRef<HTMLInputElement | null>(null);
     const [uploadSignatureImg, setUploadSignatureImg] = useState<string>("");
 
+    /**
+     * Function that fires every time signature file input changes
+     * @param e Event object from file input
+     */
     const handleUploadSignatureChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -126,6 +130,17 @@ export function useSignature() {
                 setUploadSignatureImg(base64String);
             };
             reader.readAsDataURL(file);
+        }
+    };
+
+    /**
+     * Function that removes uploaded signature
+     */
+    const handleRemoveUploadedSignature = () => {
+        setUploadSignatureImg("");
+
+        if (uploadSignatureRef.current) {
+            uploadSignatureRef.current.value = "";
         }
     };
 
@@ -146,5 +161,6 @@ export function useSignature() {
         uploadSignatureRef,
         uploadSignatureImg,
         handleUploadSignatureChange,
+        handleRemoveUploadedSignature,
     };
 }
