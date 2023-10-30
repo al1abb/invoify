@@ -36,7 +36,7 @@ const Items = ({}: ItemsProps) => {
         });
     };
 
-    const removeField = (index: any) => {
+    const removeField = (index: number) => {
         remove(index);
     };
 
