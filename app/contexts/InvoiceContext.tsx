@@ -120,7 +120,6 @@ export const InvoiceContextProvider = ({
      *
      * @param {InvoiceType} data - The data used to generate the PDF.
      * @return {Promise<void>} A promise that resolves once the PDF has been generated.
-     *
      * @throws {Error} If there is an error generating the PDF.
      */
     const generatePdf = useCallback(async (data: InvoiceType) => {
@@ -135,7 +134,7 @@ export const InvoiceContextProvider = ({
             const result = await response.blob();
             setInvoicePdf(result);
 
-            if (result) {
+            if (result.size > 0) {
                 // Toast
                 pdfGenerationSuccess();
             }
@@ -243,7 +242,6 @@ export const InvoiceContextProvider = ({
      * Deletes an invoice from local storage based on given index number.
      *
      * @param index Index of the invoice to delete
-     *
      * @return {void} - This function does not return any value
      */
     const deleteInvoice = (index: number) => {
@@ -262,7 +260,6 @@ export const InvoiceContextProvider = ({
      * Sends the invoice PDF to the specified email address
      *
      * @param email Email to send Invoice PDF
-     *
      * @returns {Promise<void>} Promise that resolves when the email is sent
      */
     const sendPdfToMail = (email: string) => {
