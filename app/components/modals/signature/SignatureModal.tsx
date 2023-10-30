@@ -36,17 +36,17 @@ import { SignatureTabs } from "@/app/types/types";
 
 type SignatureModalProps = {};
 
-const SignatureModal = (props: SignatureModalProps) => {
+const SignatureModal = ({}: SignatureModalProps) => {
     const { setValue } = useFormContext();
 
     // Modal state
     const [open, setOpen] = useState(false);
 
     // Modal tabs
-    const [tab, setTab] = useState("draw");
+    const [tab, setTab] = useState<string>(SignatureTabs.DRAW);
 
     const onTabChange = (value: string) => {
-        setTab(value);
+        setTab(value as string);
     };
 
     // Signature variables
