@@ -9,7 +9,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { BaseButton, SignatureFontSelector } from "@/app/components";
 
 // Types
-import { SignatureFont } from "@/app/types/types";
+import { SignatureFont, SignatureTabs } from "@/app/types/types";
 
 type TypeSignatureProps = {
     typedSignatureFontSize: number | string;
@@ -33,7 +33,7 @@ const TypeSignature = ({
     inputRef,
 }: TypeSignatureProps) => {
     return (
-        <TabsContent value="type">
+        <TabsContent value={SignatureTabs.TYPE}>
             <Card className="border-none shadow-none">
                 <CardContent className="space-y-2 p-0">
                     <div

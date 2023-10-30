@@ -10,6 +10,9 @@ import { BaseButton } from "@/app/components";
 // Icons
 import { Trash2 } from "lucide-react";
 
+// Types
+import { SignatureTabs } from "@/app/types/types";
+
 type UploadSignatureProps = {
     uploadSignatureRef: React.RefObject<HTMLInputElement>;
     uploadSignatureImg: string;
@@ -28,7 +31,7 @@ const UploadSignature = ({
     handleSaveSignature,
 }: UploadSignatureProps) => {
     return (
-        <TabsContent value="upload">
+        <TabsContent value={SignatureTabs.UPLOAD}>
             <Card className="border-none shadow-none">
                 <CardContent className="space-y-2 p-0">
                     <div style={{ height: "15rem" }}>

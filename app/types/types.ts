@@ -28,6 +28,12 @@ export type SignatureFont = {
     variable: string;
 };
 
+export enum SignatureTabs {
+    DRAW = "draw",
+    TYPE = "type",
+    UPLOAD = "upload",
+}
+
 // Wizard types
 export type WizardStepType = {
     id: number;

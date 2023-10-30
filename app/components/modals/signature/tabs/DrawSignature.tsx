@@ -16,7 +16,7 @@ import { BaseButton, SignatureColorSelector } from "@/app/components";
 import { Eraser } from "lucide-react";
 
 // Types
-import { SignatureColor } from "@/app/types/types";
+import { SignatureColor, SignatureTabs } from "@/app/types/types";
 
 type DrawSignatureProps = {
     signatureData?: string;
@@ -40,7 +40,7 @@ const DrawSignature = ({
     handleSaveSignature,
 }: DrawSignatureProps) => {
     return (
-        <TabsContent value="draw">
+        <TabsContent value={SignatureTabs.DRAW}>
             <Card className="border-none shadow-none">
                 <CardContent className="space-y-2 p-0">
                     <div

@@ -31,6 +31,9 @@ import { useSignature } from "@/app/hooks/useSignature";
 // Helpers
 import { isDataUrl } from "@/lib/helpers";
 
+// Types
+import { SignatureTabs } from "@/app/types/types";
+
 type SignatureModalProps = {};
 
 const SignatureModal = (props: SignatureModalProps) => {
@@ -77,7 +80,7 @@ const SignatureModal = (props: SignatureModalProps) => {
      * Function that handles signature save logic for all tabs (draw, type, upload)
      */
     const handleSaveSignature = () => {
-        if (tab == "draw") {
+        if (tab == SignatureTabs.DRAW) {
             handleCanvasEnd();
 
             // This setValue was removed from handleCanvasEnd and put here to prevent
@@ -89,7 +92,7 @@ const SignatureModal = (props: SignatureModalProps) => {
             setOpen(false);
         }
 
-        if (tab == "type") {
+        if (tab == SignatureTabs.TYPE) {
             setValue(
                 "details.signature",
                 {
@@ -104,7 +107,7 @@ const SignatureModal = (props: SignatureModalProps) => {
             setOpen(false);
         }
 
-        if (tab == "upload") {
+        if (tab == SignatureTabs.UPLOAD) {
             setValue("details.signature.data", uploadSignatureImg, {
                 shouldDirty: true,
             });
@@ -171,9 +174,15 @@ const SignatureModal = (props: SignatureModalProps) => {
 
                     <Tabs value={tab} onValueChange={onTabChange}>
                         <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="draw">Draw</TabsTrigger>
-                            <TabsTrigger value="type">Type</TabsTrigger>
-                            <TabsTrigger value="upload">Upload</TabsTrigger>
+                            <TabsTrigger value={SignatureTabs.DRAW}>
+                                Draw
+                            </TabsTrigger>
+                            <TabsTrigger value={SignatureTabs.TYPE}>
+                                Type
+                            </TabsTrigger>
+                            <TabsTrigger value={SignatureTabs.UPLOAD}>
+                                Upload
+                            </TabsTrigger>
                         </TabsList>
 
                         {/* DRAW */}
