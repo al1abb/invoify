@@ -9,7 +9,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { BaseButton, CustomInputField, InputFormField } from "@/app/components";
+import { BaseButton, FormCustomInput, FormInput } from "@/app/components";
 
 // Icons
 import { Plus } from "lucide-react";
@@ -43,37 +43,37 @@ const BillFromSection = ({}: BillFromSectionProps) => {
             </Label>
 
             {/* // TODO: Remove control from these elements and apply it using useFormContext */}
-            <InputFormField
+            <FormInput
                 name="sender.name"
                 label="Name"
                 placeholder="Your name"
             />
-            <InputFormField
+            <FormInput
                 name="sender.address"
                 label="Address"
                 placeholder="Your address"
             />
-            <InputFormField
+            <FormInput
                 name="sender.zipCode"
                 label="Zip"
                 placeholder="Your zip code"
             />
-            <InputFormField
+            <FormInput
                 name="sender.city"
                 label="City"
                 placeholder="Your city"
             />
-            <InputFormField
+            <FormInput
                 name="sender.country"
                 label="Country"
                 placeholder="Your country"
             />
-            <InputFormField
+            <FormInput
                 name="sender.email"
                 label="Email"
                 placeholder="Your email"
             />
-            <InputFormField
+            <FormInput
                 name="sender.phone"
                 label="Phone"
                 placeholder="Your phone number"
@@ -81,7 +81,7 @@ const BillFromSection = ({}: BillFromSectionProps) => {
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
             {fields?.map((field, index) => (
-                <CustomInputField
+                <FormCustomInput
                     key={field.id}
                     index={index}
                     location={CUSTOM_INPUT_NAME}

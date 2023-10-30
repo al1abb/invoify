@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label";
 import {
     CurrencySelector,
     DatePickerFormField,
-    FileFormField,
-    InputFormField,
+    FormInput,
+    FormLogoInput,
 } from "@/app/components";
 
 type InvoiceDetailsProps = {};
@@ -25,12 +25,12 @@ const InvoiceDetails = ({}: InvoiceDetailsProps) => {
                 >
                     Invoice Details:
                 </Label>
-                <FileFormField
+                <FormLogoInput
                     name="details.invoiceLogo"
                     label="Invoice Logo"
                 />
 
-                <InputFormField
+                <FormInput
                     name="details.invoiceNumber"
                     label="Invoice number"
                     placeholder="Invoice number"

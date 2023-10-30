@@ -9,7 +9,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { BaseButton, CustomInputField, InputFormField } from "@/app/components";
+import { BaseButton, FormCustomInput, FormInput } from "@/app/components";
 
 // Icons
 import { Plus } from "lucide-react";
@@ -43,37 +43,37 @@ const BillToSection = ({}: BillToSectionProps) => {
                 Bill To:
             </Label>
 
-            <InputFormField
+            <FormInput
                 name="receiver.name"
                 label="Name"
                 placeholder="Receiver name"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.address"
                 label="Address"
                 placeholder="Receiver address"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.zipCode"
                 label="Zip"
                 placeholder="Receiver zip code"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.city"
                 label="City"
                 placeholder="Receiver city"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.country"
                 label="Country"
                 placeholder="Receiver country"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.email"
                 label="Email"
                 placeholder="Receiver email"
             />
-            <InputFormField
+            <FormInput
                 name="receiver.phone"
                 label="Phone"
                 placeholder="Receiver phone number"
@@ -81,7 +81,7 @@ const BillToSection = ({}: BillToSectionProps) => {
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
             {fields?.map((field, index) => (
-                <CustomInputField
+                <FormCustomInput
                     key={field.id}
                     index={index}
                     location={CUSTOM_INPUT_NAME}

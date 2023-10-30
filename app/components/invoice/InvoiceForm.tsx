@@ -26,7 +26,7 @@ import {
     InvoiceDetails,
     Items,
     PaymentInformation,
-    InvoiceFooter,
+    InvoiceSummary,
 } from "@/app/components";
 
 type InvoiceFormProps = {};
@@ -87,7 +87,7 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
                             </WizardStep>
 
                             <WizardStep>
-                                <InvoiceFooter />
+                                <InvoiceSummary />
                             </WizardStep>
                         </Wizard>
                     </div>

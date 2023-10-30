@@ -5,19 +5,12 @@ import React, { useEffect } from "react";
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
 
-// Shadcn UI components
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-} from "@/components/ui/form";
+// ShadCn
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { BaseButton, InputFormField } from "@/app/components";
+import { BaseButton, FormInput, FormTextarea } from "@/app/components";
 
 // Icons
 import { Trash2 } from "lucide-react";
@@ -70,14 +63,14 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
         <div className="flex flex-col gap-y-5 my-2">
             Item #{index + 1}
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
-                <InputFormField
+                <FormInput
                     name={`${name}[${index}].name`}
                     label="Name"
                     placeholder="Item name"
                     vertical
                 />
 
-                <InputFormField
+                <FormInput
                     name={`${name}[${index}].quantity`}
                     type="number"
                     label="Quantity"
@@ -86,7 +79,7 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                     vertical
                 />
 
-                <InputFormField
+                <FormInput
                     name={`${name}[${index}].unitPrice`}
                     type="number"
                     label="Rate"
@@ -109,26 +102,10 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                     />
                 </div>
             </div>
-            <FormField
-                control={control}
+            <FormTextarea
                 name={`${name}[${index}].description`}
-                render={({ field }) => (
-                    <FormItem>
-                        <Label>Description</Label>
-                        <div className="flex justify-between gap-5 items-center text-sm">
-                            <div>
-                                <FormControl>
-                                    <Textarea
-                                        {...field}
-                                        placeholder="Item description"
-                                        className="w-[15rem] h-0"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </div>
-                        </div>
-                    </FormItem>
-                )}
+                label="Description"
+                placeholder="Item description"
             />
             <div>
                 {/* Not allowing deletion for first item and making sure that there is always at least 1 item */}

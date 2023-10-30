@@ -6,7 +6,7 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { InputFormField } from "@/app/components";
+import { FormInput } from "@/app/components";
 
 type PaymentInformationProps = {};
 
@@ -17,19 +17,19 @@ const PaymentInformation = ({}: PaymentInformationProps) => {
                 Payment Information:
             </Label>
             <div className="flex flex-wrap gap-10 mt-5">
-                <InputFormField
+                <FormInput
                     name="details.paymentInformation.bankName"
                     label="Bank name"
                     placeholder="Bank name"
                     vertical
                 />
-                <InputFormField
+                <FormInput
                     name="details.paymentInformation.accountName"
                     label="Account name"
                     placeholder="Account name"
                     vertical
                 />
-                <InputFormField
+                <FormInput
                     name="details.paymentInformation.accountNumber"
                     label="Account number"
                     placeholder="Account number"
