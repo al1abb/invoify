@@ -42,11 +42,12 @@ import CurrencySelector from "./form-fields/CurrencySelector";
 import SavedInvoicesList from "./modals/invoice/components/SavedInvoicesList";
 
 // Form fields
-import InputFormField from "./form-fields/InputFormField";
+import FormInput from "./form-fields/FormInput";
+import FormTextarea from "./form-fields/FormTextarea";
 import DatePickerFormField from "./form-fields/DatePickerFormField";
-import FileFormField from "./form-fields/FileFormField";
+import FormLogoInput from "./form-fields/FormLogoInput";
 import ChargeInput from "./form-fields/ChargeInput";
-import CustomInputField from "./form-fields/CustomInputField";
+import FormCustomInput from "./form-fields/FormCustomInput";
 
 // Reusable components
 import BaseButton from "./reusables/BaseButton";
@@ -104,16 +105,17 @@ export {
     WizardStep,
     WizardProgress,
     PaymentInformation,
-    InvoiceSummary as InvoiceFooter,
+    InvoiceSummary,
     Charges,
     CurrencySelector,
     SavedInvoicesList,
     PdfViewer,
-    InputFormField,
+    FormInput,
+    FormTextarea,
     DatePickerFormField,
-    FileFormField,
+    FormLogoInput,
     ChargeInput,
-    CustomInputField,
+    FormCustomInput,
     BaseButton,
     SendPdfToEmailModal,
     InvoiceLoaderModal,
