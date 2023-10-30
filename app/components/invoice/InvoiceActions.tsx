@@ -43,7 +43,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         {/* Import & Export modals */}
 
                         <InvoiceLoaderModal />
-                        <InvoiceExportModal />
+                        {invoicePdf.size != 0 && <InvoiceExportModal />}
                     </div>
 
                     <NewInvoiceAlert>
