@@ -85,7 +85,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable}`}
+                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased`}
             >
                 <Providers>
                     <BaseNavbar />
