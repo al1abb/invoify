@@ -4,9 +4,9 @@ import { SignatureColor, SignatureFont } from "@/app/types/types";
 /**
  * API endpoints
  */
-export const GENERATE_PDF_API = "/api/pdf/generate";
-export const SEND_PDF_API = "/api/pdf/send";
-export const EXPORT_INVOICE_API = "/api/pdf/export";
+export const GENERATE_PDF_API = "/api/invoice/generate";
+export const SEND_PDF_API = "/api/invoice/send";
+export const EXPORT_INVOICE_API = "/api/invoice/export";
 
 /**
  * External API endpoints
