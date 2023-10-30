@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input, InputProps } from "@/components/ui/input";
 
-type InputFormFieldProps = {
+type FormInputProps = {
     name: string;
     label?: string;
     labelHelper?: string;
@@ -21,14 +21,14 @@ type InputFormFieldProps = {
     vertical?: boolean;
 } & InputProps;
 
-const InputFormField = ({
+const FormInput = ({
     name,
     label,
     labelHelper,
     placeholder,
     vertical = false,
     ...props
-}: InputFormFieldProps) => {
+}: FormInputProps) => {
     const { control } = useFormContext();
 
     const verticalInput = (
@@ -88,4 +88,4 @@ const InputFormField = ({
     return vertical ? verticalInput : horizontalInput;
 };
 
-export default InputFormField;
+export default FormInput;

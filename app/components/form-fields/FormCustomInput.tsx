@@ -3,34 +3,34 @@
 import React from "react";
 
 // Components
-import { BaseButton, InputFormField } from "@/app/components";
+import { BaseButton, FormInput } from "@/app/components";
 
 // Icons
 import { Trash2 } from "lucide-react";
 
-type CustomInputFieldProps = {
+type FormCustomInputProps = {
     index: number;
     location: string;
     removeField: (index: number) => void;
 };
 
-const CustomInputField = ({
+const FormCustomInput = ({
     index,
     location,
     removeField,
-}: CustomInputFieldProps) => {
+}: FormCustomInputProps) => {
     const nameKey = `${location}[${index}].key`;
     const nameValue = `${location}[${index}].value`;
     return (
         <>
             <div className="flex items-center gap-2">
-                <InputFormField
+                <FormInput
                     name={nameKey}
                     placeholder="Name"
                     className="font-medium p-0 border-none h-[1.5rem] w-[4rem]"
                 />
 
-                <InputFormField
+                <FormInput
                     name={nameValue}
                     placeholder="Value"
                     className="w-[10rem]"
@@ -47,4 +47,4 @@ const CustomInputField = ({
     );
 };
 
-export default CustomInputField;
+export default FormCustomInput;

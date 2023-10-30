@@ -23,12 +23,12 @@ import { Image } from "lucide-react";
 // Types
 import { NameType } from "@/app/types/types";
 
-type FileFormFieldProps = {
+type FormLogoInputProps = {
     name: NameType;
     label?: string;
 };
 
-const FileFormField = ({ name, label }: FileFormFieldProps) => {
+const FormLogoInput = ({ name, label }: FormLogoInputProps) => {
     const { control, setValue } = useFormContext();
 
     const logoImage = useWatch({
@@ -119,4 +119,4 @@ const FileFormField = ({ name, label }: FileFormFieldProps) => {
     );
 };
 
-export default FileFormField;
+export default FormLogoInput;
