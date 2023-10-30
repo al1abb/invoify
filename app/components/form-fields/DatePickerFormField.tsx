@@ -83,6 +83,7 @@ const DatePickerFormField = ({ name, label }: DatePickerFormFieldProps) => {
                                         <Calendar
                                             mode="single"
                                             captionLayout="dropdown-buttons"
+                                            defaultMonth={field.value}
                                             selected={new Date(field.value)}
                                             onSelect={(e) => {
                                                 field.onChange(e);
