@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Nodemailer
 import nodemailer, { SendMailOptions } from "nodemailer";
@@ -28,21 +28,6 @@ const transporter = nodemailer.createTransport({
 export async function sendPdfToEmailService(
     req: NextRequest
 ): Promise<boolean> {
-    /**
-     * @typedef {FormData} FormData
-     * @property {string} email - The recipient's email address.
-     * @property {Blob} invoicePdf - The PDF to be sent as an attachment.
-     */
-
-    /**
-     * @typedef {SendMailOptions} SendMailOptions
-     * @property {string} from - The sender's email address.
-     * @property {string} to - The recipient's email address.
-     * @property {string} subject - The email subject.
-     * @property {string} html - The email content in HTML format.
-     * @property {Array<{ filename: string, content: Buffer }>} attachments - Email attachments.
-     */
-
     const fd = await req.formData();
 
     const email = fd.get("email")?.toString();
@@ -52,7 +37,7 @@ export async function sendPdfToEmailService(
     const emailHTML = await SendPdfEmail();
 
     // Convert Blob to ArrayBuffer
-    const arrayBuffer = await new Response(invoicePdf).arrayBuffer();
+    const arrayBuffer = await new NextResponse(invoicePdf).arrayBuffer();
 
     // Convert ArrayBuffer to Buffer
     const pdfBuffer = Buffer.from(arrayBuffer);

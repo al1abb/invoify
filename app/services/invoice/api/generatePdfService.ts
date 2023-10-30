@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Puppeteer
 import puppeteer, { Page } from "puppeteer";
@@ -14,10 +14,8 @@ import { InvoiceType } from "@/app/types/types";
  *
  * @async
  * @param {NextRequest} req - The Next.js request object.
- *
  * @throws {Error} If there is an error during the PDF generation process.
- *
- * @returns {Promise<Response>} A promise that resolves to a Response object containing the generated PDF.
+ * @returns {Promise<NextResponse>} A promise that resolves to a NextResponse object containing the generated PDF.
  */
 
 export async function generatePdfService(req: NextRequest) {
@@ -57,7 +55,7 @@ export async function generatePdfService(req: NextRequest) {
         // Create a Blob from the PDF data
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
 
-        const response = new Response(pdfBlob, {
+        const response = new NextResponse(pdfBlob, {
             headers: {
                 "Content-Type": "application/pdf",
                 "Content-Disposition": "inline; filename=invoice.pdf",
@@ -70,7 +68,7 @@ export async function generatePdfService(req: NextRequest) {
         console.error(error);
 
         // Return an error response
-        return new Response(`Error generating PDF: \n${error}`, {
+        return new NextResponse(`Error generating PDF: \n${error}`, {
             status: 500,
         });
     }

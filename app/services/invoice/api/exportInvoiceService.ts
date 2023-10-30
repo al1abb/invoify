@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // JSON2CSV
 import { AsyncParser } from "@json2csv/node";
@@ -6,6 +6,12 @@ import { AsyncParser } from "@json2csv/node";
 // Types
 import { ExportTypes } from "@/app/types/types";
 
+/**
+ * Export an invoice in selected format.
+ *
+ * @param {NextRequest} req The Next.js request object.
+ * @returns A response object containing the exported data in the requested format.
+ */
 export async function exportInvoiceService(req: NextRequest) {
     const body = await req.json();
     const format = req.nextUrl.searchParams.get("format");
@@ -15,7 +21,7 @@ export async function exportInvoiceService(req: NextRequest) {
     try {
         switch (format) {
             case ExportTypes.JSON:
-                return new Response(jsonData, {
+                return new NextResponse(jsonData, {
                     headers: {
                         "Content-Type": "application/json",
                         "Content-Disposition":
@@ -29,7 +35,7 @@ export async function exportInvoiceService(req: NextRequest) {
                 const csv = await parser.parse(body).promise();
 
                 console.log(csv);
-                return new Response(csv, {
+                return new NextResponse(csv, {
                     headers: {
                         "Content-Type": "text/csv",
                         "Content-Disposition":
