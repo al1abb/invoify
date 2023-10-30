@@ -84,7 +84,6 @@ const InvoiceSenderSchema = z.object({
     country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
-    // vatNumber: fieldValidators.stringOptional,
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
@@ -96,7 +95,6 @@ const InvoiceReceiverSchema = z.object({
     country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
-    // vatNumber: fieldValidators.stringOptional,
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
