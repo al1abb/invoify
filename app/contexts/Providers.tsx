@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InvoiceSchema } from "@/lib/schemas";
 
 // Context
+import { ThemeProvider } from "@/app/contexts/ThemeProvider";
 import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
 import { ChargesContextProvider } from "@/app/contexts/ChargesContext";
 
@@ -32,11 +33,18 @@ const Providers = ({ children }: ProvidersProps) => {
     });
 
     return (
-        <FormProvider {...form}>
-            <InvoiceContextProvider>
-                <ChargesContextProvider>{children}</ChargesContextProvider>
-            </InvoiceContextProvider>
-        </FormProvider>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <FormProvider {...form}>
+                <InvoiceContextProvider>
+                    <ChargesContextProvider>{children}</ChargesContextProvider>
+                </InvoiceContextProvider>
+            </FormProvider>
+        </ThemeProvider>
     );
 };
 
