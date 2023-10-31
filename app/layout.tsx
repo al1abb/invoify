@@ -20,7 +20,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { BaseNavbar, BaseFooter } from "@/app/components";
 
 // Context
-import Providers from "./contexts/Providers";
+import Providers from "@/app/contexts/Providers";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
