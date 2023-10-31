@@ -6,11 +6,11 @@ import Image from "next/image";
 import Logo from "@/public/assets/img/invoify-logo.svg";
 
 // Components
-import { DevDebug } from "@/app/components";
+import { DevDebug, ThemeSwitcher } from "@/app/components";
 
 const BaseNavbar = () => {
     return (
-        <nav className="container flex justify-between items-center py-5 px-10 bg-white">
+        <nav className="container flex justify-between items-center py-5 px-10">
             <div>
                 <Image src={Logo} alt="Invoify Logo" width={200} height={150} />
 
@@ -19,6 +19,10 @@ const BaseNavbar = () => {
 
             <div>
                 <DevDebug />
+            </div>
+
+            <div>
+                <ThemeSwitcher />
             </div>
         </nav>
     );

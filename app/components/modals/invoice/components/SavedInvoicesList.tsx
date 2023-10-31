@@ -102,7 +102,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                 {savedInvoices.map((invoice, idx) => (
                     <div
                         key={idx}
-                        className="bg-white p-4 rounded-md border border-black hover:border-blue-500 hover:shadow-lg w-52 cursor-pointer"
+                        className="p-4 rounded-md border border-black hover:border-blue-500 hover:shadow-lg w-52 cursor-pointer"
                         onClick={() => handleSelect(invoice)}
                     >
                         <div className="text-lg font-semibold">

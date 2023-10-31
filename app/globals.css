@@ -76,7 +76,7 @@
 }
 
 body {
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
     font-family: "Outfit" sans-serif;
 }
 
@@ -96,7 +96,7 @@ hr {
     height: 7rem;
     width: 10rem;
 
-    background-color: #efefef;
+    /* background-color: #efefef; */
 }
 
 #logo-input {
