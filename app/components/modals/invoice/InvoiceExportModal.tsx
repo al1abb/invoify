@@ -69,6 +69,14 @@ const InvoiceExportModal = (props: InvoiceExportModalProps) => {
                     >
                         Export as CSV
                     </BaseButton>
+
+                    <BaseButton
+                        tooltipLabel="Export Invoice as XML"
+                        disabled={invoicePdfLoading}
+                        onClick={() => exportInvoiceAs(ExportTypes.XML)}
+                    >
+                        Export as XML
+                    </BaseButton>
                 </div>
             </DialogContent>
         </Dialog>

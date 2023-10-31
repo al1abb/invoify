@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 // JSON2CSV
 import { AsyncParser } from "@json2csv/node";
 
+// XML2JS
+import { Builder } from "xml2js";
+
 // Types
 import { ExportTypes } from "@/app/types/types";
 
@@ -33,13 +36,22 @@ export async function exportInvoiceService(req: NextRequest) {
                 //? Can pass specific fields to async parser. Empty = All
                 const parser = new AsyncParser();
                 const csv = await parser.parse(body).promise();
-
-                console.log(csv);
                 return new NextResponse(csv, {
                     headers: {
                         "Content-Type": "text/csv",
                         "Content-Disposition":
                             "attachment; filename=invoice.csv",
+                    },
+                });
+            case ExportTypes.XML:
+                // Convert JSON to XML
+                const builder = new Builder();
+                const xml = builder.buildObject(body);
+                return new NextResponse(xml, {
+                    headers: {
+                        "Content-Type": "application/xml",
+                        "Content-Disposition":
+                            "attachment; filename=invoice.xml",
                     },
                 });
         }

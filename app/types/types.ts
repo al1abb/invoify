@@ -45,4 +45,5 @@ export type WizardStepType = {
 export enum ExportTypes {
     JSON = "JSON",
     CSV = "CSV",
+    XML = "XML",
 }
