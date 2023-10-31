@@ -1,19 +1,19 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-// Font
+// Fonts
 import {
-    Alex_Brush,
-    Dancing_Script,
-    Great_Vibes,
-    Outfit,
-    Parisienne,
-} from "next/font/google";
+    alexBrush,
+    dancingScript,
+    greatVibes,
+    outfit,
+    parisienne,
+} from "@/app/fonts/fonts";
 
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
 
-// Shadcn
+// ShadCn
 import { Toaster } from "@/components/ui/toaster";
 
 // Components
@@ -21,42 +21,6 @@ import { BaseNavbar, BaseFooter } from "@/app/components";
 
 // Context
 import Providers from "./contexts/Providers";
-
-// Fonts
-const outfit = Outfit({ subsets: ["latin"], display: "swap" });
-
-// Signature fonts
-const dancingScript = Dancing_Script({
-    subsets: ["latin"],
-    weight: "400",
-    variable: "--font-dancing-script",
-    preload: true,
-    display: "swap",
-});
-
-const parisienne = Parisienne({
-    subsets: ["latin"],
-    weight: "400",
-    variable: "--font-parisienne",
-    preload: true,
-    display: "swap",
-});
-
-const greatVibes = Great_Vibes({
-    subsets: ["latin"],
-    weight: "400",
-    variable: "--font-great-vibes",
-    preload: true,
-    display: "swap",
-});
-
-const alexBrush = Alex_Brush({
-    subsets: ["latin"],
-    weight: "400",
-    variable: "--font-alex-brush",
-    preload: true,
-    display: "swap",
-});
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
