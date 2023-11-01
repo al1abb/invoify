@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useTheme } from "next-themes";
 
@@ -14,6 +14,15 @@ type Props = {};
 
 const ThemeSwitcher = ({}: Props) => {
     const { theme, setTheme } = useTheme();
+
+    // Set body background color to a custom color when light theme is on
+    useEffect(() => {
+        if (theme === "light") {
+            document.body.style.backgroundColor = "#fafafa";
+        } else {
+            document.body.style.backgroundColor = "";
+        }
+    }, [theme]);
     return (
         <>
             <BaseButton
