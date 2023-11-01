@@ -34,13 +34,14 @@ type SavedInvoicesListProps = {
 const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     const { savedInvoices, onFormSubmit, deleteInvoice } = useInvoiceContext();
 
-    const { reset } = useFormContext();
+    const { reset } = useFormContext<InvoiceType>();
 
     // Update fields when selected invoice is changed.
-    // Reason: The fields don't go through validation when invoice loads
+    // ? Reason: The fields don't go through validation when invoice loads
     const updateFields = (selected: any) => {
         // Next 2 lines are so that when invoice loads,
         // the dates won't be in the wrong format
+        // ? Selected cannot be of type InvoiceType because of these 2 variables
         selected.details.dueDate = new Date(selected.details.dueDate);
         selected.details.invoiceDate = new Date(selected.details.invoiceDate);
 
@@ -55,18 +56,6 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         selected.details.totalAmount = formatNumberWithCommas(
             Number(selected.details.totalAmount)
         );
-
-        //? Might work if image input logic is moved to a separate hook
-        // Invoice logo
-        // const logoImage = document.getElementById(
-        //     "logoImage"
-        // ) as HTMLImageElement;
-
-        // console.log(logoImage);
-
-        // if (logoImage) {
-        //     logoImage.src = selected.details.invoiceLogo;
-        // }
     };
 
     // Transform date values for next submission
