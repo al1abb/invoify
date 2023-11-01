@@ -47,6 +47,32 @@ const formatPriceToString = (price: number): string => {
 };
 
 /**
+ * This method flattens a nested object. It is used for xlsx export
+ * @param obj A nested object to flatten
+ * @param parentKey The parent key
+ * @returns A flattened object
+ */
+const flattenObject = (
+    obj: Record<string, any>,
+    parentKey = ""
+): Record<string, any> => {
+    const result: Record<string, any> = {};
+
+    for (const key in obj) {
+        if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+            const flattened = flattenObject(obj[key], parentKey + key + "_");
+            for (const subKey in flattened) {
+                result[parentKey + subKey] = flattened[subKey];
+            }
+        } else {
+            result[parentKey + key] = obj[key];
+        }
+    }
+
+    return result;
+};
+
+/**
  * A method to validate an email address
  *
  * @param email Email to validate
@@ -65,4 +91,10 @@ const isValidEmail = (email: string) => {
  */
 const isDataUrl = (str: string) => str.startsWith("data:");
 
-export { formatNumberWithCommas, formatPriceToString, isValidEmail, isDataUrl };
+export {
+    formatNumberWithCommas,
+    formatPriceToString,
+    flattenObject,
+    isValidEmail,
+    isDataUrl,
+};
