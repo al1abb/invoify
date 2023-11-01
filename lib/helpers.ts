@@ -52,15 +52,18 @@ const formatPriceToString = (price: number): string => {
  * @param parentKey The parent key
  * @returns A flattened object
  */
-const flattenObject = (
-    obj: Record<string, any>,
+const flattenObject = <T>(
+    obj: Record<string, T>,
     parentKey = ""
-): Record<string, any> => {
-    const result: Record<string, any> = {};
+): Record<string, T> => {
+    const result: Record<string, T> = {};
 
     for (const key in obj) {
         if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-            const flattened = flattenObject(obj[key], parentKey + key + "_");
+            const flattened = flattenObject(
+                obj[key] as Record<string, T>,
+                parentKey + key + "_"
+            );
             for (const subKey in flattened) {
                 result[parentKey + subKey] = flattened[subKey];
             }
