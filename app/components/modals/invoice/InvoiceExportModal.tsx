@@ -54,7 +54,7 @@ const InvoiceExportModal = (props: InvoiceExportModalProps) => {
 
                 {/* Export options here */}
 
-                <div className="flex flex-row gap-5">
+                <div className="flex flex-wrap flex-row gap-5">
                     <BaseButton
                         tooltipLabel="Export Invoice as JSON"
                         disabled={invoicePdfLoading}
@@ -76,6 +76,14 @@ const InvoiceExportModal = (props: InvoiceExportModalProps) => {
                         onClick={() => exportInvoiceAs(ExportTypes.XML)}
                     >
                         Export as XML
+                    </BaseButton>
+
+                    <BaseButton
+                        tooltipLabel="Export Invoice as XLSX"
+                        disabled={invoicePdfLoading}
+                        onClick={() => exportInvoiceAs(ExportTypes.XLSX)}
+                    >
+                        Export as XLSX
                     </BaseButton>
                 </div>
             </DialogContent>
