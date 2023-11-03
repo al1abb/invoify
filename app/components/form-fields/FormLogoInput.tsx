@@ -26,9 +26,10 @@ import { NameType } from "@/app/types/types";
 type FormLogoInputProps = {
     name: NameType;
     label?: string;
+    placeholder?: string;
 };
 
-const FormLogoInput = ({ name, label }: FormLogoInputProps) => {
+const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
     const { control, setValue } = useFormContext();
 
     const logoImage = useWatch({
@@ -89,7 +90,7 @@ const FormLogoInput = ({ name, label }: FormLogoInputProps) => {
                                     <>
                                         <div className="flex flex-col items-center">
                                             <Image />
-                                            <p>Click to upload image</p>
+                                            <p>{placeholder}</p>
                                         </div>
                                         <FormControl>
                                             <input
