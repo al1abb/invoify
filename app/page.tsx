@@ -1,9 +1,6 @@
-import { InvoiceMain } from "./components";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-    return (
-        <main className="lg:container md:container sm:container-lg py-10 sm:py-4 xs:container-lg">
-            <InvoiceMain />
-        </main>
-    );
+// This page only renders when the app is built statically (output: 'export')
+export default function RootPage() {
+    redirect("/en");
 }
