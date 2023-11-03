@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label";
 // Components
 import { BaseButton, FormCustomInput, FormInput } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Icons
 import { Plus } from "lucide-react";
 
@@ -18,6 +21,8 @@ type BillToSectionProps = {};
 
 const BillToSection = ({}: BillToSectionProps) => {
     const { control } = useFormContext();
+
+    const { _t } = useTranslationContext();
 
     const CUSTOM_INPUT_NAME = "receiver.customInputs";
 
@@ -40,42 +45,42 @@ const BillToSection = ({}: BillToSectionProps) => {
     return (
         <div className="flex flex-col gap-3">
             <Label htmlFor="billTo" className="text-xl font-semibold">
-                Bill To:
+                {_t("form.steps.fromAndTo.billTo")}:
             </Label>
 
             <FormInput
                 name="receiver.name"
-                label="Name"
+                label={_t("form.steps.fromAndTo.name")}
                 placeholder="Receiver name"
             />
             <FormInput
                 name="receiver.address"
-                label="Address"
+                label={_t("form.steps.fromAndTo.address")}
                 placeholder="Receiver address"
             />
             <FormInput
                 name="receiver.zipCode"
-                label="Zip"
+                label={_t("form.steps.fromAndTo.zipCode")}
                 placeholder="Receiver zip code"
             />
             <FormInput
                 name="receiver.city"
-                label="City"
+                label={_t("form.steps.fromAndTo.city")}
                 placeholder="Receiver city"
             />
             <FormInput
                 name="receiver.country"
-                label="Country"
+                label={_t("form.steps.fromAndTo.country")}
                 placeholder="Receiver country"
             />
             <FormInput
                 name="receiver.email"
-                label="Email"
+                label={_t("form.steps.fromAndTo.email")}
                 placeholder="Receiver email"
             />
             <FormInput
                 name="receiver.phone"
-                label="Phone"
+                label={_t("form.steps.fromAndTo.phone")}
                 placeholder="Receiver phone number"
             />
 
@@ -97,7 +102,7 @@ const BillToSection = ({}: BillToSectionProps) => {
                 onClick={addNewCustomInput}
             >
                 <Plus />
-                Add Custom Input
+                {_t("form.steps.fromAndTo.addCustomInput")}
             </BaseButton>
         </div>
     );

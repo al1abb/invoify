@@ -11,6 +11,9 @@ import { Label } from "@/components/ui/label";
 // Components
 import { BaseButton, SingleItem } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Icons
 import { Plus } from "lucide-react";
 
@@ -18,6 +21,8 @@ type ItemsProps = {};
 
 const Items = ({}: ItemsProps) => {
     const { control, setValue } = useFormContext();
+
+    const { _t } = useTranslationContext();
 
     const ITEMS_NAME = "details.items";
 
@@ -42,7 +47,9 @@ const Items = ({}: ItemsProps) => {
 
     return (
         <div className="flex flex-col gap-2 w-full">
-            <Label className="text-xl font-semibold">Items:</Label>
+            <Label className="text-xl font-semibold">
+                {_t("form.steps.lineItems.heading")}:
+            </Label>
             {fields.map((field, index) => (
                 <SingleItem
                     key={field.id}
@@ -57,7 +64,7 @@ const Items = ({}: ItemsProps) => {
                 onClick={addNewField}
             >
                 <Plus />
-                Add a new item
+                {_t("form.steps.lineItems.addNewItem")}
             </BaseButton>
         </div>
     );

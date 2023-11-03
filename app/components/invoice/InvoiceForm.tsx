@@ -29,9 +29,14 @@ import {
     InvoiceSummary,
 } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 type InvoiceFormProps = {};
 
 const InvoiceForm = ({}: InvoiceFormProps) => {
+    const { _t } = useTranslationContext();
+
     const { control } = useFormContext();
 
     // Get invoice number variable
@@ -44,7 +49,7 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
         if (invoiceNumber) {
             return `#${invoiceNumber}`;
         } else {
-            return "New Invoice";
+            return _t("form.newInvBadge");
         }
     }, [invoiceNumber]);
 
@@ -53,14 +58,14 @@ const InvoiceForm = ({}: InvoiceFormProps) => {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-3">
-                        INVOICE
+                        <span className="uppercase">{_t("form.title")}</span>
                         <Badge variant="secondary" className="w-fit">
                             <p style={{ fontSize: "14px" }}>
                                 {invoiceNumberLabel}
                             </p>
                         </Badge>
                     </CardTitle>
-                    <CardDescription>Generate invoice</CardDescription>
+                    <CardDescription>{_t("form.description")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-8">

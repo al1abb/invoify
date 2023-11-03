@@ -8,6 +8,9 @@ import { useWizard } from "react-use-wizard";
 // Components
 import { BaseButton } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Icons
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -16,6 +19,8 @@ type Props = {};
 const WizardNavigation = (props: Props) => {
     const { isFirstStep, isLastStep, handleStep, previousStep, nextStep } =
         useWizard();
+
+    const { _t } = useTranslationContext();
     return (
         <div className="flex justify-end gap-5">
             {!isFirstStep && (
@@ -24,7 +29,7 @@ const WizardNavigation = (props: Props) => {
                     onClick={previousStep}
                 >
                     <ArrowLeft />
-                    Back
+                    {_t("form.wizard.back")}
                 </BaseButton>
             )}
             <BaseButton
@@ -32,7 +37,7 @@ const WizardNavigation = (props: Props) => {
                 disabled={isLastStep}
                 onClick={nextStep}
             >
-                Next
+                {_t("form.wizard.next")}
                 <ArrowRight />
             </BaseButton>
         </div>
