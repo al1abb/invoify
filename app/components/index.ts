@@ -52,6 +52,7 @@ import FormCustomInput from "./form-fields/FormCustomInput";
 // Reusable components
 import BaseButton from "./reusables/BaseButton";
 import ThemeSwitcher from "./reusables/ThemeSwitcher";
+import LanguageSelector from "./reusables/LanguageSelector";
 
 /* =========================
    * Modals & Alerts
@@ -119,6 +120,7 @@ export {
     FormCustomInput,
     BaseButton,
     ThemeSwitcher,
+    LanguageSelector,
     SendPdfToEmailModal,
     InvoiceLoaderModal,
     InvoiceExportModal,
