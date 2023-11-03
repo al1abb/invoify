@@ -12,6 +12,9 @@ import { Label } from "@/components/ui/label";
 // Components
 import { BaseButton, FormInput, FormTextarea } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Icons
 import { Trash2 } from "lucide-react";
 
@@ -26,6 +29,8 @@ type SingleItemProps = {
 
 const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
     const { control, setValue } = useFormContext();
+
+    const { _t } = useTranslationContext();
 
     // Get rate variable
     const rate = useWatch({
@@ -61,11 +66,11 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
 
     return (
         <div className="flex flex-col gap-y-5 my-2">
-            Item #{index + 1}
+            {_t("form.steps.lineItems.item")} #{index + 1}
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <FormInput
                     name={`${name}[${index}].name`}
-                    label="Name"
+                    label={_t("form.steps.lineItems.name")}
                     placeholder="Item name"
                     vertical
                 />
@@ -73,8 +78,8 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                 <FormInput
                     name={`${name}[${index}].quantity`}
                     type="number"
-                    label="Quantity"
-                    placeholder="Quantity"
+                    label={_t("form.steps.lineItems.quantity")}
+                    placeholder={_t("form.steps.lineItems.quantity")}
                     className="w-[8rem]"
                     vertical
                 />
@@ -82,16 +87,16 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                 <FormInput
                     name={`${name}[${index}].unitPrice`}
                     type="number"
-                    label="Rate"
-                    labelHelper={`(in ${currency})`}
-                    placeholder="Unit price/Rate"
+                    label={_t("form.steps.lineItems.rate")}
+                    labelHelper={`(${currency})`}
+                    placeholder={_t("form.steps.lineItems.rate")}
                     className="w-[8rem]"
                     vertical
                 />
 
                 <div className="flex flex-col gap-2">
                     <div>
-                        <Label>Total</Label>
+                        <Label>{_t("form.steps.lineItems.total")}</Label>
                     </div>
                     <Input
                         value={`${total} ${currency}`}
@@ -104,7 +109,7 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
             </div>
             <FormTextarea
                 name={`${name}[${index}].description`}
-                label="Description"
+                label={_t("form.steps.lineItems.description")}
                 placeholder="Item description"
             />
             <div>
@@ -116,7 +121,7 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                         onClick={() => removeField(index)}
                     >
                         <Trash2 />
-                        Remove Item
+                        {_t("form.steps.lineItems.removeItem")}
                     </BaseButton>
                 )}
             </div>

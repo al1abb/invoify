@@ -1,0 +1,90 @@
+{
+    "form": {
+        "title": "Rechnung",
+        "description": "Rechnung erstellen",
+        "newInvBadge": "Neue Rechnung",
+        "wizard": {
+            "fromAndTo": "Von & An",
+            "invoiceDetails": "Rechnungsdetails",
+            "lineItems": "Positionen",
+            "paymentInfo": "Zahlungsinformationen",
+            "summary": "Zusammenfassung",
+            "next": "Weiter",
+            "back": "Zurück"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Von",
+                "billTo": "An",
+                "name": "Name",
+                "address": "Adresse",
+                "zipCode": "PLZ",
+                "city": "Stadt",
+                "country": "Land",
+                "email": "E-Mail",
+                "phone": "Telefon",
+                "addCustomInput": "Benutzerdefinierte Eingabe",
+                "sender": "Absender",
+                "receiver": "Empfänger"
+            },
+            "invoiceDetails": {
+                "heading": "Rechnungsdetails",
+                "invoiceLogo": {
+                    "label": "Rechnungslogo",
+                    "placeholder": "Bild hochladen"
+                },
+                "invoiceNumber": "Rechnungsnummer",
+                "issuedDate": "Ausstellungsdatum",
+                "dueDate": "Fälligkeitsdatum",
+                "currency": "Währung"
+            },
+            "lineItems": {
+                "heading": "Positionen",
+                "item": "Artikel",
+                "name": "Name",
+                "quantity": "Menge",
+                "rate": "Preis",
+                "total": "Gesamt",
+                "description": "Beschreibung",
+                "addNewItem": "Neuer Artikel",
+                "removeItem": "Artikel entfernen"
+            },
+            "paymentInfo": {
+                "heading": "Zahlungsinformationen",
+                "bankName": "Bankname",
+                "accountName": "Kontobezeichnung",
+                "accountNumber": "Kontonummer"
+            },
+            "summary": {
+                "heading": "Zusammenfassung",
+                "signature": {
+                    "heading": "Unterschrift",
+                    "placeholder": "Unterschrift hinzufügen",
+                    "draw": "Zeichnen",
+                    "type": "Typ",
+                    "upload": "Hochladen"
+                },
+                "additionalNotes": "Zusätzliche Notizen",
+                "paymentTerms": "Zahlungsbedingungen",
+                "discount": "Rabatt",
+                "tax": "Steuer",
+                "shipping": "Versand",
+                "subTotal": "Zwischensumme",
+                "totalAmount": "Gesamtbetrag",
+                "includeTotalInWords": "Gesamtbetrag in Worten"
+            }
+        }
+    },
+    "actions": {
+        "title": "Aktionen",
+        "description": "Operationen und Vorschau",
+        "loadInvoice": "Rechnung laden",
+        "exportInvoice": "Rechnung exportieren",
+        "newInvoice": "Neue Rechnung",
+        "generatePdf": "PDF generieren",
+        "pdfView": "PDF-Ansicht"
+    },
+    "footer": {
+        "developedBy": "Entwickelt von"
+    }
+}

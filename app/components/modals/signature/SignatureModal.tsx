@@ -22,6 +22,9 @@ import {
     UploadSignature,
 } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Icons
 import { FileSignature } from "lucide-react";
 
@@ -38,6 +41,8 @@ type SignatureModalProps = {};
 
 const SignatureModal = ({}: SignatureModalProps) => {
     const { setValue } = useFormContext();
+
+    const { _t } = useTranslationContext();
 
     // Modal state
     const [open, setOpen] = useState(false);
@@ -134,7 +139,9 @@ const SignatureModal = ({}: SignatureModalProps) => {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger className="flex justify-start">
                     <div>
-                        <Label>Signature</Label>
+                        <Label>
+                            {_t("form.steps.summary.signature.heading")}
+                        </Label>
 
                         {signature && isDataUrl(signature) ? (
                             <img
@@ -162,25 +169,31 @@ const SignatureModal = ({}: SignatureModalProps) => {
                                 className="flex flex-col justify-center items-center h-[155px] border border-black rounded-md hover:border-blue-500"
                             >
                                 <FileSignature />
-                                <Label>Click to add signature</Label>
+                                <Label>
+                                    {_t(
+                                        "form.steps.summary.signature.placeholder"
+                                    )}
+                                </Label>
                             </div>
                         )}
                     </div>
                 </DialogTrigger>
 
                 <DialogContent className="select-none">
-                    <DialogTitle>Signature</DialogTitle>
+                    <DialogTitle>
+                        {_t("form.steps.summary.signature.heading")}
+                    </DialogTitle>
 
                     <Tabs value={tab} onValueChange={onTabChange}>
                         <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger value={SignatureTabs.DRAW}>
-                                Draw
+                                {_t("form.steps.summary.signature.draw")}
                             </TabsTrigger>
                             <TabsTrigger value={SignatureTabs.TYPE}>
-                                Type
+                                {_t("form.steps.summary.signature.type")}
                             </TabsTrigger>
                             <TabsTrigger value={SignatureTabs.UPLOAD}>
-                                Upload
+                                {_t("form.steps.summary.signature.upload")}
                             </TabsTrigger>
                         </TabsList>
 

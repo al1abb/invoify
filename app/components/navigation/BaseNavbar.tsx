@@ -6,7 +6,7 @@ import Image from "next/image";
 import Logo from "@/public/assets/img/invoify-logo.svg";
 
 // Components
-import { DevDebug, ThemeSwitcher } from "@/app/components";
+import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
 
 const BaseNavbar = () => {
     return (
@@ -19,6 +19,10 @@ const BaseNavbar = () => {
 
             <div>
                 <DevDebug />
+            </div>
+
+            <div>
+                <LanguageSelector />
             </div>
 
             <div>

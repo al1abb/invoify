@@ -11,6 +11,9 @@ import { WizardValues } from "react-use-wizard";
 // Components
 import { BaseButton } from "@/app/components";
 
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
+
 // Types
 import { InvoiceType, WizardStepType } from "@/app/types/types";
 
@@ -24,6 +27,8 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     const {
         formState: { errors },
     } = useFormContext<InvoiceType>();
+
+    const { _t } = useTranslationContext();
 
     const step1Valid = !errors.sender && !errors.receiver;
     const step2Valid =
@@ -57,27 +62,27 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     const steps: WizardStepType[] = [
         {
             id: 0,
-            label: "From & To",
+            label: _t("form.wizard.fromAndTo"),
             isValid: step1Valid,
         },
         {
             id: 1,
-            label: "Invoice Details",
+            label: _t("form.wizard.invoiceDetails"),
             isValid: step2Valid,
         },
         {
             id: 2,
-            label: "Line Items",
+            label: _t("form.wizard.lineItems"),
             isValid: step3Valid,
         },
         {
             id: 3,
-            label: "Payment Info",
+            label: _t("form.wizard.paymentInfo"),
             isValid: step4Valid,
         },
         {
             id: 4,
-            label: "Summary",
+            label: _t("form.wizard.summary"),
             isValid: step5Valid,
         },
     ];
