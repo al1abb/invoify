@@ -2,6 +2,15 @@
 import { SignatureColor, SignatureFont } from "@/app/types/types";
 
 /**
+ * I18N variables
+ */
+export const LOCALES = [
+    { code: "en", name: "English" },
+    { code: "de", name: "German" },
+];
+export const DEFAULT_LOCALE = LOCALES[0].code;
+
+/**
  * API endpoints
  */
 export const GENERATE_PDF_API = "/api/invoice/generate";
