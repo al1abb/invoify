@@ -13,6 +13,7 @@ import { InvoiceSchema } from "@/lib/schemas";
 
 // Context
 import { ThemeProvider } from "@/app/contexts/ThemeProvider";
+import { TranslationProvider } from "./TranslationContext";
 import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
 import { ChargesContextProvider } from "@/app/contexts/ChargesContext";
 
@@ -39,11 +40,15 @@ const Providers = ({ children }: ProvidersProps) => {
             enableSystem
             disableTransitionOnChange
         >
-            <FormProvider {...form}>
-                <InvoiceContextProvider>
-                    <ChargesContextProvider>{children}</ChargesContextProvider>
-                </InvoiceContextProvider>
-            </FormProvider>
+            <TranslationProvider>
+                <FormProvider {...form}>
+                    <InvoiceContextProvider>
+                        <ChargesContextProvider>
+                            {children}
+                        </ChargesContextProvider>
+                    </InvoiceContextProvider>
+                </FormProvider>
+            </TranslationProvider>
         </ThemeProvider>
     );
 };
