@@ -71,7 +71,9 @@
                 "shipping": "Shipping",
                 "subTotal": "Subtotal",
                 "totalAmount": "Total Amount",
-                "includeTotalInWords": "Include Total in Words"
+                "includeTotalInWords": "Include Total in Words?",
+                "yes": "Yes",
+                "no": "No"
             }
         }
     },

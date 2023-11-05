@@ -7,15 +7,15 @@
             "fromAndTo": "Von & An",
             "invoiceDetails": "Rechnungsdetails",
             "lineItems": "Positionen",
-            "paymentInfo": "Zahlungsinformationen",
+            "paymentInfo": "Zahlung",
             "summary": "Zusammenfassung",
             "next": "Weiter",
             "back": "Zurück"
         },
         "steps": {
             "fromAndTo": {
-                "billFrom": "Von",
-                "billTo": "An",
+                "billFrom": "Absender",
+                "billTo": "Empfänger",
                 "name": "Name",
                 "address": "Adresse",
                 "zipCode": "PLZ",
@@ -23,8 +23,8 @@
                 "country": "Land",
                 "email": "E-Mail",
                 "phone": "Telefon",
-                "addCustomInput": "Benutzerdefinierte Eingabe",
-                "sender": "Absender",
+                "addCustomInput": "Benutzerfeld hinzufügen",
+                "sender": "Sender",
                 "receiver": "Empfänger"
             },
             "invoiceDetails": {
@@ -46,13 +46,13 @@
                 "rate": "Preis",
                 "total": "Gesamt",
                 "description": "Beschreibung",
-                "addNewItem": "Neuer Artikel",
-                "removeItem": "Artikel entfernen"
+                "addNewItem": "Neue Position",
+                "removeItem": "Entfernen"
             },
             "paymentInfo": {
                 "heading": "Zahlungsinformationen",
-                "bankName": "Bankname",
-                "accountName": "Kontobezeichnung",
+                "bankName": "Bank",
+                "accountName": "Kontoinhaber",
                 "accountNumber": "Kontonummer"
             },
             "summary": {
@@ -64,14 +64,16 @@
                     "type": "Typ",
                     "upload": "Hochladen"
                 },
-                "additionalNotes": "Zusätzliche Notizen",
+                "additionalNotes": "Notizen",
                 "paymentTerms": "Zahlungsbedingungen",
                 "discount": "Rabatt",
                 "tax": "Steuer",
                 "shipping": "Versand",
                 "subTotal": "Zwischensumme",
                 "totalAmount": "Gesamtbetrag",
-                "includeTotalInWords": "Gesamtbetrag in Worten"
+                "includeTotalInWords": "In Worten",
+                "yes": "Ja",
+                "no": "Nein"
             }
         }
     },
