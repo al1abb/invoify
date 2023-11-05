@@ -14,6 +14,7 @@ import { ChargeInput } from "@/app/components";
 
 // Contexts
 import { useChargesContext } from "@/app/contexts/ChargesContext";
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";
@@ -27,6 +28,8 @@ const Charges = ({}: ChargesProps) => {
     const {
         formState: { errors },
     } = useFormContext<InvoiceType>();
+
+    const { _t } = useTranslationContext();
 
     const {
         discountSwitch,
@@ -65,7 +68,7 @@ const Charges = ({}: ChargesProps) => {
                 {/* Switches */}
                 <div className="flex justify-evenly pb-6">
                     <div>
-                        <Label>Discount</Label>
+                        <Label>{_t("form.steps.summary.discount")}</Label>
 
                         <div>
                             <div>
@@ -80,7 +83,7 @@ const Charges = ({}: ChargesProps) => {
                     </div>
 
                     <div>
-                        <Label>Tax</Label>
+                        <Label>{_t("form.steps.summary.tax")}</Label>
 
                         <div>
                             <div>
@@ -95,7 +98,7 @@ const Charges = ({}: ChargesProps) => {
                     </div>
 
                     <div>
-                        <Label>Shipping</Label>
+                        <Label>{_t("form.steps.summary.shipping")}</Label>
 
                         <div>
                             <div>
@@ -112,7 +115,7 @@ const Charges = ({}: ChargesProps) => {
 
                 <div className="flex flex-col justify-center px-5 gap-y-3">
                     <div className="flex justify-between items-center">
-                        <div>Sub total</div>
+                        <div>{_t("form.steps.summary.subTotal")}</div>
 
                         <div>
                             {formatNumberWithCommas(subTotal)} {currency}
@@ -120,7 +123,7 @@ const Charges = ({}: ChargesProps) => {
                     </div>
                     {discountSwitch && (
                         <ChargeInput
-                            label="Discount"
+                            label={_t("form.steps.summary.discount")}
                             name="details.discountDetails.amount"
                             switchAmountType={switchAmountType}
                             type={discountType}
@@ -131,7 +134,7 @@ const Charges = ({}: ChargesProps) => {
 
                     {taxSwitch && (
                         <ChargeInput
-                            label="Tax"
+                            label={_t("form.steps.summary.tax")}
                             name="details.taxDetails.amount"
                             switchAmountType={switchAmountType}
                             type={taxType}
@@ -142,7 +145,7 @@ const Charges = ({}: ChargesProps) => {
 
                     {shippingSwitch && (
                         <ChargeInput
-                            label="Shipping"
+                            label={_t("form.steps.summary.shipping")}
                             name="details.shippingDetails.cost"
                             switchAmountType={switchAmountType}
                             type={shippingType}
@@ -152,7 +155,7 @@ const Charges = ({}: ChargesProps) => {
                     )}
 
                     <div className="flex justify-between items-center">
-                        <div>Total Amount</div>
+                        <div>{_t("form.steps.summary.totalAmount")}</div>
 
                         <div className="">
                             <p>
@@ -166,8 +169,12 @@ const Charges = ({}: ChargesProps) => {
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <p>Include total in words?</p>{" "}
-                        <p>{totalInWordsSwitch ? "Yes" : "No"}</p>
+                        <p>{_t("form.steps.summary.includeTotalInWords")}</p>{" "}
+                        <p>
+                            {totalInWordsSwitch
+                                ? _t("form.steps.summary.yes")
+                                : _t("form.steps.summary.no")}
+                        </p>
                         <Switch
                             checked={totalInWordsSwitch}
                             onCheckedChange={(value) => {
