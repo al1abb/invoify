@@ -101,9 +101,9 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
                         {step.id + 1}. {step.label}
                     </BaseButton>
 
-                    {step.id != stepCount - 1 && (
+                    {/* {step.id != stepCount - 1 && (
                         <div className="w-[3rem] h-0.5 bg-black hidden md:block"></div>
-                    )}
+                    )} */}
                 </React.Fragment>
             ))}
         </div>
