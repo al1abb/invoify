@@ -16,7 +16,9 @@ import {
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
@@ -72,21 +74,28 @@ const CurrencySelector = ({
                                             height: "200px",
                                         }}
                                     >
-                                        {!currenciesLoading &&
-                                            currencies.map(
-                                                (
-                                                    currency: CurrencyType,
-                                                    idx: number
-                                                ) => (
-                                                    <SelectItem
-                                                        key={idx}
-                                                        value={currency.code}
-                                                    >
-                                                        {currency.name}{" "}
-                                                        {`(${currency.code})`}
-                                                    </SelectItem>
-                                                )
-                                            )}
+                                        <SelectGroup>
+                                            <SelectLabel>
+                                                Currencies
+                                            </SelectLabel>
+                                            {!currenciesLoading &&
+                                                currencies.map(
+                                                    (
+                                                        currency: CurrencyType,
+                                                        idx: number
+                                                    ) => (
+                                                        <SelectItem
+                                                            key={idx}
+                                                            value={
+                                                                currency.code
+                                                            }
+                                                        >
+                                                            {currency.name}{" "}
+                                                            {`(${currency.code})`}
+                                                        </SelectItem>
+                                                    )
+                                                )}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
