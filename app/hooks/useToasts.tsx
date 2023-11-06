@@ -7,6 +7,14 @@ const useToasts = () => {
         sendPdfToMail: (email: string) => void;
     };
 
+    const newInvoiceSuccess = () => {
+        toast({
+            variant: "default",
+            title: "Generated new invoice",
+            description: "Successfully created a new invoice",
+        });
+    };
+
     const pdfGenerationSuccess = () => {
         toast({
             variant: "default",
@@ -57,6 +65,7 @@ const useToasts = () => {
     };
 
     return {
+        newInvoiceSuccess,
         pdfGenerationSuccess,
         saveInvoiceSuccess,
         modifiedInvoiceSuccess,
