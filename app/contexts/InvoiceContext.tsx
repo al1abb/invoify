@@ -97,20 +97,18 @@ export const InvoiceContextProvider = ({
     /**
      * Handles form submission.
      *
-     * @param values - The form data used to generate the PDF.
+     * @param {InvoiceType} data - The form values used to generate the PDF.
      */
-    const onFormSubmit = (values: InvoiceType) => {
+    const onFormSubmit = (data: InvoiceType) => {
         console.log("VALUE");
-        console.log(values);
+        console.log(data);
 
-        // Call generate pdf service
-        generatePdf(values);
+        // Call generate pdf method
+        generatePdf(data);
     };
 
     /**
      * Generates a new invoice.
-     *
-     * @return {void} - This function does not return any value.
      */
     const newInvoice = () => {
         reset(FORM_DEFAULT_VALUES);
@@ -123,11 +121,11 @@ export const InvoiceContextProvider = ({
     };
 
     /**
-     * Generates a PDF using the provided data.
+     * Generate a PDF document based on the provided data.
      *
      * @param {InvoiceType} data - The data used to generate the PDF.
-     * @return {Promise<void>} A promise that resolves once the PDF has been generated.
-     * @throws {Error} If there is an error generating the PDF.
+     * @returns {Promise<void>} A promise that resolves when the PDF is successfully generated.
+     * @throws {Error} If an error occurs during the PDF generation process.
      */
     const generatePdf = useCallback(async (data: InvoiceType) => {
         setInvoicePdfLoading(true);
@@ -154,8 +152,6 @@ export const InvoiceContextProvider = ({
 
     /**
      * Generates a preview of a PDF file and opens it in a new browser tab.
-     *
-     * @return {void} - This function does not return any value.
      */
     const previewPdfInTab = () => {
         if (invoicePdf) {
@@ -166,8 +162,6 @@ export const InvoiceContextProvider = ({
 
     /**
      * Downloads a PDF file.
-     *
-     * @return {void} No return value.
      */
     const downloadPdf = () => {
         // Only download if there is an invoice
@@ -189,6 +183,9 @@ export const InvoiceContextProvider = ({
         }
     };
 
+    /**
+     * Prints a PDF file.
+     */
     const printPdf = () => {
         if (invoicePdf) {
             const pdfUrl = URL.createObjectURL(invoicePdf);
@@ -203,8 +200,6 @@ export const InvoiceContextProvider = ({
 
     /**
      * Saves the invoice data to local storage.
-     *
-     * @return {void} - This function does not return any value.
      */
     const saveInvoice = () => {
         if (invoicePdf) {
@@ -258,10 +253,9 @@ export const InvoiceContextProvider = ({
     };
 
     /**
-     * Deletes an invoice from local storage based on given index number.
+     * Delete an invoice from local storage based on the given index.
      *
-     * @param index Index of the invoice to delete
-     * @return {void} - This function does not return any value
+     * @param {number} index - The index of the invoice to be deleted.
      */
     const deleteInvoice = (index: number) => {
         if (index >= 0 && index < savedInvoices.length) {
@@ -276,10 +270,10 @@ export const InvoiceContextProvider = ({
     };
 
     /**
-     * Sends the invoice PDF to the specified email address
+     * Send the invoice PDF to the specified email address.
      *
-     * @param email Email to send Invoice PDF
-     * @returns {Promise<void>} Promise that resolves when the email is sent
+     * @param {string} email - The email address to which the Invoice PDF will be sent.
+     * @returns {Promise<void>} A promise that resolves once the email is successfully sent.
      */
     const sendPdfToMail = (email: string) => {
         const fd = new FormData();
@@ -308,10 +302,11 @@ export const InvoiceContextProvider = ({
     };
 
     /**
-     * Export an invoice in the specified format.
-     * This function exports an invoice using the provided export format and form values.
+     * Export an invoice in the specified format using the provided form values.
      *
-     * @param exportAs Export as type
+     * This function initiates the export process with the chosen export format and the form data.
+     *
+     * @param {ExportTypes} exportAs - The format in which to export the invoice.
      */
     const exportInvoiceAs = (exportAs: ExportTypes) => {
         const formValues = getValues();
