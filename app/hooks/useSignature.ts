@@ -35,16 +35,16 @@ export function useSignature() {
     const [selectedColor, setSelectedColor] = useState<string>(colors[0].color);
 
     /**
-     * Function that sets selected color
+     * Sets selected signature color
      *
-     * @param color Color to be selected as string. Ex: "red"
+     * @param {string} color Color to be selected as string. Ex: "red"
      */
     const handleColorButtonClick = (color: string) => {
         setSelectedColor(color);
     };
 
     /**
-     * Function that clears drawn signature canvas
+     * Clears drawn signature canvas
      */
     const clearSignature = useCallback(() => {
         if (signatureRef.current) {
@@ -55,7 +55,7 @@ export function useSignature() {
     }, []);
 
     /**
-     * Function that fires every time canvas drawing stops
+     * Fires every time canvas drawing stops
      */
     const handleCanvasEnd = useCallback(() => {
         if (signatureRef.current) {
@@ -84,8 +84,8 @@ export function useSignature() {
     /**
      * Font size calculator for typed signature
      *
-     * @param text Text in signature input
-     * @returns Font size that should be used
+     * @param {string} text Text in signature input
+     * @returns {number} Font size that should be used
      */
     const calculateFontSize = (text: string) => {
         const initialFontSize = 100;
