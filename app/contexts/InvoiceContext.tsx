@@ -38,6 +38,7 @@ const defaultInvoiceContext = {
     newInvoice: () => {},
     generatePdf: async (data: InvoiceType) => {},
     downloadPdf: () => {},
+    printPdf: () => {},
     previewPdfInTab: () => {},
     saveInvoice: () => {},
     deleteInvoice: (index: number) => {},
@@ -62,11 +63,12 @@ export const InvoiceContextProvider = ({
 
     // Toasts
     const {
-        modifiedInvoiceSuccess,
+        newInvoiceSuccess,
         pdfGenerationSuccess,
         saveInvoiceSuccess,
-        sendPdfError,
+        modifiedInvoiceSuccess,
         sendPdfSuccess,
+        sendPdfError,
     } = useToasts();
 
     // Get form values and methods from form context
@@ -113,6 +115,9 @@ export const InvoiceContextProvider = ({
     const newInvoice = () => {
         reset(FORM_DEFAULT_VALUES);
         router.refresh();
+
+        // Toast
+        newInvoiceSuccess();
     };
 
     /**
@@ -146,6 +151,18 @@ export const InvoiceContextProvider = ({
     }, []);
 
     /**
+     * Generates a preview of a PDF file and opens it in a new browser tab.
+     *
+     * @return {void} - This function does not return any value.
+     */
+    const previewPdfInTab = () => {
+        if (invoicePdf) {
+            const url = window.URL.createObjectURL(invoicePdf);
+            window.open(url, "_blank");
+        }
+    };
+
+    /**
      * Downloads a PDF file.
      *
      * @return {void} No return value.
@@ -170,15 +187,15 @@ export const InvoiceContextProvider = ({
         }
     };
 
-    /**
-     * Generates a preview of a PDF file and opens it in a new browser tab.
-     *
-     * @return {void} - This function does not return any value.
-     */
-    const previewPdfInTab = () => {
+    const printPdf = () => {
         if (invoicePdf) {
-            const url = window.URL.createObjectURL(invoicePdf);
-            window.open(url, "_blank");
+            const pdfUrl = URL.createObjectURL(invoicePdf);
+            const printWindow = window.open(pdfUrl, "_blank");
+            if (printWindow) {
+                printWindow.onload = () => {
+                    printWindow.print();
+                };
+            }
         }
     };
 
@@ -311,6 +328,7 @@ export const InvoiceContextProvider = ({
                 newInvoice,
                 generatePdf,
                 downloadPdf,
+                printPdf,
                 previewPdfInTab,
                 saveInvoice,
                 deleteInvoice,
