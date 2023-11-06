@@ -30,7 +30,8 @@ import { LOCALES } from "@/lib/variables";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
-    description: "Invoice generating application",
+    description:
+        "Create professional invoices effortlessly with Invoify, the free invoice generator. Try it now!",
     icons: [{ rel: "icon", url: Favicon.src }],
     keywords: [
         "invoice",
