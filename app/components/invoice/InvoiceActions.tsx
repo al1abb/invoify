@@ -68,11 +68,9 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         <span>Generate PDF</span>
                     </BaseButton>
 
-                    <div>
-                        {!invoicePdfLoading && invoicePdf.size != 0 && (
-                            <PdfViewer pdfBlob={invoicePdf} />
-                        )}
-                    </div>
+                    {!invoicePdfLoading && invoicePdf.size != 0 && (
+                        <PdfViewer pdfBlob={invoicePdf} />
+                    )}
                 </div>
             </Card>
         </div>
