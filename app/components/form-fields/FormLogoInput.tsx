@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { Image } from "lucide-react";
+import { ImageMinus, Image } from "lucide-react";
 
 // Types
 import { NameType } from "@/app/types/types";
@@ -69,23 +69,28 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                 name={name}
                 render={({ field }) => (
                     <FormItem>
+                        <Label>{label}:</Label>
                         {base64Image ? (
                             <img
                                 id="logoImage"
                                 src={base64Image}
                                 style={{
                                     objectFit: "contain",
-                                    maxWidth: "15rem",
-                                    maxHeight: "15rem",
-                                    height: "100px",
+                                    width: "10rem",
+                                    height: "7rem",
                                 }}
                             />
                         ) : (
-                            <div>
-                                <Label>{label}:</Label>
+                            <div
+                                style={{
+                                    objectFit: "contain",
+                                    width: "10rem",
+                                    height: "7rem",
+                                }}
+                            >
                                 <Label
                                     htmlFor="logo-input"
-                                    className="custom-file-input cursor-pointer border border-black rounded-md hover:border-blue-500"
+                                    className="custom-logo-input cursor-pointer border border-black rounded-md hover:border-blue-500"
                                 >
                                     <>
                                         <div className="flex flex-col items-center">
@@ -110,11 +115,12 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                 )}
             />
             {base64Image && (
-                <>
+                <div>
                     <BaseButton variant="destructive" onClick={removeLogo}>
+                        <ImageMinus />
                         Remove logo
                     </BaseButton>
-                </>
+                </div>
             )}
         </>
     );
