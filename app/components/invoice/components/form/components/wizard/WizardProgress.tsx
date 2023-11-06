@@ -44,6 +44,12 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
         !errors.details?.subTotal &&
         !errors.details?.totalAmount;
 
+    /**
+     * Determines the button variant based on the given WizardStepType.
+     *
+     * @param {WizardStepType} step - The wizard step object
+     * @returns The button variant ("destructive", "default", or "outline") based on the step's validity and active status.
+     */
     const returnButtonVariant = (step: WizardStepType) => {
         if (!step.isValid) {
             return "destructive";
@@ -55,9 +61,17 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
         }
     };
 
-    // ? Old method of targeting stepCount from react use wizard library
-    // Create an array with stepCount number of elements
-    // const stepArray = Array.from({ length: stepCount }, (_, index) => index);
+    /**
+     * Checks whether the given WizardStepType has been passed or not.
+     *
+     * @param {WizardStepType} currentStep - The WizardStepType object
+     * @returns `true` if the step has been passed, `false` if it hasn't, or `undefined` if the step is not valid.
+     */
+    const stepPassed = (currentStep: WizardStepType) => {
+        if (currentStep.isValid) {
+            return activeStep > currentStep.id ? true : false;
+        }
+    };
 
     const steps: WizardStepType[] = [
         {
@@ -90,7 +104,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     return (
         <div className="flex flex-wrap justify-around items-center gap-y-3">
             {steps.map((step, idx) => (
-                <React.Fragment key={step.id}>
+                <div key={step.id}>
                     <BaseButton
                         variant={returnButtonVariant(step)}
                         className="w-auto"
@@ -104,7 +118,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
                     {/* {step.id != stepCount - 1 && (
                         <div className="w-[3rem] h-0.5 bg-black hidden md:block"></div>
                     )} */}
-                </React.Fragment>
+                </div>
             ))}
         </div>
     );
