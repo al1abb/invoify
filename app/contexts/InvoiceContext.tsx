@@ -114,6 +114,8 @@ export const InvoiceContextProvider = ({
      */
     const newInvoice = () => {
         reset(FORM_DEFAULT_VALUES);
+        setInvoicePdf(new Blob());
+
         router.refresh();
 
         // Toast
