@@ -5,18 +5,11 @@ import React from "react";
 // RHF
 import { useFormContext } from "react-hook-form";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-
 // Components
 import { BaseButton } from "@/app/components";
 
 // Contexts
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
-
-// Icons
-import { FileText, Trash2 } from "lucide-react";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";
@@ -26,6 +19,7 @@ import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
+import { Card, CardContent } from "@/components/ui/card";
 
 type SavedInvoicesListProps = {
     setModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -84,46 +78,51 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     };
 
     return (
-        <div>
-            <Label className="text-md">Your Invoices:</Label>
-
-            <div className="flex flex-wrap gap-4 py-5 overflow-y-auto max-h-72">
+        <>
+            <div className="flex flex-col gap-5 overflow-y-auto max-h-72">
                 {savedInvoices.map((invoice, idx) => (
-                    <div
+                    <Card
                         key={idx}
-                        className="p-4 rounded-md border border-black hover:border-blue-500 hover:shadow-lg w-52 cursor-pointer"
+                        className="p-2 border rounded-sm hover:border-blue-500 hover:shadow-lg cursor-pointer"
                         onClick={() => handleSelect(invoice)}
                     >
-                        <div className="text-lg font-semibold">
-                            <FileText size={20} />
-                            <Badge variant="secondary" className="">
-                                <p style={{ fontSize: "16px" }}>
-                                    #{invoice.details.invoiceNumber}
+                        <CardContent className="flex justify-between">
+                            <div>
+                                {/* <FileText /> */}
+                                <p className="font-semibold">
+                                    Invoice #{invoice.details.invoiceNumber}{" "}
                                 </p>
-                            </Badge>
-                        </div>
-                        <small>{invoice.details.updatedAt}</small>
-                        <div className="text-gray-600">
-                            <p>From: {invoice.sender.name}</p>
-                            <p>To: {invoice.receiver.name}</p>
-                            <p>
-                                Total: <b>${invoice.details.totalAmount}</b>
-                            </p>
-                        </div>
+                                <small className="text-gray-500">
+                                    Updated at: {invoice.details.updatedAt}
+                                </small>
 
-                        {/* Remove Invoice Button */}
-                        <BaseButton
-                            className="mt-3"
-                            size="icon"
-                            variant="destructive"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                deleteInvoice(idx);
-                            }}
-                        >
-                            <Trash2 className="mr-1" />
-                        </BaseButton>
-                    </div>
+                                <div>
+                                    <p>Sender: {invoice.sender.name}</p>
+                                    <p>Receiver: {invoice.receiver.name}</p>
+                                    <p>
+                                        Total:
+                                        <span className="font-semibold">
+                                            {invoice.details.totalAmount}{" "}
+                                            {invoice.details.currency}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-2">
+                                {/* Remove Invoice Button */}
+                                <BaseButton
+                                    variant="destructive"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteInvoice(idx);
+                                    }}
+                                >
+                                    Delete
+                                </BaseButton>
+                            </div>
+                        </CardContent>
+                    </Card>
                 ))}
 
                 {savedInvoices.length == 0 && (
@@ -132,7 +131,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 
