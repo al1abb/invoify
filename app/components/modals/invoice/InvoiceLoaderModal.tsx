@@ -26,7 +26,7 @@ type InvoiceLoaderModalProps = {};
 const InvoiceLoaderModal = (props: InvoiceLoaderModalProps) => {
     const [open, setOpen] = useState(false);
 
-    const { invoicePdfLoading } = useInvoiceContext();
+    const { invoicePdfLoading, savedInvoices } = useInvoiceContext();
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -43,10 +43,10 @@ const InvoiceLoaderModal = (props: InvoiceLoaderModalProps) => {
             </DialogTrigger>
 
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Load an invoice</DialogTitle>
+                <DialogHeader className="pb-2 border-b">
+                    <DialogTitle>Saved Invoices</DialogTitle>
                     <DialogDescription>
-                        Please select an invoice to load.
+                        You have {savedInvoices.length} saved invoices
                     </DialogDescription>
                 </DialogHeader>
 
