@@ -13,6 +13,9 @@ import {
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
 
+// Vercel Analytics
+import { Analytics } from "@vercel/analytics/react";
+
 // ShadCn
 import { Toaster } from "@/components/ui/toaster";
 
@@ -90,6 +93,9 @@ export default async function LocaleLayout({
 
                         {/* Toast component */}
                         <Toaster />
+
+                        {/* Vercel analytics */}
+                        <Analytics />
                     </Providers>
                 </NextIntlClientProvider>
             </body>
