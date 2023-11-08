@@ -11,6 +11,7 @@ import {
     DatePickerFormField,
     FormInput,
     FormLogoInput,
+    TemplateSelector,
 } from "@/app/components";
 
 // Contexts
@@ -21,7 +22,7 @@ type InvoiceDetailsProps = {};
 const InvoiceDetails = ({}: InvoiceDetailsProps) => {
     const { _t } = useTranslationContext();
     return (
-        <>
+        <div className="flex flex-row flex-wrap gap-5">
             <div className="flex flex-col gap-2">
                 <Label
                     htmlFor="invoiceDetails"
@@ -59,7 +60,11 @@ const InvoiceDetails = ({}: InvoiceDetailsProps) => {
                     placeholder="Select Currency"
                 />
             </div>
-        </>
+
+            <div className="flex flex-col gap-2">
+                <TemplateSelector />
+            </div>
+        </div>
     );
 };
 

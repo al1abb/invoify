@@ -17,6 +17,8 @@ import InvoiceActions from "./invoice/InvoiceActions";
 // Form
 // Form / Components
 import SingleItem from "./invoice/components/form/components/SingleItem";
+import Charges from "./invoice/components/form/components/Charges";
+import TemplateSelector from "./invoice/components/form/components/TemplateSelector";
 
 // Form / Components / Wizard
 import WizardNavigation from "./invoice/components/form/components/wizard/WizardNavigation";
@@ -30,9 +32,6 @@ import InvoiceDetails from "./invoice/components/form/sections/InvoiceDetails";
 import Items from "./invoice/components/form/sections/Items";
 import PaymentInformation from "./invoice/components/form/sections/PaymentInformation";
 import InvoiceSummary from "./invoice/components/form/sections/InvoiceSummary";
-
-// Form / Sections / Footer
-import Charges from "./invoice/components/form/components/Charges";
 
 // Actions
 import PdfViewer from "./invoice/components/actions/PdfViewer";
@@ -103,12 +102,13 @@ export {
     InvoiceDetails,
     Items,
     SingleItem,
+    Charges,
+    TemplateSelector,
     WizardNavigation,
     WizardStep,
     WizardProgress,
     PaymentInformation,
     InvoiceSummary,
-    Charges,
     CurrencySelector,
     SavedInvoicesList,
     PdfViewer,
