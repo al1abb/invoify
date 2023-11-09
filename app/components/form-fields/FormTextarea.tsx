@@ -15,9 +15,6 @@ import {
 } from "@/components/ui/form";
 import { Textarea, TextareaProps } from "@/components/ui/textarea";
 
-// Types
-import { InvoiceType } from "@/app/types/types";
-
 type FormTextareaProps = {
     name: string;
     label?: string;
@@ -32,11 +29,11 @@ const FormTextarea = ({
     placeholder,
     ...props
 }: FormTextareaProps) => {
-    const { control } = useFormContext<InvoiceType>();
+    const { control } = useFormContext();
     return (
         <FormField
             control={control}
-            name="details.additionalNotes"
+            name={name}
             render={({ field }) => (
                 <FormItem>
                     {label && <FormLabel>{`${label}:`}</FormLabel>}
