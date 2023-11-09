@@ -31,8 +31,8 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
     const { invoicePdfLoading, invoicePdf } = useInvoiceContext();
 
     return (
-        <div className={`w-full xl:w-[29%]`}>
-            <Card className="h-[100vh] sticky top-0 px-2">
+        <div className={`w-fit xl:w-[45%]`}>
+            <Card className="h-auto sticky top-0 px-2">
                 <CardHeader>
                     <CardTitle>ACTIONS</CardTitle>
                     <CardDescription>Operations and preview</CardDescription>
@@ -46,31 +46,33 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         {invoicePdf.size != 0 && <InvoiceExportModal />}
                     </div>
 
-                    <NewInvoiceAlert>
+                    <div className="flex flex-row gap-5">
+                        <NewInvoiceAlert>
+                            <BaseButton
+                                className="w-fit"
+                                tooltipLabel="Get new invoice form"
+                                variant="outline"
+                                disabled={invoicePdfLoading}
+                            >
+                                <Plus />
+                                New Invoice
+                            </BaseButton>
+                        </NewInvoiceAlert>
+
                         <BaseButton
-                            tooltipLabel="Get new invoice form"
-                            variant="outline"
-                            disabled={invoicePdfLoading}
+                            className="w-fit"
+                            type="submit"
+                            size="lg"
+                            tooltipLabel="Generate your invoice"
+                            loading={invoicePdfLoading}
+                            loadingText="Generating your invoice"
                         >
-                            <Plus />
-                            New Invoice
+                            <FileInput />
+                            <span>Generate PDF</span>
                         </BaseButton>
-                    </NewInvoiceAlert>
+                    </div>
 
-                    <BaseButton
-                        type="submit"
-                        size="lg"
-                        tooltipLabel="Generate your invoice"
-                        loading={invoicePdfLoading}
-                        loadingText="Generating your invoice"
-                    >
-                        <FileInput />
-                        <span>Generate PDF</span>
-                    </BaseButton>
-
-                    {!invoicePdfLoading && invoicePdf.size != 0 && (
-                        <PdfViewer pdfBlob={invoicePdf} />
-                    )}
+                    {!invoicePdfLoading && <PdfViewer />}
                 </div>
             </Card>
         </div>
