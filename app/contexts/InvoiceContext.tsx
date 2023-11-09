@@ -5,6 +5,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from "react";
 
@@ -34,6 +35,7 @@ const defaultInvoiceContext = {
     invoicePdf: new Blob(),
     invoicePdfLoading: false,
     savedInvoices: [] as InvoiceType[],
+    pdfUrl: null as string | null,
     onFormSubmit: (values: InvoiceType) => {},
     newInvoice: () => {},
     generatePdf: async (data: InvoiceType) => {},
@@ -93,6 +95,14 @@ export const InvoiceContextProvider = ({
             setSavedInvoices(savedInvoicesDefault);
         }
     }, []);
+
+    // Get pdf url from blob
+    const pdfUrl = useMemo(() => {
+        if (invoicePdf.size > 0) {
+            return window.URL.createObjectURL(invoicePdf);
+        }
+        return null;
+    }, [invoicePdf]);
 
     /**
      * Handles form submission.
@@ -321,6 +331,7 @@ export const InvoiceContextProvider = ({
                 invoicePdf,
                 invoicePdfLoading,
                 savedInvoices,
+                pdfUrl,
                 onFormSubmit,
                 newInvoice,
                 generatePdf,
