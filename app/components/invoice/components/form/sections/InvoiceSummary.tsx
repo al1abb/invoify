@@ -18,7 +18,7 @@ const InvoiceSummary = ({}: InvoiceSummaryProps) => {
             <Label className="text-xl font-semibold">
                 {_t("form.steps.summary.heading")}:
             </Label>
-            <div className="flex flex-wrap justify-around gap-y-10">
+            <div className="flex flex-wrap gap-y-10">
                 <div className="flex flex-col gap-3">
                     {/* Signature dialog */}
                     <SignatureModal />
