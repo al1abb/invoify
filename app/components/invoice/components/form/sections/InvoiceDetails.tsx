@@ -22,47 +22,49 @@ type InvoiceDetailsProps = {};
 const InvoiceDetails = ({}: InvoiceDetailsProps) => {
     const { _t } = useTranslationContext();
     return (
-        <div className="flex flex-row flex-wrap gap-5">
-            <div className="flex flex-col gap-2">
-                <Label
-                    htmlFor="invoiceDetails"
-                    className="text-xl font-semibold"
-                >
-                    {_t("form.steps.invoiceDetails.heading")}:
-                </Label>
-                <FormLogoInput
-                    name="details.invoiceLogo"
-                    label={_t("form.steps.invoiceDetails.invoiceLogo.label")}
-                    placeholder={_t(
-                        "form.steps.invoiceDetails.invoiceLogo.placeholder"
-                    )}
-                />
+        <div className="flex flex-col flex-wrap gap-5">
+            <Label htmlFor="invoiceDetails" className="text-xl font-semibold">
+                {_t("form.steps.invoiceDetails.heading")}:
+            </Label>
 
-                <FormInput
-                    name="details.invoiceNumber"
-                    label={_t("form.steps.invoiceDetails.invoiceNumber")}
-                    placeholder="Invoice number"
-                />
+            <div className="flex flex-row flex-wrap gap-5">
+                <div className="flex flex-col gap-2">
+                    <FormLogoInput
+                        name="details.invoiceLogo"
+                        label={_t(
+                            "form.steps.invoiceDetails.invoiceLogo.label"
+                        )}
+                        placeholder={_t(
+                            "form.steps.invoiceDetails.invoiceLogo.placeholder"
+                        )}
+                    />
 
-                <DatePickerFormField
-                    name="details.invoiceDate"
-                    label={_t("form.steps.invoiceDetails.issuedDate")}
-                />
+                    <FormInput
+                        name="details.invoiceNumber"
+                        label={_t("form.steps.invoiceDetails.invoiceNumber")}
+                        placeholder="Invoice number"
+                    />
 
-                <DatePickerFormField
-                    name="details.dueDate"
-                    label={_t("form.steps.invoiceDetails.dueDate")}
-                />
+                    <DatePickerFormField
+                        name="details.invoiceDate"
+                        label={_t("form.steps.invoiceDetails.issuedDate")}
+                    />
 
-                <CurrencySelector
-                    name="details.currency"
-                    label={_t("form.steps.invoiceDetails.currency")}
-                    placeholder="Select Currency"
-                />
-            </div>
+                    <DatePickerFormField
+                        name="details.dueDate"
+                        label={_t("form.steps.invoiceDetails.dueDate")}
+                    />
 
-            <div className="flex flex-col gap-2">
-                <TemplateSelector />
+                    <CurrencySelector
+                        name="details.currency"
+                        label={_t("form.steps.invoiceDetails.currency")}
+                        placeholder="Select Currency"
+                    />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    <TemplateSelector />
+                </div>
             </div>
         </div>
     );
