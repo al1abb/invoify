@@ -134,6 +134,7 @@ export const FORM_DEFAULT_VALUES = {
         additionalNotes: "",
         paymentTerms: "",
         totalAmountInWords: "",
+        pdfTemplate: 1,
     },
 };
 
@@ -200,5 +201,6 @@ export const FORM_FILL_VALUES = {
             data: "",
         },
         totalAmount: "100",
+        pdfTemplate: 1,
     },
 };
