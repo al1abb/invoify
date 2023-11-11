@@ -9,7 +9,8 @@ import { InvoiceType } from "@/app/types/types";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 
-const InvoiceTemplate = ({ sender, receiver, details }: InvoiceType) => {
+const InvoiceTemplate = (data: InvoiceType) => {
+    const { sender, receiver, details } = data;
     // const ReactDOMServer = (await import("react-dom/server")).default;
 
     // Instead of fetching all fonts, get the specific one user selected
@@ -49,7 +50,7 @@ const InvoiceTemplate = ({ sender, receiver, details }: InvoiceType) => {
                     width: "100%",
                     paddingBottom: "56-25%",
                 }}
-                className="my-1 border min-h-[50rem]"
+                className="my-1 min-h-[50rem]"
             >
                 <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl dark:bg-gray-800">
                     <div className="flex justify-between">
