@@ -31,7 +31,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
     const { invoicePdfLoading, invoicePdf } = useInvoiceContext();
 
     return (
-        <div className={`w-fit xl:w-[45%]`}>
+        <div className={`xl:w-[45%]`}>
             <Card className="h-auto sticky top-0 px-2">
                 <CardHeader>
                     <CardTitle>ACTIONS</CardTitle>
