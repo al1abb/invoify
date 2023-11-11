@@ -1,8 +1,12 @@
 "use client";
 
 import React from "react";
-import { InvoiceTemplate } from "@/app/components";
+
+// RHF
 import { useFormContext } from "react-hook-form";
+
+// Components
+import { InvoiceTemplate1 } from "@/app/components";
 
 type Props = {};
 
@@ -12,7 +16,7 @@ const Template1 = (props: Props) => {
     const formValues = getValues();
     return (
         <div className="container">
-            <InvoiceTemplate
+            <InvoiceTemplate1
                 sender={formValues.sender}
                 receiver={formValues.receiver}
                 details={formValues.details}
