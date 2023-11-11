@@ -17,10 +17,13 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 // Icons
 import { Plus } from "lucide-react";
 
+// Types
+import { InvoiceType } from "@/app/types/types";
+
 type ItemsProps = {};
 
 const Items = ({}: ItemsProps) => {
-    const { control, setValue } = useFormContext();
+    const { control } = useFormContext<InvoiceType>();
 
     const { _t } = useTranslationContext();
 
