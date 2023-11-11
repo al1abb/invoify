@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 // Puppeteer
 import puppeteer, { Page } from "puppeteer";
 
-// Templates
-import { InvoiceTemplate } from "@/app/components";
+// Helpers
+import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
@@ -24,6 +24,10 @@ export async function generatePdfService(req: NextRequest) {
     try {
         const ReactDOMServer = (await import("react-dom/server")).default;
 
+        // Get the selected invoice template
+        const templateId = body.details.pdfTemplate;
+        const InvoiceTemplate = await getInvoiceTemplate(templateId);
+
         // Read the HTML template from a React component
         const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
             InvoiceTemplate(body)
@@ -38,7 +42,7 @@ export async function generatePdfService(req: NextRequest) {
         const page: Page = await browser.newPage();
 
         // Set the HTML content of the page
-        // ? waitUntil prop makes fonts work in templates
+        // * "waitUntil" prop makes fonts work in templates
         await page.setContent(await htmlTemplate, {
             waitUntil: "networkidle0",
         });
