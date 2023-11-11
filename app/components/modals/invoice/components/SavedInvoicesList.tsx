@@ -30,6 +30,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
 
     const { reset } = useFormContext<InvoiceType>();
 
+    // TODO: Remove "any" from the function below
     // Update fields when selected invoice is changed.
     // ? Reason: The fields don't go through validation when invoice loads
     const updateFields = (selected: any) => {
@@ -52,7 +53,11 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         );
     };
 
-    // Transform date values for next submission
+    /**
+     * Transform date values for next submission
+     *
+     * @param {InvoiceType} selected - The selected invoice
+     */
     const transformDates = (selected: InvoiceType) => {
         selected.details.dueDate = new Date(
             selected.details.dueDate
@@ -62,19 +67,32 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         ).toLocaleDateString(undefined, DATE_OPTIONS);
     };
 
-    // Load a saved invoice
-    const handleSelect = (selectedInvoice: InvoiceType) => {
+    /**
+     * Loads a given invoice into the form.
+     *
+     * @param {InvoiceType} selectedInvoice - The selected invoice
+     */
+    const load = (selectedInvoice: InvoiceType) => {
         if (selectedInvoice) {
             updateFields(selectedInvoice);
             reset(selectedInvoice);
             transformDates(selectedInvoice);
 
-            // Submit form
-            onFormSubmit(selectedInvoice);
-
             // Close modal
             setModalState(false);
         }
+    };
+
+    /**
+     * Loads a given invoice into the form and generates a pdf by submitting the form.
+     *
+     * @param {InvoiceType} selectedInvoice - The selected invoice
+     */
+    const loadAndGeneratePdf = (selectedInvoice: InvoiceType) => {
+        load(selectedInvoice);
+
+        // Submit form
+        onFormSubmit(selectedInvoice);
     };
 
     return (
@@ -84,7 +102,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                     <Card
                         key={idx}
                         className="p-2 border rounded-sm hover:border-blue-500 hover:shadow-lg cursor-pointer"
-                        onClick={() => handleSelect(invoice)}
+                        // onClick={() => handleSelect(invoice)}
                     >
                         <CardContent className="flex justify-between">
                             <div>
@@ -100,7 +118,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                     <p>Sender: {invoice.sender.name}</p>
                                     <p>Receiver: {invoice.receiver.name}</p>
                                     <p>
-                                        Total:
+                                        Total:{" "}
                                         <span className="font-semibold">
                                             {invoice.details.totalAmount}{" "}
                                             {invoice.details.currency}
@@ -109,7 +127,21 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                 </div>
                             </div>
 
-                            <div className="mt-2">
+                            <div className="flex flex-col gap-2">
+                                <BaseButton
+                                    tooltipLabel="Load invoice details into the form"
+                                    onClick={() => load(invoice)}
+                                >
+                                    Load
+                                </BaseButton>
+
+                                <BaseButton
+                                    tooltipLabel="Load invoice and generate PDF"
+                                    variant="outline"
+                                    onClick={() => loadAndGeneratePdf(invoice)}
+                                >
+                                    Load & Generate
+                                </BaseButton>
                                 {/* Remove Invoice Button */}
                                 <BaseButton
                                     variant="destructive"
