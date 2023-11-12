@@ -60,6 +60,10 @@ const fieldValidators = {
     string: z.string(),
     stringMin1: z.string().min(1, { message: "Must be at least 1 character" }),
     stringToNumber: z.coerce.number(),
+
+    // Charges
+    stringToNumberWithMax: z.coerce.number().max(1000000),
+
     stringOptional: z.string().optional(),
     numWithCommas: z.coerce
         .number()
@@ -113,18 +117,18 @@ const PaymentInformationSchema = z.object({
 });
 
 const DiscountDetailsSchema = z.object({
-    amount: fieldValidators.stringToNumber,
+    amount: fieldValidators.stringToNumberWithMax,
     amountType: fieldValidators.string,
 });
 
 const TaxDetailsSchema = z.object({
-    amount: fieldValidators.stringToNumber,
+    amount: fieldValidators.stringToNumberWithMax,
     taxID: fieldValidators.string,
     amountType: fieldValidators.string,
 });
 
 const ShippingDetailsSchema = z.object({
-    cost: fieldValidators.stringToNumber,
+    cost: fieldValidators.stringToNumberWithMax,
     costType: fieldValidators.string,
 });
 
