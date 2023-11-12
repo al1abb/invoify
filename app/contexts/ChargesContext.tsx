@@ -63,20 +63,22 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     });
 
     // Charges
-    const discount = useWatch({
-        name: `details.discountDetails`,
-        control,
-    });
+    const charges = {
+        discount: useWatch({ name: `details.discountDetails`, control }) || {
+            amount: 0,
+            amountType: "amount",
+        },
+        tax: useWatch({ name: `details.taxDetails`, control }) || {
+            amount: 0,
+            amountType: "amount",
+        },
+        shipping: useWatch({ name: `details.shippingDetails`, control }) || {
+            cost: 0,
+            costType: "amount",
+        },
+    };
 
-    const tax = useWatch({
-        name: `details.taxDetails`,
-        control,
-    });
-
-    const shipping = useWatch({
-        name: `details.shippingDetails`,
-        control,
-    });
+    const { discount, tax, shipping } = charges;
 
     // Switch states. On/Off
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(
@@ -168,7 +170,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
      * Calculates the subtotal, total, and the total amount in words on the invoice.
      */
     const calculateTotal = () => {
-        // Here Number fixes a bug where an extra zero appears
+        // Here Number(item.total) fixes a bug where an extra zero appears
         // at the beginning of subTotal caused by toFixed(2) in item.total in single item
         // Reason: toFixed(2) returns string, not a number instance
         const totalSum: number = itemsArray.reduce(
@@ -190,31 +192,38 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
 
         let total: number = totalSum;
 
-        if (discountType == "amount") {
-            total -= discountAmount;
-            discountAmountType = "amount";
-        } else {
-            total -= total * (discountAmount / 100);
-            discountAmountType = "percentage";
+        if (!isNaN(discountAmount)) {
+            if (discountType == "amount") {
+                total -= discountAmount;
+                discountAmountType = "amount";
+            } else {
+                total -= total * (discountAmount / 100);
+                discountAmountType = "percentage";
+            }
         }
 
-        if (taxType == "amount") {
-            total += taxAmount;
-            taxAmountType = "amount";
-        } else {
-            total += total * (taxAmount / 100);
-            taxAmountType = "percentage";
+        if (!isNaN(taxAmount)) {
+            if (taxType == "amount") {
+                total += taxAmount;
+                taxAmountType = "amount";
+            } else {
+                total += total * (taxAmount / 100);
+                taxAmountType = "percentage";
+            }
         }
 
-        if (shippingType == "amount") {
-            total += shippingCost;
-            shippingCostType = "amount";
-        } else {
-            total += total * (shippingCost / 100);
-            shippingCostType = "percentage";
+        if (!isNaN(shippingCost)) {
+            if (shippingType == "amount") {
+                total += shippingCost;
+                shippingCostType = "amount";
+            } else {
+                total += total * (shippingCost / 100);
+                shippingCostType = "percentage";
+            }
         }
 
         setTotalAmount(total);
+
         setValue("details.discountDetails.amount", discountAmount);
         setValue("details.taxDetails.amount", taxAmount);
         setValue("details.shippingDetails.cost", shippingCost);
