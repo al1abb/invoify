@@ -26,6 +26,9 @@ import {
 // Template images
 import template1 from "@/public/assets/img/invoice-1-example.png";
 
+// Icons
+import { Check } from "lucide-react";
+
 // Types
 import { InvoiceType } from "@/app/types/types";
 
@@ -53,12 +56,12 @@ const TemplateSelector = ({}: TemplateSelectorProps) => {
     return (
         <>
             <div>
-                <Label>Choose invoice template:</Label>
+                <Label>Choose Invoice Template:</Label>
 
                 <div>
                     <Card>
                         <CardHeader>
-                            <p>Templates</p>
+                            Templates
                             <CardDescription>
                                 Select one of the predefined templates
                             </CardDescription>
@@ -68,16 +71,29 @@ const TemplateSelector = ({}: TemplateSelectorProps) => {
                                 {templates.map((template, idx) => (
                                     <div
                                         key={idx}
-                                        className="flex flex-col flex-shrink-0 mr-4 my-5 gap-y-3"
+                                        className="flex flex-col flex-shrink-0 mr-4 gap-y-3"
                                     >
                                         <p>{template.name}</p>
 
-                                        <div className="border">
+                                        <div className="relative border">
+                                            {formValues.details.pdfTemplate ===
+                                                template.id && (
+                                                <div className="shadow-lg absolute right-2 top-2 rounded-full bg-blue-400 dark:bg-blue-600">
+                                                    <Check />
+                                                </div>
+                                            )}
                                             <Image
                                                 src={template.img}
                                                 alt={template.name}
                                                 width={300}
                                                 height={700}
+                                                className="shadow cursor-pointer"
+                                                onClick={() =>
+                                                    setValue(
+                                                        "details.pdfTemplate",
+                                                        template.id
+                                                    )
+                                                }
                                             />
                                             {/* {template.component} */}
                                         </div>
