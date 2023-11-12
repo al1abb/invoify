@@ -39,7 +39,7 @@ const PdfViewer = ({}) => {
     // ? Uncomment to enable live preview
     const { watch } = useFormContext<InvoiceType>();
 
-    const [debouncedWatch] = useDebounce(watch, 2000);
+    const [debouncedWatch] = useDebounce(watch, 1000);
     const formValues = debouncedWatch();
 
     return (
@@ -47,14 +47,14 @@ const PdfViewer = ({}) => {
             {invoicePdf.size == 0 ? (
                 <>
                     <p className="text-xl font-semibold">Live Preview:</p>
-                    <div className="border rounded w-full h-[55rem] py-1">
+                    <div className="border rounded w-full h-[55rem] my-1">
                         <DynamicInvoiceTemplate {...formValues} />
                     </div>
                 </>
             ) : (
                 <>
                     <p className="text-xl font-semibold">PDF View</p>
-                    <div className="flex flex-wrap gap-x-2 py-1">
+                    <div className="flex flex-wrap gap-x-2 my-1">
                         <BaseButton
                             tooltipLabel="Preview invoice in new tab"
                             onClick={previewPdfInTab}
