@@ -68,7 +68,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                             loadingText="Generating your invoice"
                         >
                             <FileInput />
-                            <span>Generate PDF</span>
+                            Generate PDF
                         </BaseButton>
                     </div>
 
