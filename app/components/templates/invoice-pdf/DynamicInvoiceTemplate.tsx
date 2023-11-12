@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // ShadCn
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,11 +43,7 @@ const DynamicInvoiceTemplate = (props: InvoiceType) => {
         return <DynamicInvoiceTemplateSkeleton />;
     }
 
-    return (
-        <Suspense fallback={<DynamicInvoiceTemplateSkeleton />}>
-            <DynamicTemplate {...props} />
-        </Suspense>
-    );
+    return <DynamicTemplate {...props} />;
 };
 
 export default DynamicInvoiceTemplate;
