@@ -50,7 +50,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
                     width: "100%",
                     paddingBottom: "56-25%",
                 }}
-                className="my-1 min-h-[50rem]"
+                className="my-1 min-h-[45rem]"
             >
                 <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl dark:bg-gray-800">
                     <div className="flex justify-between">
