@@ -200,6 +200,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
                 total -= total * (discountAmount / 100);
                 discountAmountType = "percentage";
             }
+            setValue("details.discountDetails.amount", discountAmount);
         }
 
         if (!isNaN(taxAmount)) {
@@ -210,6 +211,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
                 total += total * (taxAmount / 100);
                 taxAmountType = "percentage";
             }
+            setValue("details.taxDetails.amount", taxAmount);
         }
 
         if (!isNaN(shippingCost)) {
@@ -220,13 +222,10 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
                 total += total * (shippingCost / 100);
                 shippingCostType = "percentage";
             }
+            setValue("details.shippingDetails.cost", shippingCost);
         }
 
         setTotalAmount(total);
-
-        setValue("details.discountDetails.amount", discountAmount);
-        setValue("details.taxDetails.amount", taxAmount);
-        setValue("details.shippingDetails.cost", shippingCost);
 
         setValue("details.discountDetails.amountType", discountAmountType);
         setValue("details.taxDetails.amountType", taxAmountType);
