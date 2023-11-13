@@ -39,6 +39,7 @@ const defaultInvoiceContext = {
     onFormSubmit: (values: InvoiceType) => {},
     newInvoice: () => {},
     generatePdf: async (data: InvoiceType) => {},
+    removeFinalPdf: () => {},
     downloadPdf: () => {},
     printPdf: () => {},
     previewPdfInTab: () => {},
@@ -161,6 +162,13 @@ export const InvoiceContextProvider = ({
     }, []);
 
     /**
+     * Removes the final PDF file and switches to Live Preview
+     */
+    const removeFinalPdf = () => {
+        setInvoicePdf(new Blob());
+    };
+
+    /**
      * Generates a preview of a PDF file and opens it in a new browser tab.
      */
     const previewPdfInTab = () => {
@@ -208,6 +216,7 @@ export const InvoiceContextProvider = ({
         }
     };
 
+    // TODO: Change function name. (saveInvoiceData maybe?)
     /**
      * Saves the invoice data to local storage.
      */
@@ -262,6 +271,7 @@ export const InvoiceContextProvider = ({
         }
     };
 
+    // TODO: Change function name. (deleteInvoiceData maybe?)
     /**
      * Delete an invoice from local storage based on the given index.
      *
@@ -335,6 +345,7 @@ export const InvoiceContextProvider = ({
                 onFormSubmit,
                 newInvoice,
                 generatePdf,
+                removeFinalPdf,
                 downloadPdf,
                 printPdf,
                 previewPdfInTab,
