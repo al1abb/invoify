@@ -42,7 +42,10 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     const step5Valid =
         !errors.details?.paymentTerms &&
         !errors.details?.subTotal &&
-        !errors.details?.totalAmount;
+        !errors.details?.totalAmount &&
+        !errors.details?.discountDetails?.amount &&
+        !errors.details?.taxDetails?.amount &&
+        !errors.details?.shippingDetails?.cost;
 
     /**
      * Determines the button variant based on the given WizardStepType.
@@ -104,7 +107,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
     return (
         <div className="flex flex-wrap justify-around items-center gap-y-3">
             {steps.map((step, idx) => (
-                <div key={step.id}>
+                <div key={step.id} className="flex items-center">
                     <BaseButton
                         variant={returnButtonVariant(step)}
                         className="w-auto"
@@ -116,7 +119,9 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
                     </BaseButton>
 
                     {/* {step.id != stepCount - 1 && (
-                        <div className="w-[3rem] h-0.5 bg-black hidden md:block"></div>
+                        <div>
+                            <Dot />
+                        </div>
                     )} */}
                 </div>
             ))}
