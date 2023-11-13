@@ -11,7 +11,6 @@ import { DATE_OPTIONS } from "@/lib/variables";
 
 const InvoiceTemplate = (data: InvoiceType) => {
     const { sender, receiver, details } = data;
-    // const ReactDOMServer = (await import("react-dom/server")).default;
 
     // Instead of fetching all fonts, get the specific one user selected
     const fontHref = details.signature?.fontFamily
