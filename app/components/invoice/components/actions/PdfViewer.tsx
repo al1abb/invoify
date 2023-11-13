@@ -20,7 +20,7 @@ import {
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Icons
-import { Download, Eye, Mail, Printer, Save } from "lucide-react";
+import { Download, Eye, Mail, MoveLeft, Printer, Save } from "lucide-react";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
@@ -29,6 +29,7 @@ const PdfViewer = ({}) => {
     const {
         invoicePdf,
         pdfUrl,
+        removeFinalPdf,
         previewPdfInTab,
         downloadPdf,
         printPdf,
@@ -43,7 +44,7 @@ const PdfViewer = ({}) => {
     const formValues = debouncedWatch();
 
     return (
-        <div className="my-5">
+        <div className="my-3">
             {invoicePdf.size == 0 ? (
                 <>
                     <p className="text-xl font-semibold">Live Preview:</p>
@@ -53,7 +54,16 @@ const PdfViewer = ({}) => {
                 </>
             ) : (
                 <>
-                    <p className="text-xl font-semibold">PDF View</p>
+                    <div className="flex items-center mb-3">
+                        <BaseButton
+                            variant={"outline"}
+                            onClick={removeFinalPdf}
+                        >
+                            <MoveLeft />
+                            Back to Live Preview
+                        </BaseButton>
+                    </div>
+                    <p className="text-xl font-semibold">Final PDF:</p>
                     <div className="flex flex-wrap gap-x-2 my-1">
                         <BaseButton
                             tooltipLabel="Preview invoice in new tab"
