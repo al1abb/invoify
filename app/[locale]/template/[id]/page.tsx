@@ -10,6 +10,16 @@ import { useFormContext } from "react-hook-form";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Invoify | Template View",
+    description: "View a specific template",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 type ViewTemplatePageProps = {
     params: { id: string };
