@@ -120,7 +120,11 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                     <p>
                                         Total:{" "}
                                         <span className="font-semibold">
-                                            {invoice.details.totalAmount}{" "}
+                                            {formatNumberWithCommas(
+                                                Number(
+                                                    invoice.details.totalAmount
+                                                )
+                                            )}{" "}
                                             {invoice.details.currency}
                                         </span>
                                     </p>
