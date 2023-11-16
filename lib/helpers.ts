@@ -120,7 +120,7 @@ const getInvoiceTemplate = async (templateId: number) => {
         console.error(`Error importing template ${componentName}: ${err}`);
 
         // Provide a default template
-        return InvoiceTemplate1;
+        return null;
     }
 };
 
