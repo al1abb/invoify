@@ -26,7 +26,7 @@ import { ExportTypes } from "@/app/types/types";
 
 type InvoiceExportModalProps = {};
 
-const InvoiceExportModal = (props: InvoiceExportModalProps) => {
+const InvoiceExportModal = ({}: InvoiceExportModalProps) => {
     const [open, setOpen] = useState(false);
 
     const { invoicePdfLoading, exportInvoiceAs } = useInvoiceContext();
