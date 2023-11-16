@@ -6,11 +6,31 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 
 - [Invoify](#invoify)
   - [Table of Contents](#table-of-contents)
+  - [Technologies](#technologies)
+    - [Core Technologies](#core-technologies)
+    - [Additional Dependencies](#additional-dependencies)
   - [Features](#features)
   - [Demo](#demo)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+
+## Technologies
+
+### Core Technologies
+
+- **Next.js:** React framework for SSR and client-side navigation.
+- **TypeScript:** JavaScript superset with static typing.
+- **Shadcn-UI:** UI library for enhanced visuals.
+- **Tailwind:** Utility-first CSS framework.
+- **React Hook Form:** Form management for React.
+- **Zod:** TypeScript-first schema validation.
+- **Puppeteer:** PDF generation with headless browsers.
+
+### Additional Dependencies
+
+- **Nodemailer:** Node.js module for sending emails.
+- **Lucide Icons:** Collection of customizable SVG icons.
 
 ## Features
 
