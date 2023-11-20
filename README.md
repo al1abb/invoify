@@ -2,6 +2,8 @@
 
 Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices.
 
+![Invoify Website image](/public/assets/img/invoify-web-app.png)
+
 ## Table of Contents
 
 - [Invoify](#invoify)
@@ -15,6 +17,7 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [License](#license)
+
 
 ## Technologies
 
@@ -43,7 +46,8 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 - [x] **Live Preview:** Edit the form and see changes in real-time with the live preview feature.
 - [x] **Export in Various Formats:** Export invoices in different formats, including JSON, XLSX, CSV, and XML.
 - [ ] **I18N Support:** Add i18n support with multiple languages for UI and templates.
-- [ ] **Template Theme Color:** Select a theme color for the invoice
+- [ ] **Themeable Templates:** Select a theme color for the invoice
+- [ ] **Custom Inputs:** Define your own inputs that are missing from the default invoice builder. (Ex: VAT number)
 
 ## Demo
 
