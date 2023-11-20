@@ -1,6 +1,6 @@
 # Invoify
 
-Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices for your business.
+Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices.
 
 ## Table of Contents
 
@@ -9,11 +9,12 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
   - [Technologies](#technologies)
     - [Core Technologies](#core-technologies)
     - [Additional Dependencies](#additional-dependencies)
-  - [Features](#features)
+  - [Roadmap](#roadmap)
   - [Demo](#demo)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+  - [License](#license)
 
 ## Technologies
 
@@ -32,15 +33,17 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 - **Nodemailer:** Node.js module for sending emails.
 - **Lucide Icons:** Collection of customizable SVG icons.
 
-## Features
+## Roadmap
 
-- **Easily Create Invoices:** Utilize a simple form to quickly generate invoices.
-- **Save for Future Access:** Store your invoices directly in your browser for easy retrieval.
-- **Retrieve Invoices Effortlessly:** Load and access invoices seamlessly from your saved list.
-- **Flexible Download Options:** Download invoices directly or send them via email in PDF format.
-- **Template Variety:** Choose from multiple (currently 2) invoice templates.
-- **Live Preview:** Edit the form and see changes in real-time with the live preview feature.
-- **Export in Various Formats:** Export invoices in different formats, including JSON, XLSX, CSV, and XML.
+- [x] **Easily Create Invoices:** Utilize a simple form to quickly generate invoices.
+- [x] **Save for Future Access:** Store your invoices directly in your browser for easy retrieval.
+- [x] **Retrieve Invoices Effortlessly:** Load and access invoices seamlessly from your saved list.
+- [x] **Flexible Download Options:** Download invoices directly or send them via email in PDF format.
+- [x] **Template Variety:** Choose from multiple (currently 2) invoice templates.
+- [x] **Live Preview:** Edit the form and see changes in real-time with the live preview feature.
+- [x] **Export in Various Formats:** Export invoices in different formats, including JSON, XLSX, CSV, and XML.
+- [ ] **I18N Support:** Add i18n support with multiple languages for UI and templates.
+- [ ] **Template Theme Color:** Select a theme color for the invoice
 
 ## Demo
 
@@ -80,3 +83,8 @@ Follow these instructions to get Invoify up and running on your local machine.
     
     ```
     http://localhost:3000
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
