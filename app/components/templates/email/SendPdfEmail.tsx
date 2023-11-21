@@ -1,16 +1,55 @@
 import React from "react";
 
-const SendPdfEmail = async () => {
-    const ReactDOMServer = (await import("react-dom/server")).default;
+import {
+    Html,
+    Body,
+    Head,
+    Heading,
+    Hr,
+    Container,
+    Preview,
+    Section,
+    Text,
+} from "@react-email/components";
 
-    const content = (
-        <>
-            <p>Thanks for using Invoify. Here is your PDF invoice</p>
-        </>
-    );
+import { Tailwind } from "@react-email/tailwind";
 
-    const htmlContent = ReactDOMServer.renderToStaticMarkup(content);
-    return htmlContent;
+type SendPdfEmailProps = {
+    invoiceNumber: string;
 };
 
-export default SendPdfEmail;
+export default function SendPdfEmail({ invoiceNumber }: SendPdfEmailProps) {
+    return (
+        <Html>
+            <Head />
+            <Preview>
+                Your invoice #{invoiceNumber} is ready for download
+            </Preview>
+            <Tailwind>
+                <Body className="bg-gray-100">
+                    <Container>
+                        <Section className="bg-white border-black-950 my-10 px-10 py-4 rounded-md">
+                            <Heading className="leading-tight">
+                                Thanks for using Invoify!
+                            </Heading>
+
+                            <Text>
+                                We're pleased to inform you that your invoice{" "}
+                                <b>#{invoiceNumber}</b> is ready for download.
+                                Please find the attached PDF document.
+                            </Text>
+
+                            <Hr />
+
+                            <Text>
+                                Best Regards,
+                                <br />
+                                Invoify Team
+                            </Text>
+                        </Section>
+                    </Container>
+                </Body>
+            </Tailwind>
+        </Html>
+    );
+}
