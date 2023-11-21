@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest an enhancement or a new feature
-title: "[FEATURE] "
+title: "[FEATURE] - "
 ---
 
 #### Feature Summary
