@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 // Services
 import { sendPdfToEmailService } from "@/app/services/invoice/api/sendPdfToEmailService";
 
-export async function POST(req: NextRequest, res: Response) {
+export async function POST(req: NextRequest) {
     try {
         const emailSent = await sendPdfToEmailService(req);
 
