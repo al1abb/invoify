@@ -1,13 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 // Nodemailer
 import nodemailer, { SendMailOptions } from "nodemailer";
 
-// Variables
-import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
+// React-email
+import { render } from "@react-email/render";
 
 // Components
 import { SendPdfEmail } from "@/app/components";
+
+// Helpers
+import { fileToBuffer } from "@/lib/helpers";
+
+// Variables
+import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -30,28 +36,26 @@ export async function sendPdfToEmailService(
 ): Promise<boolean> {
     const fd = await req.formData();
 
-    const email = fd.get("email")?.toString();
-    const invoicePdf = fd.get("invoicePdf");
+    // Get form data values
+    const email = fd.get("email") as string;
+    const invoicePdf = fd.get("invoicePdf") as File;
+    const invoiceNumber = fd.get("invoiceNumber") as string;
 
     // Get email html content
-    const emailHTML = await SendPdfEmail();
+    const emailHTML = render(SendPdfEmail({ invoiceNumber }));
 
-    // Convert Blob to ArrayBuffer
-    const arrayBuffer = await new NextResponse(invoicePdf).arrayBuffer();
-
-    // Convert ArrayBuffer to Buffer
-    const pdfBuffer = Buffer.from(arrayBuffer);
+    const invoiceBuffer = await fileToBuffer(invoicePdf);
 
     try {
         const mailOptions: SendMailOptions = {
             from: "Invoify",
             to: email,
-            subject: "Your invoice PDF is ready",
+            subject: `Invoice Ready: #${invoiceNumber}`,
             html: emailHTML,
             attachments: [
                 {
                     filename: "invoice.pdf",
-                    content: pdfBuffer,
+                    content: invoiceBuffer,
                 },
             ],
         };
