@@ -299,6 +299,7 @@ export const InvoiceContextProvider = ({
         const fd = new FormData();
         fd.append("email", email);
         fd.append("invoicePdf", invoicePdf, "invoice.pdf");
+        fd.append("invoiceNumber", getValues().details.invoiceNumber);
 
         return fetch(SEND_PDF_API, {
             method: "POST",
