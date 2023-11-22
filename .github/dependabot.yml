@@ -6,17 +6,17 @@
 version: 2
 updates:
  - package-ecosystem: "npm"
-  directory: "/"
-  schedule:
-    interval: "daily"
-  open-pull-requests-limit: 10
-  versioning-strategy: "lockfile-only"
-  allow:
-    - dependency-type: "all"
-  ignore:
-    - dependency-name: "next"
-    - dependency-name: "react"
-    - dependency-name: "react-dom"
-    - dependency-name: "@types/node"
-    - dependency-name: "@types/react"
-    - dependency-name: "@types/react-dom"
+   directory: "/"
+   schedule:
+     interval: "daily"
+   open-pull-requests-limit: 10
+   versioning-strategy: "lockfile-only"
+   allow:
+     - dependency-type: "all"
+   ignore:
+     - dependency-name: "next"
+     - dependency-name: "react"
+     - dependency-name: "react-dom"
+     - dependency-name: "@types/node"
+     - dependency-name: "@types/react"
+     - dependency-name: "@types/react-dom"
