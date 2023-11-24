@@ -10,7 +10,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@hookform/resolvers": "^3.3.1",
+        "@hookform/resolvers": "^3.3.2",
         "@json2csv/node": "^7.0.3",
         "@radix-ui/react-alert-dialog": "^1.0.5",
         "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -38,9 +38,9 @@
         "next": "^13.5.6",
         "next-intl": "^2.21.0",
         "next-themes": "^0.2.1",
-        "nodemailer": "^6.9.6",
+        "nodemailer": "^6.9.7",
         "number-to-words": "^1.2.4",
-        "postcss": "8.4.29",
+        "postcss": "8.4.31",
         "puppeteer": "^21.3.1",
         "react": "18.2.0",
         "react-day-picker": "^8.8.2",
@@ -50,7 +50,7 @@
         "react-signature-canvas": "^1.0.6",
         "react-use-wizard": "^2.2.4",
         "tailwind-merge": "^1.14.0",
-        "tailwindcss": "3.3.3",
+        "tailwindcss": "3.3.5",
         "tailwindcss-animate": "^1.0.7",
         "typescript": "5.2.2",
         "use-debounce": "^10.0.0",
@@ -59,7 +59,7 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
-        "@types/nodemailer": "^6.4.11",
+        "@types/nodemailer": "^6.4.14",
         "@types/number-to-words": "^1.2.1",
         "@types/react": "^18.2.22",
         "@types/react-dom": "^18.2.7",
