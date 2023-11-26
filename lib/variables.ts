@@ -1,10 +1,7 @@
 // Types
 import { SignatureColor, SignatureFont } from "@/app/types/types";
 
-export const BASE_URL =
-    process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : "https://invoify.vercel.app";
+export const BASE_URL = "https://invoify.vercel.app";
 
 /**
  * I18N variables
