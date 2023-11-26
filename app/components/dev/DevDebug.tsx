@@ -19,7 +19,7 @@ type DevDebugProps = {};
 const DevDebug = ({}: DevDebugProps) => {
     const { reset, formState } = useFormContext();
     return (
-        <div className="flex border-2 border-red-500">
+        <div className="flex border-2 border-red-500 rounded-md">
             <div className="flex flex-col">
                 <b>DEV:</b>
                 Form: {formState.isDirty ? "Dirty" : "Clean"}
