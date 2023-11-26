@@ -40,14 +40,21 @@ export const metadata: Metadata = {
         "invoice",
         "invoice generating",
         "invoice generator",
-        "free invoice generator",
         "invoice app",
         "invoice generator app",
+        "free invoice generator",
     ],
     viewport: "width=device-width, initial-scale=1",
     robots: {
         index: true,
         follow: true,
+    },
+    alternates: {
+        canonical: "/",
+    },
+    authors: {
+        name: "Ali Abbasov",
+        url: "https://aliabb.vercel.app",
     },
 };
 
