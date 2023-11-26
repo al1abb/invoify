@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";

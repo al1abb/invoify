@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // Components
 import { BaseButton, FormInput } from "@/app/components";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // ShadCn
 import { Label } from "@/components/ui/label";
 

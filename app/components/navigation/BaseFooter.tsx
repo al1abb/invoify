@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
-
-import { useTranslations } from "next-intl";
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
 const BaseFooter = () => {
-    const _t = useTranslations();
+    const { _t } = useTranslationContext();
+
     return (
         <div className="container py-10">
             <p>

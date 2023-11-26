@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-
 import { useParams } from "next/navigation";
-import { useRouter } from "next-intl/client";
+
+// Next Intl
+import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
 
 // ShadCn
 import {

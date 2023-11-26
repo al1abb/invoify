@@ -1,5 +1,3 @@
-import React from "react";
-
 // Components
 import { BaseButton } from "@/app/components";
 

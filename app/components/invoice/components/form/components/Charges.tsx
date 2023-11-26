@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // RHF
 import { useFormContext } from "react-hook-form";
 

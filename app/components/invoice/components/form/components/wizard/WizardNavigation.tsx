@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // React Wizard
 import { useWizard } from "react-use-wizard";
 

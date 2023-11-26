@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
 
@@ -47,7 +45,6 @@ const BillFromSection = ({}: BillFromSectionProps) => {
                 {_t("form.steps.fromAndTo.billFrom")}:
             </Label>
 
-            {/* // TODO: Remove control from these elements and apply it using useFormContext */}
             <FormInput
                 name="sender.name"
                 label={_t("form.steps.fromAndTo.name")}
