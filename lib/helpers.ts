@@ -4,9 +4,6 @@ import { NextResponse } from "next/server";
 // Utils
 import numberToWords from "number-to-words";
 
-// Components
-import { InvoiceTemplate1 } from "@/app/components";
-
 /**
  * Formats a number with commas and decimal places
  *
