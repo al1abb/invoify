@@ -28,7 +28,7 @@ import { FileInput, Plus } from "lucide-react";
 type InvoiceActionsProps = {};
 
 const InvoiceActions = ({}: InvoiceActionsProps) => {
-    const { invoicePdfLoading, invoicePdf } = useInvoiceContext();
+    const { invoicePdfLoading } = useInvoiceContext();
 
     return (
         <div className={`xl:w-[45%]`}>
@@ -43,7 +43,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         {/* Import & Export modals */}
 
                         <InvoiceLoaderModal />
-                        {invoicePdf.size != 0 && <InvoiceExportModal />}
+                        <InvoiceExportModal />
                     </div>
 
                     <div className="flex flex-row gap-5">
@@ -72,7 +72,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         </BaseButton>
                     </div>
 
-                    {!invoicePdfLoading && <PdfViewer />}
+                    <PdfViewer />
                 </div>
             </Card>
         </div>
