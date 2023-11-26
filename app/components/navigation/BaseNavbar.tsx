@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 // Next
 import Link from "next/link";
@@ -16,11 +16,9 @@ const BaseNavbar = () => {
     }, []);
 
     return (
-        <nav className="container flex flex-wrap gap-5 justify-between items-center py-5 px-10">
+        <nav className="container flex flex-wrap justify-between items-center gap-5 px-10">
             <Link href={"/"}>
-                <Image src={Logo} alt="Invoify Logo" width={200} height={150} />
-
-                <p>Generate invoices with ease.</p>
+                <Image src={Logo} alt="Invoify Logo" width={190} height={100} />
             </Link>
             {/* ? DEV Only */}
             {devEnv && <DevDebug />}
