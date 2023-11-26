@@ -47,11 +47,9 @@ const InvoiceTemplate2 = ({ sender, receiver, details }: InvoiceType) => {
                 style={{
                     position: "relative",
                     width: "100%",
-                    paddingBottom: "56-25%",
                 }}
-                className="min-h-[45rem]"
             >
-                <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl">
+                <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl min-h-[65rem]">
                     <div className="flex justify-between">
                         <div>
                             <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">

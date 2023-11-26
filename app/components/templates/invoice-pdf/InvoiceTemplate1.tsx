@@ -46,12 +46,9 @@ const InvoiceTemplate = (data: InvoiceType) => {
             <div
                 style={{
                     position: "relative",
-                    width: "100%",
-                    paddingBottom: "56-25%",
                 }}
-                className="min-h-[45rem]"
             >
-                <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl">
+                <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl min-h-[65rem]">
                     <div className="flex justify-between">
                         <div>
                             {details.invoiceLogo && (
@@ -182,7 +179,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
                     </div>
 
                     <div className="mt-2 flex sm:justify-end">
-                        <div className="w-full max-w-2xl sm:text-right space-y-2">
+                        <div className="sm:text-right space-y-2">
                             <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                                 <dl className="grid sm:grid-cols-5 gap-x-3">
                                     <dt className="col-span-3 font-semibold text-gray-800">
