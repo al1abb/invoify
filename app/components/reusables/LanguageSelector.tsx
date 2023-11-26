@@ -35,7 +35,7 @@ const LanguageSelector = ({}: LanguageSelectorProps) => {
             value={params.locale.toLocaleString()}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
-            <SelectTrigger className="w-[13rem]">
+            <SelectTrigger className="w-[10rem]">
                 <SelectValue placeholder="Select a language" />
             </SelectTrigger>
             <SelectContent
