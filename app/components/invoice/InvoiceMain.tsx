@@ -29,7 +29,7 @@ const InvoiceMain = () => {
                         console.log(err);
                     })}
                 >
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap justify-center">
                         <InvoiceForm />
 
                         <InvoiceActions />
