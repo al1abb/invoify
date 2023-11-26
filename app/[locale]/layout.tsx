@@ -34,7 +34,7 @@ import { LOCALES } from "@/lib/variables";
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
     description:
-        "Create professional invoices effortlessly with Invoify, the free invoice generator. Try it now!",
+        "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
     icons: [{ rel: "icon", url: Favicon.src }],
     keywords: [
         "invoice",
@@ -81,7 +81,7 @@ export default async function LocaleLayout({
     return (
         <html lang={locale}>
             <body
-                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased`}
+                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>
