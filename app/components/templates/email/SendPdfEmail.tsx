@@ -36,8 +36,8 @@ export default function SendPdfEmail({ invoiceNumber }: SendPdfEmailProps) {
                             <Img
                                 src={logo}
                                 alt="Invoify Logo"
-                                width={190}
-                                height={100}
+                                width={200}
+                                height={120}
                             />
                             <Heading className="leading-tight">
                                 Thanks for using Invoify!
