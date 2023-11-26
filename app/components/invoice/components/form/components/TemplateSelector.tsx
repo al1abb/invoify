@@ -87,6 +87,7 @@ const TemplateSelector = ({}: TemplateSelectorProps) => {
                                                 alt={template.name}
                                                 width={300}
                                                 height={700}
+                                                placeholder="blur"
                                                 className="shadow cursor-pointer"
                                                 onClick={() =>
                                                     setValue(
