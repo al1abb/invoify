@@ -48,7 +48,7 @@ const PdfViewer = ({}) => {
             {invoicePdf.size == 0 ? (
                 <>
                     <p className="text-xl font-semibold">Live Preview:</p>
-                    <div className="border rounded w-full h-[55rem] my-1">
+                    <div className="border dark:border-none rounded-xl my-1">
                         <DynamicInvoiceTemplate {...formValues} />
                     </div>
                 </>
