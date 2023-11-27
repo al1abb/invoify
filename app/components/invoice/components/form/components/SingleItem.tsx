@@ -99,19 +99,20 @@ const SingleItem = ({
         <div
             style={style}
             {...attributes}
-            className={`cursor-default flex flex-col gap-y-5 my-2 ${
-                isDragging ? "opacity-75 bg-white rounded-xl" : ""
+            className={`group cursor-default flex flex-col gap-y-5 my-2 ${
+                isDragging ? "opacity-75 rounded-xl" : ""
             }`}
         >
+            {isDragging && <div className="bg-blue-600 h-1"></div>}
             <div className="flex flex-wrap justify-between">
                 <p>
                     {_t("form.steps.lineItems.item")} #{index + 1}
                 </p>
 
-                <div className="flex gap-3">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-3">
                     {/* Drag and Drop Button */}
                     <div
-                        className="cursor-pointer"
+                        className="flex justify-center items-center cursor-pointer"
                         ref={setNodeRef}
                         {...listeners}
                     >
