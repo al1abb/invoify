@@ -87,7 +87,6 @@ Follow these instructions to get Invoify up and running on your local machine.
     
     ```
     http://localhost:3000
-
 <!-- LICENSE -->
 ## License
 
