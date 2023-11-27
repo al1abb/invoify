@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -15,6 +15,7 @@ import {
     useSensors,
     DragEndEvent,
     DragOverlay,
+    UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
     SortableContext,
@@ -76,12 +77,15 @@ const Items = ({}: ItemsProps) => {
     };
 
     // DnD
+    const [activeId, setActiveId] = useState<UniqueIdentifier>();
+
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
     const handleDragEnd = useCallback(
         async (event: DragEndEvent) => {
             const { active, over } = event;
-            let updatedItems = fields;
+            setActiveId(active.id);
+
             if (active.id !== over?.id) {
                 const oldIndex = fields.findIndex(
                     (item) => item.id === active.id
@@ -109,6 +113,10 @@ const Items = ({}: ItemsProps) => {
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
+                onDragStart={(event) => {
+                    const { active } = event;
+                    setActiveId(active.id);
+                }}
                 onDragEnd={handleDragEnd}
             >
                 <SortableContext
@@ -128,7 +136,12 @@ const Items = ({}: ItemsProps) => {
                         />
                     ))}
                 </SortableContext>
-                {/* <DragOverlay>
+                {/* <DragOverlay
+                    dropAnimation={{
+                        duration: 500,
+                        easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+                    }}
+                >
                     <p>Moving Item</p>
                 </DragOverlay> */}
             </DndContext>
