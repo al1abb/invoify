@@ -58,6 +58,7 @@ const Items = ({}: ItemsProps) => {
                     key={field.id}
                     name={ITEMS_NAME}
                     index={index}
+                    fields={fields}
                     removeField={removeField}
                 />
             ))}

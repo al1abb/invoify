@@ -19,15 +19,16 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 import { Trash2 } from "lucide-react";
 
 // Types
-import { NameType } from "@/app/types/types";
+import { ItemType, NameType } from "@/app/types/types";
 
 type SingleItemProps = {
     name: NameType;
     index: number;
+    fields: ItemType[];
     removeField: (index: number) => void;
 };
 
-const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
+const SingleItem = ({ name, index, fields, removeField }: SingleItemProps) => {
     const { control, setValue } = useFormContext();
 
     const { _t } = useTranslationContext();
@@ -113,11 +114,10 @@ const SingleItem = ({ name, index, removeField }: SingleItemProps) => {
                 placeholder="Item description"
             />
             <div>
-                {/* Not allowing deletion for first item and making sure that there is always at least 1 item */}
-                {index != 0 && (
+                {/* Not allowing deletion for first item when there is only 1 item */}
+                {fields.length > 1 && (
                     <BaseButton
                         variant="destructive"
-                        className="w-fit gap-2"
                         onClick={() => removeField(index)}
                     >
                         <Trash2 />
