@@ -3,7 +3,11 @@
 import { useEffect } from "react";
 
 // RHF
-import { useFormContext, useWatch } from "react-hook-form";
+import { FieldArrayWithId, useFormContext, useWatch } from "react-hook-form";
+
+// DnD
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 // ShadCn
 import { Input } from "@/components/ui/input";
@@ -16,7 +20,7 @@ import { BaseButton, FormInput, FormTextarea } from "@/app/components";
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
 // Icons
-import { Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
 
 // Types
 import { ItemType, NameType } from "@/app/types/types";
@@ -25,10 +29,21 @@ type SingleItemProps = {
     name: NameType;
     index: number;
     fields: ItemType[];
+    field: FieldArrayWithId<ItemType>;
+    moveFieldUp: (index: number) => void;
+    moveFieldDown: (index: number) => void;
     removeField: (index: number) => void;
 };
 
-const SingleItem = ({ name, index, fields, removeField }: SingleItemProps) => {
+const SingleItem = ({
+    name,
+    index,
+    fields,
+    field,
+    moveFieldUp,
+    moveFieldDown,
+    removeField,
+}: SingleItemProps) => {
     const { control, setValue } = useFormContext();
 
     const { _t } = useTranslationContext();
@@ -65,9 +80,65 @@ const SingleItem = ({ name, index, fields, removeField }: SingleItemProps) => {
         }
     }, [rate, quantity]);
 
+    // DnD
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: field.id });
+
+    const style = {
+        transition,
+        transform: CSS.Transform.toString(transform),
+    };
+
     return (
-        <div className="flex flex-col gap-y-5 my-2">
-            {_t("form.steps.lineItems.item")} #{index + 1}
+        <div
+            style={style}
+            {...attributes}
+            className={`cursor-default flex flex-col gap-y-5 my-2 ${
+                isDragging ? "opacity-75 bg-white rounded-xl" : ""
+            }`}
+        >
+            <div className="flex flex-wrap justify-between">
+                <p>
+                    {_t("form.steps.lineItems.item")} #{index + 1}
+                </p>
+
+                <div className="flex gap-3">
+                    {/* Drag and Drop Button */}
+                    <div
+                        className="cursor-pointer"
+                        ref={setNodeRef}
+                        {...listeners}
+                    >
+                        <GripVertical />
+                    </div>
+
+                    {/* Up Button */}
+                    <BaseButton
+                        size={"icon"}
+                        tooltipLabel="Move the item up"
+                        onClick={() => moveFieldUp(index)}
+                        disabled={index === 0}
+                    >
+                        <ChevronUp />
+                    </BaseButton>
+
+                    {/* Down Button */}
+                    <BaseButton
+                        size={"icon"}
+                        tooltipLabel="Move the item down"
+                        onClick={() => moveFieldDown(index)}
+                        disabled={index === fields.length - 1}
+                    >
+                        <ChevronDown />
+                    </BaseButton>
+                </div>
+            </div>
             <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
                 <FormInput
                     name={`${name}[${index}].name`}
