@@ -5,7 +5,7 @@ import React, { useCallback } from "react";
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-//DnD kit
+// DnD
 import {
     DndContext,
     closestCenter,
@@ -45,7 +45,7 @@ const Items = ({}: ItemsProps) => {
 
     const ITEMS_NAME = "details.items";
 
-    const { fields, append, remove, swap, move } = useFieldArray({
+    const { fields, append, remove, move } = useFieldArray({
         control: control,
         name: ITEMS_NAME,
     });
@@ -90,10 +90,12 @@ const Items = ({}: ItemsProps) => {
                     (item) => item.id === over?.id
                 );
 
+                // ? Old approach of rearranging the items list
                 // Rearrange the items
                 // updatedItems = arrayMove(fields, oldIndex, newIndex);
                 // setValue(ITEMS_NAME, fields);
-                swap(oldIndex, newIndex);
+
+                move(oldIndex, newIndex);
             }
         },
         [fields, setValue]
