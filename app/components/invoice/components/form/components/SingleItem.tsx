@@ -100,10 +100,10 @@ const SingleItem = ({
             style={style}
             {...attributes}
             className={`group cursor-default flex flex-col gap-y-5 my-2 ${
-                isDragging ? "opacity-75 rounded-xl" : ""
+                isDragging ? "bg-white dark:bg-slate-900 rounded-xl z-10" : ""
             }`}
         >
-            {isDragging && <div className="bg-blue-600 h-1"></div>}
+            {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>}
             <div className="flex flex-wrap justify-between">
                 <p>
                     {_t("form.steps.lineItems.item")} #{index + 1}
@@ -116,7 +116,7 @@ const SingleItem = ({
                         ref={setNodeRef}
                         {...listeners}
                     >
-                        <GripVertical />
+                        <GripVertical className="hover:text-blue-600" />
                     </div>
 
                     {/* Up Button */}
