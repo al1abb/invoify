@@ -48,27 +48,30 @@ const SingleItem = ({
 
     const { _t } = useTranslationContext();
 
-    // Get rate variable
+    // Items
+    const itemName = useWatch({
+        name: `${name}[${index}].name`,
+        control,
+    });
+
     const rate = useWatch({
         name: `${name}[${index}].unitPrice`,
         control,
     });
 
-    // Get quantity variable
     const quantity = useWatch({
         name: `${name}[${index}].quantity`,
         control,
     });
 
-    // Get currency variable
-    const currency = useWatch({
-        name: `details.currency`,
+    const total = useWatch({
+        name: `${name}[${index}].total`,
         control,
     });
 
-    // Get currency variable
-    const total = useWatch({
-        name: `${name}[${index}].total`,
+    // Currency
+    const currency = useWatch({
+        name: `details.currency`,
         control,
     });
 
@@ -99,15 +102,19 @@ const SingleItem = ({
         <div
             style={style}
             {...attributes}
-            className={`group cursor-default flex flex-col gap-y-5 my-2 ${
-                isDragging ? "bg-white dark:bg-slate-900 rounded-xl z-10" : ""
+            className={`group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 border dark:border-gray-600 ${
+                isDragging ? "bg-gray-200 dark:bg-slate-900 z-10" : ""
             }`}
         >
             {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>}
             <div className="flex flex-wrap justify-between">
-                <p>
-                    {_t("form.steps.lineItems.item")} #{index + 1}
-                </p>
+                {itemName != "" ? (
+                    <p className="font-medium">
+                        #{index + 1} - {itemName}
+                    </p>
+                ) : (
+                    <p className="font-medium">#{index + 1} - Empty name</p>
+                )}
 
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-3">
                     {/* Drag and Drop Button */}
@@ -140,7 +147,7 @@ const SingleItem = ({
                     </BaseButton>
                 </div>
             </div>
-            <div className="flex flex-wrap gap-x-10 gap-y-5" key={index}>
+            <div className="flex flex-wrap justify-between gap-y-5" key={index}>
                 <FormInput
                     name={`${name}[${index}].name`}
                     label={_t("form.steps.lineItems.name")}
