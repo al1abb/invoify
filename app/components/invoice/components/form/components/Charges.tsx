@@ -20,9 +20,7 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 // Types
 import { InvoiceType } from "@/app/types/types";
 
-type ChargesProps = {};
-
-const Charges = ({}: ChargesProps) => {
+const Charges = () => {
     const {
         formState: { errors },
     } = useFormContext<InvoiceType>();
