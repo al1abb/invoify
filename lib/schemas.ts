@@ -65,6 +65,8 @@ const fieldValidators = {
     stringToNumberWithMax: z.coerce.number().max(1000000),
 
     stringOptional: z.string().optional(),
+
+    // ! This is unused
     numWithCommas: z.coerce
         .number()
         .nonnegative({
@@ -150,8 +152,8 @@ const InvoiceDetailsSchema = z.object({
     taxDetails: TaxDetailsSchema.optional(),
     discountDetails: DiscountDetailsSchema.optional(),
     shippingDetails: ShippingDetailsSchema.optional(),
-    subTotal: fieldValidators.numWithCommas,
-    totalAmount: fieldValidators.numWithCommas,
+    subTotal: fieldValidators.string,
+    totalAmount: fieldValidators.string,
     totalAmountInWords: fieldValidators.string,
     additionalNotes: fieldValidators.stringOptional,
     paymentTerms: fieldValidators.stringMin1,

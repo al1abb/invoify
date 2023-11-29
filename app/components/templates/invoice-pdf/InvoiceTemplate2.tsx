@@ -1,7 +1,7 @@
 import React from "react";
 
 // Helpers
-import { isDataUrl } from "@/lib/helpers";
+import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
@@ -188,7 +188,10 @@ const InvoiceTemplate2 = ({ sender, receiver, details }: InvoiceType) => {
                                         Subtotal:
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
-                                        {details.subTotal} {details.currency}
+                                        {formatNumberWithCommas(
+                                            Number(details.subTotal)
+                                        )}{" "}
+                                        {details.currency}
                                     </dd>
                                 </dl>
                                 {details.discountDetails?.amount != undefined &&
@@ -238,7 +241,10 @@ const InvoiceTemplate2 = ({ sender, receiver, details }: InvoiceType) => {
                                         Total:
                                     </dt>
                                     <dd className="col-span-2 text-gray-500">
-                                        {details.totalAmount} {details.currency}
+                                        {formatNumberWithCommas(
+                                            Number(details.totalAmount)
+                                        )}{" "}
+                                        {details.currency}
                                     </dd>
                                 </dl>
                                 {details.totalAmountInWords && (
