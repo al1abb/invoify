@@ -66,6 +66,9 @@ const fieldValidators = {
 
     stringOptional: z.string().optional(),
 
+    nonNegativeNumber: z.coerce.number().nonnegative({
+        message: "Must be a positive number",
+    }),
     // ! This is unused
     numWithCommas: z.coerce
         .number()
@@ -152,8 +155,8 @@ const InvoiceDetailsSchema = z.object({
     taxDetails: TaxDetailsSchema.optional(),
     discountDetails: DiscountDetailsSchema.optional(),
     shippingDetails: ShippingDetailsSchema.optional(),
-    subTotal: fieldValidators.string,
-    totalAmount: fieldValidators.string,
+    subTotal: fieldValidators.nonNegativeNumber,
+    totalAmount: fieldValidators.nonNegativeNumber,
     totalAmountInWords: fieldValidators.string,
     additionalNotes: fieldValidators.stringOptional,
     paymentTerms: fieldValidators.stringMin1,
