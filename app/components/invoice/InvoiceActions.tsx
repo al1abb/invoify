@@ -47,7 +47,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                     <div className="flex flex-row gap-5">
                         <NewInvoiceAlert>
                             <BaseButton
-                                tooltipLabel="Get new invoice form"
+                                tooltipLabel="Get a new invoice form"
                                 variant="outline"
                                 disabled={invoicePdfLoading}
                             >
