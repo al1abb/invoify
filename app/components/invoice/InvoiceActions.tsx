@@ -36,7 +36,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                     <CardDescription>Operations and preview</CardDescription>
                 </CardHeader>
 
-                <div className="flex flex-col flex-wrap gap-2">
+                <div className="flex flex-col flex-wrap items-center gap-2">
                     <div className="flex flex-row gap-5">
                         {/* Import & Export modals */}
 
@@ -47,7 +47,6 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                     <div className="flex flex-row gap-5">
                         <NewInvoiceAlert>
                             <BaseButton
-                                className="w-fit"
                                 tooltipLabel="Get new invoice form"
                                 variant="outline"
                                 disabled={invoicePdfLoading}
@@ -58,9 +57,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         </NewInvoiceAlert>
 
                         <BaseButton
-                            className="w-fit"
                             type="submit"
-                            size="lg"
                             tooltipLabel="Generate your invoice"
                             loading={invoicePdfLoading}
                             loadingText="Generating your invoice"
