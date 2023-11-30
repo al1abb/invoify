@@ -44,7 +44,7 @@ const PdfViewer = ({}) => {
     const formValues = debouncedWatch();
 
     return (
-        <div className="my-3">
+        <div className="w-full my-3">
             {invoicePdf.size == 0 ? (
                 <>
                     <p className="text-xl font-semibold">Live Preview:</p>
