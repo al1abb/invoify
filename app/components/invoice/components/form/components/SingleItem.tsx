@@ -98,15 +98,19 @@ const SingleItem = ({
         transform: CSS.Transform.toString(transform),
     };
 
+    const boxDragClasses = isDragging
+        ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
+        : "border";
+
+    const gripDragClasses = isDragging ? "cursor-grabbing" : "cursor-grab";
+
     return (
         <div
             style={style}
             {...attributes}
-            className={`group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 border dark:border-gray-600 ${
-                isDragging ? "bg-gray-200 dark:bg-slate-900 z-10" : ""
-            }`}
+            className={`${boxDragClasses} group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 dark:border-gray-600`}
         >
-            {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>}
+            {/* {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>} */}
             <div className="flex flex-wrap justify-between">
                 {itemName != "" ? (
                     <p className="font-medium">
@@ -119,7 +123,7 @@ const SingleItem = ({
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-3">
                     {/* Drag and Drop Button */}
                     <div
-                        className="flex justify-center items-center cursor-pointer"
+                        className={`${gripDragClasses} flex justify-center items-center`}
                         ref={setNodeRef}
                         {...listeners}
                     >
@@ -147,7 +151,10 @@ const SingleItem = ({
                     </BaseButton>
                 </div>
             </div>
-            <div className="flex flex-wrap justify-between gap-y-5" key={index}>
+            <div
+                className="flex flex-wrap justify-between gap-y-5 gap-x-2"
+                key={index}
+            >
                 <FormInput
                     name={`${name}[${index}].name`}
                     label={_t("form.steps.lineItems.name")}
