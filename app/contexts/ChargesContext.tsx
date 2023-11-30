@@ -178,7 +178,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
             0
         );
 
-        setValue("details.subTotal", totalSum.toString());
+        setValue("details.subTotal", totalSum);
         setSubTotal(totalSum);
 
         let discountAmount: number =
@@ -231,7 +231,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         setValue("details.taxDetails.amountType", taxAmountType);
         setValue("details.shippingDetails.costType", shippingCostType);
 
-        setValue("details.totalAmount", total.toString());
+        setValue("details.totalAmount", total);
 
         if (totalInWordsSwitch) {
             setValue("details.totalAmountInWords", formatPriceToString(total));
