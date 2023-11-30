@@ -204,7 +204,6 @@ const SingleItem = ({
                     </BaseButton>
                 )}
             </div>
-            <hr />
         </div>
     );
 };
