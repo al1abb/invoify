@@ -102,7 +102,9 @@ const SingleItem = ({
         ? "border-2 bg-gray-200 border-blue-600 dark:bg-slate-900 z-10"
         : "border";
 
-    const gripDragClasses = isDragging ? "cursor-grabbing" : "cursor-grab";
+    const gripDragClasses = isDragging
+        ? "opacity-0 group-hover:opacity-100 transition-opacity cursor-grabbing"
+        : "cursor-grab";
 
     return (
         <div
@@ -120,7 +122,7 @@ const SingleItem = ({
                     <p className="font-medium">#{index + 1} - Empty name</p>
                 )}
 
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-3">
+                <div className="flex gap-3">
                     {/* Drag and Drop Button */}
                     <div
                         className={`${gripDragClasses} flex justify-center items-center`}
