@@ -68,10 +68,6 @@
     .dark .custom-logo-input {
         border-color: white;
     }
-
-    .dark .signature-upload {
-        border-color: white;
-    }
 }
 
 @layer base {
@@ -84,7 +80,6 @@
 }
 
 body {
-    /* background-color: #fafafa; */
     font-family: "Outfit" sans-serif;
 }
 
