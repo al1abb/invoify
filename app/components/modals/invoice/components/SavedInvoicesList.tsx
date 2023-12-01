@@ -5,6 +5,9 @@ import React from "react";
 // RHF
 import { useFormContext } from "react-hook-form";
 
+// ShadCn
+import { Card, CardContent } from "@/components/ui/card";
+
 // Components
 import { BaseButton } from "@/app/components";
 
@@ -19,7 +22,6 @@ import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
-import { Card, CardContent } from "@/components/ui/card";
 
 type SavedInvoicesListProps = {
     setModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,13 +46,6 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
         selected.details.signature = {
             data: "",
         };
-
-        selected.details.subTotal = formatNumberWithCommas(
-            Number(selected.details.subTotal)
-        );
-        selected.details.totalAmount = formatNumberWithCommas(
-            Number(selected.details.totalAmount)
-        );
     };
 
     /**
