@@ -64,10 +64,6 @@
         --input: 217.2 32.6% 17.5%;
         --ring: 212.7 26.8% 83.9%;
     }
-
-    .dark .custom-logo-input {
-        border-color: white;
-    }
 }
 
 @layer base {
@@ -89,19 +85,6 @@ body {
 
 hr {
     border-width: 1px;
-}
-
-/* Custom file input element */
-.custom-logo-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 7rem;
-    width: 10rem;
-}
-
-#logo-input {
-    display: none;
 }
 
 /* Remove chrome input focus */
