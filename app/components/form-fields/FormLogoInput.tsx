@@ -90,7 +90,7 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                             >
                                 <Label
                                     htmlFor="logo-input"
-                                    className="custom-logo-input cursor-pointer border border-black rounded-md hover:border-blue-500"
+                                    className="flex justify-center items-center h-[7rem] w-[10rem] cursor-pointer rounded-md bg-gray-100 dark:bg-slate-800 border border-black dark:border-white hover:border-blue-500"
                                 >
                                     <>
                                         <div className="flex flex-col items-center">
@@ -102,6 +102,7 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                                                 ref={fileInputRef}
                                                 type="file"
                                                 id="logo-input"
+                                                className="hidden"
                                                 onChange={handleInvoiceChange}
                                                 accept="image/*"
                                             />
