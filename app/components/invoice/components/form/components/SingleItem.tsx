@@ -191,7 +191,7 @@ const SingleItem = ({
                         value={`${total} ${currency}`}
                         readOnly
                         placeholder="Item total"
-                        className="border-none font-medium text-lg"
+                        className="border-none font-medium text-lg bg-transparent"
                         size={10}
                     />
                 </div>
