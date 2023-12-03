@@ -112,7 +112,7 @@ const PdfViewer = ({}) => {
                     </div>
                     <AspectRatio ratio={1 / 1.4}>
                         <iframe
-                            className="h-full w-full"
+                            className="h-full w-full rounded-xl"
                             src={`${pdfUrl}#toolbar=0`}
                         ></iframe>
                     </AspectRatio>
