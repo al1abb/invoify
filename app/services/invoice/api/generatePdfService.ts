@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import puppeteer from "puppeteer-core";
-import chromium from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 
 // Puppeteer
 // import puppeteer, { Page } from "puppeteer";
@@ -40,8 +40,8 @@ export async function generatePdfService(req: NextRequest) {
         const browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath,
-            headless: chromium.headless,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless === "new" ? true : chromium.headless,
         });
 
         const page = await browser.newPage();
