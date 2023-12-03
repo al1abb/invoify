@@ -4,6 +4,15 @@
 // );
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    webpack: (config) => {
+        config.module.rules.push({
+            test: /\.map$/,
+            use: "ignore-loader",
+        });
+
+        return config;
+    },
+};
 
 module.exports = nextConfig;
