@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 // Variables
 import { LOCALES } from "@/lib/variables";
@@ -35,7 +36,10 @@ const LanguageSelector = ({}: LanguageSelectorProps) => {
             value={params.locale.toLocaleString()}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
-            <SelectTrigger className="w-[10rem]">
+            <SelectTrigger className="w-[10rem] relative">
+                <Badge className="position: absolute -top-4 -left-2 font-normal">
+                    BETA
+                </Badge>
                 <SelectValue placeholder="Select a language" />
             </SelectTrigger>
             <SelectContent
