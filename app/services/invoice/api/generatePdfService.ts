@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import puppeteer from "puppeteer-core";
+import chromium from "chrome-aws-lambda";
+
 // Puppeteer
-import puppeteer, { Page } from "puppeteer";
+// import puppeteer, { Page } from "puppeteer";
 
 // Helpers
 import { getInvoiceTemplate } from "@/lib/helpers";
@@ -35,11 +38,13 @@ export async function generatePdfService(req: NextRequest) {
 
         // Create a Puppeteer browser instance
         const browser = await puppeteer.launch({
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: "new",
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath,
+            headless: chromium.headless,
         });
 
-        const page: Page = await browser.newPage();
+        const page = await browser.newPage();
 
         // Set the HTML content of the page
         // * "waitUntil" prop makes fonts work in templates
@@ -49,7 +54,7 @@ export async function generatePdfService(req: NextRequest) {
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
-            format: "A4", // You can change the page format here
+            format: "a4", // You can change the page format here
             printBackground: true,
         });
 
