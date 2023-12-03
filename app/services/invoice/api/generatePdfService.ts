@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Puppeteer
-import puppeteer, { Page } from "puppeteer";
+// Chromium
+import chromium from "@sparticuz/chromium";
 
 // Helpers
 import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Types
 import { InvoiceType } from "@/app/types/types";
+
+const ENV = process.env.NODE_ENV;
 
 /**
  * Generate a PDF document of an invoice based on the provided data.
@@ -17,7 +19,6 @@ import { InvoiceType } from "@/app/types/types";
  * @throws {Error} If there is an error during the PDF generation process.
  * @returns {Promise<NextResponse>} A promise that resolves to a NextResponse object containing the generated PDF.
  */
-
 export async function generatePdfService(req: NextRequest) {
     const body: InvoiceType = await req.json();
 
@@ -34,12 +35,32 @@ export async function generatePdfService(req: NextRequest) {
         );
 
         // Create a Puppeteer browser instance
-        const browser = await puppeteer.launch({
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: "new",
-        });
+        let browser;
 
-        const page: Page = await browser.newPage();
+        if (ENV === "production") {
+            const puppeteer = await import("puppeteer-core");
+            browser = await puppeteer.launch({
+                args: chromium.args,
+                defaultViewport: chromium.defaultViewport,
+                executablePath: await chromium.executablePath(
+                    `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+                ),
+                headless:
+                    chromium.headless === "new" ? true : chromium.headless,
+            });
+        } else if (ENV === "development") {
+            const puppeteer = await import("puppeteer");
+            browser = await puppeteer.launch({
+                args: ["--no-sandbox", "--disable-setuid-sandbox"],
+                headless: "new",
+            });
+        }
+
+        if (!browser) {
+            throw new Error("Failed to launch browser");
+        }
+
+        const page = await browser.newPage();
 
         // Set the HTML content of the page
         // * "waitUntil" prop makes fonts work in templates
@@ -49,7 +70,7 @@ export async function generatePdfService(req: NextRequest) {
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
-            format: "A4", // You can change the page format here
+            format: "a4", // You can change the page format here
             printBackground: true,
         });
 
