@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import puppeteer from "puppeteer-core";
+import puppeteer, { Page } from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
 // Puppeteer
@@ -46,7 +46,7 @@ export async function generatePdfService(req: NextRequest) {
             headless: chromium.headless === "new" ? true : chromium.headless,
         });
 
-        const page = await browser.newPage();
+        const page: Page = await browser.newPage();
 
         // Set the HTML content of the page
         // * "waitUntil" prop makes fonts work in templates
