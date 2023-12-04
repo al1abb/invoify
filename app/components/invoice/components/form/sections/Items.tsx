@@ -94,11 +94,6 @@ const Items = ({}: ItemsProps) => {
                     (item) => item.id === over?.id
                 );
 
-                // ? Old approach of rearranging the items list
-                // Rearrange the items
-                // updatedItems = arrayMove(fields, oldIndex, newIndex);
-                // setValue(ITEMS_NAME, fields);
-
                 move(oldIndex, newIndex);
             }
         },
@@ -142,7 +137,9 @@ const Items = ({}: ItemsProps) => {
                         easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
                     }}
                 >
-                    <p>Moving Item</p>
+                    <div className="w-[10rem]">
+                        <p>Click to drop</p>
+                    </div>
                 </DragOverlay> */}
             </DndContext>
             <BaseButton
