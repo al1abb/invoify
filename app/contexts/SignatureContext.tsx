@@ -82,7 +82,7 @@ export const SignatureContextProvider = ({
     /**
      * Sets selected signature color
      *
-     * @param {string} color Color to be selected as string. Ex: "red"
+     * @param {string} color - Color to be selected as string. Ex: "red"
      */
     const handleColorButtonClick = (color: string) => {
         setSelectedColor(color);
@@ -132,7 +132,7 @@ export const SignatureContextProvider = ({
     /**
      * Font size calculator for typed signature
      *
-     * @param {string} text Text in signature input
+     * @param {string} text - Text in signature input
      * @returns {number} Font size that should be used
      */
     const calculateFontSize = (text: string) => {
@@ -173,7 +173,7 @@ export const SignatureContextProvider = ({
 
     /**
      * Function that fires every time signature file input changes
-     * @param e Event object from file input
+     * @param e - Event object from file input
      */
     const handleUploadSignatureChange = (
         e: React.ChangeEvent<HTMLInputElement>

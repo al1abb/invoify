@@ -11,7 +11,6 @@ import {
     Text,
     Img,
 } from "@react-email/components";
-
 import { Tailwind } from "@react-email/tailwind";
 
 // Variables

@@ -6,7 +6,7 @@ import { useDebounce } from "use-debounce";
 // RHF
 import { useFormContext } from "react-hook-form";
 
-// ShadCn components
+// ShadCn
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 // Components
@@ -37,7 +37,6 @@ const PdfViewer = ({}) => {
         sendPdfToMail,
     } = useInvoiceContext();
 
-    // ? Uncomment to enable live preview
     const { watch } = useFormContext<InvoiceType>();
 
     const [debouncedWatch] = useDebounce(watch, 1000);

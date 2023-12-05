@@ -37,15 +37,12 @@ import { Plus } from "lucide-react";
 // Types
 import { InvoiceType } from "@/app/types/types";
 
-type ItemsProps = {};
-
-const Items = ({}: ItemsProps) => {
+const Items = () => {
     const { control, setValue } = useFormContext<InvoiceType>();
 
     const { _t } = useTranslationContext();
 
     const ITEMS_NAME = "details.items";
-
     const { fields, append, remove, move } = useFieldArray({
         control: control,
         name: ITEMS_NAME,
@@ -144,7 +141,6 @@ const Items = ({}: ItemsProps) => {
             </DndContext>
             <BaseButton
                 tooltipLabel="Add a new item to the list"
-                className="w-fit"
                 onClick={addNewField}
             >
                 <Plus />

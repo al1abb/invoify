@@ -14,7 +14,7 @@ import InvoiceActions from "./invoice/InvoiceActions";
 /* =========================
    * Invoice components
    ========================= */
-// Form
+// * Form
 // Form / Components
 import SingleItem from "./invoice/components/form/components/SingleItem";
 import Charges from "./invoice/components/form/components/Charges";
@@ -33,7 +33,7 @@ import Items from "./invoice/components/form/sections/Items";
 import PaymentInformation from "./invoice/components/form/sections/PaymentInformation";
 import InvoiceSummary from "./invoice/components/form/sections/InvoiceSummary";
 
-// Actions
+// * Actions
 import PdfViewer from "./invoice/components/actions/PdfViewer";
 
 // Custom Selectors

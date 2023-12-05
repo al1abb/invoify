@@ -31,7 +31,6 @@ const InvoiceMain = () => {
                 >
                     <div className="flex flex-wrap justify-center">
                         <InvoiceForm />
-
                         <InvoiceActions />
                     </div>
                 </form>

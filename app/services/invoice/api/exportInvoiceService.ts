@@ -18,7 +18,7 @@ import { ExportTypes } from "@/app/types/types";
 /**
  * Export an invoice in selected format.
  *
- * @param {NextRequest} req The Next.js request object.
+ * @param {NextRequest} req - The Next.js request object.
  * @returns {NextResponse} A response object containing the exported data in the requested format.
  */
 export async function exportInvoiceService(req: NextRequest) {

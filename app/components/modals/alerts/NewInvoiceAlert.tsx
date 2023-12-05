@@ -28,10 +28,11 @@ const NewInvoiceAlert = ({ children }: NewInvoiceAlertProps) => {
     // Invoice context
     const { newInvoice } = useInvoiceContext();
 
-    const [open, setOpen] = useState(false);
     const {
         formState: { isDirty },
     } = useFormContext();
+
+    const [open, setOpen] = useState(false);
 
     const handleNewInvoice = () => {
         if (isDirty) {

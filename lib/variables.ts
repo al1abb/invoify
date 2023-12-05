@@ -4,15 +4,6 @@ import { SignatureColor, SignatureFont } from "@/app/types/types";
 export const BASE_URL = "https://invoify.vercel.app";
 
 /**
- * I18N variables
- */
-export const LOCALES = [
-    { code: "en", name: "English" },
-    { code: "de", name: "German" },
-];
-export const DEFAULT_LOCALE = LOCALES[0].code;
-
-/**
  * API endpoints
  */
 export const GENERATE_PDF_API = "/api/invoice/generate";
@@ -24,6 +15,15 @@ export const EXPORT_INVOICE_API = "/api/invoice/export";
  */
 export const CURRENCIES_API =
     "https://openexchangerates.org/api/currencies.json";
+
+/**
+ * I18N variables
+ */
+export const LOCALES = [
+    { code: "en", name: "English" },
+    { code: "de", name: "German" },
+];
+export const DEFAULT_LOCALE = LOCALES[0].code;
 
 /**
  * Nodemailer variables
