@@ -7,6 +7,9 @@ import { TabsContent } from "@/components/ui/tabs";
 // Components
 import { BaseButton } from "@/app/components";
 
+// Contexts
+import { useSignatureContext } from "@/app/contexts/SignatureContext";
+
 // Icons
 import { Trash2 } from "lucide-react";
 
@@ -14,22 +17,17 @@ import { Trash2 } from "lucide-react";
 import { SignatureTabs } from "@/app/types/types";
 
 type UploadSignatureProps = {
-    uploadSignatureRef: React.RefObject<HTMLInputElement>;
-    uploadSignatureImg: string;
-    handleUploadSignatureChange: (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => void;
-    handleRemoveUpload: () => void;
     handleSaveSignature: () => void;
 };
 
-const UploadSignature = ({
-    uploadSignatureRef,
-    uploadSignatureImg,
-    handleUploadSignatureChange,
-    handleRemoveUpload,
-    handleSaveSignature,
-}: UploadSignatureProps) => {
+const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
+    const {
+        uploadSignatureRef,
+        uploadSignatureImg,
+        handleUploadSignatureChange,
+        handleRemoveUploadedSignature,
+    } = useSignatureContext();
+
     return (
         <TabsContent value={SignatureTabs.UPLOAD}>
             <Card className="border-none shadow-none">
@@ -63,7 +61,7 @@ const UploadSignature = ({
                         <BaseButton
                             tooltipLabel="Remove signature image"
                             variant="outline"
-                            onClick={handleRemoveUpload}
+                            onClick={handleRemoveUploadedSignature}
                         >
                             <Trash2 />
                             Remove
