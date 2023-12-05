@@ -8,6 +8,7 @@ import { Charges, FormTextarea, SignatureModal } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { SignatureContextProvider } from "@/app/contexts/SignatureContext";
 
 type InvoiceSummaryProps = {};
 
@@ -21,7 +22,9 @@ const InvoiceSummary = ({}: InvoiceSummaryProps) => {
             <div className="flex flex-wrap gap-x-5 gap-y-10">
                 <div className="flex flex-col gap-3">
                     {/* Signature dialog */}
-                    <SignatureModal />
+                    <SignatureContextProvider>
+                        <SignatureModal />
+                    </SignatureContextProvider>
 
                     {/* Additional notes & Payment terms */}
                     <FormTextarea

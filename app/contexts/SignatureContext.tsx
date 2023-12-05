@@ -1,4 +1,14 @@
-import { useState, useRef, useCallback, useMemo } from "react";
+"use client";
+
+import React, {
+    MutableRefObject,
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
@@ -6,13 +16,48 @@ import { useFormContext, useWatch } from "react-hook-form";
 // Signature Canvas
 import SignatureCanvas from "react-signature-canvas";
 
-// Types
-import { SignatureColor, SignatureFont } from "@/app/types/types";
-
 // Variables
 import { SIGNATURE_COLORS, SIGNATURE_FONTS } from "@/lib/variables";
 
-export function useSignature() {
+// Types
+import { SignatureColor, SignatureFont } from "@/app/types/types";
+
+const defaultSignatureContext = {
+    signatureData: "",
+    signatureRef: null as MutableRefObject<SignatureCanvas | null> | null,
+    colors: [] as SignatureColor[],
+    selectedColor: "",
+    handleColorButtonClick: (color: string) => {},
+    clearSignature: () => {},
+    handleCanvasEnd: () => {},
+    typedSignature: "",
+    setTypedSignature: (value: string) => {},
+    typedSignatureRef: null as MutableRefObject<HTMLInputElement | null> | null,
+    typedSignatureFonts: [] as SignatureFont[],
+    selectedFont: {} as SignatureFont,
+    setSelectedFont: (value: SignatureFont) => {},
+    typedSignatureFontSize: 0 as number,
+    clearTypedSignature: () => {},
+    uploadSignatureRef:
+        null as MutableRefObject<HTMLInputElement | null> | null,
+    uploadSignatureImg: "",
+    handleUploadSignatureChange: (e: React.ChangeEvent<HTMLInputElement>) => {},
+    handleRemoveUploadedSignature: () => {},
+};
+
+export const SignatureContext = createContext(defaultSignatureContext);
+
+export const useSignatureContext = () => {
+    return useContext(SignatureContext);
+};
+
+type SignatureContextProviderProps = {
+    children: React.ReactNode;
+};
+
+export const SignatureContextProvider = ({
+    children,
+}: SignatureContextProviderProps) => {
     // Form context
     const { setValue } = useFormContext();
 
@@ -74,6 +119,9 @@ export function useSignature() {
         signature ?? ""
     );
 
+    // Typed signature input ref
+    const typedSignatureRef = useRef<HTMLInputElement | null>(null);
+
     // All available fonts for typed signature input
     const typedSignatureFonts: SignatureFont[] = SIGNATURE_FONTS;
 
@@ -110,6 +158,14 @@ export function useSignature() {
     );
 
     /**
+     * Clears typed signature
+     */
+    const clearTypedSignature = () => {
+        setTypedSignature("");
+        setValue("details.signature", "");
+    };
+
+    /**
      * * UPLOAD SIGNATURE
      */
     const uploadSignatureRef = useRef<HTMLInputElement | null>(null);
@@ -144,23 +200,31 @@ export function useSignature() {
         }
     };
 
-    return {
-        signatureData,
-        signatureRef,
-        colors,
-        selectedColor,
-        handleColorButtonClick,
-        clearSignature,
-        handleCanvasEnd,
-        typedSignature,
-        setTypedSignature,
-        typedSignatureFonts,
-        selectedFont,
-        setSelectedFont,
-        typedSignatureFontSize,
-        uploadSignatureRef,
-        uploadSignatureImg,
-        handleUploadSignatureChange,
-        handleRemoveUploadedSignature,
-    };
-}
+    return (
+        <SignatureContext.Provider
+            value={{
+                signatureData,
+                signatureRef,
+                colors,
+                selectedColor,
+                handleColorButtonClick,
+                clearSignature,
+                handleCanvasEnd,
+                typedSignature,
+                setTypedSignature,
+                typedSignatureRef,
+                typedSignatureFonts,
+                selectedFont,
+                setSelectedFont,
+                typedSignatureFontSize,
+                clearTypedSignature,
+                uploadSignatureRef,
+                uploadSignatureImg,
+                handleUploadSignatureChange,
+                handleRemoveUploadedSignature,
+            }}
+        >
+            {children}
+        </SignatureContext.Provider>
+    );
+};

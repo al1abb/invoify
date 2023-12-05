@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React from "react";
 
 // ShadCn
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,30 +8,27 @@ import { TabsContent } from "@/components/ui/tabs";
 // Components
 import { BaseButton, SignatureFontSelector } from "@/app/components";
 
+// Contexts
+import { useSignatureContext } from "@/app/contexts/SignatureContext";
+
 // Types
-import { SignatureFont, SignatureTabs } from "@/app/types/types";
+import { SignatureTabs } from "@/app/types/types";
 
 type TypeSignatureProps = {
-    typedSignatureFontSize: number | string;
-    selectedFont: SignatureFont;
-    setSelectedFont: (value: SignatureFont) => void;
-    typedSignature: string;
-    setTypedSignature: (value: string) => void;
-    typedSignatureFonts: SignatureFont[];
     handleSaveSignature: () => void;
-    inputRef: RefObject<HTMLInputElement>;
 };
 
-const TypeSignature = ({
-    typedSignatureFontSize,
-    selectedFont,
-    setSelectedFont,
-    typedSignature,
-    setTypedSignature,
-    typedSignatureFonts,
-    handleSaveSignature,
-    inputRef,
-}: TypeSignatureProps) => {
+const TypeSignature = ({ handleSaveSignature }: TypeSignatureProps) => {
+    const {
+        typedSignatureFontSize,
+        selectedFont,
+        setSelectedFont,
+        typedSignature,
+        setTypedSignature,
+        typedSignatureRef,
+        typedSignatureFonts,
+    } = useSignatureContext();
+
     return (
         <TabsContent value={SignatureTabs.TYPE}>
             <Card className="border-none shadow-none">
@@ -42,7 +39,7 @@ const TypeSignature = ({
                     >
                         <Input
                             id="typed-signature"
-                            ref={inputRef}
+                            ref={typedSignatureRef}
                             className="bg-transparent h-full text-center"
                             style={{
                                 fontSize: `${typedSignatureFontSize}px`,
