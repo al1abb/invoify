@@ -12,33 +12,30 @@ import { TabsContent } from "@/components/ui/tabs";
 // Components
 import { BaseButton, SignatureColorSelector } from "@/app/components";
 
+// Contexts
+import { useSignatureContext } from "@/app/contexts/SignatureContext";
+
 // Icons
 import { Eraser } from "lucide-react";
 
 // Types
-import { SignatureColor, SignatureTabs } from "@/app/types/types";
+import { SignatureTabs } from "@/app/types/types";
 
 type DrawSignatureProps = {
-    signatureData?: string;
-    signatureRef?: React.RefObject<SignatureCanvas>;
-    colors: SignatureColor[];
-    selectedColor: string;
-    handleColorButtonClick: (color: string) => void;
-    clearSignature: () => void;
-    handleCanvasEnd: () => void;
     handleSaveSignature: () => void;
 };
 
-const DrawSignature = ({
-    signatureData,
-    signatureRef,
-    colors,
-    selectedColor,
-    handleColorButtonClick,
-    clearSignature,
-    handleCanvasEnd,
-    handleSaveSignature,
-}: DrawSignatureProps) => {
+const DrawSignature = ({ handleSaveSignature }: DrawSignatureProps) => {
+    const {
+        signatureData,
+        signatureRef,
+        colors,
+        selectedColor,
+        handleColorButtonClick,
+        clearSignature,
+        handleCanvasEnd,
+    } = useSignatureContext();
+
     return (
         <TabsContent value={SignatureTabs.DRAW}>
             <Card className="border-none shadow-none">
