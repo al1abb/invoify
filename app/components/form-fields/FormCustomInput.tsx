@@ -1,5 +1,3 @@
-"use client";
-
 // Components
 import { BaseButton, FormInput } from "@/app/components";
 
