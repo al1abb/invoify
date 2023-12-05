@@ -83,10 +83,6 @@ body {
     outline: none;
 }
 
-hr {
-    border-width: 1px;
-}
-
 /* Remove chrome input focus */
 input,
 textarea,
@@ -94,7 +90,6 @@ select,
 a,
 svg,
 button {
-    /* --tw-ring-offset-width: 0px !important; */
     --tw-ring-offset-color: "transparent" !important;
 }
 
