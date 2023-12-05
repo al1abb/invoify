@@ -70,14 +70,6 @@ export default async function LocaleLayout({
     children: React.ReactNode;
     params: { locale: string };
 }) {
-    // ? NOTE:
-    // Below code is used for server component i18n approach logic
-
-    // Validate that the incoming `locale` parameter is valid
-    // If not, return default not found page
-    // const isValidLocale = locales.some((cur) => cur === locale);
-    // if (!isValidLocale) notFound();
-
     let messages;
     try {
         messages = (await import(`@/app/i18n/locales/${locale}.json`)).default;
