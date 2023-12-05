@@ -10,10 +10,9 @@ import { Charges, FormTextarea, SignatureModal } from "@/app/components";
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
 import { SignatureContextProvider } from "@/app/contexts/SignatureContext";
 
-type InvoiceSummaryProps = {};
-
-const InvoiceSummary = ({}: InvoiceSummaryProps) => {
+const InvoiceSummary = () => {
     const { _t } = useTranslationContext();
+
     return (
         <>
             <Label className="text-xl font-semibold">
@@ -21,8 +20,8 @@ const InvoiceSummary = ({}: InvoiceSummaryProps) => {
             </Label>
             <div className="flex flex-wrap gap-x-5 gap-y-10">
                 <div className="flex flex-col gap-3">
-                    {/* Signature dialog */}
                     <SignatureContextProvider>
+                        {/* Signature dialog */}
                         <SignatureModal />
                     </SignatureContextProvider>
 
@@ -39,6 +38,7 @@ const InvoiceSummary = ({}: InvoiceSummaryProps) => {
                     />
                 </div>
 
+                {/* Final charges */}
                 <Charges />
             </div>
         </>

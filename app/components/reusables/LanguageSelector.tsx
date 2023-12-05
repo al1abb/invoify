@@ -20,9 +20,7 @@ import { Badge } from "@/components/ui/badge";
 // Variables
 import { LOCALES } from "@/lib/variables";
 
-type LanguageSelectorProps = {};
-
-const LanguageSelector = ({}: LanguageSelectorProps) => {
+const LanguageSelector = () => {
     const router = useRouter();
     const params = useParams();
 

@@ -24,9 +24,7 @@ import { Import } from "lucide-react";
 // Types
 import { ExportTypes } from "@/app/types/types";
 
-type InvoiceExportModalProps = {};
-
-const InvoiceExportModal = ({}: InvoiceExportModalProps) => {
+const InvoiceExportModal = () => {
     const [open, setOpen] = useState(false);
 
     const { invoicePdfLoading, exportInvoiceAs } = useInvoiceContext();

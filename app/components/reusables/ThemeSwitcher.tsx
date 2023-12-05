@@ -8,9 +8,7 @@ import { BaseButton } from "@/app/components";
 // Icons
 import { Moon, Sun } from "lucide-react";
 
-type Props = {};
-
-const ThemeSwitcher = ({}: Props) => {
+const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme();
     return (
         <>

@@ -15,9 +15,7 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 // Icons
 import { Plus } from "lucide-react";
 
-type BillToSectionProps = {};
-
-const BillToSection = ({}: BillToSectionProps) => {
+const BillToSection = () => {
     const { control } = useFormContext();
 
     const { _t } = useTranslationContext();

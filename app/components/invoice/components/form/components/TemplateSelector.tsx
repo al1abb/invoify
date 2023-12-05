@@ -30,9 +30,7 @@ import { Check } from "lucide-react";
 // Types
 import { InvoiceType } from "@/app/types/types";
 
-type TemplateSelectorProps = {};
-
-const TemplateSelector = ({}: TemplateSelectorProps) => {
+const TemplateSelector = () => {
     const { watch, setValue } = useFormContext<InvoiceType>();
     const formValues = watch();
     const templates = [

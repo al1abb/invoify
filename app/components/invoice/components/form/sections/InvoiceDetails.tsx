@@ -15,10 +15,9 @@ import {
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
-type InvoiceDetailsProps = {};
-
-const InvoiceDetails = ({}: InvoiceDetailsProps) => {
+const InvoiceDetails = () => {
     const { _t } = useTranslationContext();
+
     return (
         <div className="flex flex-col flex-wrap gap-5">
             <Label htmlFor="invoiceDetails" className="text-xl font-semibold">

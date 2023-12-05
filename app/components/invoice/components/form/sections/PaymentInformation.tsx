@@ -3,15 +3,13 @@
 // ShadCn
 import { Label } from "@/components/ui/label";
 
-// Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
-
 // Components
 import { FormInput } from "@/app/components";
 
-type PaymentInformationProps = {};
+// Contexts
+import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
-const PaymentInformation = ({}: PaymentInformationProps) => {
+const PaymentInformation = () => {
     const { _t } = useTranslationContext();
     return (
         <>

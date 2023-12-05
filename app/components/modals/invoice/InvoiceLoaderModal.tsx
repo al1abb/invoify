@@ -21,9 +21,7 @@ import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 // Icons
 import { FolderUp } from "lucide-react";
 
-type InvoiceLoaderModalProps = {};
-
-const InvoiceLoaderModal = (props: InvoiceLoaderModalProps) => {
+const InvoiceLoaderModal = () => {
     const [open, setOpen] = useState(false);
 
     const { invoicePdfLoading, savedInvoices } = useInvoiceContext();

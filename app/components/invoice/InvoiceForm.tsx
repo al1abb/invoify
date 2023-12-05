@@ -32,9 +32,7 @@ import {
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
-type InvoiceFormProps = {};
-
-const InvoiceForm = ({}: InvoiceFormProps) => {
+const InvoiceForm = () => {
     const { _t } = useTranslationContext();
 
     const { control } = useFormContext();

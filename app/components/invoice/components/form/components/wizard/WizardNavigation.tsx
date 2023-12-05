@@ -12,9 +12,7 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 // Icons
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-type Props = {};
-
-const WizardNavigation = (props: Props) => {
+const WizardNavigation = () => {
     const { isFirstStep, isLastStep, handleStep, previousStep, nextStep } =
         useWizard();
 

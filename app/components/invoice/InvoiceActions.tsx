@@ -23,9 +23,7 @@ import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 // Icons
 import { FileInput, Plus } from "lucide-react";
 
-type InvoiceActionsProps = {};
-
-const InvoiceActions = ({}: InvoiceActionsProps) => {
+const InvoiceActions = () => {
     const { invoicePdfLoading } = useInvoiceContext();
 
     return (
@@ -67,6 +65,7 @@ const InvoiceActions = ({}: InvoiceActionsProps) => {
                         </BaseButton>
                     </div>
 
+                    {/* Live preview and Final pdf */}
                     <PdfViewer />
                 </div>
             </Card>
