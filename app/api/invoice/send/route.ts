@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Services
 import { sendPdfToEmailService } from "@/app/services/invoice/api/sendPdfToEmailService";
@@ -8,16 +8,16 @@ export async function POST(req: NextRequest) {
         const emailSent = await sendPdfToEmailService(req);
 
         if (emailSent) {
-            return new Response("Email sent successfully", {
+            return new NextResponse("Email sent successfully", {
                 status: 200,
             });
         } else {
-            return new Response("Failed to send email", {
+            return new NextResponse("Failed to send email", {
                 status: 500,
             });
         }
     } catch (err) {
         console.log(err);
-        return new Response("Failed to send email", { status: 500 });
+        return new NextResponse("Failed to send email", { status: 500 });
     }
 }
