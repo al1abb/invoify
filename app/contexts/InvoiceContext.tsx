@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
 // Hooks
-import useToasts from "../hooks/useToasts";
+import useToasts from "@/app/hooks/useToasts";
 
 // Services
 import { exportInvoice } from "@/app/services/invoice/client/exportInvoice";
@@ -135,8 +135,8 @@ export const InvoiceContextProvider = ({
      * Generate a PDF document based on the provided data.
      *
      * @param {InvoiceType} data - The data used to generate the PDF.
-     * @returns {Promise<void>} A promise that resolves when the PDF is successfully generated.
-     * @throws {Error} If an error occurs during the PDF generation process.
+     * @returns {Promise<void>} - A promise that resolves when the PDF is successfully generated.
+     * @throws {Error} - If an error occurs during the PDF generation process.
      */
     const generatePdf = useCallback(async (data: InvoiceType) => {
         setInvoicePdfLoading(true);
