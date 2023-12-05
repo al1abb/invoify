@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
@@ -24,12 +24,10 @@ import {
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useSignatureContext } from "@/app/contexts/SignatureContext";
 
 // Icons
 import { FileSignature } from "lucide-react";
-
-// Hooks
-import { useSignature } from "@/app/hooks/useSignature";
 
 // Helpers
 import { isDataUrl } from "@/lib/helpers";
@@ -41,6 +39,15 @@ type SignatureModalProps = {};
 
 const SignatureModal = ({}: SignatureModalProps) => {
     const { setValue } = useFormContext();
+
+    const {
+        handleCanvasEnd,
+        signatureData,
+        typedSignature,
+        selectedFont,
+        uploadSignatureImg,
+        signatureRef,
+    } = useSignatureContext();
 
     const { _t } = useTranslationContext();
 
@@ -54,32 +61,9 @@ const SignatureModal = ({}: SignatureModalProps) => {
         setTab(value as string);
     };
 
-    // Signature variables
-    const {
-        signatureData,
-        signatureRef,
-        colors,
-        selectedColor,
-        handleColorButtonClick,
-        clearSignature,
-        handleCanvasEnd,
-        typedSignature,
-        setTypedSignature,
-        typedSignatureFonts,
-        selectedFont,
-        setSelectedFont,
-        typedSignatureFontSize,
-        uploadSignatureRef,
-        uploadSignatureImg,
-        handleUploadSignatureChange,
-        handleRemoveUploadedSignature,
-    } = useSignature();
-
     const signature = useWatch({
         name: "details.signature.data",
     });
-
-    const typedSignatureRef = useRef<HTMLInputElement | null>(null);
 
     /**
      * Function that handles signature save logic for all tabs (draw, type, upload)
@@ -126,7 +110,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
         if (open && signatureData) {
             // Access the canvas element and draw the signature
             setTimeout(() => {
-                const canvas = signatureRef.current;
+                const canvas = signatureRef?.current;
                 if (canvas) {
                     canvas.fromDataURL(signatureData);
                 }
@@ -199,36 +183,16 @@ const SignatureModal = ({}: SignatureModalProps) => {
 
                         {/* DRAW */}
                         <DrawSignature
-                            signatureData={signatureData}
-                            signatureRef={signatureRef}
-                            colors={colors}
-                            selectedColor={selectedColor}
-                            handleColorButtonClick={handleColorButtonClick}
-                            clearSignature={clearSignature}
-                            handleCanvasEnd={handleCanvasEnd}
                             handleSaveSignature={handleSaveSignature}
                         />
 
                         {/* TYPE */}
                         <TypeSignature
-                            typedSignatureFontSize={typedSignatureFontSize}
-                            selectedFont={selectedFont}
-                            setSelectedFont={setSelectedFont}
-                            typedSignature={typedSignature}
-                            setTypedSignature={setTypedSignature}
-                            typedSignatureFonts={typedSignatureFonts}
                             handleSaveSignature={handleSaveSignature}
-                            inputRef={typedSignatureRef}
                         />
 
                         {/* UPLOAD */}
                         <UploadSignature
-                            uploadSignatureRef={uploadSignatureRef}
-                            uploadSignatureImg={uploadSignatureImg}
-                            handleUploadSignatureChange={
-                                handleUploadSignatureChange
-                            }
-                            handleRemoveUpload={handleRemoveUploadedSignature}
                             handleSaveSignature={handleSaveSignature}
                         />
                     </Tabs>
