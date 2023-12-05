@@ -53,9 +53,6 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 
 Visit the [live demo](https://invoify.vercel.app) to see Invoify in action.
 
-> [!NOTE]
-> Please be aware that there is a known issue with Puppeteer and PDF generation in the current demo. You can find more information and updates on this issue [here](https://github.com/aliabb01/invoify/issues/4).
-
 ## Getting Started
 
 Follow these instructions to get Invoify up and running on your local machine.
