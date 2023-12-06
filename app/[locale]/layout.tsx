@@ -30,20 +30,14 @@ import { NextIntlClientProvider } from "next-intl";
 
 // Variables
 import { LOCALES } from "@/lib/variables";
+import { ROOTKEYWORDS } from "@/lib/seo";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
     description:
         "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
     icons: [{ rel: "icon", url: Favicon.src }],
-    keywords: [
-        "invoice",
-        "invoice generating",
-        "invoice generator",
-        "invoice app",
-        "invoice generator app",
-        "free invoice generator",
-    ],
+    keywords: ROOTKEYWORDS,
     viewport: "width=device-width, initial-scale=1",
     robots: {
         index: true,
