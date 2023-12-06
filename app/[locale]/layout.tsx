@@ -29,7 +29,7 @@ import Providers from "@/app/contexts/Providers";
 import { NextIntlClientProvider } from "next-intl";
 
 // SEO
-import { ROOTKEYWORDS } from "@/lib/seo";
+import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
 
 // Variables
 import { BASE_URL, LOCALES } from "@/lib/variables";
@@ -75,6 +75,13 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale}>
+            <head>
+                <script
+                    type="application/ld+json"
+                    id="json-ld"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
+                />
+            </head>
             <body
                 className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
             >

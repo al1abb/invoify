@@ -2,6 +2,7 @@
 import { SignatureColor, SignatureFont } from "@/app/types/types";
 
 export const BASE_URL = "https://invoify.vercel.app";
+export const AUTHOR_WEBSITE = "https://aliabb.vercel.app";
 
 /**
  * API endpoints
