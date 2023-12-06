@@ -19,6 +19,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
 
     const heading = (
         <>
+            {/* //! NOTE: This causes performance issues in production. (Estimated saving 1.38s) */}
             <link
                 href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
                 rel="stylesheet"
