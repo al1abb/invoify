@@ -28,9 +28,11 @@ import Providers from "@/app/contexts/Providers";
 // Next Intl
 import { NextIntlClientProvider } from "next-intl";
 
-// Variables
-import { LOCALES } from "@/lib/variables";
+// SEO
 import { ROOTKEYWORDS } from "@/lib/seo";
+
+// Variables
+import { BASE_URL, LOCALES } from "@/lib/variables";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
         follow: true,
     },
     alternates: {
-        canonical: "/",
+        canonical: BASE_URL,
     },
     authors: {
         name: "Ali Abbasov",
