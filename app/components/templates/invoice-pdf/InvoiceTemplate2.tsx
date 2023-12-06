@@ -1,5 +1,8 @@
 import React from "react";
 
+// Components
+import { InvoiceLayout } from "@/app/components";
+
 // Helpers
 import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 
@@ -9,40 +12,10 @@ import { InvoiceType } from "@/app/types/types";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 
-const InvoiceTemplate2 = ({ sender, receiver, details }: InvoiceType) => {
-    // const ReactDOMServer = (await import("react-dom/server")).default;
-
-    // Instead of fetching all fonts, get the specific one user selected
-    const fontHref = details.signature?.fontFamily
-        ? `https://fonts.googleapis.com/css2?family=${details?.signature?.fontFamily}&display=swap`
-        : "";
-
-    const heading = (
-        <>
-            <link
-                href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-                rel="stylesheet"
-            />
-
-            {details.signature?.fontFamily && (
-                <>
-                    <link
-                        rel="preconnect"
-                        href="https://fonts.googleapis.com"
-                    />
-                    <link
-                        rel="preconnect"
-                        href="https://fonts.gstatic.com"
-                        crossOrigin="anonymous"
-                    />
-                    <link href={fontHref} rel="stylesheet" />
-                </>
-            )}
-        </>
-    );
-    const content = (
-        <>
-            {heading}
+const InvoiceTemplate2 = (data: InvoiceType) => {
+    const { sender, receiver, details } = data;
+    return (
+        <InvoiceLayout data={data}>
             <div
                 style={{
                     position: "relative",
@@ -349,10 +322,8 @@ const InvoiceTemplate2 = ({ sender, receiver, details }: InvoiceType) => {
                     ) : null}
                 </div>
             </div>
-        </>
+        </InvoiceLayout>
     );
-
-    return <>{content}</>;
 };
 
 export default InvoiceTemplate2;
