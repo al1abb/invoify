@@ -11,6 +11,9 @@ import { BaseButton, SignatureFontSelector } from "@/app/components";
 // Contexts
 import { useSignatureContext } from "@/app/contexts/SignatureContext";
 
+// Icons
+import { Check, Eraser } from "lucide-react";
+
 // Types
 import { SignatureTabs } from "@/app/types/types";
 
@@ -27,6 +30,7 @@ const TypeSignature = ({ handleSaveSignature }: TypeSignatureProps) => {
         setTypedSignature,
         typedSignatureRef,
         typedSignatureFonts,
+        clearTypedSignature,
     } = useSignatureContext();
 
     return (
@@ -56,18 +60,31 @@ const TypeSignature = ({ handleSaveSignature }: TypeSignatureProps) => {
                         />
                     </div>
                 </CardContent>
-                <div className="flex justify-end gap-2 pt-2">
+                <div className="flex justify-between gap-2 pt-2">
                     <SignatureFontSelector
                         typedSignatureFonts={typedSignatureFonts}
                         selectedFont={selectedFont}
                         setSelectedFont={setSelectedFont}
                     />
+
+                    {typedSignature && (
+                        <BaseButton
+                            tooltipLabel="Clear signature"
+                            variant="outline"
+                            onClick={clearTypedSignature}
+                        >
+                            Clear
+                            <Eraser />
+                        </BaseButton>
+                    )}
+
                     <BaseButton
                         tooltipLabel="Save changes"
                         disabled={!typedSignature}
                         onClick={handleSaveSignature}
                     >
-                        Save
+                        Done
+                        <Check />
                     </BaseButton>
                 </div>
             </Card>

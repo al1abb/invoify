@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 // React Signature Canvas
 import SignatureCanvas from "react-signature-canvas";
 
@@ -16,7 +14,7 @@ import { BaseButton, SignatureColorSelector } from "@/app/components";
 import { useSignatureContext } from "@/app/contexts/SignatureContext";
 
 // Icons
-import { Eraser } from "lucide-react";
+import { Check, Eraser } from "lucide-react";
 
 // Types
 import { SignatureTabs } from "@/app/types/types";
@@ -82,8 +80,8 @@ const DrawSignature = ({ handleSaveSignature }: DrawSignatureProps) => {
                             className="w-fit gap-2"
                             onClick={clearSignature}
                         >
-                            <Eraser />
                             Erase
+                            <Eraser />
                         </BaseButton>
                     )}
                     <BaseButton
@@ -91,7 +89,8 @@ const DrawSignature = ({ handleSaveSignature }: DrawSignatureProps) => {
                         disabled={!signatureData}
                         onClick={handleSaveSignature}
                     >
-                        Save
+                        Done
+                        <Check />
                     </BaseButton>
                 </div>
             </Card>

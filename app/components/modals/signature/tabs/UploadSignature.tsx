@@ -1,5 +1,3 @@
-import React from "react";
-
 // ShadCn
 import { Card, CardContent } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
@@ -11,7 +9,7 @@ import { BaseButton } from "@/app/components";
 import { useSignatureContext } from "@/app/contexts/SignatureContext";
 
 // Icons
-import { Trash2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 
 // Types
 import { SignatureTabs } from "@/app/types/types";
@@ -63,8 +61,8 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
                             variant="outline"
                             onClick={handleRemoveUploadedSignature}
                         >
-                            <Trash2 />
                             Remove
+                            <Trash2 />
                         </BaseButton>
                     )}
                     <BaseButton
@@ -72,7 +70,8 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
                         disabled={!uploadSignatureImg}
                         onClick={handleSaveSignature}
                     >
-                        Save
+                        Done
+                        <Check />
                     </BaseButton>
                 </div>
             </Card>
