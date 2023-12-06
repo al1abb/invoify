@@ -82,6 +82,7 @@ import NewInvoiceAlert from "./modals/alerts/NewInvoiceAlert";
    ========================= */
 // Invoice templates
 import DynamicInvoiceTemplate from "./templates/invoice-pdf/DynamicInvoiceTemplate";
+import InvoiceLayout from "./templates/invoice-pdf/InvoiceLayout";
 import InvoiceTemplate1 from "./templates/invoice-pdf/InvoiceTemplate1";
 import InvoiceTemplate2 from "./templates/invoice-pdf/InvoiceTemplate2";
 
@@ -134,6 +135,7 @@ export {
     SignatureFontSelector,
     NewInvoiceAlert,
     DynamicInvoiceTemplate,
+    InvoiceLayout,
     InvoiceTemplate1,
     InvoiceTemplate2,
     SendPdfEmail,
