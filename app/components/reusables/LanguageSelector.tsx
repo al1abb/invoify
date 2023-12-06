@@ -34,7 +34,10 @@ const LanguageSelector = () => {
             value={params.locale.toLocaleString()}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
-            <SelectTrigger className="w-[10rem] relative">
+            <SelectTrigger
+                className="w-[10rem] relative"
+                aria-label="Languages"
+            >
                 <Badge className="position: absolute -top-4 -left-2 font-normal">
                     BETA
                 </Badge>
