@@ -29,7 +29,7 @@ import {
 } from "@/lib/variables";
 
 // Types
-import { ExportTypes, InvoiceType } from "@/app/types/types";
+import { ExportTypes, InvoiceType } from "@/types";
 
 const defaultInvoiceContext = {
     invoicePdf: new Blob(),

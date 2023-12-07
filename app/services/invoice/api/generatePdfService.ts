@@ -7,7 +7,7 @@ import chromium from "@sparticuz/chromium";
 import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 const ENV = process.env.NODE_ENV;
 

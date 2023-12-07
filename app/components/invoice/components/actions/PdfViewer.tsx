@@ -23,7 +23,7 @@ import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 import { Download, Eye, Mail, MoveLeft, Printer, Save } from "lucide-react";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 const PdfViewer = ({}) => {
     const {

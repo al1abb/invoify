@@ -22,7 +22,7 @@ import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 import { Import } from "lucide-react";
 
 // Types
-import { ExportTypes } from "@/app/types/types";
+import { ExportTypes } from "@/types";
 
 const InvoiceExportModal = () => {
     const [open, setOpen] = useState(false);

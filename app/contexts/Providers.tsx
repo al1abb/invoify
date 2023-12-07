@@ -18,7 +18,7 @@ import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
 import { ChargesContextProvider } from "@/app/contexts/ChargesContext";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 // Variables
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";

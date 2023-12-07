@@ -33,7 +33,7 @@ import { FileSignature } from "lucide-react";
 import { isDataUrl } from "@/lib/helpers";
 
 // Types
-import { SignatureTabs } from "@/app/types/types";
+import { SignatureTabs } from "@/types";
 
 type SignatureModalProps = {};
 

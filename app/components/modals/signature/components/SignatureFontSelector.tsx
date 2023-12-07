@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 
 // Types
-import { SignatureFont } from "@/app/types/types";
+import { SignatureFont } from "@/types";
 
 type SignatureFontSelectorProps = {
     typedSignatureFonts: SignatureFont[];

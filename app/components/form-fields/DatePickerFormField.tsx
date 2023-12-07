@@ -29,7 +29,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
 // Types
-import { NameType } from "@/app/types/types";
+import { NameType } from "@/types";
 
 type DatePickerFormFieldProps = {
     name: NameType;

@@ -21,7 +21,7 @@ import { BaseButton } from "@/app/components";
 import { ImageMinus, Image } from "lucide-react";
 
 // Types
-import { NameType } from "@/app/types/types";
+import { NameType } from "@/types";
 
 type FormLogoInputProps = {
     name: NameType;

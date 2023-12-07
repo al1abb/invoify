@@ -23,7 +23,7 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
 
 // Types
-import { ItemType, NameType } from "@/app/types/types";
+import { ItemType, NameType } from "@/types";
 
 type SingleItemProps = {
     name: NameType;

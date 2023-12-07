@@ -15,7 +15,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { formatPriceToString } from "@/lib/helpers";
 
 // Types
-import { InvoiceType, ItemType } from "@/app/types/types";
+import { InvoiceType, ItemType } from "@/types";
 
 const defaultChargesContext = {
     discountSwitch: false,

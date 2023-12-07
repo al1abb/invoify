@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CURRENCIES_API } from "@/lib/variables";
 
 // Type
-import { CurrencyType } from "@/app/types/types";
+import { CurrencyType } from "@/types";
 
 const useCurrencies = () => {
     const [currencies, setCurrencies] = useState<CurrencyType[]>([]);

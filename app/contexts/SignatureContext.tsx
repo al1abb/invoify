@@ -20,7 +20,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { SIGNATURE_COLORS, SIGNATURE_FONTS } from "@/lib/variables";
 
 // Types
-import { SignatureColor, SignatureFont } from "@/app/types/types";
+import { SignatureColor, SignatureFont } from "@/types";
 
 const defaultSignatureContext = {
     signatureData: "",

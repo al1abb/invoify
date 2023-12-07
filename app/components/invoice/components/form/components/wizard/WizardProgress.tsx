@@ -13,7 +13,7 @@ import { BaseButton } from "@/app/components";
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
 
 // Types
-import { InvoiceType, WizardStepType } from "@/app/types/types";
+import { InvoiceType, WizardStepType } from "@/types";
 
 type WizardProgressProps = {
     wizard: WizardValues;

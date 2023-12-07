@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import { useFormContext } from "react-hook-form";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 type ViewTemplatePageProps = {
     params: { id: string };

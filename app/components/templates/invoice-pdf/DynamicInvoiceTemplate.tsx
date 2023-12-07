@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 const DynamicInvoiceTemplateSkeleton = () => {
     return <Skeleton className="w-full min-h-[65rem]" />;

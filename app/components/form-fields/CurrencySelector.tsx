@@ -25,7 +25,7 @@ import {
 import useCurrencies from "@/app/hooks/useCurrencies";
 
 // Types
-import { CurrencyType, NameType } from "@/app/types/types";
+import { CurrencyType, NameType } from "@/types";
 
 type CurrencySelectorProps = {
     name: NameType;

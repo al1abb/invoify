@@ -12,7 +12,7 @@ import { useSignatureContext } from "@/app/contexts/SignatureContext";
 import { Check, Trash2 } from "lucide-react";
 
 // Types
-import { SignatureTabs } from "@/app/types/types";
+import { SignatureTabs } from "@/types";
 
 type UploadSignatureProps = {
     handleSaveSignature: () => void;

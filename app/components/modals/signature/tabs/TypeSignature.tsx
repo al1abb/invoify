@@ -15,7 +15,7 @@ import { useSignatureContext } from "@/app/contexts/SignatureContext";
 import { Check, Eraser } from "lucide-react";
 
 // Types
-import { SignatureTabs } from "@/app/types/types";
+import { SignatureTabs } from "@/types";
 
 type TypeSignatureProps = {
     handleSaveSignature: () => void;

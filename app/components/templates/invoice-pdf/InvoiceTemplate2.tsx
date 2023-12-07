@@ -7,7 +7,7 @@ import { InvoiceLayout } from "@/app/components";
 import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";

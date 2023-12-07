@@ -13,7 +13,7 @@ import XLSX from "xlsx";
 import { flattenObject } from "@/lib/helpers";
 
 // Types
-import { ExportTypes } from "@/app/types/types";
+import { ExportTypes } from "@/types";
 
 /**
  * Export an invoice in selected format.

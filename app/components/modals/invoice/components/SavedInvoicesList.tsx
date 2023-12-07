@@ -21,7 +21,7 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 import { DATE_OPTIONS } from "@/lib/variables";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 type SavedInvoicesListProps = {
     setModalState: React.Dispatch<React.SetStateAction<boolean>>;

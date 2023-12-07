@@ -28,7 +28,7 @@ import template1 from "@/public/assets/img/invoice-1-example.png";
 import { Check } from "lucide-react";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 const TemplateSelector = () => {
     const { watch, setValue } = useFormContext<InvoiceType>();

@@ -1,5 +1,5 @@
 // Types
-import { SignatureColor, SignatureFont } from "@/app/types/types";
+import { SignatureColor, SignatureFont } from "@/types";
 
 export const BASE_URL = "https://invoify.vercel.app";
 export const AUTHOR_WEBSITE = "https://aliabb.vercel.app";

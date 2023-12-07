@@ -2,7 +2,7 @@
 import { EXPORT_INVOICE_API } from "@/lib/variables";
 
 // Types
-import { ExportTypes, InvoiceType } from "@/app/types/types";
+import { ExportTypes, InvoiceType } from "@/types";
 
 /**
  * Export an invoice by sending a POST request to the server and initiating the download.

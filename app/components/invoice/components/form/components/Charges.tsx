@@ -18,7 +18,7 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 import { formatNumberWithCommas } from "@/lib/helpers";
 
 // Types
-import { InvoiceType } from "@/app/types/types";
+import { InvoiceType } from "@/types";
 
 const Charges = () => {
     const {
