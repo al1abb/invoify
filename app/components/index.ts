@@ -1,8 +1,8 @@
 /* =========================
    * Navigation
    ========================= */
-import BaseNavbar from "./navigation/BaseNavbar";
-import BaseFooter from "./navigation/BaseFooter";
+import BaseNavbar from "./layout/BaseNavbar";
+import BaseFooter from "./layout/BaseFooter";
 
 /* =========================
    * Invoice
