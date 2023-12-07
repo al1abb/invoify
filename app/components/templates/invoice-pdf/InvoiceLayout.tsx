@@ -44,7 +44,9 @@ export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
     return (
         <section>
             {head}
-            <div className="">{children}</div>
+            <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl min-h-[60rem]">
+                {children}
+            </div>
         </section>
     );
 }
