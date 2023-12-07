@@ -1,10 +1,7 @@
 "use client";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-
 // Components
-import { FormInput } from "@/app/components";
+import { FormInput, Subheading } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
@@ -12,10 +9,8 @@ import { useTranslationContext } from "@/app/contexts/TranslationContext";
 const PaymentInformation = () => {
     const { _t } = useTranslationContext();
     return (
-        <>
-            <Label className="text-xl font-semibold">
-                {_t("form.steps.paymentInfo.heading")}:
-            </Label>
+        <section>
+            <Subheading>{_t("form.steps.paymentInfo.heading")}:</Subheading>
             <div className="flex flex-wrap gap-10 mt-5">
                 <FormInput
                     name="details.paymentInformation.bankName"
@@ -36,7 +31,7 @@ const PaymentInformation = () => {
                     vertical
                 />
             </div>
-        </>
+        </section>
     );
 };
 

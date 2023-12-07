@@ -22,11 +22,8 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-
 // Components
-import { BaseButton, SingleItem } from "@/app/components";
+import { BaseButton, SingleItem, Subheading } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
@@ -98,10 +95,8 @@ const Items = () => {
     );
 
     return (
-        <div className="flex flex-col gap-2 w-full">
-            <Label className="text-xl font-semibold">
-                {_t("form.steps.lineItems.heading")}:
-            </Label>
+        <section className="flex flex-col gap-2 w-full">
+            <Subheading>{_t("form.steps.lineItems.heading")}:</Subheading>
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -146,7 +141,7 @@ const Items = () => {
                 <Plus />
                 {_t("form.steps.lineItems.addNewItem")}
             </BaseButton>
-        </div>
+        </section>
     );
 };
 

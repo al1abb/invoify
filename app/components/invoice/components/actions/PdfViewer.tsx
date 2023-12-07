@@ -14,6 +14,7 @@ import {
     BaseButton,
     DynamicInvoiceTemplate,
     SendPdfToEmailModal,
+    Subheading,
 } from "@/app/components";
 
 // Contexts
@@ -46,7 +47,7 @@ const PdfViewer = () => {
         <div className="my-3">
             {invoicePdf.size == 0 ? (
                 <>
-                    <p className="text-xl font-semibold">Live Preview:</p>
+                    <Subheading>Live Preview:</Subheading>
                     <div className="border dark:border-none rounded-xl my-1">
                         <DynamicInvoiceTemplate {...formValues} />
                     </div>
@@ -62,7 +63,7 @@ const PdfViewer = () => {
                             Back to Live Preview
                         </BaseButton>
                     </div>
-                    <p className="text-xl font-semibold">Final PDF:</p>
+                    <Subheading>Final PDF:</Subheading>
 
                     {/* Buttons */}
                     <div className="flex flex-wrap gap-x-2 my-1">

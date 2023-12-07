@@ -3,11 +3,13 @@
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-
 // Components
-import { BaseButton, FormCustomInput, FormInput } from "@/app/components";
+import {
+    BaseButton,
+    FormCustomInput,
+    FormInput,
+    Subheading,
+} from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
@@ -39,10 +41,8 @@ const BillToSection = () => {
     };
 
     return (
-        <div className="flex flex-col gap-3">
-            <Label htmlFor="billTo" className="text-xl font-semibold">
-                {_t("form.steps.fromAndTo.billTo")}:
-            </Label>
+        <section className="flex flex-col gap-3">
+            <Subheading>{_t("form.steps.fromAndTo.billTo")}:</Subheading>
 
             <FormInput
                 name="receiver.name"
@@ -100,7 +100,7 @@ const BillToSection = () => {
                 <Plus />
                 {_t("form.steps.fromAndTo.addCustomInput")}
             </BaseButton>
-        </div>
+        </section>
     );
 };
 
