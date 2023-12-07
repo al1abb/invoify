@@ -1,6 +1,6 @@
-"use client";
+import dynamic from "next/dynamic";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 
 // ShadCn
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,37 +13,25 @@ const DynamicInvoiceTemplateSkeleton = () => {
 };
 
 const DynamicInvoiceTemplate = (props: InvoiceType) => {
-    // State to store the dynamically imported component
-    const [DynamicTemplate, setDynamicTemplate] =
-        useState<React.ComponentType<InvoiceType> | null>(null);
-
     // Dynamic template component name
     const templateName = `InvoiceTemplate${props.details.pdfTemplate}`;
 
-    // * This useEffect fires only when template changes
-    useEffect(() => {
-        // Import the component dynamically
-        const importPromise = import(
-            `@/app/components/templates/invoice-pdf/${templateName}`
-        );
+    const DYNAMIC = useMemo(
+        () =>
+            dynamic<InvoiceType>(
+                () =>
+                    import(
+                        `@/app/components/templates/invoice-pdf/${templateName}`
+                    ),
+                {
+                    loading: () => <DynamicInvoiceTemplateSkeleton />,
+                    ssr: false,
+                }
+            ),
+        [templateName]
+    );
 
-        importPromise
-            .then((module) => {
-                setDynamicTemplate(() => module.default);
-            })
-            .catch((error) => {
-                console.error(
-                    `Error importing template ${templateName}: ${error}`
-                );
-            });
-    }, [templateName]);
-
-    if (!DynamicTemplate) {
-        // Loading state or fallback component
-        return <DynamicInvoiceTemplateSkeleton />;
-    }
-
-    return <DynamicTemplate {...props} />;
+    return <DYNAMIC {...props} />;
 };
 
 export default DynamicInvoiceTemplate;
