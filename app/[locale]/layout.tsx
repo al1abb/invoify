@@ -52,6 +52,9 @@ export const metadata: Metadata = {
         name: "Ali Abbasov",
         url: "https://aliabb.vercel.app",
     },
+    verification: {
+        google: "niScX4JYveit46wC1LTfuJb0qx7DUiiDnGPwtce7VGo",
+    },
 };
 
 export function generateStaticParams() {
