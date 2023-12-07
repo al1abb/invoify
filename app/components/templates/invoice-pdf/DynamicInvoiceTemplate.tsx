@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { InvoiceType } from "@/types";
 
 const DynamicInvoiceTemplateSkeleton = () => {
-    return <Skeleton className="min-h-[65rem]" />;
+    return <Skeleton className="min-h-[60rem]" />;
 };
 
 const DynamicInvoiceTemplate = (props: InvoiceType) => {
