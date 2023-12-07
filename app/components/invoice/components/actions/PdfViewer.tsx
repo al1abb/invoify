@@ -25,7 +25,7 @@ import { Download, Eye, Mail, MoveLeft, Printer, Save } from "lucide-react";
 // Types
 import { InvoiceType } from "@/types";
 
-const PdfViewer = ({}) => {
+const PdfViewer = () => {
     const {
         invoicePdf,
         pdfUrl,
@@ -43,7 +43,7 @@ const PdfViewer = ({}) => {
     const formValues = debouncedWatch();
 
     return (
-        <div className="w-full my-3">
+        <div className="my-3">
             {invoicePdf.size == 0 ? (
                 <>
                     <p className="text-xl font-semibold">Live Preview:</p>
@@ -63,6 +63,8 @@ const PdfViewer = ({}) => {
                         </BaseButton>
                     </div>
                     <p className="text-xl font-semibold">Final PDF:</p>
+
+                    {/* Buttons */}
                     <div className="flex flex-wrap gap-x-2 my-1">
                         <BaseButton
                             tooltipLabel="Preview invoice in new tab"

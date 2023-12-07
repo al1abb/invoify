@@ -43,7 +43,7 @@ export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
     return (
         <>
             {head}
-            {children}
+            <div className="">{children}</div>
         </>
     );
 }

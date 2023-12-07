@@ -65,8 +65,10 @@ const InvoiceActions = () => {
                         </BaseButton>
                     </div>
 
-                    {/* Live preview and Final pdf */}
-                    <PdfViewer />
+                    <div className="w-full">
+                        {/* Live preview and Final pdf */}
+                        <PdfViewer />
+                    </div>
                 </div>
             </Card>
         </div>
