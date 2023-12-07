@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 
+// Types
 import { InvoiceType } from "@/types";
 
 type InvoiceLayoutProps = {
@@ -10,7 +11,7 @@ type InvoiceLayoutProps = {
 export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
     const { sender, receiver, details } = data;
 
-    // Instead of fetching all fonts, get the specific one user selected
+    // Instead of fetching all signature fonts, get the specific one user selected.
     const fontHref = details.signature?.fontFamily
         ? `https://fonts.googleapis.com/css2?family=${details?.signature?.fontFamily}&display=swap`
         : "";
@@ -41,9 +42,9 @@ export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
     );
 
     return (
-        <>
+        <section>
             {head}
             <div className="">{children}</div>
-        </>
+        </section>
     );
 }
