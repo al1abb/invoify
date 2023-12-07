@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 
 // Hooks
-import useCurrencies from "@/app/hooks/useCurrencies";
+import useCurrencies from "@/hooks/useCurrencies";
 
 // Types
 import { CurrencyType, NameType } from "@/types";

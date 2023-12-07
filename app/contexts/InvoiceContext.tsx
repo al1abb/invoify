@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
 // Hooks
-import useToasts from "@/app/hooks/useToasts";
+import useToasts from "@/hooks/useToasts";
 
 // Services
 import { exportInvoice } from "@/app/services/invoice/client/exportInvoice";
