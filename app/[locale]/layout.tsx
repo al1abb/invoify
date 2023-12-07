@@ -8,13 +8,16 @@ import {
     greatVibes,
     outfit,
     parisienne,
-} from "@/app/fonts/fonts";
+} from "@/lib/fonts";
 
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
 
 // Vercel Analytics
 import { Analytics } from "@vercel/analytics/react";
+
+// Next Intl
+import { NextIntlClientProvider } from "next-intl";
 
 // ShadCn
 import { Toaster } from "@/components/ui/toaster";
@@ -24,9 +27,6 @@ import { BaseNavbar, BaseFooter } from "@/app/components";
 
 // Context
 import Providers from "@/app/contexts/Providers";
-
-// Next Intl
-import { NextIntlClientProvider } from "next-intl";
 
 // SEO
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
