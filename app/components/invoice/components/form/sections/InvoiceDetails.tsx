@@ -1,14 +1,12 @@
 "use client";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-
 // Components
 import {
     CurrencySelector,
     DatePickerFormField,
     FormInput,
     FormLogoInput,
+    Subheading,
     TemplateSelector,
 } from "@/app/components";
 
@@ -19,10 +17,8 @@ const InvoiceDetails = () => {
     const { _t } = useTranslationContext();
 
     return (
-        <div className="flex flex-col flex-wrap gap-5">
-            <Label htmlFor="invoiceDetails" className="text-xl font-semibold">
-                {_t("form.steps.invoiceDetails.heading")}:
-            </Label>
+        <section className="flex flex-col flex-wrap gap-5">
+            <Subheading>{_t("form.steps.invoiceDetails.heading")}:</Subheading>
 
             <div className="flex flex-row flex-wrap gap-5">
                 <div className="flex flex-col gap-2">
@@ -63,7 +59,7 @@ const InvoiceDetails = () => {
                     <TemplateSelector />
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

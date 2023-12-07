@@ -1,10 +1,12 @@
 "use client";
 
-// ShadCn
-import { Label } from "@/components/ui/label";
-
 // Components
-import { Charges, FormTextarea, SignatureModal } from "@/app/components";
+import {
+    Charges,
+    FormTextarea,
+    SignatureModal,
+    Subheading,
+} from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/app/contexts/TranslationContext";
@@ -14,10 +16,8 @@ const InvoiceSummary = () => {
     const { _t } = useTranslationContext();
 
     return (
-        <>
-            <Label className="text-xl font-semibold">
-                {_t("form.steps.summary.heading")}:
-            </Label>
+        <section>
+            <Subheading>{_t("form.steps.summary.heading")}:</Subheading>
             <div className="flex flex-wrap gap-x-5 gap-y-10">
                 <div className="flex flex-col gap-3">
                     <SignatureContextProvider>
@@ -41,7 +41,7 @@ const InvoiceSummary = () => {
                 {/* Final charges */}
                 <Charges />
             </div>
-        </>
+        </section>
     );
 };
 

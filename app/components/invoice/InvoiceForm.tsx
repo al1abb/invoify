@@ -55,14 +55,18 @@ const InvoiceForm = () => {
         <div className={`xl:w-[55%]`}>
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                        <span className="uppercase">{_t("form.title")}</span>
+                    <div className="flex gap-3">
+                        <CardTitle className="flex items-center gap-3">
+                            <span className="uppercase">
+                                {_t("form.title")}
+                            </span>
+                        </CardTitle>
                         <Badge variant="secondary" className="w-fit">
                             <p style={{ fontSize: "14px" }}>
                                 {invoiceNumberLabel}
                             </p>
                         </Badge>
-                    </CardTitle>
+                    </div>
                     <CardDescription>{_t("form.description")}</CardDescription>
                 </CardHeader>
                 <CardContent>

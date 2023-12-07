@@ -6,7 +6,7 @@ const BaseFooter = () => {
     const { _t } = useTranslationContext();
 
     return (
-        <div className="container py-10">
+        <footer className="container py-10">
             <p>
                 {_t("footer.developedBy")}{" "}
                 <a
@@ -17,7 +17,7 @@ const BaseFooter = () => {
                     Ali Abbasov
                 </a>
             </p>
-        </div>
+        </footer>
     );
 };
 
