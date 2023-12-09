@@ -68,6 +68,11 @@ export async function generatePdfService(req: NextRequest) {
             waitUntil: "networkidle0",
         });
 
+        // Add Tailwind CSS
+        await page.addStyleTag({
+            url: "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
+        });
+
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
             format: "a4", // You can change the page format here
