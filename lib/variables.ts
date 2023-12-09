@@ -18,6 +18,11 @@ export const CURRENCIES_API =
     "https://openexchangerates.org/api/currencies.json";
 
 /**
+ * Google
+ */
+export const GOOGLE_SC_VERIFICATION = process.env.GOOGLE_SC_VERIFICATION;
+
+/**
  * I18N variables
  */
 export const LOCALES = [

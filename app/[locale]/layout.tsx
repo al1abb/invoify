@@ -32,7 +32,7 @@ import Providers from "@/app/contexts/Providers";
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
 
 // Variables
-import { BASE_URL, LOCALES } from "@/lib/variables";
+import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
         url: "https://aliabb.vercel.app",
     },
     verification: {
-        google: "niScX4JYveit46wC1LTfuJb0qx7DUiiDnGPwtce7VGo",
+        google: GOOGLE_SC_VERIFICATION,
     },
 };
 
