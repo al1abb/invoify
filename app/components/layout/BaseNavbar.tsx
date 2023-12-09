@@ -28,6 +28,7 @@ const BaseNavbar = () => {
                             alt="Invoify Logo"
                             width={190}
                             height={100}
+                            loading="eager"
                         />
                     </Link>
                     {/* ? DEV Only */}
