@@ -21,7 +21,14 @@ import {
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Icons
-import { Download, Eye, Mail, MoveLeft, Printer, Save } from "lucide-react";
+import {
+    BookmarkIcon,
+    DownloadCloudIcon,
+    Eye,
+    Mail,
+    MoveLeft,
+    Printer,
+} from "lucide-react";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -56,59 +63,65 @@ const PdfViewer = () => {
                 <>
                     <div className="flex items-center mb-3">
                         <BaseButton
-                            variant={"outline"}
+                            variant={"ghost"}
+                            size="sm"
                             onClick={removeFinalPdf}
                         >
-                            <MoveLeft />
+                            <MoveLeft className="w-5 h-5" />
                             Back to Live Preview
                         </BaseButton>
                     </div>
                     <Subheading>Final PDF:</Subheading>
 
                     {/* Buttons */}
-                    <div className="flex flex-wrap gap-x-2 my-1">
+                    <div className="flex flex-wrap gap-2 my-1">
                         <BaseButton
                             tooltipLabel="Preview invoice in new tab"
                             onClick={previewPdfInTab}
-                            size="icon"
+                            size="sm"
                             variant={"outline"}
                         >
-                            <Eye />
+                            <Eye className="w-5 h-5" />
+                            Preview
                         </BaseButton>
                         <BaseButton
                             tooltipLabel="Download invoice PDF"
                             onClick={downloadPdf}
-                            size="icon"
+                            size="sm"
                             variant={"outline"}
                         >
-                            <Download />
+                            <DownloadCloudIcon className="w-5 h-5" />
+                            Download
                         </BaseButton>
 
                         <BaseButton
                             tooltipLabel="Print invoice"
                             onClick={printPdf}
-                            size="icon"
+                            size="sm"
                             variant={"outline"}
                         >
-                            <Printer />
+                            <Printer className="w-5 h-5" />
+                            Print
                         </BaseButton>
 
                         <BaseButton
                             tooltipLabel="Save invoice in website"
                             onClick={saveInvoice}
-                            size="icon"
+                            size="sm"
                             variant={"outline"}
                         >
-                            <Save />
+                            <BookmarkIcon className="w-5 h-5" />
+                            Save
                         </BaseButton>
 
                         <SendPdfToEmailModal sendPdfToMail={sendPdfToMail}>
                             <BaseButton
                                 tooltipLabel="Send invoice PDF to mail"
-                                size="icon"
+                                size="sm"
                                 variant={"outline"}
                             >
-                                <Mail />
+                                <Mail className="w-5 h-5" />
+                                Send to mail
                             </BaseButton>
                         </SendPdfToEmailModal>
                     </div>
