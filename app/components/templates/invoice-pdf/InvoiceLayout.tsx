@@ -18,12 +18,6 @@ export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
 
     const head = (
         <>
-            {/* //! NOTE: This used to cause performance issues in production. (Estimated saving 1.38s) */}
-            {/* <link
-                href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-                rel="stylesheet"
-            /> */}
-
             {details.signature?.fontFamily && (
                 <>
                     <link
