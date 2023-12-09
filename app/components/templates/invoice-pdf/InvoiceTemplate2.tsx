@@ -293,6 +293,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                             fontSize: 30,
                             fontWeight: 400,
                             fontFamily: `${details.signature.fontFamily}, cursive`,
+                            color: "black",
                         }}
                     >
                         {details.signature.data}
