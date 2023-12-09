@@ -34,9 +34,10 @@ export async function generatePdfService(req: NextRequest) {
             InvoiceTemplate(body)
         );
 
-        // Create a Puppeteer browser instance
+        // Create a browser instance
         let browser;
 
+        // Launch the browser in production or development mode depending on the environment
         if (ENV === "production") {
             const puppeteer = await import("puppeteer-core");
             browser = await puppeteer.launch({
@@ -63,8 +64,8 @@ export async function generatePdfService(req: NextRequest) {
         const page = await browser.newPage();
 
         // Set the HTML content of the page
-        // * "waitUntil" prop makes fonts work in templates
         await page.setContent(await htmlTemplate, {
+            // * "waitUntil" prop makes fonts work in templates
             waitUntil: "networkidle0",
         });
 
@@ -75,7 +76,7 @@ export async function generatePdfService(req: NextRequest) {
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
-            format: "a4", // You can change the page format here
+            format: "a4",
             printBackground: true,
         });
 

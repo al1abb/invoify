@@ -1,6 +1,9 @@
 // Types
 import { SignatureColor, SignatureFont } from "@/types";
 
+/**
+ * Websites
+ */
 export const BASE_URL = "https://invoify.vercel.app";
 export const AUTHOR_WEBSITE = "https://aliabb.vercel.app";
 
@@ -23,19 +26,19 @@ export const CURRENCIES_API =
 export const GOOGLE_SC_VERIFICATION = process.env.GOOGLE_SC_VERIFICATION;
 
 /**
- * I18N variables
+ * Nodemailer
+ */
+export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
+export const NODEMAILER_PW = process.env.NODEMAILER_PW;
+
+/**
+ * I18N
  */
 export const LOCALES = [
     { code: "en", name: "English" },
     { code: "de", name: "German" },
 ];
 export const DEFAULT_LOCALE = LOCALES[0].code;
-
-/**
- * Nodemailer variables
- */
-export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
-export const NODEMAILER_PW = process.env.NODEMAILER_PW;
 
 /**
  * Signature variables

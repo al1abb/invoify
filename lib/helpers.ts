@@ -7,8 +7,8 @@ import numberToWords from "number-to-words";
 /**
  * Formats a number with commas and decimal places
  *
- * @param number - Number to format
- * @returns A styled number to be displayed on the invoice
+ * @param {number} number - Number to format
+ * @returns {string} A styled number to be displayed on the invoice
  */
 const formatNumberWithCommas = (number: number) => {
     return number.toLocaleString("en-US", {
@@ -21,8 +21,8 @@ const formatNumberWithCommas = (number: number) => {
 /**
  * Turns a number into words for invoices
  *
- * @param price - Number to format
- * @returns Number in words
+ * @param {number} price - Number to format
+ * @returns {string} Number in words
  */
 const formatPriceToString = (price: number): string => {
     // Split the price into integer and fractional parts (Dollar and Cents)
@@ -53,9 +53,9 @@ const formatPriceToString = (price: number): string => {
 /**
  * This method flattens a nested object. It is used for xlsx export
  *
- * @param obj - A nested object to flatten
- * @param parentKey - The parent key
- * @returns A flattened object
+ * @param {Record<string, T>} obj - A nested object to flatten
+ * @param {string} parentKey - The parent key
+ * @returns {Record<string, T>} A flattened object
  */
 const flattenObject = <T>(
     obj: Record<string, T>,
@@ -84,7 +84,7 @@ const flattenObject = <T>(
  * A method to validate an email address
  *
  * @param {string} email - Email to validate
- * @returns A boolean indicating if the email is valid
+ * @returns {boolean} A boolean indicating if the email is valid
  */
 const isValidEmail = (email: string) => {
     // Regular expression for a simple email pattern
@@ -95,8 +95,8 @@ const isValidEmail = (email: string) => {
 /**
  * A method to check if a string is a data URL
  *
- * @param str - String to check
- * @returns Boolean indicating if the string is a data URL
+ * @param {string} str - String to check
+ * @returns {boolean} Boolean indicating if the string is a data URL
  */
 const isDataUrl = (str: string) => str.startsWith("data:");
 
@@ -104,7 +104,7 @@ const isDataUrl = (str: string) => str.startsWith("data:");
  * Dynamically imports and retrieves an invoice template React component based on the provided template ID.
  *
  * @param {number} templateId - The ID of the invoice template.
- * @returns {Promise<React.Component>} A promise that resolves to the imported React component for the specified template.
+ * @returns {Promise<React.ComponentType<any> | null>} A promise that resolves to the invoice template component or null if not found.
  * @throws {Error} Throws an error if there is an issue with the dynamic import or if a default template is not available.
  */
 const getInvoiceTemplate = async (templateId: number) => {
@@ -126,7 +126,7 @@ const getInvoiceTemplate = async (templateId: number) => {
 
 /**
  * Convert a file to a buffer. Used for sending invoice as email attachment.
- * @param file - The file to convert to a buffer.
+ * @param {File} file - The file to convert to a buffer.
  * @returns {Promise<Buffer>} A promise that resolves to a buffer.
  */
 const fileToBuffer = async (file: File) => {
