@@ -129,6 +129,8 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                             <div className="flex flex-col gap-2">
                                 <BaseButton
                                     tooltipLabel="Load invoice details into the form"
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => load(invoice)}
                                 >
                                     Load
@@ -137,6 +139,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                 <BaseButton
                                     tooltipLabel="Load invoice and generate PDF"
                                     variant="outline"
+                                    size="sm"
                                     onClick={() => loadAndGeneratePdf(invoice)}
                                 >
                                     Load & Generate
@@ -144,6 +147,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                                 {/* Remove Invoice Button */}
                                 <BaseButton
                                     variant="destructive"
+                                    size="sm"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         deleteInvoice(idx);
