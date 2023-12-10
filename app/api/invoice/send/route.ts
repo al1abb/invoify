@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Services
-import { sendPdfToEmailService } from "@/app/services/invoice/api/sendPdfToEmailService";
+import { sendPdfToEmailService } from "@/services/invoice/api/sendPdfToEmailService";
 
 export async function POST(req: NextRequest) {
     try {
