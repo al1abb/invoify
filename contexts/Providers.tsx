@@ -12,10 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InvoiceSchema } from "@/lib/schemas";
 
 // Context
-import { ThemeProvider } from "@/app/contexts/ThemeProvider";
-import { TranslationProvider } from "@/app/contexts/TranslationContext";
-import { InvoiceContextProvider } from "@/app/contexts/InvoiceContext";
-import { ChargesContextProvider } from "@/app/contexts/ChargesContext";
+import { ThemeProvider } from "@/contexts/ThemeProvider";
+import { TranslationProvider } from "@/contexts/TranslationContext";
+import { InvoiceContextProvider } from "@/contexts/InvoiceContext";
+import { ChargesContextProvider } from "@/contexts/ChargesContext";
 
 // Types
 import { InvoiceType } from "@/types";

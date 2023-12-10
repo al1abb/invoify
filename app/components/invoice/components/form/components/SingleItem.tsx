@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { BaseButton, FormInput, FormTextarea } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Icons
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";

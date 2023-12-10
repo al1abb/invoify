@@ -16,7 +16,7 @@ import {
 import { SavedInvoicesList } from "@/app/components";
 
 // Context
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 type InvoiceLoaderModalType = {
     children: React.ReactNode;

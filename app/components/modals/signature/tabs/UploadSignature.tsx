@@ -6,7 +6,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { BaseButton } from "@/app/components";
 
 // Contexts
-import { useSignatureContext } from "@/app/contexts/SignatureContext";
+import { useSignatureContext } from "@/contexts/SignatureContext";
 
 // Icons
 import { Check, Trash2 } from "lucide-react";

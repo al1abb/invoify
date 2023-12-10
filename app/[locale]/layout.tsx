@@ -25,8 +25,8 @@ import { Toaster } from "@/components/ui/toaster";
 // Components
 import { BaseNavbar, BaseFooter } from "@/app/components";
 
-// Context
-import Providers from "@/app/contexts/Providers";
+// Contexts
+import Providers from "@/contexts/Providers";
 
 // SEO
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";

@@ -23,8 +23,8 @@ import {
 } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
-import { useSignatureContext } from "@/app/contexts/SignatureContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { useSignatureContext } from "@/contexts/SignatureContext";
 
 // Icons
 import { FileSignature } from "lucide-react";

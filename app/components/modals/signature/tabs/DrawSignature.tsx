@@ -11,7 +11,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { BaseButton, SignatureColorSelector } from "@/app/components";
 
 // Contexts
-import { useSignatureContext } from "@/app/contexts/SignatureContext";
+import { useSignatureContext } from "@/contexts/SignatureContext";
 
 // Icons
 import { Check, Eraser } from "lucide-react";

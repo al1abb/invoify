@@ -4,7 +4,7 @@
 import { FormInput, Subheading } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 const PaymentInformation = () => {
     const { _t } = useTranslationContext();

@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BaseButton } from "@/app/components";
 
 // Contexts
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";

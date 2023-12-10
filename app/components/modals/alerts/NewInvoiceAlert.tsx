@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 // Context
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // ShadCn
 import {

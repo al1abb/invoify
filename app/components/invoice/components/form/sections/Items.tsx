@@ -26,7 +26,7 @@ import {
 import { BaseButton, SingleItem, Subheading } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Icons
 import { Plus } from "lucide-react";

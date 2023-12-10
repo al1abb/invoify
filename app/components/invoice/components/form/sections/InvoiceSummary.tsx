@@ -9,8 +9,8 @@ import {
 } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
-import { SignatureContextProvider } from "@/app/contexts/SignatureContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { SignatureContextProvider } from "@/contexts/SignatureContext";
 
 const InvoiceSummary = () => {
     const { _t } = useTranslationContext();

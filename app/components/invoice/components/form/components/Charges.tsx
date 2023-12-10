@@ -11,8 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { ChargeInput } from "@/app/components";
 
 // Contexts
-import { useChargesContext } from "@/app/contexts/ChargesContext";
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useChargesContext } from "@/contexts/ChargesContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";

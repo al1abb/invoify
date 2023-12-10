@@ -30,7 +30,7 @@ import {
 } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 const InvoiceForm = () => {
     const { _t } = useTranslationContext();

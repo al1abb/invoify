@@ -10,7 +10,7 @@ import { WizardValues } from "react-use-wizard";
 import { BaseButton } from "@/app/components";
 
 // Contexts
-import { useTranslationContext } from "@/app/contexts/TranslationContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Types
 import { InvoiceType, WizardStepType } from "@/types";

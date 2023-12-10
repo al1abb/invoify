@@ -10,7 +10,7 @@ import { Form } from "@/components/ui/form";
 import { InvoiceActions, InvoiceForm } from "@/app/components";
 
 // Context
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // Types
 import { InvoiceType } from "@/types";

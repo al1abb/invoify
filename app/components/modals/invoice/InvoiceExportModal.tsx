@@ -16,7 +16,7 @@ import {
 import { BaseButton } from "@/app/components";
 
 // Context
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // Types
 import { ExportTypes } from "@/types";

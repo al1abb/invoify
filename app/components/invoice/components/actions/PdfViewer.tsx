@@ -10,7 +10,7 @@ import { useFormContext } from "react-hook-form";
 import { FinalPdf, LivePreview } from "@/app/components";
 
 // Contexts
-import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
+import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // Types
 import { InvoiceType } from "@/types";
