@@ -13,31 +13,23 @@ import {
 } from "@/components/ui/dialog";
 
 // Components
-import { BaseButton, SavedInvoicesList } from "@/app/components";
+import { SavedInvoicesList } from "@/app/components";
 
 // Context
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
-// Icons
-import { FolderUp } from "lucide-react";
+type InvoiceLoaderModalType = {
+    children: React.ReactNode;
+};
 
-const InvoiceLoaderModal = () => {
+const InvoiceLoaderModal = ({ children }: InvoiceLoaderModalType) => {
     const [open, setOpen] = useState(false);
 
-    const { invoicePdfLoading, savedInvoices } = useInvoiceContext();
+    const { savedInvoices } = useInvoiceContext();
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <BaseButton
-                    variant="outline"
-                    tooltipLabel="Open load invoice menu"
-                    disabled={invoicePdfLoading}
-                >
-                    <FolderUp />
-                    Load Invoice
-                </BaseButton>
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
 
             <DialogContent>
                 <DialogHeader className="pb-2 border-b">

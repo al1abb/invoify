@@ -21,7 +21,7 @@ import {
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
 // Icons
-import { FileInput, Plus } from "lucide-react";
+import { FileInput, FolderUp, Import, Plus } from "lucide-react";
 
 const InvoiceActions = () => {
     const { invoicePdfLoading } = useInvoiceContext();
@@ -35,18 +35,38 @@ const InvoiceActions = () => {
                 </CardHeader>
 
                 <div className="flex flex-col flex-wrap items-center gap-2">
-                    <div className="flex flex-row gap-5">
-                        {/* Import & Export modals */}
+                    <div className="flex flex-wrap gap-3">
+                        {/* Load modal button */}
+                        <InvoiceLoaderModal>
+                            <BaseButton
+                                variant="outline"
+                                tooltipLabel="Open load invoice menu"
+                                disabled={invoicePdfLoading}
+                            >
+                                <FolderUp />
+                                Load Invoice
+                            </BaseButton>
+                        </InvoiceLoaderModal>
 
-                        <InvoiceLoaderModal />
-                        <InvoiceExportModal />
+                        {/* Export modal button */}
+                        <InvoiceExportModal>
+                            <BaseButton
+                                variant="outline"
+                                tooltipLabel="Open load invoice menu"
+                                disabled={invoicePdfLoading}
+                            >
+                                <Import />
+                                Export Invoice
+                            </BaseButton>
+                        </InvoiceExportModal>
                     </div>
 
-                    <div className="flex flex-row gap-5">
+                    <div className="flex flex-wrap gap-3">
+                        {/* New invoice button */}
                         <NewInvoiceAlert>
                             <BaseButton
-                                tooltipLabel="Get a new invoice form"
                                 variant="outline"
+                                tooltipLabel="Get a new invoice form"
                                 disabled={invoicePdfLoading}
                             >
                                 <Plus />
@@ -54,6 +74,7 @@ const InvoiceActions = () => {
                             </BaseButton>
                         </NewInvoiceAlert>
 
+                        {/* Generate pdf button */}
                         <BaseButton
                             type="submit"
                             tooltipLabel="Generate your invoice"

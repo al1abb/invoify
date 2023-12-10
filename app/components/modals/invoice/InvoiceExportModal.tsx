@@ -18,28 +18,20 @@ import { BaseButton } from "@/app/components";
 // Context
 import { useInvoiceContext } from "@/app/contexts/InvoiceContext";
 
-// Icons
-import { Import } from "lucide-react";
-
 // Types
 import { ExportTypes } from "@/types";
 
-const InvoiceExportModal = () => {
+type InvoiceExportModalType = {
+    children: React.ReactNode;
+};
+
+const InvoiceExportModal = ({ children }: InvoiceExportModalType) => {
     const [open, setOpen] = useState(false);
 
     const { invoicePdfLoading, exportInvoiceAs } = useInvoiceContext();
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <BaseButton
-                    variant="outline"
-                    tooltipLabel="Open load invoice menu"
-                    disabled={invoicePdfLoading}
-                >
-                    <Import />
-                    Export Invoice
-                </BaseButton>
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
 
             <DialogContent>
                 <DialogHeader>
