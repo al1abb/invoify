@@ -15,28 +15,28 @@ import InvoiceActions from "./invoice/InvoiceActions";
    * Invoice components
    ========================= */
 // * Form
-// Form / Components
-import SingleItem from "./invoice/components/form/components/SingleItem";
-import Charges from "./invoice/components/form/components/Charges";
-import TemplateSelector from "./invoice/components/form/components/TemplateSelector";
+// Form components
+import SingleItem from "./invoice/form/SingleItem";
+import Charges from "./invoice/form/Charges";
+import TemplateSelector from "./invoice/form/TemplateSelector";
 
-// Form / Components / Wizard
-import WizardNavigation from "./invoice/components/form/components/wizard/WizardNavigation";
-import WizardStep from "./invoice/components/form/components/wizard/WizardStep";
-import WizardProgress from "./invoice/components/form/components/wizard/WizardProgress";
+// Form / Wizard
+import WizardNavigation from "./invoice/form/wizard/WizardNavigation";
+import WizardStep from "./invoice/form/wizard/WizardStep";
+import WizardProgress from "./invoice/form/wizard/WizardProgress";
 
 // Form / Sections
-import BillFromSection from "./invoice/components/form/sections/BillFromSection";
-import BillToSection from "./invoice/components/form/sections/BillToSection";
-import InvoiceDetails from "./invoice/components/form/sections/InvoiceDetails";
-import Items from "./invoice/components/form/sections/Items";
-import PaymentInformation from "./invoice/components/form/sections/PaymentInformation";
-import InvoiceSummary from "./invoice/components/form/sections/InvoiceSummary";
+import BillFromSection from "./invoice/form/sections/BillFromSection";
+import BillToSection from "./invoice/form/sections/BillToSection";
+import InvoiceDetails from "./invoice/form/sections/InvoiceDetails";
+import Items from "./invoice/form/sections/Items";
+import PaymentInformation from "./invoice/form/sections/PaymentInformation";
+import InvoiceSummary from "./invoice/form/sections/InvoiceSummary";
 
 // * Actions
-import PdfViewer from "./invoice/components/actions/PdfViewer";
-import LivePreview from "./invoice/components/actions/LivePreview";
-import FinalPdf from "./invoice/components/actions/FinalPdf";
+import PdfViewer from "./invoice/actions/PdfViewer";
+import LivePreview from "./invoice/actions/LivePreview";
+import FinalPdf from "./invoice/actions/FinalPdf";
 
 // Custom Selectors
 import CurrencySelector from "./form-fields/CurrencySelector";
