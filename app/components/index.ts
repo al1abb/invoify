@@ -38,19 +38,16 @@ import PdfViewer from "./invoice/actions/PdfViewer";
 import LivePreview from "./invoice/actions/LivePreview";
 import FinalPdf from "./invoice/actions/FinalPdf";
 
-// Custom Selectors
-import CurrencySelector from "./form-fields/CurrencySelector";
-import SavedInvoicesList from "./modals/invoice/components/SavedInvoicesList";
-
+// * Reusable components
 // Form fields
-import FormInput from "./form-fields/FormInput";
-import FormTextarea from "./form-fields/FormTextarea";
-import DatePickerFormField from "./form-fields/DatePickerFormField";
-import FormLogoInput from "./form-fields/FormLogoInput";
-import ChargeInput from "./form-fields/ChargeInput";
-import FormCustomInput from "./form-fields/FormCustomInput";
+import CurrencySelector from "./reusables/form-fields/CurrencySelector";
+import FormInput from "./reusables/form-fields/FormInput";
+import FormTextarea from "./reusables/form-fields/FormTextarea";
+import DatePickerFormField from "./reusables/form-fields/DatePickerFormField";
+import FormLogoInput from "./reusables/form-fields/FormLogoInput";
+import ChargeInput from "./reusables/form-fields/ChargeInput";
+import FormCustomInput from "./reusables/form-fields/FormCustomInput";
 
-// Reusable components
 import BaseButton from "./reusables/BaseButton";
 import ThemeSwitcher from "./reusables/ThemeSwitcher";
 import LanguageSelector from "./reusables/LanguageSelector";
@@ -64,6 +61,9 @@ import SendPdfToEmailModal from "./modals/email/SendPdfToEmailModal";
 // Import/Export
 import InvoiceLoaderModal from "./modals/invoice/InvoiceLoaderModal";
 import InvoiceExportModal from "./modals/invoice/InvoiceExportModal";
+
+// Custom Selectors
+import SavedInvoicesList from "./modals/invoice/components/SavedInvoicesList";
 
 // Signature
 import SignatureModal from "./modals/signature/SignatureModal";
