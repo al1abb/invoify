@@ -32,6 +32,7 @@ export default function FinalPdf() {
 
     return (
         <>
+            <Subheading>Final PDF:</Subheading>
             <div className="flex items-center mb-3">
                 <BaseButton
                     variant={"ghost"}
@@ -42,7 +43,6 @@ export default function FinalPdf() {
                     Back to Live Preview
                 </BaseButton>
             </div>
-            <Subheading>Final PDF:</Subheading>
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-2 my-1">
