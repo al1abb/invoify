@@ -5,20 +5,14 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config, { isServer }) => {
+    experimental: {
+        serverComponentsExternalPackages: ["puppeteer-core"],
+    },
+    webpack: (config) => {
         config.module.rules.push({
             test: /\.map$/,
             use: "ignore-loader",
         });
-
-        if (!isServer) {
-            config.externals = {
-                ...config.externals,
-                "puppeteer-core": "commonjs puppeteer-core",
-                "@sparticuz/chromium": "commonjs @sparticuz/chromium",
-            };
-        }
-
         return config;
     },
 };
