@@ -71,22 +71,23 @@ Follow these instructions to get Invoify up and running on your local machine.
    ```bash
    git clone https://github.com/aliabb01/invoify.git
    cd invoify
+   ```
 2. Install dependencies
    
    ```bash
    npm install
+   ```
 3. Create an .env.local file with this content (This step is for sending pdf to email feature):
    ```env
    NODEMAILER_EMAIL=your_email@example.com
    NODEMAILER_PW=your_email_password
+   ```
 4. Start development server
 
     ```bash
     npm run dev
-5. Open your web browser and access the application at
-    
     ```
-    http://localhost:3000
+5. Open your web browser and access the application at [http://localhost:3000](http://localhost:3000)
 <!-- LICENSE -->
 ## License
 
