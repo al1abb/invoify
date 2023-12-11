@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
@@ -23,31 +23,31 @@ import { ImageMinus, Image } from "lucide-react";
 // Types
 import { NameType } from "@/types";
 
-type FormLogoInputProps = {
+type FormFileProps = {
     name: NameType;
     label?: string;
     placeholder?: string;
 };
 
-const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
+const FormFile = ({ name, label, placeholder }: FormFileProps) => {
     const { control, setValue } = useFormContext();
 
     const logoImage = useWatch({
-        name: "details.invoiceLogo",
+        name: name,
         control,
     });
 
     const [base64Image, setBase64Image] = useState<string>(logoImage ?? "");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 const base64String = event.target!.result as string;
                 setBase64Image(base64String);
-                setValue("details.invoiceLogo", base64String); // Set the value for form submission
+                setValue(name, base64String); // Set the value for form submission
             };
             reader.readAsDataURL(file);
         }
@@ -55,7 +55,7 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
 
     const removeLogo = () => {
         setBase64Image("");
-        setValue("details.invoiceLogo", "");
+        setValue(name, "");
 
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
@@ -89,7 +89,7 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                                 }}
                             >
                                 <Label
-                                    htmlFor="logo-input"
+                                    htmlFor={name}
                                     className="flex justify-center items-center h-[7rem] w-[10rem] cursor-pointer rounded-md bg-gray-100 dark:bg-slate-800 border border-black dark:border-white hover:border-blue-500"
                                 >
                                     <>
@@ -101,9 +101,9 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
                                             <input
                                                 ref={fileInputRef}
                                                 type="file"
-                                                id="logo-input"
+                                                id={name}
                                                 className="hidden"
-                                                onChange={handleInvoiceChange}
+                                                onChange={handleFileChange}
                                                 accept="image/*"
                                             />
                                         </FormControl>
@@ -127,4 +127,4 @@ const FormLogoInput = ({ name, label, placeholder }: FormLogoInputProps) => {
     );
 };
 
-export default FormLogoInput;
+export default FormFile;

@@ -5,7 +5,7 @@ import {
     CurrencySelector,
     DatePickerFormField,
     FormInput,
-    FormLogoInput,
+    FormFile,
     Subheading,
     TemplateSelector,
 } from "@/app/components";
@@ -22,7 +22,7 @@ const InvoiceDetails = () => {
 
             <div className="flex flex-row flex-wrap gap-5">
                 <div className="flex flex-col gap-2">
-                    <FormLogoInput
+                    <FormFile
                         name="details.invoiceLogo"
                         label={_t(
                             "form.steps.invoiceDetails.invoiceLogo.label"

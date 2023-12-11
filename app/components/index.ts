@@ -44,7 +44,7 @@ import CurrencySelector from "./reusables/form-fields/CurrencySelector";
 import FormInput from "./reusables/form-fields/FormInput";
 import FormTextarea from "./reusables/form-fields/FormTextarea";
 import DatePickerFormField from "./reusables/form-fields/DatePickerFormField";
-import FormLogoInput from "./reusables/form-fields/FormLogoInput";
+import FormFile from "./reusables/form-fields/FormFile";
 import ChargeInput from "./reusables/form-fields/ChargeInput";
 import FormCustomInput from "./reusables/form-fields/FormCustomInput";
 
@@ -123,7 +123,7 @@ export {
     FormInput,
     FormTextarea,
     DatePickerFormField,
-    FormLogoInput,
+    FormFile,
     ChargeInput,
     FormCustomInput,
     BaseButton,
