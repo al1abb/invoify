@@ -8,7 +8,11 @@ import {
 } from "next/font/google";
 
 // Default Fonts
-export const outfit = Outfit({ subsets: ["latin"], display: "swap" });
+export const outfit = Outfit({
+    subsets: ["latin"],
+    display: "swap",
+    adjustFontFallback: false,
+});
 
 // Signature fonts
 export const dancingScript = Dancing_Script({
