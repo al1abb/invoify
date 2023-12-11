@@ -15,7 +15,6 @@ import { InvoiceSchema } from "@/lib/schemas";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 import { InvoiceContextProvider } from "@/contexts/InvoiceContext";
-import { ChargesContextProvider } from "@/contexts/ChargesContext";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -42,11 +41,7 @@ const Providers = ({ children }: ProvidersProps) => {
         >
             <TranslationProvider>
                 <FormProvider {...form}>
-                    <InvoiceContextProvider>
-                        <ChargesContextProvider>
-                            {children}
-                        </ChargesContextProvider>
-                    </InvoiceContextProvider>
+                    <InvoiceContextProvider>{children}</InvoiceContextProvider>
                 </FormProvider>
             </TranslationProvider>
         </ThemeProvider>

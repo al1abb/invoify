@@ -11,6 +11,7 @@ import {
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
 import { SignatureContextProvider } from "@/contexts/SignatureContext";
+import { ChargesContextProvider } from "@/contexts/ChargesContext";
 
 const InvoiceSummary = () => {
     const { _t } = useTranslationContext();
@@ -38,8 +39,10 @@ const InvoiceSummary = () => {
                     />
                 </div>
 
-                {/* Final charges */}
-                <Charges />
+                <ChargesContextProvider>
+                    {/* Final charges */}
+                    <Charges />
+                </ChargesContextProvider>
             </div>
         </section>
     );
