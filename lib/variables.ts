@@ -225,7 +225,9 @@ export const FORM_FILL_VALUES = {
         signature: {
             data: "",
         },
-        totalAmount: "100",
+        subTotal: "850",
+        totalAmount: "850",
+        totalAmountInWords: "Eight Hundred Fifty",
         pdfTemplate: 1,
     },
 };
