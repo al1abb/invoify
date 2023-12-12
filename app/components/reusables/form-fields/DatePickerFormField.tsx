@@ -23,7 +23,9 @@ import {
 
 // Utils
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+
+// Variables
+import { DATE_OPTIONS } from "@/lib/variables";
 
 // Icons
 import { CalendarIcon } from "lucide-react";
@@ -69,9 +71,11 @@ const DatePickerFormField = ({ name, label }: DatePickerFormFieldProps) => {
                                             >
                                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                                 {field.value ? (
-                                                    format(
-                                                        new Date(field.value),
-                                                        "PPP"
+                                                    new Date(
+                                                        field.value
+                                                    ).toLocaleDateString(
+                                                        undefined,
+                                                        DATE_OPTIONS
                                                     )
                                                 ) : (
                                                     <span>Pick a date</span>
