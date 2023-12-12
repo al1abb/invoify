@@ -6,6 +6,9 @@ import chromium from "@sparticuz/chromium";
 // Helpers
 import { getInvoiceTemplate } from "@/lib/helpers";
 
+// Variables
+import { CHROMIUM_EXECUTABLE_PATH } from "@/lib/variables";
+
 // Types
 import { InvoiceType } from "@/types";
 
@@ -44,7 +47,7 @@ export async function generatePdfService(req: NextRequest) {
                 args: chromium.args,
                 defaultViewport: chromium.defaultViewport,
                 executablePath: await chromium.executablePath(
-                    `https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar`
+                    CHROMIUM_EXECUTABLE_PATH
                 ),
                 headless:
                     chromium.headless === "new" ? true : chromium.headless,

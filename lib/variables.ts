@@ -21,6 +21,12 @@ export const CURRENCIES_API =
     "https://openexchangerates.org/api/currencies.json";
 
 /**
+ * Chromium for Puppeteer
+ */
+export const CHROMIUM_EXECUTABLE_PATH =
+    "https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar";
+
+/**
  * Google
  */
 export const GOOGLE_SC_VERIFICATION = process.env.GOOGLE_SC_VERIFICATION;
