@@ -74,7 +74,9 @@ export async function generatePdfService(req: NextRequest) {
 
         // Add Tailwind CSS
         await page.addStyleTag({
-            url: "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
+            content: `
+                @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+            `,
         });
 
         // Generate the PDF
