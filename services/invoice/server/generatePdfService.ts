@@ -7,12 +7,10 @@ import chromium from "@sparticuz/chromium";
 import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Variables
-import { CHROMIUM_EXECUTABLE_PATH } from "@/lib/variables";
+import { CHROMIUM_EXECUTABLE_PATH, ENV } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/types";
-
-const ENV = process.env.NODE_ENV;
 
 /**
  * Generate a PDF document of an invoice based on the provided data.
