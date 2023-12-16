@@ -7,7 +7,7 @@ import chromium from "@sparticuz/chromium";
 import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Variables
-import { CHROMIUM_EXECUTABLE_PATH, ENV } from "@/lib/variables";
+import { CHROMIUM_EXECUTABLE_PATH, ENV, TAILWIND_CDN } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -72,7 +72,7 @@ export async function generatePdfService(req: NextRequest) {
 
         // Add Tailwind CSS
         await page.addStyleTag({
-            url: "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
+            url: TAILWIND_CDN,
         });
 
         // Generate the PDF
