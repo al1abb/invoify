@@ -45,7 +45,7 @@ const fieldValidators = {
     date: z
         .date()
         .transform((date) =>
-            new Date(date).toLocaleDateString(undefined, DATE_OPTIONS)
+            new Date(date).toLocaleDateString("en-US", DATE_OPTIONS)
         ),
 
     // Items

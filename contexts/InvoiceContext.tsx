@@ -231,7 +231,7 @@ export const InvoiceContextProvider = ({
                     : [];
 
                 const updatedDate = new Date().toLocaleDateString(
-                    undefined,
+                    "en-US",
                     SHORT_DATE_OPTIONS
                 );
 

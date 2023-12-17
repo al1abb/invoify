@@ -74,7 +74,7 @@ const DatePickerFormField = ({ name, label }: DatePickerFormFieldProps) => {
                                                     new Date(
                                                         field.value
                                                     ).toLocaleDateString(
-                                                        undefined,
+                                                        "en-US",
                                                         DATE_OPTIONS
                                                     )
                                                 ) : (
