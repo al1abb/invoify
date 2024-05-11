@@ -50,6 +50,7 @@ export async function generatePdfService(req: NextRequest) {
                 headless:
                     chromium.headless === "new" ? true : chromium.headless,
             });
+            console.log(browser);
         } else if (ENV === "development") {
             const puppeteer = await import("puppeteer");
             browser = await puppeteer.launch({
@@ -66,10 +67,7 @@ export async function generatePdfService(req: NextRequest) {
         console.log("Page opened"); // Debugging log
 
         // Set the HTML content of the page
-        await page.setContent(await htmlTemplate, {
-            // * "waitUntil" prop makes fonts work in templates
-            waitUntil: "networkidle2",
-        });
+        await page.setContent(await htmlTemplate);
         console.log("Page content set"); // Debugging log
 
         // Add Tailwind CSS
