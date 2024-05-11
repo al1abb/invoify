@@ -68,7 +68,7 @@ export async function generatePdfService(req: NextRequest) {
         // Set the HTML content of the page
         await page.setContent(await htmlTemplate, {
             // * "waitUntil" prop makes fonts work in templates
-            waitUntil: "networkidle0",
+            waitUntil: "networkidle2",
         });
         console.log("Page content set"); // Debugging log
 
