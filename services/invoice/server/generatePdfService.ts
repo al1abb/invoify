@@ -81,9 +81,6 @@ export async function generatePdfService(req: NextRequest) {
             printBackground: true,
         });
 
-        // Close the Puppeteer browser
-        await browser.close();
-
         // Create a Blob from the PDF data
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
 
@@ -94,6 +91,9 @@ export async function generatePdfService(req: NextRequest) {
             },
             status: 200,
         });
+
+        // Close the Puppeteer browser
+        await browser.close();
 
         return response;
     } catch (error) {
