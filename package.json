@@ -32,7 +32,6 @@
         "@react-email/components": "^0.0.11",
         "@react-email/render": "^0.0.9",
         "@react-email/tailwind": "^0.0.12",
-        "@sparticuz/chromium": "^119.0.0",
         "@types/node": "20.6.2",
         "@vercel/analytics": "^1.1.1",
         "autoprefixer": "10.4.15",
@@ -45,7 +44,7 @@
         "nodemailer": "^6.9.7",
         "number-to-words": "^1.2.4",
         "postcss": "8.4.31",
-        "puppeteer-core": "^21.5.0",
+        "puppeteer-core": "22.5.0",
         "react": "18.2.0",
         "react-day-picker": "^8.8.2",
         "react-dom": "18.2.0",
@@ -64,6 +63,7 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
+        "@sparticuz/chromium": "122.0.0",
         "@next/bundle-analyzer": "^14.0.4",
         "@types/nodemailer": "^6.4.14",
         "@types/number-to-words": "^1.2.1",

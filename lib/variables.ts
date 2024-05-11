@@ -29,7 +29,7 @@ export const CURRENCIES_API =
  * Chromium for Puppeteer
  */
 export const CHROMIUM_EXECUTABLE_PATH =
-    "https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar";
+    "https://github.com/Sparticuz/chromium/releases/download/v122.0.0/chromium-v122.0.0-pack.tar";
 
 /**
  * Tailwind
