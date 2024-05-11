@@ -63,23 +63,31 @@ export async function generatePdfService(req: NextRequest) {
         }
 
         const page = await browser.newPage();
+        console.log("Page opened"); // Debugging log
 
         // Set the HTML content of the page
         await page.setContent(await htmlTemplate, {
             // * "waitUntil" prop makes fonts work in templates
             waitUntil: "networkidle0",
         });
+        console.log("Page content set"); // Debugging log
 
         // Add Tailwind CSS
         await page.addStyleTag({
             url: TAILWIND_CDN,
         });
+        console.log("Style tag added"); // Debugging log
 
         // Generate the PDF
         const pdf: Buffer = await page.pdf({
             format: "a4",
             printBackground: true,
         });
+        console.log("PDF generated"); // Debugging log
+
+        // Close the Puppeteer browser
+        await browser.close();
+        console.log("Browser closed"); // Debugging log
 
         // Create a Blob from the PDF data
         const pdfBlob = new Blob([pdf], { type: "application/pdf" });
@@ -91,9 +99,6 @@ export async function generatePdfService(req: NextRequest) {
             },
             status: 200,
         });
-
-        // Close the Puppeteer browser
-        await browser.close();
 
         return response;
     } catch (error) {
