@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "Facture",
+        "description": "Générer une facture",
+        "newInvBadge": "Nouvelle facture",
+        "wizard": {
+            "fromAndTo": "De & À",
+            "invoiceDetails": "Détails de la facture",
+            "lineItems": "Articles",
+            "paymentInfo": "Informations de paiement",
+            "summary": "Résumé",
+            "next": "Suivant",
+            "back": "Retour"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Facturé de",
+                "billTo": "Facturé à",
+                "name": "Nom/Prénom:",
+                "address": "Adresse",
+                "zipCode": "Code postal",
+                "city": "Ville",
+                "country": "Pays",
+                "email": "Email",
+                "phone": "Téléphone",
+                "addCustomInput": "Ajouter une entrée personnalisée",
+                "sender": "Expéditeur",
+                "receiver": "Destinataire"
+            },
+            "invoiceDetails": {
+                "heading": "Détails de la facture",
+                "invoiceLogo": {
+                    "label": "Logo de la facture",
+                    "placeholder": "Cliquez pour télécharger une image"
+                },
+                "invoiceNumber": "Numéro de facture",
+                "issuedDate": "Date d'émission",
+                "dueDate": "Date d'échéance",
+                "currency": "Devise"
+            },
+            "lineItems": {
+                "heading": "Articles",
+                "item": "Article",
+                "name": "Nom",
+                "quantity": "Quantité",
+                "rate": "Taux",
+                "total": "Total",
+                "description": "Description",
+                "addNewItem": "Ajouter un nouvel article",
+                "removeItem": "Supprimer l'article"
+            },
+            "paymentInfo": {
+                "heading": "Informations de paiement",
+                "bankName": "Nom de la banque",
+                "accountName": "Nom du compte",
+                "accountNumber": "Numéro de compte"
+            },
+            "summary": {
+                "heading": "Résumé",
+                "signature": {
+                    "heading": "Signature",
+                    "placeholder": "Cliquez pour ajouter une signature",
+                    "draw": "Dessiner",
+                    "type": "Taper",
+                    "upload": "Télécharger"
+                },
+                "additionalNotes": "Notes supplémentaires",
+                "paymentTerms": "Conditions de paiement",
+                "discount": "Remise",
+                "tax": "Taxe",
+                "shipping": "Expédition",
+                "subTotal": "Sous-total",
+                "totalAmount": "Montant total",
+                "includeTotalInWords": "Inclure le total en mots?",
+                "yes": "Oui",
+                "no": "Non"
+            }
+        }
+    },
+    "actions": {
+        "title": "Actions",
+        "description": "Opérations et aperçu",
+        "loadInvoice": "Charger la facture",
+        "exportInvoice": "Exporter la facture",
+        "newInvoice": "Nouvelle facture",
+        "generatePdf": "Générer un PDF",
+        "pdfView": "Vue PDF"
+    },
+    "footer": {
+        "developedBy": "Développé par"
+    }
+}
