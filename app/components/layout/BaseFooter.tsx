@@ -2,6 +2,9 @@
 
 import { useTranslationContext } from "@/contexts/TranslationContext";
 
+// Variables
+import { AUTHOR_GITHUB } from "@/lib/variables";
+
 const BaseFooter = () => {
     const { _t } = useTranslationContext();
 
@@ -10,7 +13,7 @@ const BaseFooter = () => {
             <p>
                 {_t("footer.developedBy")}{" "}
                 <a
-                    href="https://github.com/aliabb01"
+                    href={AUTHOR_GITHUB}
                     target="_blank"
                     style={{ textDecoration: "underline" }}
                 >
