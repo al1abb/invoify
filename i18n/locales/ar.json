@@ -1,0 +1,92 @@
+{
+  "form": {
+    "title": "فاتورة",
+    "description": "إنشاء الفاتورة",
+    "newInvBadge": "فاتورة جديدة",
+    "wizard": {
+      "fromAndTo": "من & إلى",
+      "invoiceDetails": "تفاصيل الفاتورة",
+      "lineItems": "عناصر الفاتورة",
+      "paymentInfo": "معلومات الدفع",
+      "summary": "الملخص",
+      "next": "التالي",
+      "back": "السابق"
+    },
+    "steps": {
+      "fromAndTo": {
+        "billFrom": "الفاتورة من",
+        "billTo": "الفاتورة إلى",
+        "name": "الاسم",
+        "address": "العنوان",
+        "zipCode": "الرمز البريدي",
+        "city": "المدينة",
+        "country": "الدولة",
+        "email": "البريد الإلكتروني",
+        "phone": "الهاتف",
+        "addCustomInput": "إضافة مدخل مخصص",
+        "sender": "المرسل",
+        "receiver": "المستلم"
+      },
+      "invoiceDetails": {
+        "heading": "تفاصيل الفاتورة",
+        "invoiceLogo": {
+          "label": "شعار الفاتورة",
+          "placeholder": "اضغط لتحميل الصورة"
+        },
+        "invoiceNumber": "رقم الفاتورة",
+        "issuedDate": "تاريخ الإصدار",
+        "dueDate": "تاريخ الاستحقاق",
+        "currency": "العملة"
+      },
+      "lineItems": {
+        "heading": "العناصر",
+        "item": "العنصر",
+        "name": "الاسم",
+        "quantity": "الكمية",
+        "rate": "السعر",
+        "total": "الإجمالي",
+        "description": "الوصف",
+        "addNewItem": "إضافة عنصر جديد",
+        "removeItem": "إزالة العنصر"
+      },
+      "paymentInfo": {
+        "heading": "معلومات الدفع",
+        "bankName": "اسم البنك",
+        "accountName": "اسم الحساب",
+        "accountNumber": "رقم الحساب"
+      },
+      "summary": {
+        "heading": "الملخص",
+        "signature": {
+          "heading": "التوقيع",
+          "placeholder": "اضغط لإضافة التوقيع",
+          "draw": "رسم",
+          "type": "كتابة",
+          "upload": "تحميل"
+        },
+        "additionalNotes": "ملاحظات إضافية",
+        "paymentTerms": "شروط الدفع",
+        "discount": "الخصم",
+        "tax": "الضريبة",
+        "shipping": "الشحن",
+        "subTotal": "الإجمالي الجزئي",
+        "totalAmount": "المبلغ الإجمالي",
+        "includeTotalInWords": "تضمين الإجمالي بالكلمات؟",
+        "yes": "نعم",
+        "no": "لا"
+      }
+    }
+  },
+  "actions": {
+    "title": "الإجراءات",
+    "description": "العمليات والمعاينة",
+    "loadInvoice": "تحميل الفاتورة",
+    "exportInvoice": "تصدير الفاتورة",
+    "newInvoice": "فاتورة جديدة",
+    "generatePdf": "إنشاء PDF",
+    "pdfView": "عرض PDF"
+  },
+  "footer": {
+    "developedBy": "تم تطويره بواسطة"
+  }
+}
