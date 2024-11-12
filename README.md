@@ -70,7 +70,7 @@ Follow these instructions to get Invoify up and running on your local machine.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/aliabb01/invoify.git
+   git clone https://github.com/al1abb/invoify.git
    cd invoify
    ```
 2. Install dependencies
