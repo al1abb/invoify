@@ -18,8 +18,8 @@
                 "billTo": "Fattura A",
                 "name": "Nome",
                 "address": "Indirizzo",
-                "zipCode": "Zip",
-                "city": "Cittá",
+                "zipCode": "ap",
+                "city": "Città",
                 "country": "Paese",
                 "email": "Email",
                 "phone": "Telefono",
@@ -42,7 +42,7 @@
                 "heading": "Elementi",
                 "item": "Elemento",
                 "name": "Nome",
-                "quantity": "Quantitá",
+                "quantity": "Quantità",
                 "rate": "Tasso",
                 "total": "Totale",
                 "description": "Descrizione",
@@ -72,7 +72,7 @@
                 "subTotal": "Subtotale",
                 "totalAmount": "Importo totale",
                 "includeTotalInWords": "Includere il totale in parole?",
-                "yes": "Sì",
+                "yes": "Si",
                 "no": "No"
             }
         }
