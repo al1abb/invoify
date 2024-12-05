@@ -16,8 +16,8 @@
             "fromAndTo": {
                 "billFrom": "Fattura Da",
                 "billTo": "Fattura A",
-                "name": "Name",
-                "address": "Address",
+                "name": "Nome",
+                "address": "Indirizzo",
                 "zipCode": "Zip",
                 "city": "Cittá",
                 "country": "Paese",
