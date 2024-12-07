@@ -16,6 +16,13 @@ export type CurrencyType = {
     [currencyCode: string]: string;
 };
 
+export type CurrencyDetails = {
+    currency: string;
+    decimals: number;
+    beforeDecimal: string | null;
+    afterDecimal: string | null;
+};
+
 // Signature types
 export type SignatureColor = {
     name: string;

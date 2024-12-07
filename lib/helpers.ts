@@ -6,6 +6,7 @@ import numberToWords from "number-to-words";
 
 // Currencies
 import currenciesDetails from "@/public/assets/data/currencies.json";
+import { CurrencyDetails } from "@/types";
 
 /**
  * Formats a number with commas and decimal places
@@ -32,10 +33,9 @@ const formatNumberWithCommas = (number: number) => {
     "afterDecimal": "Fils"
  }
  */
-const fetchCurrencyDetails =  (currency: string) => {
-    const data = currenciesDetails as any;
+const fetchCurrencyDetails = (currency: string) => {
+    const data = currenciesDetails as Record<string, CurrencyDetails>;
     const currencyDetails = data[currency];
-    console.log(currencyDetails);
     return currencyDetails || null;
 };
 
@@ -48,16 +48,29 @@ const fetchCurrencyDetails =  (currency: string) => {
  */
 const formatPriceToString = (price: number, currency: string): string => {
     // Initialize variables
-   
-   // Fetch the currency details
-    const { decimals, beforeDecimal, afterDecimal } = fetchCurrencyDetails(currency);
+    let decimals, beforeDecimal, afterDecimal;
+    const currencyDetails = fetchCurrencyDetails(currency);
 
-    // Ensure the price is rounded to two decimal places
+    // If currencyDetails is available, use its values, else dynamically set decimals
+    if (currencyDetails) {
+        decimals = currencyDetails.decimals;
+        beforeDecimal = currencyDetails.beforeDecimal;
+        afterDecimal = currencyDetails.afterDecimal;
+    } else {
+        // Dynamically get decimals from the price if currencyDetails is null
+        const priceString = price.toString();
+        const decimalIndex = priceString.indexOf('.');
+        decimals = decimalIndex !== -1 ? priceString.split('.')[1].length : 0;
+    }
+
+    // Ensure the price is rounded to the appropriate decimal places
     const roundedPrice = parseFloat(price.toFixed(decimals));
 
     // Split the price into integer and fractional parts
     const integerPart = Math.floor(roundedPrice);
-    const fractionalPart = Math.round((roundedPrice - integerPart) * 100);
+    
+    const fractionalMultiplier = Math.pow(10, decimals);
+    const fractionalPart = Math.round((roundedPrice - integerPart) * fractionalMultiplier);
 
     // Convert the integer part to words with a capitalized first letter
     const integerPartInWords = numberToWords
@@ -76,21 +89,20 @@ const formatPriceToString = (price: number, currency: string): string => {
     }
 
     // Combine the parts into the final string
-    
     let result = integerPartInWords;
-    
-    // check if before decimal is not null 
-    if(beforeDecimal !== null && beforeDecimal !== null) {
-    result += ` ${beforeDecimal}`;
+
+    // Check if beforeDecimal is not null 
+    if (beforeDecimal !== null) {
+        result += ` ${beforeDecimal}`;
     }
 
     if (fractionalPartInWords) {
-        // check if after decimal is not null
-        if(afterDecimal !== null) {
-            // concatenate the after decimal and fractional part
+        // Check if afterDecimal is not null
+        if (afterDecimal !== null) {
+            // Concatenate the after decimal and fractional part
             result += ` and ${fractionalPartInWords} ${afterDecimal}`;
-        }else{
-            // if after decimal is null concatenate the fractional part
+        } else {
+            // If afterDecimal is null, concatenate the fractional part
             result += ` point ${fractionalPartInWords}`;
         }
     }
