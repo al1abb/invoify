@@ -48,7 +48,10 @@ const fetchCurrencyDetails = (currency: string) => {
  */
 const formatPriceToString = (price: number, currency: string): string => {
     // Initialize variables
-    let decimals, beforeDecimal, afterDecimal;
+    let decimals : number;
+    let beforeDecimal: string | null = null;
+    let afterDecimal: string | null = null;
+    
     const currencyDetails = fetchCurrencyDetails(currency);
 
     // If currencyDetails is available, use its values, else dynamically set decimals
