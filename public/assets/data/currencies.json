@@ -1,0 +1,1022 @@
+{
+    "AED": {
+        "currency": "United Arab Emirates Dirham",
+        "decimals": 2,
+        "beforeDecimal": "Dirham",
+        "afterDecimal": "Fils"
+    },
+    "AFN": {
+        "currency": "Afghan Afghani",
+        "decimals": 2,
+        "beforeDecimal": "Afghani",
+        "afterDecimal": "Pul"
+    },
+    "ALL": {
+        "currency": "Albanian Lek",
+        "decimals": 2,
+        "beforeDecimal": "Lek",
+        "afterDecimal": null
+    },
+    "AMD": {
+        "currency": "Armenian Dram",
+        "decimals": 2,
+        "beforeDecimal": "Dram",
+        "afterDecimal": null
+    },
+    "ANG": {
+        "currency": "Netherlands Antillean Guilder",
+        "decimals": 2,
+        "beforeDecimal": "Guilder",
+        "afterDecimal": "Cent"
+    },
+    "AOA": {
+        "currency": "Angolan Kwanza",
+        "decimals": 2,
+        "beforeDecimal": "Kwanza",
+        "afterDecimal": "Cêntimo"
+    },
+    "ARS": {
+        "currency": "Argentine Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "AUD": {
+        "currency": "Australian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "AWG": {
+        "currency": "Aruban Florin",
+        "decimals": 2,
+        "beforeDecimal": "Florin",
+        "afterDecimal": "Cent"
+    },
+    "AZN": {
+        "currency": "Azerbaijani Manat",
+        "decimals": 2,
+        "beforeDecimal": "Manat",
+        "afterDecimal": "Qəpik"
+    },
+    "BAM": {
+        "currency": "Bosnia-Herzegovina Convertible Mark",
+        "decimals": 2,
+        "beforeDecimal": "Mark",
+        "afterDecimal": "Fening"
+    },
+    "BBD": {
+        "currency": "Barbadian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "BDT": {
+        "currency": "Bangladeshi Taka",
+        "decimals": 2,
+        "beforeDecimal": "Taka",
+        "afterDecimal": "Poisha"
+    },
+    "BGN": {
+        "currency": "Bulgarian Lev",
+        "decimals": 2,
+        "beforeDecimal": "Lev",
+        "afterDecimal": "Stotinka"
+    },
+    "BHD": {
+        "currency": "Bahraini Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Fils"
+    },
+    "BIF": {
+        "currency": "Burundian Franc",
+        "decimals": 2,
+        "beforeDecimal": "Franc",
+        "afterDecimal": null
+    },
+    "BMD": {
+        "currency": "Bermudan Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "BND": {
+        "currency": "Brunei Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Sen"
+    },
+    "BOB": {
+        "currency": "Bolivian Boliviano",
+        "decimals": 2,
+        "beforeDecimal": "Boliviano",
+        "afterDecimal": "Centavo"
+    },
+    "BRL": {
+        "currency": "Brazilian Real",
+        "decimals": 2,
+        "beforeDecimal": "Real",
+        "afterDecimal": "Centavo"
+    },
+    "BSD": {
+        "currency": "Bahamian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "BTC": {
+        "currency": "Bitcoin",
+        "decimals": 8,
+        "beforeDecimal": "Bitcoin",
+        "afterDecimal": "Satoshi"
+    },
+    "BTN": {
+        "currency": "Bhutanese Ngultrum",
+        "decimals": 2,
+        "beforeDecimal": "Ngultrum",
+        "afterDecimal": "Chetrum"
+    },
+    "BWP": {
+        "currency": "Botswanan Pula",
+        "decimals": 2,
+        "beforeDecimal": "Pula",
+        "afterDecimal": "Thebe"
+    },
+    "BYN": {
+        "currency": "Belarusian Ruble",
+        "decimals": 2,
+        "beforeDecimal": "Ruble",
+        "afterDecimal": "Kopeck"
+    },
+    "BZD": {
+        "currency": "Belize Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "CAD": {
+        "currency": "Canadian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "CDF": {
+        "currency": "Congolese Franc",
+        "decimals": 2,
+        "beforeDecimal": "Franc",
+        "afterDecimal": null
+    },
+    "CHF": {
+        "currency": "Swiss Franc",
+        "decimals": 2,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Rappen"
+    },
+    "CLF": {
+        "currency": "Chilean Unit of Account (UF)",
+        "decimals": 4,
+        "beforeDecimal": "UF",
+        "afterDecimal": null
+    },
+    "CLP": {
+        "currency": "Chilean Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "CNH": {
+        "currency": "Chinese Yuan (Offshore)",
+        "decimals": 2,
+        "beforeDecimal": "Yuan",
+        "afterDecimal": "Jiao"
+    },
+    "CNY": {
+        "currency": "Chinese Yuan",
+        "decimals": 2,
+        "beforeDecimal": "Yuan",
+        "afterDecimal": "Fen"
+    },
+    "COP": {
+        "currency": "Colombian Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "CRC": {
+        "currency": "Costa Rican Colón",
+        "decimals": 2,
+        "beforeDecimal": "Colón",
+        "afterDecimal": "Céntimo"
+    },
+    "CUC": {
+        "currency": "Cuban Convertible Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "CUP": {
+        "currency": "Cuban Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "CVE": {
+        "currency": "Cape Verdean Escudo",
+        "decimals": 2,
+        "beforeDecimal": "Escudo",
+        "afterDecimal": "Centavo"
+    },
+    "CZK": {
+        "currency": "Czech Republic Koruna",
+        "decimals": 2,
+        "beforeDecimal": "Koruna",
+        "afterDecimal": "Haléř"
+    },
+    "DJF": {
+        "currency": "Djiboutian Franc",
+        "decimals": 2,
+        "beforeDecimal": "Franc",
+        "afterDecimal": null
+    },
+    "DKK": {
+        "currency": "Danish Krone",
+        "decimals": 2,
+        "beforeDecimal": "Krone",
+        "afterDecimal": "Øre"
+    },
+    "DOP": {
+        "currency": "Dominican Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavo"
+    },
+    "DZD": {
+        "currency": "Algerian Dinar",
+        "decimals": 2,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Santeem"
+    },
+    "EGP": {
+        "currency": "Egyptian Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Piastre"
+    },
+    "ERN": {
+        "currency": "Eritrean Nakfa",
+        "decimals": 2,
+        "beforeDecimal": "Nakfa",
+        "afterDecimal": "Cents"
+    },
+    "ETB": {
+        "currency": "Ethiopian Birr",
+        "decimals": 2,
+        "beforeDecimal": "Birr",
+        "afterDecimal": "Santim"
+    },
+    "EUR": {
+        "currency": "Euro",
+        "decimals": 2,
+        "beforeDecimal": "Euro",
+        "afterDecimal": "Cent"
+    },
+    "FJD": {
+        "currency": "Fijian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    },
+    "FKP": {
+        "currency": "Falkland Islands Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Penny"
+    },
+    "GBP": {
+        "currency": "British Pound Sterling",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Penny"
+    },
+    "GEL": {
+        "currency": "Georgian Lari",
+        "decimals": 2,
+        "beforeDecimal": "Lari",
+        "afterDecimal": "Tetri"
+    },
+    "GGP": {
+        "currency": "Guernsey Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Pence"
+    },
+    "GHS": {
+        "currency": "Ghanaian Cedi",
+        "decimals": 2,
+        "beforeDecimal": "Cedi",
+        "afterDecimal": "Pesewa"
+    },
+    "GIP": {
+        "currency": "Gibraltar Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Pence"
+    },
+    "GMD": {
+        "currency": "Gambian Dalasi",
+        "decimals": 2,
+        "beforeDecimal": "Dalasi",
+        "afterDecimal": "Butut"
+    },
+    "GNF": {
+        "currency": "Guinean Franc",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "GTQ": {
+        "currency": "Guatemalan Quetzal",
+        "decimals": 2,
+        "beforeDecimal": "Quetzal",
+        "afterDecimal": "Centavos"
+    },
+    "GYD": {
+        "currency": "Guyanaese Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "HKD": {
+        "currency": "Hong Kong Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "HNL": {
+        "currency": "Honduran Lempira",
+        "decimals": 2,
+        "beforeDecimal": "Lempira",
+        "afterDecimal": "Centavos"
+    },
+    "HRK": {
+        "currency": "Croatian Kuna",
+        "decimals": 2,
+        "beforeDecimal": "Kuna",
+        "afterDecimal": "Lipaa"
+    },
+    "HTG": {
+        "currency": "Haitian Gourde",
+        "decimals": 2,
+        "beforeDecimal": "Gourde",
+        "afterDecimal": "Centimes"
+    },
+    "HUF": {
+        "currency": "Hungarian Forint",
+        "decimals": 2,
+        "beforeDecimal": "Forint",
+        "afterDecimal": "Filler"
+    },
+    "IDR": {
+        "currency": "Indonesian Rupiah",
+        "decimals": 2,
+        "beforeDecimal": "Rupiah",
+        "afterDecimal": "Sen"
+    },
+    "ILS": {
+        "currency": "Israeli New Sheqel",
+        "decimals": 2,
+        "beforeDecimal": "Sheqel",
+        "afterDecimal": "Agorot"
+    },
+    "IMP": {
+        "currency": "Manx pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Pence"
+    },
+    "INR": {
+        "currency": "Indian Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Paisa"
+    },
+    "IQD": {
+        "currency": "Iraqi Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Fils"
+    },
+    "IRR": {
+        "currency": "Iranian Rial",
+        "decimals": 2,
+        "beforeDecimal": "Rial",
+        "afterDecimal": "Dinar"
+    },
+    "ISK": {
+        "currency": "Icelandic Króna",
+        "decimals": 0,
+        "beforeDecimal": "Króna",
+        "afterDecimal": "Aurar"
+    },
+    "JEP": {
+        "currency": "Jersey Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Pence"
+    },
+    "JMD": {
+        "currency": "Jamaican Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "JOD": {
+        "currency": "Jordanian Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Fils"
+    },
+    "JPY": {
+        "currency": "Japanese Yen",
+        "decimals": 0,
+        "beforeDecimal": "Yen",
+        "afterDecimal": "Sen"
+    },
+    "KES": {
+        "currency": "Kenyan Shilling",
+        "decimals": 2,
+        "beforeDecimal": "Shilling",
+        "afterDecimal": "Cents"
+    },
+    "KGS": {
+        "currency": "Kyrgystani Som",
+        "decimals": 2,
+        "beforeDecimal": "Som",
+        "afterDecimal": "Tyiyn"
+    },
+    "KHR": {
+        "currency": "Cambodian Riel",
+        "decimals": 2,
+        "beforeDecimal": "Riel",
+        "afterDecimal": "Sen"
+    },
+    "KMF": {
+        "currency": "Comorian Franc",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "KPW": {
+        "currency": "North Korean Won",
+        "decimals": 2,
+        "beforeDecimal": "Won",
+        "afterDecimal": "Chon"
+    },
+    "KRW": {
+        "currency": "South Korean Won",
+        "decimals": 0,
+        "beforeDecimal": "Won",
+        "afterDecimal": "Jeon"
+    },
+    "KWD": {
+        "currency": "Kuwaiti Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Fils"
+    },
+    "KYD": {
+        "currency": "Cayman Islands Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "KZT": {
+        "currency": "Kazakhstani Tenge",
+        "decimals": 2,
+        "beforeDecimal": "Tenge",
+        "afterDecimal": "Tıyn"
+    },
+    "LAK": {
+        "currency": "Laotian Kip",
+        "decimals": 2,
+        "beforeDecimal": "Kip",
+        "afterDecimal": "Att"
+    },
+    "LBP": {
+        "currency": "Lebanese Pound",
+        "decimals": 0,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Piastres"
+    },
+    "LKR": {
+        "currency": "Sri Lankan Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Cents"
+    },
+    "LRD": {
+        "currency": "Liberian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "LSL": {
+        "currency": "Lesotho Loti",
+        "decimals": 2,
+        "beforeDecimal": "Loti",
+        "afterDecimal": "Sente"
+    },
+    "LYD": {
+        "currency": "Libyan Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Dirham"
+    },
+    "MAD": {
+        "currency": "Moroccan Dirham",
+        "decimals": 2,
+        "beforeDecimal": "Dirham",
+        "afterDecimal": "Centimes"
+    },
+    "MDL": {
+        "currency": "Moldovan Leu",
+        "decimals": 2,
+        "beforeDecimal": "Leu",
+        "afterDecimal": "Bani"
+    },
+    "MGA": {
+        "currency": "Malagasy Ariary",
+        "decimals": 2,
+        "beforeDecimal": "Ariary",
+        "afterDecimal": "Rary"
+    },
+    "MKD": {
+        "currency": "Macedonian Denar",
+        "decimals": 2,
+        "beforeDecimal": "Denar",
+        "afterDecimal": "Denari"
+    },
+    "MMK": {
+        "currency": "Myanma Kyat",
+        "decimals": 0,
+        "beforeDecimal": "Kyat",
+        "afterDecimal": "Pya"
+    },
+    "MNT": {
+        "currency": "Mongolian Tugrik",
+        "decimals": 2,
+        "beforeDecimal": "Tugrik",
+        "afterDecimal": "Mongolian Chon"
+    },
+    "MOP": {
+        "currency": "Macanese Pataca",
+        "decimals": 2,
+        "beforeDecimal": "Pataca",
+        "afterDecimal": "Avos"
+    },
+    "MRU": {
+        "currency": "Mauritanian Ouguiya",
+        "decimals": 2,
+        "beforeDecimal": "Ouguiya",
+        "afterDecimal": "Khoums"
+    },
+    "MUR": {
+        "currency": "Mauritian Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Cents"
+    },
+    "MVR": {
+        "currency": "Maldivian Rufiyaa",
+        "decimals": 2,
+        "beforeDecimal": "Rufiyaa",
+        "afterDecimal": "Laari"
+    },
+    "MWK": {
+        "currency": "Malawian Kwacha",
+        "decimals": 2,
+        "beforeDecimal": "Kwacha",
+        "afterDecimal": "Tambala"
+    },
+    "MXN": {
+        "currency": "Mexican Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavos"
+    },
+    "MYR": {
+        "currency": "Malaysian Ringgit",
+        "decimals": 2,
+        "beforeDecimal": "Ringgit",
+        "afterDecimal": "Sen"
+    },
+    "MZN": {
+        "currency": "Mozambican Metical",
+        "decimals": 2,
+        "beforeDecimal": "Metical",
+        "afterDecimal": "Centavos"
+    },
+    "NAD": {
+        "currency": "Namibian Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "NGN": {
+        "currency": "Nigerian Naira",
+        "decimals": 2,
+        "beforeDecimal": "Naira",
+        "afterDecimal": "Kobo"
+    },
+    "NIO": {
+        "currency": "Nicaraguan Córdoba",
+        "decimals": 2,
+        "beforeDecimal": "Córdoba",
+        "afterDecimal": "Centavos"
+    },
+    "NOK": {
+        "currency": "Norwegian Krone",
+        "decimals": 2,
+        "beforeDecimal": "Krone",
+        "afterDecimal": "Øre"
+    },
+    "NPR": {
+        "currency": "Nepalese Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Paisa"
+    },
+    "NZD": {
+        "currency": "New Zealand Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "OMR": {
+        "currency": "Omani Rial",
+        "decimals": 3,
+        "beforeDecimal": "Rial",
+        "afterDecimal": "Baisa"
+    },
+    "PAB": {
+        "currency": "Panamanian Balboa",
+        "decimals": 2,
+        "beforeDecimal": "Balboa",
+        "afterDecimal": "Centésimos"
+    },
+    "PEN": {
+        "currency": "Peruvian Nuevo Sol",
+        "decimals": 2,
+        "beforeDecimal": "Sol",
+        "afterDecimal": "Céntimos"
+    },
+    "PGK": {
+        "currency": "Papua New Guinean Kina",
+        "decimals": 2,
+        "beforeDecimal": "Kina",
+        "afterDecimal": "Toea"
+    },
+    "PHP": {
+        "currency": "Philippine Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Centavos"
+    },
+    "PKR": {
+        "currency": "Pakistani Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Paisa"
+    },
+    "PLN": {
+        "currency": "Polish Zloty",
+        "decimals": 2,
+        "beforeDecimal": "Zloty",
+        "afterDecimal": "Grosz"
+    },
+    "PYG": {
+        "currency": "Paraguayan Guarani",
+        "decimals": 2,
+        "beforeDecimal": "Guarani",
+        "afterDecimal": "Céntimos"
+    },
+    "QAR": {
+        "currency": "Qatari Rial",
+        "decimals": 2,
+        "beforeDecimal": "Rial",
+        "afterDecimal": "Dirham"
+    },
+    "RON": {
+        "currency": "Romanian Leu",
+        "decimals": 2,
+        "beforeDecimal": "Leu",
+        "afterDecimal": "Bani"
+    },
+    "RSD": {
+        "currency": "Serbian Dinar",
+        "decimals": 2,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Paras"
+    },
+    "RUB": {
+        "currency": "Russian Ruble",
+        "decimals": 2,
+        "beforeDecimal": "Ruble",
+        "afterDecimal": "Kopeck"
+    },
+    "RWF": {
+        "currency": "Rwandan Franc",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "SAR": {
+        "currency": "Saudi Riyal",
+        "decimals": 2,
+        "beforeDecimal": "Riyal",
+        "afterDecimal": "Halala"
+    },
+    "SBD": {
+        "currency": "Solomon Islands Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "SCR": {
+        "currency": "Seychellois Rupee",
+        "decimals": 2,
+        "beforeDecimal": "Rupee",
+        "afterDecimal": "Cents"
+    },
+    "SDG": {
+        "currency": "Sudanese Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Piastres"
+    },
+    "SEK": {
+        "currency": "Swedish Krona",
+        "decimals": 2,
+        "beforeDecimal": "Krona",
+        "afterDecimal": "Öre"
+    },
+    "SGD": {
+        "currency": "Singapore Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "SHP": {
+        "currency": "Saint Helena Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Pence"
+    },
+    "SLL": {
+        "currency": "Sierra Leonean Leone",
+        "decimals": 2,
+        "beforeDecimal": "Leone",
+        "afterDecimal": "Cents"
+    },
+    "SOS": {
+        "currency": "Somali Shilling",
+        "decimals": 2,
+        "beforeDecimal": "Shilling",
+        "afterDecimal": "Cents"
+    },
+    "SRD": {
+        "currency": "Surinamese Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "SSP": {
+        "currency": "South Sudanese Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Piastres"
+    },
+    "STD": {
+        "currency": "São Tomé and Príncipe Dobra (pre-2018)",
+        "decimals": 2,
+        "beforeDecimal": "Dobra",
+        "afterDecimal": "Cêntimos"
+    },
+    "STN": {
+        "currency": "São Tomé and Príncipe Dobra",
+        "decimals": 2,
+        "beforeDecimal": "Dobra",
+        "afterDecimal": "Centavos"
+    },
+    "SVC": {
+        "currency": "Salvadoran Colón",
+        "decimals": 2,
+        "beforeDecimal": "Colón",
+        "afterDecimal": "Centavos"
+    },
+    "SYP": {
+        "currency": "Syrian Pound",
+        "decimals": 2,
+        "beforeDecimal": "Pound",
+        "afterDecimal": "Piastres"
+    },
+    "SZL": {
+        "currency": "Swazi Lilangeni",
+        "decimals": 2,
+        "beforeDecimal": "Lilangeni",
+        "afterDecimal": "Cents"
+    },
+    "THB": {
+        "currency": "Thai Baht",
+        "decimals": 2,
+        "beforeDecimal": "Baht",
+        "afterDecimal": "Satang"
+    },
+    "TJS": {
+        "currency": "Tajikistani Somoni",
+        "decimals": 2,
+        "beforeDecimal": "Somoni",
+        "afterDecimal": "Diram"
+    },
+    "TMT": {
+        "currency": "Turkmenistani Manat",
+        "decimals": 2,
+        "beforeDecimal": "Manat",
+        "afterDecimal": "Tengé"
+    },
+    "TND": {
+        "currency": "Tunisian Dinar",
+        "decimals": 3,
+        "beforeDecimal": "Dinar",
+        "afterDecimal": "Millimes"
+    },
+    "TOP": {
+        "currency": "Tongan Pa'anga",
+        "decimals": 2,
+        "beforeDecimal": "Pa'anga",
+        "afterDecimal": "Seniti"
+    },
+    "TRY": {
+        "currency": "Turkish Lira",
+        "decimals": 2,
+        "beforeDecimal": "Lira",
+        "afterDecimal": "Kuruş"
+    },
+    "TTD": {
+        "currency": "Trinidad and Tobago Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "TWD": {
+        "currency": "New Taiwan Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "TZS": {
+        "currency": "Tanzanian Shilling",
+        "decimals": 2,
+        "beforeDecimal": "Shilling",
+        "afterDecimal": "Cents"
+    },
+    "UAH": {
+        "currency": "Ukrainian Hryvnia",
+        "decimals": 2,
+        "beforeDecimal": "Hryvnia",
+        "afterDecimal": "Kopiyky"
+    },
+    "UGX": {
+        "currency": "Ugandan Shilling",
+        "decimals": 2,
+        "beforeDecimal": "Shilling",
+        "afterDecimal": "Cents"
+    },
+    "USD": {
+        "currency": "United States Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "UYU": {
+        "currency": "Uruguayan Peso",
+        "decimals": 2,
+        "beforeDecimal": "Peso",
+        "afterDecimal": "Céntimos"
+    },
+    "UZS": {
+        "currency": "Uzbekistan Som",
+        "decimals": 2,
+        "beforeDecimal": "Som",
+        "afterDecimal": "Tyiyn"
+    },
+    "VEF": {
+        "currency": "Venezuelan Bolívar Fuerte (Old)",
+        "decimals": 2,
+        "beforeDecimal": "Bolívar",
+        "afterDecimal": "Céntimo"
+    },
+    "VES": {
+        "currency": "Venezuelan Bolívar Soberano",
+        "decimals": 2,
+        "beforeDecimal": "Bolívar",
+        "afterDecimal": "Céntimo"
+    },
+    "VND": {
+        "currency": "Vietnamese Dong",
+        "decimals": 0,
+        "beforeDecimal": "Dong",
+        "afterDecimal": "Hao"
+    },
+    "VUV": {
+        "currency": "Vanuatu Vatu",
+        "decimals": 0,
+        "beforeDecimal": "Vatu",
+        "afterDecimal": "Centime"
+    },
+    "WST": {
+        "currency": "Samoan Tala",
+        "decimals": 2,
+        "beforeDecimal": "Tala",
+        "afterDecimal": "Sene"
+    },
+    "XAF": {
+        "currency": "CFA Franc BEAC",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "XAG": {
+        "currency": "Silver Ounce",
+        "decimals": 2,
+        "beforeDecimal": "Ounce",
+        "afterDecimal": "Cents"
+    },
+    "XAU": {
+        "currency": "Gold Ounce",
+        "decimals": 2,
+        "beforeDecimal": "Ounce",
+        "afterDecimal": "Cents"
+    },
+    "XCD": {
+        "currency": "East Caribbean Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cents"
+    },
+    "XDR": {
+        "currency": "Special Drawing Rights",
+        "decimals": 0,
+        "beforeDecimal": "SDR",
+        "afterDecimal": "Fraction"
+    },
+    "XOF": {
+        "currency": "CFA Franc BCEAO",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "XPD": {
+        "currency": "Palladium Ounce",
+        "decimals": 2,
+        "beforeDecimal": "Ounce",
+        "afterDecimal": "Cents"
+    },
+    "XPF": {
+        "currency": "CFP Franc",
+        "decimals": 0,
+        "beforeDecimal": "Franc",
+        "afterDecimal": "Centimes"
+    },
+    "XPT": {
+        "currency": "Platinum Ounce",
+        "decimals": 2,
+        "beforeDecimal": "Ounce",
+        "afterDecimal": "Cents"
+    },
+    "YER": {
+        "currency": "Yemeni Rial",
+        "decimals": 0,
+        "beforeDecimal": "Rial",
+        "afterDecimal": "Fils"
+    },
+    "ZAR": {
+        "currency": "South African Rand",
+        "decimals": 2,
+        "beforeDecimal": "Rand",
+        "afterDecimal": "Cent"
+    },
+    "ZMW": {
+        "currency": "Zambian Kwacha",
+        "decimals": 2,
+        "beforeDecimal": "Kwacha",
+        "afterDecimal": "Ngwee"
+    },
+    "ZWL": {
+        "currency": "Zimbabwean Dollar",
+        "decimals": 2,
+        "beforeDecimal": "Dollar",
+        "afterDecimal": "Cent"
+    }
+}

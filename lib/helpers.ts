@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 // Utils
 import numberToWords from "number-to-words";
 
+// Currencies
+import currenciesDetails from "@/public/assets/data/currencies.json";
+
 /**
  * Formats a number with commas and decimal places
  *
@@ -19,32 +22,77 @@ const formatNumberWithCommas = (number: number) => {
 };
 
 /**
+ * @param {string} currency - The currency that is currently selected 
+ * @returns {Object} - An object containing the currency details as
+ * ```
+ * {
+    "currency": "United Arab Emirates Dirham",
+    "decimals": 2,
+    "beforeDecimal": "Dirham",
+    "afterDecimal": "Fils"
+ }
+ */
+const fetchCurrencyDetails =  (currency: string) => {
+    const data = currenciesDetails as any;
+    const currencyDetails = data[currency];
+    console.log(currencyDetails);
+    return currencyDetails || null;
+};
+
+
+/**
  * Turns a number into words for invoices
  *
  * @param {number} price - Number to format
  * @returns {string} Number in words
  */
-const formatPriceToString = (price: number): string => {
-    // Split the price into integer and fractional parts (Dollar and Cents)
-    const integerPart = Math.floor(price);
-    const fractionalPart = Math.round((price - integerPart) * 100);
+const formatPriceToString = (price: number, currency: string): string => {
+    // Initialize variables
+   
+   // Fetch the currency details
+    const { decimals, beforeDecimal, afterDecimal } = fetchCurrencyDetails(currency);
 
-    // Convert the integer part to words with capitalized first letter
+    // Ensure the price is rounded to two decimal places
+    const roundedPrice = parseFloat(price.toFixed(decimals));
+
+    // Split the price into integer and fractional parts
+    const integerPart = Math.floor(roundedPrice);
+    const fractionalPart = Math.round((roundedPrice - integerPart) * 100);
+
+    // Convert the integer part to words with a capitalized first letter
     const integerPartInWords = numberToWords
         .toWords(integerPart)
         .replace(/^\w/, (c) => c.toUpperCase());
 
-    // Create the result string without fractional part if it's zero
-    let result = integerPartInWords;
+    // Convert fractional part to words
+    const fractionalPartInWords =
+        fractionalPart > 0
+            ? numberToWords.toWords(fractionalPart)
+            : null;
 
-    // Append fractional part only if it's not zero
-    if (fractionalPart !== 0) {
-        result += ` and ${fractionalPart}/100`;
-    }
-
-    // Handle the case when both integer and fractional parts are zero
+    // Handle zero values for both parts
     if (integerPart === 0 && fractionalPart === 0) {
         return "Zero";
+    }
+
+    // Combine the parts into the final string
+    
+    let result = integerPartInWords;
+    
+    // check if before decimal is not null 
+    if(beforeDecimal !== null && beforeDecimal !== null) {
+    result += ` ${beforeDecimal}`;
+    }
+
+    if (fractionalPartInWords) {
+        // check if after decimal is not null
+        if(afterDecimal !== null) {
+            // concatenate the after decimal and fractional part
+            result += ` and ${fractionalPartInWords} ${afterDecimal}`;
+        }else{
+            // if after decimal is null concatenate the fractional part
+            result += ` point ${fractionalPartInWords}`;
+        }
     }
 
     return result;

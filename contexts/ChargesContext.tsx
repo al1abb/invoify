@@ -49,7 +49,7 @@ type ChargesContextProps = {
 };
 
 export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
-    const { control, setValue } = useFormContext<InvoiceType>();
+    const { control, setValue, getValues } = useFormContext<InvoiceType>();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -234,7 +234,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         setValue("details.totalAmount", total);
 
         if (totalInWordsSwitch) {
-            setValue("details.totalAmountInWords", formatPriceToString(total));
+            setValue("details.totalAmountInWords", formatPriceToString(total, getValues("details.currency")));
         } else {
             setValue("details.totalAmountInWords", "");
         }
