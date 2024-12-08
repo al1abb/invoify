@@ -4,6 +4,10 @@ import { NextResponse } from "next/server";
 // Utils
 import numberToWords from "number-to-words";
 
+// Currencies
+import currenciesDetails from "@/public/assets/data/currencies.json";
+import { CurrencyDetails } from "@/types";
+
 /**
  * Formats a number with commas and decimal places
  *
@@ -19,32 +23,91 @@ const formatNumberWithCommas = (number: number) => {
 };
 
 /**
+ * @param {string} currency - The currency that is currently selected 
+ * @returns {Object} - An object containing the currency details as
+ * ```
+ * {
+    "currency": "United Arab Emirates Dirham",
+    "decimals": 2,
+    "beforeDecimal": "Dirham",
+    "afterDecimal": "Fils"
+ }
+ */
+ const fetchCurrencyDetails = (currency: string): CurrencyDetails | null => {
+    const data = currenciesDetails as Record<string, CurrencyDetails>;
+    const currencyDetails = data[currency];
+    return currencyDetails || null;
+};
+
+
+/**
  * Turns a number into words for invoices
  *
  * @param {number} price - Number to format
  * @returns {string} Number in words
  */
-const formatPriceToString = (price: number): string => {
-    // Split the price into integer and fractional parts (Dollar and Cents)
-    const integerPart = Math.floor(price);
-    const fractionalPart = Math.round((price - integerPart) * 100);
+const formatPriceToString = (price: number, currency: string): string => {
+    // Initialize variables
+    let decimals : number;
+    let beforeDecimal: string | null = null;
+    let afterDecimal: string | null = null;
+    
+    const currencyDetails = fetchCurrencyDetails(currency);
 
-    // Convert the integer part to words with capitalized first letter
+    // If currencyDetails is available, use its values, else dynamically set decimals
+    if (currencyDetails) {
+        decimals = currencyDetails.decimals;
+        beforeDecimal = currencyDetails.beforeDecimal;
+        afterDecimal = currencyDetails.afterDecimal;
+    } else {
+        // Dynamically get decimals from the price if currencyDetails is null
+        const priceString = price.toString();
+        const decimalIndex = priceString.indexOf('.');
+        decimals = decimalIndex !== -1 ? priceString.split('.')[1].length : 0;
+    }
+
+    // Ensure the price is rounded to the appropriate decimal places
+    const roundedPrice = parseFloat(price.toFixed(decimals));
+
+    // Split the price into integer and fractional parts
+    const integerPart = Math.floor(roundedPrice);
+    
+    const fractionalMultiplier = Math.pow(10, decimals);
+    const fractionalPart = Math.round((roundedPrice - integerPart) * fractionalMultiplier);
+
+    // Convert the integer part to words with a capitalized first letter
     const integerPartInWords = numberToWords
         .toWords(integerPart)
         .replace(/^\w/, (c) => c.toUpperCase());
 
-    // Create the result string without fractional part if it's zero
-    let result = integerPartInWords;
+    // Convert fractional part to words
+    const fractionalPartInWords =
+        fractionalPart > 0
+            ? numberToWords.toWords(fractionalPart)
+            : null;
 
-    // Append fractional part only if it's not zero
-    if (fractionalPart !== 0) {
-        result += ` and ${fractionalPart}/100`;
-    }
-
-    // Handle the case when both integer and fractional parts are zero
+    // Handle zero values for both parts
     if (integerPart === 0 && fractionalPart === 0) {
         return "Zero";
+    }
+
+    // Combine the parts into the final string
+    let result = integerPartInWords;
+
+    // Check if beforeDecimal is not null 
+    if (beforeDecimal !== null) {
+        result += ` ${beforeDecimal}`;
+    }
+
+    if (fractionalPartInWords) {
+        // Check if afterDecimal is not null
+        if (afterDecimal !== null) {
+            // Concatenate the after decimal and fractional part
+            result += ` and ${fractionalPartInWords} ${afterDecimal}`;
+        } else {
+            // If afterDecimal is null, concatenate the fractional part
+            result += ` point ${fractionalPartInWords}`;
+        }
     }
 
     return result;
