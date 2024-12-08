@@ -33,7 +33,7 @@ const formatNumberWithCommas = (number: number) => {
     "afterDecimal": "Fils"
  }
  */
-const fetchCurrencyDetails = (currency: string) => {
+ const fetchCurrencyDetails = (currency: string): CurrencyDetails | null => {
     const data = currenciesDetails as Record<string, CurrencyDetails>;
     const currencyDetails = data[currency];
     return currencyDetails || null;
