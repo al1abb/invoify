@@ -115,7 +115,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
                                     <p className="font-medium text-gray-800">
                                         {item.name}
                                     </p>
-                                    <p className="text-xs text-gray-600">
+                                    <p className="text-xs text-gray-600 whitespace-pre-line">
                                         {item.description}
                                     </p>
                                 </div>
