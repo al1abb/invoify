@@ -47,6 +47,7 @@ const defaultInvoiceContext = {
     deleteInvoice: (index: number) => {},
     sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
     exportInvoiceAs: (exportAs: ExportTypes) => {},
+    importInvoice: (file: File) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -72,6 +73,7 @@ export const InvoiceContextProvider = ({
         modifiedInvoiceSuccess,
         sendPdfSuccess,
         sendPdfError,
+        importInvoiceError,
     } = useToasts();
 
     // Get form values and methods from form context
@@ -336,6 +338,28 @@ export const InvoiceContextProvider = ({
         exportInvoice(exportAs, formValues);
     };
 
+    /**
+     * Import an invoice from a JSON file.
+     *
+     * @param {File} file - The JSON file to import.
+     */
+    const importInvoice = (file: File) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target?.result as string);
+                // Reset form with imported data
+                reset(importedData);
+                
+            } catch (error) {
+                console.error('Error parsing JSON file:', error);
+                importInvoiceError();
+                
+            }
+        };
+        reader.readAsText(file);
+    };
+
     return (
         <InvoiceContext.Provider
             value={{
@@ -354,6 +378,7 @@ export const InvoiceContextProvider = ({
                 deleteInvoice,
                 sendPdfToMail,
                 exportInvoiceAs,
+                importInvoice,
             }}
         >
             {children}
