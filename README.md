@@ -93,3 +93,6 @@ Follow these instructions to get Invoify up and running on your local machine.
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+## Discord
+Join the Discord server [here](https://discord.gg/BzT6g4Wj)
