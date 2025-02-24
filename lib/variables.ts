@@ -60,6 +60,7 @@ export const LOCALES = [
     { code: "fr", name: "Français" },
     { code: "ar", name: "العربية" },
     { code: "pt-BR", name: "Português (Brasil)" },
+    { code: "tr", name: "Türkçe" },
 ]
 export const DEFAULT_LOCALE = LOCALES[0].code;
 
