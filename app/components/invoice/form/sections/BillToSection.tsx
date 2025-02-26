@@ -78,6 +78,11 @@ const BillToSection = () => {
                 name="receiver.phone"
                 label={_t("form.steps.fromAndTo.phone")}
                 placeholder="Receiver phone number"
+                onKeyPress={(e) => {
+                    if (!/[0-9]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                }}
             />
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
