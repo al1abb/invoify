@@ -77,12 +77,11 @@ const BillFromSection = () => {
         name="sender.phone"
         label={_t("form.steps.fromAndTo.phone")}
         placeholder="Your phone number"
-        type="tel"
-        pattern="\d*"
-        onKeyPress={(e) => {
-          if (!/[0-9]/.test(e.key)) {
-            e.preventDefault();
-          }
+        type="text"
+        inputMode="numeric"
+        onInput={(e) => {
+          const target = e.target as HTMLInputElement;
+          target.value = target.value.replace(/\D/g, "");
         }}
       />
 
