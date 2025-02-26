@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "Faktura",
+        "description": "Generer faktura",
+        "newInvBadge": "Ny faktura",
+        "wizard": {
+            "fromAndTo": "Frå & til",
+            "invoiceDetails": "Fakturadetaljar",
+            "lineItems": "Varelinjer",
+            "paymentInfo": "Betalingsinformasjon",
+            "summary": "Samandrag",
+            "next": "Neste",
+            "back": "Tilbake"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Faktura frå",
+                "billTo": "Faktura til",
+                "name": "Namn",
+                "address": "Adresse",
+                "zipCode": "Postnummer",
+                "city": "By",
+                "country": "Land",
+                "email": "E-post",
+                "phone": "Telefon",
+                "addCustomInput": "Legg til eige felt",
+                "sender": "Avsendar",
+                "receiver": "Mottakar"
+            },
+            "invoiceDetails": {
+                "heading": "Fakturadetaljar",
+                "invoiceLogo": {
+                    "label": "Fakturalogo",
+                    "placeholder": "Klikk for å laste opp bilete"
+                },
+                "invoiceNumber": "Fakturanummer",
+                "issuedDate": "Utferdingsdato",
+                "dueDate": "Forfallsdato",
+                "currency": "Valuta"
+            },
+            "lineItems": {
+                "heading": "Varer",
+                "item": "Vare",
+                "name": "Namn",
+                "quantity": "Mengd",
+                "rate": "Pris",
+                "total": "Totalt",
+                "description": "Skildring",
+                "addNewItem": "Legg til ny vare",
+                "removeItem": "Fjern vare"
+            },
+            "paymentInfo": {
+                "heading": "Betalingsinformasjon",
+                "bankName": "Banknamn",
+                "accountName": "Kontonamn",
+                "accountNumber": "Kontonummer"
+            },
+            "summary": {
+                "heading": "Samandrag",
+                "signature": {
+                    "heading": "Signatur",
+                    "placeholder": "Klikk for å legge til signatur",
+                    "draw": "Teikn",
+                    "type": "Skriv",
+                    "upload": "Last opp"
+                },
+                "additionalNotes": "Tilleggsnotatar",
+                "paymentTerms": "Betalingsvilkår",
+                "discount": "Rabatt",
+                "tax": "MVA",
+                "shipping": "Frakt",
+                "subTotal": "Delsum",
+                "totalAmount": "Totalbeløp",
+                "includeTotalInWords": "Inkluder totalbeløp med ord?",
+                "yes": "Ja",
+                "no": "Nei"
+            }
+        }
+    },
+    "actions": {
+        "title": "Handlingar",
+        "description": "Operasjonar og førehandsvising",
+        "loadInvoice": "Last inn faktura",
+        "exportInvoice": "Eksporter faktura",
+        "newInvoice": "Ny faktura",
+        "generatePdf": "Generer PDF",
+        "pdfView": "PDF-vising"
+    },
+    "footer": {
+        "developedBy": "Utvikla av"
+    }
+}
