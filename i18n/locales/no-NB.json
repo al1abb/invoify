@@ -4,7 +4,7 @@
         "description": "Generer faktura",
         "newInvBadge": "Ny faktura",
         "wizard": {
-            "fromAndTo": "Fra & Til",
+            "fromAndTo": "Fra & til",
             "invoiceDetails": "Fakturadetaljer",
             "lineItems": "Varelinjer",
             "paymentInfo": "Betalingsinformasjon",
