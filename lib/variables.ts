@@ -61,7 +61,7 @@ export const LOCALES = [
     { code: "ar", name: "العربية" },
     { code: "pt-BR", name: "Português (Brasil)" },
     { code: "tr", name: "Türkçe" },
-    { code: "vi", name: "Vietnamese" },
+    { code: "vi", name: "Tiếng Việt" },
 ]
 export const DEFAULT_LOCALE = LOCALES[0].code;
 
