@@ -79,10 +79,12 @@ const BillToSection = () => {
                 label={_t("form.steps.fromAndTo.phone")}
                 placeholder="Receiver phone number"
                 type="text"
-                inputMode="numeric"
+                inputMode="tel"
+                pattern="[0-9]*"
+                aria-describedby="phone-format"
                 onInput={(e) => {
-                const target = e.target as HTMLInputElement;
-                target.value = target.value.replace(/\D/g, "");
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
                 }}
             />
 
