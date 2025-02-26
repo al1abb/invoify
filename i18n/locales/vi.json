@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "Hóa đơn",
+        "description": "Tạo hóa đơn",
+        "newInvBadge": "Hóa đơn mới",
+        "wizard": {
+            "fromAndTo": "Bên bán & Bên mua",
+            "invoiceDetails": "Chi tiết hóa đơn",
+            "lineItems": "Các mục hàng",
+            "paymentInfo": "Thông tin thanh toán",
+            "summary": "Tóm tắt",
+            "next": "Tiếp theo",
+            "back": "Quay lại"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Bên bán",
+                "billTo": "Bên mua",
+                "name": "Tên",
+                "address": "Địa chỉ",
+                "zipCode": "Mã bưu điện",
+                "city": "Thành phố",
+                "country": "Quốc gia",
+                "email": "Email",
+                "phone": "Số điện thoại",
+                "addCustomInput": "Thêm trường tùy chỉnh",
+                "sender": "Bên bán",
+                "receiver": "Bên mua"
+            },
+            "invoiceDetails": {
+                "heading": "Chi tiết hóa đơn",
+                "invoiceLogo": {
+                    "label": "Logo hóa đơn",
+                    "placeholder": "Nhấp để tải lên hình ảnh"
+                },
+                "invoiceNumber": "Số hóa đơn",
+                "issuedDate": "Ngày lập",
+                "dueDate": "Ngày đến hạn",
+                "currency": "Tiền tệ"
+            },
+            "lineItems": {
+                "heading": "Các mục hàng",
+                "item": "Mục",
+                "name": "Tên",
+                "quantity": "Số lượng",
+                "rate": "Đơn giá",
+                "total": "Tổng",
+                "description": "Mô tả",
+                "addNewItem": "Thêm mục mới",
+                "removeItem": "Xóa mục"
+            },
+            "paymentInfo": {
+                "heading": "Thông tin thanh toán",
+                "bankName": "Tên ngân hàng",
+                "accountName": "Tên tài khoản",
+                "accountNumber": "Số tài khoản"
+            },
+            "summary": {
+                "heading": "Tóm tắt",
+                "signature": {
+                    "heading": "Chữ ký",
+                    "placeholder": "Nhấp để thêm chữ ký",
+                    "draw": "Vẽ",
+                    "type": "Gõ",
+                    "upload": "Tải lên"
+                },
+                "additionalNotes": "Ghi chú bổ sung",
+                "paymentTerms": "Điều khoản thanh toán",
+                "discount": "Giảm giá",
+                "tax": "Thuế",
+                "shipping": "Phí vận chuyển",
+                "subTotal": "Tạm tính",
+                "totalAmount": "Tổng số tiền",
+                "includeTotalInWords": "Bao gồm tổng số bằng chữ?",
+                "yes": "Có",
+                "no": "Không"
+            }
+        }
+    },
+    "actions": {
+        "title": "Hành động",
+        "description": "Thao tác và xem trước",
+        "loadInvoice": "Tải hóa đơn",
+        "exportInvoice": "Xuất hóa đơn",
+        "newInvoice": "Hóa đơn mới",
+        "generatePdf": "Tạo PDF",
+        "pdfView": "Xem PDF"
+    },
+    "footer": {
+        "developedBy": "Được phát triển bởi"
+    }
+}
