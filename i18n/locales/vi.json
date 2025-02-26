@@ -40,14 +40,14 @@
             },
             "lineItems": {
                 "heading": "Các mục hàng",
-                "item": "Mục",
+                "item": "Sản phẩm",
                 "name": "Tên",
                 "quantity": "Số lượng",
                 "rate": "Đơn giá",
                 "total": "Tổng",
                 "description": "Mô tả",
-                "addNewItem": "Thêm mục mới",
-                "removeItem": "Xóa mục"
+                "addNewItem": "Thêm sản phẩm mới",
+                "removeItem": "Xóa sản phẩm"
             },
             "paymentInfo": {
                 "heading": "Thông tin thanh toán",
