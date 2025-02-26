@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "請求書",
+        "description": "請求書を作成",
+        "newInvBadge": "新しい請求書",
+        "wizard": {
+            "fromAndTo": "送信者 & 受信者",
+            "invoiceDetails": "請求書の詳細",
+            "lineItems": "品目",
+            "paymentInfo": "支払い情報",
+            "summary": "概要",
+            "next": "次へ",
+            "back": "戻る"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "請求元",
+                "billTo": "請求先",
+                "name": "名前",
+                "address": "住所",
+                "zipCode": "郵便番号",
+                "city": "市区町村",
+                "country": "国",
+                "email": "メール",
+                "phone": "電話",
+                "addCustomInput": "カスタム入力を追加",
+                "sender": "送信者",
+                "receiver": "受信者"
+            },
+            "invoiceDetails": {
+                "heading": "請求書の詳細",
+                "invoiceLogo": {
+                    "label": "請求書のロゴ",
+                    "placeholder": "クリックして画像をアップロード"
+                },
+                "invoiceNumber": "請求書番号",
+                "issuedDate": "発行日",
+                "dueDate": "支払期限",
+                "currency": "通貨"
+            },
+            "lineItems": {
+                "heading": "品目",
+                "item": "項目",
+                "name": "名称",
+                "quantity": "数量",
+                "rate": "単価",
+                "total": "合計",
+                "description": "説明",
+                "addNewItem": "新しい項目を追加",
+                "removeItem": "項目を削除"
+            },
+            "paymentInfo": {
+                "heading": "支払い情報",
+                "bankName": "銀行名",
+                "accountName": "口座名義",
+                "accountNumber": "口座番号"
+            },
+            "summary": {
+                "heading": "概要",
+                "signature": {
+                    "heading": "署名",
+                    "placeholder": "クリックして署名を追加",
+                    "draw": "手書き",
+                    "type": "入力",
+                    "upload": "アップロード"
+                },
+                "additionalNotes": "追加のメモ",
+                "paymentTerms": "支払い条件",
+                "discount": "割引",
+                "tax": "税金",
+                "shipping": "送料",
+                "subTotal": "小計",
+                "totalAmount": "合計金額",
+                "includeTotalInWords": "合計金額を文字で表示しますか？",
+                "yes": "はい",
+                "no": "いいえ"
+            }
+        }
+    },
+    "actions": {
+        "title": "操作",
+        "description": "処理とプレビュー",
+        "loadInvoice": "請求書を読み込む",
+        "exportInvoice": "請求書をエクスポート",
+        "newInvoice": "新しい請求書",
+        "generatePdf": "PDFを生成",
+        "pdfView": "PDFビュー"
+    },
+    "footer": {
+        "developedBy": "開発者"
+    }
+}
