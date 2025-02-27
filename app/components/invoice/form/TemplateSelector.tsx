@@ -23,6 +23,7 @@ import {
 
 // Template images
 import template1 from "@/public/assets/img/invoice-1-example.png";
+import template2 from "@/public/assets/img/invoice-2-example.png";
 
 // Icons
 import { Check } from "lucide-react";
@@ -45,7 +46,7 @@ const TemplateSelector = () => {
             id: 2,
             name: "Template 2",
             description: "Second template",
-            img: template1,
+            img: template2,
             component: <InvoiceTemplate2 {...formValues} />,
         },
     ];
