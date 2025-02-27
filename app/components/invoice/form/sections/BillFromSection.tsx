@@ -77,6 +77,14 @@ const BillFromSection = () => {
                 name="sender.phone"
                 label={_t("form.steps.fromAndTo.phone")}
                 placeholder="Your phone number"
+                type="text"
+                inputMode="tel"
+                pattern="[0-9]*"
+                aria-describedby="phone-format"
+                onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
+                }}
             />
 
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
