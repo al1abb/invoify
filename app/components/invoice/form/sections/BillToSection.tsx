@@ -80,7 +80,7 @@ const BillToSection = () => {
                 placeholder="Receiver phone number"
                 type="text"
                 inputMode="tel"
-                pattern="[0-9]*"
+                pattern="[0-9+\-\(\)\s]*"
                 aria-describedby="phone-format"
                 onInput={(e) => {
                     const target = e.target as HTMLInputElement;
