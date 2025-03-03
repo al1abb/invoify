@@ -1,4 +1,4 @@
-[![Discord](https://img.shields.io/badge/Discord-%40Invoify-000000?style=flat&logo=Discord&logoColor=#5865F2)](https://discord.gg/BzT6g4Wj)
+[![Discord](https://img.shields.io/badge/Discord-%40Invoify-000000?style=flat&logo=Discord&logoColor=#5865F2)](https://discord.gg/uhXKHbVKHZ)
 # Invoify
 
 Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices.
@@ -96,4 +96,4 @@ Follow these instructions to get Invoify up and running on your local machine.
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Discord
-Join the Discord server [here](https://discord.gg/BzT6g4Wj)
+Join the Discord server [here](https://discord.gg/uhXKHbVKHZ)
