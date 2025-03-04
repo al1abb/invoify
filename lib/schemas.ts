@@ -54,7 +54,7 @@ const fieldValidators = {
         .min(1, { message: "Must be a number greater than 0" }),
     unitPrice: z.coerce
         .number()
-        .min(1, { message: "Must be a number greater than 0" }),
+        .gt(0, { message: "Must be a number greater than 0" }),
 
     // Strings
     string: z.string(),
