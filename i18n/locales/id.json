@@ -1,0 +1,92 @@
+{
+  "form": {
+    "title": "Faktur",
+    "description": "Buat Faktur",
+    "newInvBadge": "Faktur Baru",
+    "wizard": {
+      "fromAndTo": "Dari & Ke",
+      "invoiceDetails": "Detail Faktur",
+      "lineItems": "Daftar Item",
+      "paymentInfo": "Info Pembayaran",
+      "summary": "Ringkasan",
+      "next": "Selanjutnya",
+      "back": "Kembali"
+    },
+    "steps": {
+      "fromAndTo": {
+        "billFrom": "Tagihan Dari",
+        "billTo": "Tagihan Ke",
+        "name": "Nama",
+        "address": "Alamat",
+        "zipCode": "Kode Pos",
+        "city": "Kota",
+        "country": "Negara",
+        "email": "Email",
+        "phone": "Telepon",
+        "addCustomInput": "Tambah Input Kustom",
+        "sender": "Pengirim",
+        "receiver": "Penerima"
+      },
+      "invoiceDetails": {
+        "heading": "Detail Faktur",
+        "invoiceLogo": {
+          "label": "Logo Faktur",
+          "placeholder": "Klik untuk unggah gambar"
+        },
+        "invoiceNumber": "Nomor Faktur",
+        "issuedDate": "Tanggal Terbit",
+        "dueDate": "Jatuh Tempo",
+        "currency": "Mata Uang"
+      },
+      "lineItems": {
+        "heading": "Item",
+        "item": "Item",
+        "name": "Nama",
+        "quantity": "Jumlah",
+        "rate": "Harga",
+        "total": "Total",
+        "description": "Deskripsi",
+        "addNewItem": "Tambah item baru",
+        "removeItem": "Hapus item"
+      },
+      "paymentInfo": {
+        "heading": "Informasi Pembayaran",
+        "bankName": "Nama Bank",
+        "accountName": "Nama Rekening",
+        "accountNumber": "Nomor Rekening"
+      },
+      "summary": {
+        "heading": "Ringkasan",
+        "signature": {
+          "heading": "Tanda Tangan",
+          "placeholder": "Klik untuk menambah tanda tangan",
+          "draw": "Gambar",
+          "type": "Ketik",
+          "upload": "Unggah"
+        },
+        "additionalNotes": "Catatan Tambahan",
+        "paymentTerms": "Syarat Pembayaran",
+        "discount": "Diskon",
+        "tax": "Pajak",
+        "shipping": "Biaya Kirim",
+        "subTotal": "Subtotal",
+        "totalAmount": "Total Pembayaran",
+        "includeTotalInWords": "Sertakan Total dalam Kata-kata?",
+        "yes": "Ya",
+        "no": "Tidak"
+      }
+    }
+  },
+  "actions": {
+    "title": "Tindakan",
+    "description": "Operasi dan pratinjau",
+    "loadInvoice": "Muat Faktur",
+    "exportInvoice": "Ekspor Faktur",
+    "newInvoice": "Faktur Baru",
+    "generatePdf": "Buat PDF",
+    "pdfView": "Tampilan PDF"
+  },
+  "footer": {
+    "developedBy": "Dikembangkan oleh"
+  }
+}
