@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "Faktura",
+        "description": "Generowanie faktury",
+        "newInvBadge": "Nowa faktura",
+        "wizard": {
+            "fromAndTo": "Od & Do",
+            "invoiceDetails": "Szczegóły faktury",
+            "lineItems": "Pozycje faktury",
+            "paymentInfo": "Informacje o płatności",
+            "summary": "Podsumowanie",
+            "next": "Dalej",
+            "back": "Wstecz"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Wystawca",
+                "billTo": "Odbiorca",
+                "name": "Nazwa",
+                "address": "Adres",
+                "zipCode": "Kod pocztowy",
+                "city": "Miasto",
+                "country": "Kraj",
+                "email": "E-mail",
+                "phone": "Telefon",
+                "addCustomInput": "Dodaj niestandardowe pole",
+                "sender": "Nadawca",
+                "receiver": "Odbiorca"
+            },
+            "invoiceDetails": {
+                "heading": "Szczegóły faktury",
+                "invoiceLogo": {
+                    "label": "Logo faktury",
+                    "placeholder": "Kliknij, aby przesłać obraz"
+                },
+                "invoiceNumber": "Numer faktury",
+                "issuedDate": "Data wystawienia",
+                "dueDate": "Termin płatności",
+                "currency": "Waluta"
+            },
+            "lineItems": {
+                "heading": "Pozycje",
+                "item": "Pozycja",
+                "name": "Nazwa",
+                "quantity": "Ilość",
+                "rate": "Cena jednostkowa",
+                "total": "Suma",
+                "description": "Opis",
+                "addNewItem": "Dodaj nową pozycję",
+                "removeItem": "Usuń pozycję"
+            },
+            "paymentInfo": {
+                "heading": "Informacje o płatności",
+                "bankName": "Nazwa banku",
+                "accountName": "Nazwa konta",
+                "accountNumber": "Numer konta"
+            },
+            "summary": {
+                "heading": "Podsumowanie",
+                "signature": {
+                    "heading": "Podpis",
+                    "placeholder": "Kliknij, aby dodać podpis",
+                    "draw": "Narysuj",
+                    "type": "Wpisz",
+                    "upload": "Prześlij"
+                },
+                "additionalNotes": "Dodatkowe uwagi",
+                "paymentTerms": "Warunki płatności",
+                "discount": "Rabat",
+                "tax": "Podatek",
+                "shipping": "Koszt dostawy",
+                "subTotal": "Suma częściowa",
+                "totalAmount": "Kwota całkowita",
+                "includeTotalInWords": "Uwzględnić kwotę słownie?",
+                "yes": "Tak",
+                "no": "Nie"
+            }
+        }
+    },
+    "actions": {
+        "title": "Akcje",
+        "description": "Operacje i podgląd",
+        "loadInvoice": "Wczytaj fakturę",
+        "exportInvoice": "Eksportuj fakturę",
+        "newInvoice": "Nowa faktura",
+        "generatePdf": "Generuj PDF",
+        "pdfView": "Podgląd PDF"
+    },
+    "footer": {
+        "developedBy": "Opracowane przez"
+    }
+}

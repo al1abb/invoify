@@ -59,6 +59,7 @@ export const LOCALES = [
     { code: "es", name: "Español" },
     { code: "fr", name: "Français" },
     { code: "ar", name: "العربية" },
+    { code: "pl", name: "Polish"},
     { code: "pt-BR", name: "Português (Brasil)" },
     { code: "tr", name: "Türkçe" },
     { code: "ja", name: "日本語" },
