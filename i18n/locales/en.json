@@ -84,8 +84,7 @@
         "exportInvoice": "Export Invoice",
         "newInvoice": "New Invoice",
         "generatePdf": "Generate PDF",
-        "pdfView": "PDF View",
-        "printPdf": "Print PDF"
+        "pdfView": "PDF View"
     },
     "footer": {
         "developedBy": "Developed by"
