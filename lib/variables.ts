@@ -57,7 +57,7 @@ export const LOCALES = [
     { code: "de", name: "Deutsch" },
     { code: "it", name: "Italiano" },
     { code: "es", name: "Español" },
-	{ code: "ca", name: "Català"},
+    { code: "ca", name: "Català"},
     { code: "fr", name: "Français" },
     { code: "ar", name: "العربية" },
     { code: "pl", name: "Polish"},
