@@ -1,12 +1,12 @@
 "use client";
 
 import React, {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -22,46 +22,49 @@ import { exportInvoice } from "@/services/invoice/client/exportInvoice";
 
 // Variables
 import {
-    FORM_DEFAULT_VALUES,
-    GENERATE_PDF_API,
-    SEND_PDF_API,
-    SHORT_DATE_OPTIONS,
+  FORM_DEFAULT_VALUES,
+  GENERATE_PDF_API,
+  SEND_PDF_API,
+  SHORT_DATE_OPTIONS,
+  TAILWIND_CDN,
 } from "@/lib/variables";
 
 // Types
 import { ExportTypes, InvoiceType } from "@/types";
+import { getInvoiceTemplate } from "@/lib/helpers";
 
 const defaultInvoiceContext = {
-    invoicePdf: new Blob(),
-    invoicePdfLoading: false,
-    savedInvoices: [] as InvoiceType[],
-    pdfUrl: null as string | null,
-    onFormSubmit: (values: InvoiceType) => {},
-    newInvoice: () => {},
-    generatePdf: async (data: InvoiceType) => {},
-    removeFinalPdf: () => {},
-    downloadPdf: () => {},
-    printPdf: () => {},
-    previewPdfInTab: () => {},
-    saveInvoice: () => {},
-    deleteInvoice: (index: number) => {},
-    sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
-    exportInvoiceAs: (exportAs: ExportTypes) => {},
-    importInvoice: (file: File) => {},
+  invoicePdf: new Blob(),
+  invoicePdfLoading: false,
+  savedInvoices: [] as InvoiceType[],
+  pdfUrl: null as string | null,
+  onFormSubmit: (values: InvoiceType) => { },
+  newInvoice: () => { },
+  generatePdf: async (data: InvoiceType) => { },
+  removeFinalPdf: () => { },
+  downloadPdf: () => { },
+  printPdf: () => { },
+  previewPdfInTab: () => { },
+  saveInvoice: () => { },
+  deleteInvoice: (index: number) => { },
+  sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
+  exportInvoiceAs: (exportAs: ExportTypes) => { },
+  importInvoice: (file: File) => { },
+  printPdfImmediatelyAndPrivately: (data: InvoiceType) => { },
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
 
 export const useInvoiceContext = () => {
-    return useContext(InvoiceContext);
+  return useContext(InvoiceContext);
 };
 
 type InvoiceContextProviderProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export const InvoiceContextProvider = ({
-    children,
+  children,
 }: InvoiceContextProviderProps) => {
   const router = useRouter();
 
@@ -74,6 +77,7 @@ export const InvoiceContextProvider = ({
     sendPdfSuccess,
     sendPdfError,
     importInvoiceError,
+    printPdfImmediatelyAndPrivatelyError
   } = useToasts();
 
   // Get form values and methods from form context
@@ -90,8 +94,8 @@ export const InvoiceContextProvider = ({
     let savedInvoicesDefault;
     if (typeof window !== undefined) {
       // Saved invoices variables
-            const savedInvoicesJSON =
-                window.localStorage.getItem("savedInvoices");
+      const savedInvoicesJSON =
+        window.localStorage.getItem("savedInvoices");
       savedInvoicesDefault = savedInvoicesJSON
         ? JSON.parse(savedInvoicesJSON)
         : [];
@@ -243,8 +247,8 @@ export const InvoiceContextProvider = ({
         const existingInvoiceIndex = savedInvoices.findIndex(
           (invoice: InvoiceType) => {
             return (
-                            invoice.details.invoiceNumber ===
-                            formValues.details.invoiceNumber
+              invoice.details.invoiceNumber ===
+              formValues.details.invoiceNumber
             );
           }
         );
@@ -263,10 +267,10 @@ export const InvoiceContextProvider = ({
           saveInvoiceSuccess();
         }
 
-                localStorage.setItem(
-                    "savedInvoices",
-                    JSON.stringify(savedInvoices)
-                );
+        localStorage.setItem(
+          "savedInvoices",
+          JSON.stringify(savedInvoices)
+        );
 
         setSavedInvoices(savedInvoices);
       }
@@ -373,6 +377,92 @@ export const InvoiceContextProvider = ({
     reader.readAsText(file);
   };
 
+  const printPdfImmediatelyAndPrivately = useCallback(async (data: InvoiceType) => {
+    try {
+
+      const ReactDOMServer = (await import("react-dom/server")).default;
+
+      // Get the selected invoice template
+      const templateId = data.details.pdfTemplate;
+      const InvoiceTemplate = await getInvoiceTemplate(templateId);
+
+      // Read the HTML template from a React component
+      const htmlTemplate = `<link rel="stylesheet" href="${TAILWIND_CDN}">`.concat(ReactDOMServer.renderToStaticMarkup(
+        InvoiceTemplate(data)
+      ));
+
+      // Open window with a descriptive name
+      const printWindow = window.open("", "invoice_print_view", "width=800,height=800");
+
+      if (!printWindow) {
+        throw new Error("Popup blocked. Please allow popups for this site to print invoices.");
+      }
+
+      printWindow.document.open();
+      printWindow.document.write(htmlTemplate);
+      printWindow.document.close();
+
+      // Handle printing with proper cleanup
+      return new Promise<void>((resolve, reject) => {
+        // Use a flag to prevent double printing
+        let printAttempted = false;
+
+        printWindow.onload = () => {
+          try {
+            if (printAttempted) return;
+            printAttempted = true;
+
+            setTimeout(() => {
+              printWindow.print();
+              // Close window after printing or after cancellation
+              setTimeout(() => {
+                printWindow.close();
+                resolve();
+              }, 500);
+            }, 500); // Short delay to ensure content rendering
+          } catch (err) {
+            printWindow.close();
+            reject(err);
+          }
+        };
+
+        // Fallback if onload doesn't trigger
+        setTimeout(() => {
+          if (!printAttempted && printWindow.document.readyState === 'complete') {
+            try {
+              printAttempted = true;
+              printWindow.print();
+              setTimeout(() => printWindow.close(), 1000);
+              resolve();
+            } catch (err) {
+              printWindow.close();
+              reject(err);
+            }
+          } else if (!printAttempted) {
+            // If document still not ready after timeout, close and reject
+            printWindow.close();
+            reject(new Error("Failed to prepare document for printing"));
+          }
+        }, 3000);
+
+        // Safety timeout to ensure the window always closes
+        setTimeout(() => {
+          if (printWindow && !printWindow.closed) {
+            printWindow.close();
+            if (!printAttempted) {
+              reject(new Error("Print operation timed out"));
+            }
+          }
+        }, 10000);
+      });
+    } catch (error) {
+      printPdfImmediatelyAndPrivatelyError((error as Error).message);
+    } finally {
+      setInvoicePdfLoading(false);
+    }
+  }, []);
+
+
   return (
     <InvoiceContext.Provider
       value={{
@@ -392,6 +482,7 @@ export const InvoiceContextProvider = ({
         sendPdfToMail,
         exportInvoiceAs,
         importInvoice,
+        printPdfImmediatelyAndPrivately
       }}
     >
       {children}
