@@ -148,6 +148,19 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                 {details.currency}
               </dd>
             </dl>
+            {details.advancePaymentDetails?.amount != undefined &&
+              details.advancePaymentDetails?.amount > 0 && (
+                <dl className="grid sm:grid-cols-5 gap-x-3">
+                  <dt className="col-span-3 font-semibold text-gray-800">
+                    Advance payment:
+                  </dt>
+                  <dd className="col-span-2 text-gray-500">
+                    {details.advancePaymentDetails.amountType === "amount"
+                      ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
+                      : `- ${details.advancePaymentDetails.amount}%`}
+                  </dd>
+                </dl>
+              )}
             {details.discountDetails?.amount != undefined &&
               details.discountDetails?.amount > 0 && (
                 <dl className="grid sm:grid-cols-5 gap-x-3">

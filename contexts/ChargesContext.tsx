@@ -220,7 +220,7 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     let taxAmount = parseFloat(tax!.amount.toString()) ?? 0;
     let shippingCost = parseFloat(shipping!.cost.toString()) ?? 0;
 
-    let advancePaymentType = "amount";
+    let advancePaymentAmountType = "amount";
     let discountAmountType = "amount";
     let taxAmountType = "amount";
     let shippingCostType = "amount";
@@ -230,10 +230,10 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     if (!isNaN(advancePaymentAmount)) {
       if (advancePaymentType == "amount") {
         total -= advancePaymentAmount;
-        advancePaymentType = "amount";
+        advancePaymentAmountType = "amount";
       } else {
         total -= total * (advancePaymentAmount / 100);
-        advancePaymentType = "percentage";
+        advancePaymentAmountType = "percentage";
       }
       setValue("details.advancePaymentDetails.amount", advancePaymentAmount);
     }
