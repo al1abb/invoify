@@ -5,8 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 // Assets
-// TODO: Update to the new logo
-import Logo from "@/public/assets/img/invoify-logo.svg";
+import Logo from "@/public/assets/img/invoizer-logo.svg";
 
 // ShadCn
 import { Card } from "@/components/ui/card";
