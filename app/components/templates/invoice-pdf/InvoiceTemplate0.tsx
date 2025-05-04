@@ -52,13 +52,15 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
   return (
     <InvoiceLayout data={props}>
       <div
-        className={`relative bg-gray-200 h-full ${previewClasses.container} ${
-          isPreview ? "text-xs" : ""
-        }`}
+        className={`relative bg-gray-200 min-h-[1056px] h-full ${
+          previewClasses.container
+        } ${isPreview ? "text-xs" : ""}`}
       >
-        <div className="absolute w-full h-1/3 bg-black z-0" />
+        {/* Top black rectangle */}
+        <div className="absolute w-full h-1/3 bg-black z-0 top-0" />
 
-        <div className="relative z-10 p-6">
+        {/* Main content with padding that grows to push bottom rectangle down */}
+        <div className="relative z-10 p-6 flex-1">
           {/* region: Logo */}
           <div
             className={`flex flex-col ${previewClasses.flexRow} items-center ${previewClasses.justifyBetween} border-b-[0.5px] pb-4`}
@@ -562,6 +564,7 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
             ) : null}
           </div>
         </div>
+        <div className="absolute w-full h-8 bg-black z-0 bottom-0" />
       </div>
     </InvoiceLayout>
   );
