@@ -124,7 +124,9 @@ const ItemSchema = z.object({
 const PaymentInformationSchema = z.object({
   bankName: fieldValidators.stringMin1,
   accountName: fieldValidators.stringMin1,
+  accountClass: fieldValidators.stringOptional,
   accountNumber: fieldValidators.stringMin1,
+  iban: fieldValidators.stringMin1,
 });
 
 const AdvancePaymentDetailsSchema = z.object({

@@ -1,10 +1,12 @@
 import { InvoiceLayout } from "@/app/components";
 import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 import { DATE_OPTIONS } from "@/lib/variables";
-import logo from "@/public/assets/img/brand-vibe-logo.png";
 import { InvoiceType } from "@/types";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import React from "react";
+
+const logoUrl =
+  "https://pub-b3e032943722420baddb7be6e251edb2.r2.dev/brand-vibe-logo.png";
 
 const COMPANY_INFO = [
   {
@@ -30,17 +32,18 @@ const DefaultTemplate = (data: InvoiceType) => {
 
   return (
     <InvoiceLayout data={data}>
-      <div className="relative bg-white">
+      <div className="relative bg-gray-200 h-full">
         <div className="absolute w-full h-1/3 bg-black z-0" />
 
         <div className="relative z-10 p-6">
           {/* region: Logo */}
           <div className="flex items-center justify-between border-b-[0.5px] pb-4">
             <img
-              src={logo.src}
+              src={logoUrl}
               width={140}
               height={80}
               alt={`Logo of ${sender.name}`}
+              style={{ maxWidth: "140px", maxHeight: "80px" }}
             />
 
             <div>
@@ -60,277 +63,314 @@ const DefaultTemplate = (data: InvoiceType) => {
             SALES INVOICE
           </h1>
 
-          <div className="flex justify-between">
-            <div>
-              {details.invoiceLogo && (
-                <img
-                  src={details.invoiceLogo}
-                  width={140}
-                  height={100}
-                  alt={`Logo of ${sender.name}`}
-                />
-              )}
-              <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600">
-                {sender.name}
-              </h1>
-            </div>
-            <div className="text-right">
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-                Invoice #
-              </h2>
-              <span className="mt-1 block text-gray-500">
-                {details.invoiceNumber}
-              </span>
-              <address className="mt-4 not-italic text-gray-800">
-                {sender.address}
-                <br />
-                {sender.zipCode}, {sender.city}
-                <br />
-                {sender.country}
-                <br />
-              </address>
-            </div>
-          </div>
-
-          <div className="mt-6 grid sm:grid-cols-2 gap-3">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Bill to:</h3>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {receiver.name}
-              </h3>
-              {}
-              <address className="mt-2 not-italic text-gray-500">
-                {receiver.address && receiver.address.length > 0
-                  ? receiver.address
-                  : null}
-                {receiver.zipCode && receiver.zipCode.length > 0
-                  ? `, ${receiver.zipCode}`
-                  : null}
-                <br />
-                {receiver.city}, {receiver.country}
-                <br />
-              </address>
-            </div>
-            <div className="sm:text-right space-y-2">
-              <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-                <dl className="grid sm:grid-cols-6 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Invoice date:
+          <div className="bg-white p-6 rounded-xl">
+            <div className="flex justify-between gap-24">
+              <div className="flex flex-col flex-1">
+                <dl className="flex gap-3">
+                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                    Company name:
+                  </dt>
+                  <dd className="text-gray-500">{receiver.name}</dd>
+                </dl>
+                <dl className="flex gap-3">
+                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                    Phone number:
+                  </dt>
+                  <dd className="text-gray-500">{receiver.phone}</dd>
+                </dl>
+                <dl className="flex gap-3">
+                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                    Email:
+                  </dt>
+                  <dd className="text-gray-500">{receiver.email}</dd>
+                </dl>
+                <dl className="flex gap-3">
+                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                    Website:
                   </dt>
                   <dd className="col-span-3 text-gray-500">
-                    {new Date(details.invoiceDate).toLocaleDateString(
-                      "en-US",
-                      DATE_OPTIONS
-                    )}
+                    {receiver.website}
                   </dd>
                 </dl>
-                <dl className="grid sm:grid-cols-6 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Due date:
+                <dl className="flex gap-3">
+                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                    Address:
                   </dt>
-                  <dd className="col-span-3 text-gray-500">
-                    {new Date(details.dueDate).toLocaleDateString(
-                      "en-US",
-                      DATE_OPTIONS
-                    )}
-                  </dd>
+                  <dd className="text-gray-500">{receiver.address}</dd>
                 </dl>
               </div>
-            </div>
-          </div>
 
-          <div className="mt-3">
-            <div className="border border-gray-200 p-1 rounded-lg space-y-1">
-              <div className="hidden sm:grid sm:grid-cols-5">
-                <div className="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">
-                  Item
-                </div>
-                <div className="text-left text-xs font-medium text-gray-500 uppercase">
-                  Qty
-                </div>
-                <div className="text-left text-xs font-medium text-gray-500 uppercase">
-                  Rate
-                </div>
-                <div className="text-right text-xs font-medium text-gray-500 uppercase">
-                  Amount
-                </div>
-              </div>
-              <div className="hidden sm:block border-b border-gray-200"></div>
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-1">
-                {details.items.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <div className="col-span-full sm:col-span-2 border-b border-gray-300">
-                      <p className="font-medium text-gray-800">{item.name}</p>
-                      <p className="text-xs text-gray-600 whitespace-pre-line">
-                        {item.description}
-                      </p>
-                    </div>
-                    <div className="border-b border-gray-300">
-                      <p className="text-gray-800">{item.quantity}</p>
-                    </div>
-                    <div className="border-b border-gray-300">
-                      <p className="text-gray-800">
-                        {item.unitPrice} {details.currency}
-                      </p>
-                    </div>
-                    <div className="border-b border-gray-300">
-                      <p className="sm:text-right text-gray-800">
-                        {item.total} {details.currency}
-                      </p>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-              <div className="sm:hidden border-b border-gray-200"></div>
-            </div>
-          </div>
-
-          <div className="mt-2 flex sm:justify-end">
-            <div className="sm:text-right space-y-2">
-              <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-                <dl className="grid sm:grid-cols-5 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Subtotal:
-                  </dt>
-                  <dd className="col-span-2 text-gray-500">
-                    {formatNumberWithCommas(Number(details.subTotal))}{" "}
-                    {details.currency}
-                  </dd>
-                </dl>
-                {details.advancePaymentDetails?.amount != undefined &&
-                  details.advancePaymentDetails?.amount > 0 && (
-                    <dl className="grid sm:grid-cols-5 gap-x-3">
-                      <dt className="col-span-3 font-semibold text-gray-800">
-                        Advance payment:
-                      </dt>
-                      <dd className="col-span-2 text-gray-500">
-                        {details.advancePaymentDetails.amountType === "amount"
-                          ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
-                          : `- ${details.advancePaymentDetails.amount}%`}
-                      </dd>
-                    </dl>
-                  )}
-                {details.discountDetails?.amount != undefined &&
-                  details.discountDetails?.amount > 0 && (
-                    <dl className="grid sm:grid-cols-5 gap-x-3">
-                      <dt className="col-span-3 font-semibold text-gray-800">
-                        Discount:
-                      </dt>
-                      <dd className="col-span-2 text-gray-500">
-                        {details.discountDetails.amountType === "amount"
-                          ? `- ${details.discountDetails.amount} ${details.currency}`
-                          : `- ${details.discountDetails.amount}%`}
-                      </dd>
-                    </dl>
-                  )}
-                {details.taxDetails?.amount != undefined &&
-                  details.taxDetails?.amount > 0 && (
-                    <dl className="grid sm:grid-cols-5 gap-x-3">
-                      <dt className="col-span-3 font-semibold text-gray-800">
-                        Tax:
-                      </dt>
-                      <dd className="col-span-2 text-gray-500">
-                        {details.taxDetails.amountType === "amount"
-                          ? `+ ${details.taxDetails.amount} ${details.currency}`
-                          : `+ ${details.taxDetails.amount}%`}
-                      </dd>
-                    </dl>
-                  )}
-                {details.shippingDetails?.cost != undefined &&
-                  details.shippingDetails?.cost > 0 && (
-                    <dl className="grid sm:grid-cols-5 gap-x-3">
-                      <dt className="col-span-3 font-semibold text-gray-800">
-                        Shipping:
-                      </dt>
-                      <dd className="col-span-2 text-gray-500">
-                        {details.shippingDetails.costType === "amount"
-                          ? `+ ${details.shippingDetails.cost} ${details.currency}`
-                          : `+ ${details.shippingDetails.cost}%`}
-                      </dd>
-                    </dl>
-                  )}
-                <dl className="grid sm:grid-cols-5 gap-x-3">
-                  <dt className="col-span-3 font-semibold text-gray-800">
-                    Total:
-                  </dt>
-                  <dd className="col-span-2 text-gray-500">
-                    {formatNumberWithCommas(Number(details.totalAmount))}{" "}
-                    {details.currency}
-                  </dd>
-                </dl>
-                {details.totalAmountInWords && (
-                  <dl className="grid sm:grid-cols-5 gap-x-3">
-                    <dt className="col-span-3 font-semibold text-gray-800">
-                      Total in words:
+              <div className="flex flex-col flex-1">
+                <div className="ml-auto">
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                      Invoice date:
                     </dt>
-                    <dd className="col-span-2 text-gray-500">
-                      <em>
-                        {details.totalAmountInWords} {details.currency}
-                      </em>
+                    <dd className="text-gray-500">
+                      {new Date(details.invoiceDate).toLocaleDateString(
+                        "en-US",
+                        DATE_OPTIONS
+                      )}
+                    </dd>
+                  </dl>
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                      Quotation no:
+                    </dt>
+                    <dd className="text-gray-500">{details.quotationNumber}</dd>
+                  </dl>
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                      Invoice no:
+                    </dt>
+                    <dd className="text-gray-500">{details.invoiceNumber}</dd>
+                  </dl>
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                      Sales person:
+                    </dt>
+                    <dd className="text-gray-500">{details.salesPerson}</dd>
+                  </dl>
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                      Due date:
+                    </dt>
+                    <dd className="text-gray-500">
+                      {new Date(details.dueDate).toLocaleDateString(
+                        "en-US",
+                        DATE_OPTIONS
+                      )}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <div className="border border-gray-200 rounded-lg space-y-1 overflow-hidden">
+                <div className="hidden sm:grid sm:grid-cols-7 bg-yellow-400 items-center p-1">
+                  <div className="text-center uppercase font-bold">Sr. no</div>
+                  <div className="sm:col-span-3 uppercase font-bold">
+                    Description
+                  </div>
+                  <div className="text-center uppercase font-bold">Qty</div>
+                  <div className="text-center uppercase font-bold">
+                    Unit price (AED)
+                  </div>
+                  <div className="text-center uppercase font-bold">
+                    Amount (AED)
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-7">
+                  {details.items.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        className={`text-center py-1 ${
+                          index % 2 === 0 ? "" : "bg-gray-100"
+                        }`}
+                      >
+                        <p className="font-medium text-gray-800">{index + 1}</p>
+                      </div>
+                      <div
+                        className={`sm:col-span-3 py-1 ${
+                          index % 2 === 0 ? "" : "bg-gray-100"
+                        }`}
+                      >
+                        <p className="font-medium text-gray-800">{item.name}</p>
+                      </div>
+                      <div
+                        className={`text-center py-1 ${
+                          index % 2 === 0 ? "" : "bg-gray-100"
+                        }`}
+                      >
+                        <p className="text-gray-800">{item.quantity}</p>
+                      </div>
+                      <div
+                        className={`text-center py-1 ${
+                          index % 2 === 0 ? "" : "bg-gray-100"
+                        }`}
+                      >
+                        <p className="text-gray-800">
+                          {formatNumberWithCommas(Number(item.unitPrice))}
+                        </p>
+                      </div>
+                      <div
+                        className={`text-center py-1 ${
+                          index % 2 === 0 ? "" : "bg-gray-100"
+                        }`}
+                      >
+                        <p className="text-gray-800">
+                          {formatNumberWithCommas(Number(item.total))}
+                        </p>
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+                <div className="sm:hidden border-b border-gray-200"></div>
+              </div>
+            </div>
+
+            <div className="mt-2 flex justify-between items-end">
+              <div className="flex-1">
+                {details.totalAmountInWords && (
+                  <dl className="flex flex-col">
+                    <dt className="font-semibold text-gray-800">
+                      Grand Total in words:
+                    </dt>
+                    <dd>
+                      <em>{details.totalAmountInWords}</em>
                     </dd>
                   </dl>
                 )}
               </div>
-            </div>
-          </div>
 
-          <div>
-            <div className="my-4">
-              <div className="my-2">
-                <p className="font-semibold text-blue-600">Additional notes:</p>
-                <p className="font-regular text-gray-800">
-                  {details.additionalNotes}
+              <div className="flex flex-col flex-1">
+                <div className="w-fit ml-auto">
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                      Subtotal:
+                    </dt>
+                    <dd>
+                      {formatNumberWithCommas(Number(details.subTotal))}{" "}
+                      {details.currency}
+                    </dd>
+                  </dl>
+                  {details.discountDetails?.amount != undefined &&
+                    details.discountDetails?.amount > 0 && (
+                      <dl className="flex gap-3 w-fit">
+                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                          Discount:
+                        </dt>
+                        <dd>
+                          {details.discountDetails.amountType === "amount"
+                            ? `- ${details.discountDetails.amount} ${details.currency}`
+                            : `- ${details.discountDetails.amount}%`}
+                        </dd>
+                      </dl>
+                    )}
+                  {details.advancePaymentDetails?.amount != undefined &&
+                    details.advancePaymentDetails?.amount > 0 && (
+                      <dl className="flex gap-3 w-fit">
+                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                          Advance payment:
+                        </dt>
+                        <dd>
+                          {details.advancePaymentDetails.amountType === "amount"
+                            ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
+                            : `- ${details.advancePaymentDetails.amount}%`}
+                        </dd>
+                      </dl>
+                    )}
+                  {details.taxDetails?.amount != undefined &&
+                    details.taxDetails?.amount > 0 && (
+                      <dl className="flex gap-3 w-fit">
+                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                          VAT:
+                        </dt>
+                        <dd>
+                          {details.taxDetails.amountType === "amount"
+                            ? `+ ${details.taxDetails.amount} ${details.currency}`
+                            : `+ ${details.taxDetails.amount}%`}
+                        </dd>
+                      </dl>
+                    )}
+                  {details.shippingDetails?.cost != undefined &&
+                    details.shippingDetails?.cost > 0 && (
+                      <dl className="flex gap-3 w-fit">
+                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                          Shipping:
+                        </dt>
+                        <dd>
+                          {details.shippingDetails.costType === "amount"
+                            ? `+ ${details.shippingDetails.cost} ${details.currency}`
+                            : `+ ${details.shippingDetails.cost}%`}
+                        </dd>
+                      </dl>
+                    )}
+                  <dl className="flex gap-3 w-fit">
+                    <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
+                      Grand Total:
+                    </dt>
+                    <dd>
+                      {formatNumberWithCommas(Number(details.totalAmount))}{" "}
+                      {details.currency}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="my-4">
+                <div className="my-2">
+                  <div className="text-sm flex gap-2">
+                    <p className="font-bold min-w-[6rem]">Bank Name:</p>
+                    <p>{details.paymentInformation?.bankName}</p>
+                  </div>
+                  <div className="text-sm flex gap-2">
+                    <p className="font-bold min-w-[6rem]">Account Name:</p>
+                    <p>{details.paymentInformation?.accountName}</p>
+                  </div>
+                  <div className="text-sm flex gap-2">
+                    <p className="font-bold min-w-[6rem]">Account Class:</p>
+                    <p>{details.paymentInformation?.accountClass}</p>
+                  </div>
+                  <div className="text-sm flex gap-2">
+                    <p className="font-bold min-w-[6rem]">Account No:</p>
+                    <p>{details.paymentInformation?.accountNumber}</p>
+                  </div>
+                  <div className="text-sm flex gap-2">
+                    <p className="font-bold min-w-[6rem]">IBAN:</p>
+                    <p>{details.paymentInformation?.iban}</p>
+                  </div>
+                </div>
+
+                <div className="my-2">
+                  <p className="font-semibold">Payment terms:</p>
+                  <p className="font-regular text-gray-800">
+                    {details.paymentTerms}
+                  </p>
+                </div>
+
+                {details.additionalNotes ? (
+                  <div className="my-2">
+                    <p className="font-semibold">Additional notes:</p>
+                    <p className="font-regular text-gray-800">
+                      {details.additionalNotes}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Signature */}
+            {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+              <div className="mt-6">
+                <p className="font-semibold text-gray-800">Signature:</p>
+                <img
+                  src={details.signature.data}
+                  width={120}
+                  height={60}
+                  alt={`Signature of ${sender.name}`}
+                />
+              </div>
+            ) : details.signature?.data ? (
+              <div className="mt-6">
+                <p className="text-gray-800">Signature:</p>
+                <p
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 400,
+                    fontFamily: `${details.signature.fontFamily}, cursive`,
+                    color: "black",
+                  }}
+                >
+                  {details.signature.data}
                 </p>
               </div>
-              <div className="my-2">
-                <p className="font-semibold text-blue-600">Payment terms:</p>
-                <p className="font-regular text-gray-800">
-                  {details.paymentTerms}
-                </p>
-              </div>
-              <div className="my-2">
-                <span className="font-semibold text-md text-gray-800">
-                  Please send the payment to this address
-                  <p className="text-sm">
-                    Bank: {details.paymentInformation?.bankName}
-                  </p>
-                  <p className="text-sm">
-                    Account name: {details.paymentInformation?.accountName}
-                  </p>
-                  <p className="text-sm">
-                    Account no: {details.paymentInformation?.accountNumber}
-                  </p>
-                </span>
-              </div>
-            </div>
+            ) : null}
           </div>
-
-          {/* Signature */}
-          {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
-            <div className="mt-6">
-              <p className="font-semibold text-gray-800">Signature:</p>
-              <img
-                src={details.signature.data}
-                width={120}
-                height={60}
-                alt={`Signature of ${sender.name}`}
-              />
-            </div>
-          ) : details.signature?.data ? (
-            <div className="mt-6">
-              <p className="text-gray-800">Signature:</p>
-              <p
-                style={{
-                  fontSize: 30,
-                  fontWeight: 400,
-                  fontFamily: `${details.signature.fontFamily}, cursive`,
-                  color: "black",
-                }}
-              >
-                {details.signature.data}
-              </p>
-            </div>
-          ) : null}
         </div>
       </div>
     </InvoiceLayout>
