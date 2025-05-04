@@ -87,7 +87,9 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
   return (
     <InvoiceLayout data={props}>
       <div
-        className={`relative bg-gray-200 h-full ${previewClasses.container} ${isPreview ? "text-xs" : ""}`}
+        className={`relative bg-gray-200 h-full ${previewClasses.container} ${
+          isPreview ? "text-xs" : ""
+        }`}
       >
         <div className="absolute w-full h-1/3 bg-black z-0" />
 
@@ -135,7 +137,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       <tbody>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Company name:
@@ -144,7 +149,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Phone number:
@@ -153,7 +161,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Email:
@@ -162,7 +173,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Website:
@@ -171,7 +185,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Address:
@@ -192,7 +209,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       <tbody>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Invoice date:
@@ -206,7 +226,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Quotation no:
@@ -215,7 +238,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Invoice no:
@@ -224,7 +250,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Sales person:
@@ -233,7 +262,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            style={{
+                              width: isPreview ? "100px" : "130px",
+                              paddingRight: "8px",
+                            }}
                             className="font-semibold align-top whitespace-nowrap"
                           >
                             Due date:
@@ -473,30 +505,30 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
 
             <div>
               <div className="my-8">
-                <div className="my-2">
-                  <div className="text-sm flex gap-2">
-                    <p className="font-bold w-[6rem]">Bank Name:</p>
+                <div className={`my-2 ${isPreview ? "text-xs" : "text-sm"}`}>
+                  <div className="flex gap-2">
+                    <p className="font-semibold w-[6rem]">Bank Name:</p>
                     <p>{details.paymentInformation?.bankName}</p>
                   </div>
-                  <div className="text-sm flex gap-2">
-                    <p className="font-bold w-[6rem]">Account Name:</p>
+                  <div className="flex gap-2">
+                    <p className="font-semibold w-[6rem]">Account Name:</p>
                     <p>{details.paymentInformation?.accountName}</p>
                   </div>
-                  <div className="text-sm flex gap-2">
-                    <p className="font-bold w-[6rem]">Account Class:</p>
+                  <div className="flex gap-2">
+                    <p className="font-semibold w-[6rem]">Account Class:</p>
                     <p>{details.paymentInformation?.accountClass}</p>
                   </div>
-                  <div className="text-sm flex gap-2">
-                    <p className="font-bold w-[6rem]">Account No:</p>
+                  <div className="flex gap-2">
+                    <p className="font-semibold w-[6rem]">Account No:</p>
                     <p>{details.paymentInformation?.accountNumber}</p>
                   </div>
-                  <div className="text-sm flex gap-2">
-                    <p className="font-bold w-[6rem]">IBAN:</p>
+                  <div className="flex gap-2">
+                    <p className="font-semibold w-[6rem]">IBAN:</p>
                     <p>{details.paymentInformation?.iban}</p>
                   </div>
                 </div>
 
-                <div className="my-2">
+                <div className="my-4">
                   <p className="font-semibold">Payment terms:</p>
                   <p className="font-regular text-gray-800">
                     {details.paymentTerms}
