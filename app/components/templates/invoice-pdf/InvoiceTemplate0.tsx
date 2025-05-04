@@ -49,41 +49,6 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
     gap8: isPreview ? "@md:gap-8" : "sm:gap-8",
   };
 
-  // Classes and styles optimized for both preview and PDF modes
-  const styles = {
-    // Font sizes
-    fontSize: isPreview
-      ? {
-          xs: "text-[9px]", // Smaller
-          sm: "text-[10px]", // Smaller for top section
-          base: "text-xs", // Smaller
-          lg: "text-sm", // Smaller
-          xl: "text-base", // Smaller
-        }
-      : {
-          xs: "text-xs",
-          sm: "text-sm",
-          base: "text-base",
-          lg: "text-lg",
-          xl: "text-xl",
-        },
-    // Paddings and margins
-    spacing: isPreview
-      ? {
-          p: "p-2",
-          px: "px-2",
-          py: "py-1",
-          m: "m-1",
-          mb: "mb-0.5", // Reduced
-          mt: "mt-0.5", // Reduced
-          gap: "gap-0.5", // Reduced
-        }
-      : {
-          // ...existing code...
-        },
-    // ...existing code...
-  };
-
   return (
     <InvoiceLayout data={props}>
       <div
@@ -504,29 +469,52 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
             </div>
 
             <div>
-              <div className="my-8">
-                <div className={`my-2 ${isPreview ? "text-xs" : "text-sm"}`}>
-                  <div className="flex gap-2">
-                    <p className="font-semibold w-[6rem]">Bank Name:</p>
-                    <p>{details.paymentInformation?.bankName}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <p className="font-semibold w-[6rem]">Account Name:</p>
-                    <p>{details.paymentInformation?.accountName}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <p className="font-semibold w-[6rem]">Account Class:</p>
-                    <p>{details.paymentInformation?.accountClass}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <p className="font-semibold w-[6rem]">Account No:</p>
-                    <p>{details.paymentInformation?.accountNumber}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <p className="font-semibold w-[6rem]">IBAN:</p>
-                    <p>{details.paymentInformation?.iban}</p>
-                  </div>
-                </div>
+              <div className="my-4">
+                {/* Use table layout for bank details to ensure consistent alignment in PDF */}
+                <table className="w-full border-collapse">
+                  <tbody>
+                    <tr>
+                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                        Bank Name:
+                      </td>
+                      <td className="pb-1">
+                        {details.paymentInformation?.bankName}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                        Account Name:
+                      </td>
+                      <td className="pb-1">
+                        {details.paymentInformation?.accountName}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                        Account Class:
+                      </td>
+                      <td className="pb-1">
+                        {details.paymentInformation?.accountClass}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                        Account No:
+                      </td>
+                      <td className="pb-1">
+                        {details.paymentInformation?.accountNumber}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                        IBAN:
+                      </td>
+                      <td className="pb-1">
+                        {details.paymentInformation?.iban}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
                 <div className="my-4">
                   <p className="font-semibold">Payment terms:</p>
