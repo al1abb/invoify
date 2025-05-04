@@ -7,13 +7,13 @@ import { useRouter } from "next-intl/client"; // This useRouter is wrapped with 
 
 // ShadCn
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
@@ -21,46 +21,40 @@ import { Badge } from "@/components/ui/badge";
 import { LOCALES } from "@/lib/variables";
 
 const LanguageSelector = () => {
-    const router = useRouter();
-    const params = useParams();
+  const router = useRouter();
+  const params = useParams();
 
-    const handleLanguageChange = (lang: string) => {
-        console.log(lang);
+  const handleLanguageChange = (lang: string) => {
+    console.log(lang);
 
-        router.push("/", { locale: lang });
-    };
-    return (
-        <Select
-            value={params.locale.toLocaleString()}
-            onValueChange={(lang) => handleLanguageChange(lang)}
-        >
-            <SelectTrigger
-                className="w-[10rem] relative"
-                aria-label="Languages"
-            >
-                <Badge className="position: absolute -top-4 -left-2 font-normal">
-                    BETA
-                </Badge>
-                <SelectValue placeholder="Select a language" />
-            </SelectTrigger>
-            <SelectContent
-                style={{
-                    overflowY: "hidden",
-                    height: "min-content",
-                }}
-            >
-                <SelectGroup>
-                    <SelectLabel>Languages</SelectLabel>
+    router.push("/", { locale: lang });
+  };
+  return (
+    <Select
+      value={params.locale.toLocaleString()}
+      onValueChange={(lang) => handleLanguageChange(lang)}
+    >
+      <SelectTrigger className="w-[10rem] relative" aria-label="Languages">
+        <SelectValue placeholder="Select a language" />
+      </SelectTrigger>
+      <SelectContent
+        style={{
+          overflowY: "hidden",
+          height: "min-content",
+        }}
+      >
+        <SelectGroup>
+          <SelectLabel>Languages</SelectLabel>
 
-                    {LOCALES.map((locale) => (
-                        <SelectItem key={locale.code} value={locale.code}>
-                            {locale.name}
-                        </SelectItem>
-                    ))}
-                </SelectGroup>
-            </SelectContent>
-        </Select>
-    );
+          {LOCALES.map((locale) => (
+            <SelectItem key={locale.code} value={locale.code}>
+              {locale.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
 };
 
 export default LanguageSelector;
