@@ -188,6 +188,7 @@ export const FORM_FILL_VALUES = {
   receiver: {
     name: "Jane Smith",
     address: "456 Elm St",
+    website: "https://example.com",
     zipCode: "54321",
     city: "Other Town",
     country: "Canada",
@@ -197,26 +198,25 @@ export const FORM_FILL_VALUES = {
   details: {
     invoiceLogo: "",
     invoiceNumber: "INV0001",
+    quotationNumber: "QTN0001",
+    salesPerson: "Hamdan",
     invoiceDate: new Date(),
     dueDate: new Date(),
     items: [
       {
         name: "Product 1",
-        description: "Description of Product 1",
         quantity: 4,
         unitPrice: 50,
         total: 200,
       },
       {
         name: "Product 2",
-        description: "Description of Product 2",
         quantity: 5,
         unitPrice: 50,
         total: 250,
       },
       {
         name: "Product 3",
-        description: "Description of Product 3",
         quantity: 5,
         unitPrice: 80,
         total: 400,
