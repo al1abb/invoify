@@ -4,7 +4,7 @@
     "description": "إنشاء الفاتورة",
     "newInvBadge": "فاتورة جديدة",
     "wizard": {
-      "fromAndTo": "من & إلى",
+      "to": "إلى",
       "invoiceDetails": "تفاصيل الفاتورة",
       "lineItems": "عناصر الفاتورة",
       "paymentInfo": "معلومات الدفع",
@@ -13,8 +13,7 @@
       "back": "السابق"
     },
     "steps": {
-      "fromAndTo": {
-        "billFrom": "الفاتورة من",
+      "to": {
         "billTo": "الفاتورة إلى",
         "name": "الاسم",
         "address": "العنوان",
