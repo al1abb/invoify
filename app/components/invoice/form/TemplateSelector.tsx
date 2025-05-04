@@ -41,21 +41,21 @@ const TemplateSelector = () => {
       name: "Default Template",
       description: "Default template",
       img: template1,
-      component: <DefaultTemplate {...formValues} />,
+      component: <DefaultTemplate {...formValues} isPreview={true} />,
     },
     {
       id: 1,
       name: "Template 1",
       description: "Template 1 description",
       img: template1,
-      component: <InvoiceTemplate1 {...formValues} />,
+      component: <InvoiceTemplate1 {...formValues} isPreview={true} />,
     },
     {
       id: 2,
       name: "Template 2",
       description: "Second template",
       img: template2,
-      component: <InvoiceTemplate2 {...formValues} />,
+      component: <InvoiceTemplate2 {...formValues} isPreview={true} />,
     },
   ];
   return (

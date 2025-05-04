@@ -1,9 +1,8 @@
 import { InvoiceLayout } from "@/app/components";
 import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 import { DATE_OPTIONS } from "@/lib/variables";
-import { InvoiceType } from "@/types";
+import { InvoiceTypeWithPreview } from "@/types";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
-import React from "react";
 
 const logoUrl =
   "https://pub-b3e032943722420baddb7be6e251edb2.r2.dev/brand-vibe-logo.png";
@@ -27,30 +26,56 @@ const COMPANY_INFO = [
   },
 ];
 
-const DefaultTemplate = (data: InvoiceType) => {
-  const { sender, receiver, details } = data;
+const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
+  const { sender, receiver, details, isPreview = false } = props;
+
+  // Classes that will only be applied in preview mode
+  const previewClasses = {
+    container: isPreview ? "@container" : "",
+    logoMaxWidth: isPreview ? "@sm:max-w-[100px]" : "",
+    companyInfoText: isPreview ? "@sm:text-xs" : "",
+    companyInfoMargin: isPreview ? "@sm:mt-1" : "",
+    titleSize: isPreview ? "@sm:text-xl" : "",
+    titleMargin: isPreview ? "@sm:my-2" : "",
+    padding: isPreview ? "@sm:p-4" : "",
+    flexRow: isPreview ? "@md:flex-row" : "sm:flex-row",
+    gap: isPreview ? "@sm:gap-2" : "",
+    minWidth: isPreview ? "@sm:min-w-[6rem]" : "",
+    textSize: isPreview ? "@sm:text-sm" : "",
+    justifyBetween: isPreview ? "@md:justify-between" : "sm:justify-between",
+    marginLeft: isPreview ? "@md:ml-auto" : "sm:ml-auto",
+    marginBottom: isPreview ? "@md:mb-0" : "sm:mb-0",
+    flexCol: isPreview ? "@md:flex-row" : "sm:flex-row",
+    colSpan: isPreview ? "@md:col-span-3" : "sm:col-span-3",
+    gap8: isPreview ? "@md:gap-8" : "sm:gap-8",
+  };
 
   return (
-    <InvoiceLayout data={data}>
-      <div className="relative bg-gray-200 h-full">
+    <InvoiceLayout data={props}>
+      <div
+        className={`relative bg-gray-200 h-full ${previewClasses.container}`}
+      >
         <div className="absolute w-full h-1/3 bg-black z-0" />
 
         <div className="relative z-10 p-6">
           {/* region: Logo */}
-          <div className="flex items-center justify-between border-b-[0.5px] pb-4">
+          <div
+            className={`flex flex-col ${previewClasses.flexRow} items-center ${previewClasses.justifyBetween} border-b-[0.5px] pb-4`}
+          >
             <img
               src={logoUrl}
               width={140}
               height={80}
               alt={`Logo of ${sender.name}`}
               style={{ maxWidth: "140px", maxHeight: "80px" }}
+              className={`mb-4 ${previewClasses.marginBottom} ${previewClasses.logoMaxWidth}`}
             />
 
             <div>
               {COMPANY_INFO.map((info, index) => (
                 <div
                   key={index}
-                  className="flex items-center text-white text-sm mt-2"
+                  className={`flex items-center text-white ${previewClasses.companyInfoText} text-sm mt-2 ${previewClasses.companyInfoMargin}`}
                 >
                   {info.icon}
                   <p className="ml-2">{info.text}</p>
@@ -59,51 +84,71 @@ const DefaultTemplate = (data: InvoiceType) => {
             </div>
           </div>
 
-          <h1 className="text-white text-center text-2xl font-bold my-4">
+          <h1
+            className={`text-white text-center ${previewClasses.titleSize} text-2xl font-bold my-4 ${previewClasses.titleMargin}`}
+          >
             SALES INVOICE
           </h1>
 
-          <div className="bg-white p-6 rounded-xl">
-            <div className="flex justify-between gap-24">
-              <div className="flex flex-col flex-1">
-                <dl className="flex gap-3">
-                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+          <div className={`bg-white p-6 ${previewClasses.padding} rounded-xl`}>
+            <div
+              className={`flex flex-col ${previewClasses.flexCol} ${previewClasses.justifyBetween} ${previewClasses.gap8}`}
+            >
+              <div
+                className={`flex flex-col flex-1 ${previewClasses.textSize} mb-4 ${previewClasses.marginBottom}`}
+              >
+                <dl className={`flex gap-3 ${previewClasses.gap}`}>
+                  <dt
+                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                  >
                     Company name:
                   </dt>
                   <dd className="text-gray-500">{receiver.name}</dd>
                 </dl>
-                <dl className="flex gap-3">
-                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                <dl className={`flex gap-3 ${previewClasses.gap}`}>
+                  <dt
+                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                  >
                     Phone number:
                   </dt>
                   <dd className="text-gray-500">{receiver.phone}</dd>
                 </dl>
-                <dl className="flex gap-3">
-                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                <dl className={`flex gap-3 ${previewClasses.gap}`}>
+                  <dt
+                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                  >
                     Email:
                   </dt>
                   <dd className="text-gray-500">{receiver.email}</dd>
                 </dl>
-                <dl className="flex gap-3">
-                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                <dl className={`flex gap-3 ${previewClasses.gap}`}>
+                  <dt
+                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                  >
                     Website:
                   </dt>
                   <dd className="col-span-3 text-gray-500">
                     {receiver.website}
                   </dd>
                 </dl>
-                <dl className="flex gap-3">
-                  <dt className="min-w-[8rem] font-semibold text-gray-800">
+                <dl className={`flex gap-3 ${previewClasses.gap}`}>
+                  <dt
+                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                  >
                     Address:
                   </dt>
                   <dd className="text-gray-500">{receiver.address}</dd>
                 </dl>
               </div>
 
-              <div className="flex flex-col flex-1">
-                <div className="ml-auto">
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+              <div
+                className={`flex flex-col flex-1 ${previewClasses.textSize}`}
+              >
+                <div className={`${previewClasses.marginLeft}`}>
+                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
+                    <dt
+                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                    >
                       Invoice date:
                     </dt>
                     <dd className="text-gray-500">
@@ -113,26 +158,34 @@ const DefaultTemplate = (data: InvoiceType) => {
                       )}
                     </dd>
                   </dl>
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
+                    <dt
+                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                    >
                       Quotation no:
                     </dt>
                     <dd className="text-gray-500">{details.quotationNumber}</dd>
                   </dl>
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
+                    <dt
+                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                    >
                       Invoice no:
                     </dt>
                     <dd className="text-gray-500">{details.invoiceNumber}</dd>
                   </dl>
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
+                    <dt
+                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                    >
                       Sales person:
                     </dt>
                     <dd className="text-gray-500">{details.salesPerson}</dd>
                   </dl>
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="min-w-[8rem] font-semibold text-gray-800">
+                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
+                    <dt
+                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
+                    >
                       Due date:
                     </dt>
                     <dd className="text-gray-500">
@@ -147,7 +200,8 @@ const DefaultTemplate = (data: InvoiceType) => {
             </div>
 
             <div className="mt-8">
-              <div className="border border-gray-200 rounded-lg space-y-1 overflow-hidden">
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                {/* Desktop header */}
                 <div className="hidden sm:grid sm:grid-cols-7 bg-yellow-400 items-center p-1">
                   <div className="text-center uppercase font-bold">Sr. no</div>
                   <div className="sm:col-span-3 uppercase font-bold">
@@ -162,52 +216,64 @@ const DefaultTemplate = (data: InvoiceType) => {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-7">
-                  {details.items.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <div
-                        className={`text-center py-1 ${
-                          index % 2 === 0 ? "" : "bg-gray-100"
-                        }`}
-                      >
+                {/* Mobile and Desktop content */}
+                {details.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`${index % 2 === 0 ? "" : "bg-gray-100"}`}
+                  >
+                    {/* Mobile view - Card layout */}
+                    <div className="sm:hidden p-3 border-b border-gray-200">
+                      <div className="flex justify-between mb-1">
+                        <span className="font-bold">Sr. no:</span>
+                        <span>{index + 1}</span>
+                      </div>
+                      <div className="mb-1">
+                        <span className="font-bold">Description:</span>
+                        <p className="mt-1">{item.name}</p>
+                      </div>
+                      <div className="flex justify-between mb-1">
+                        <span className="font-bold">Qty:</span>
+                        <span>{item.quantity}</span>
+                      </div>
+                      <div className="flex justify-between mb-1">
+                        <span className="font-bold">Unit price (AED):</span>
+                        <span>
+                          {formatNumberWithCommas(Number(item.unitPrice))}
+                        </span>
+                      </div>
+                      <div className="flex justify-between font-medium">
+                        <span className="font-bold">Amount (AED):</span>
+                        <span>
+                          {formatNumberWithCommas(Number(item.total))}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Desktop view - Table layout */}
+                    <div className="hidden sm:grid sm:grid-cols-7 py-1">
+                      <div className="text-center">
                         <p className="font-medium text-gray-800">{index + 1}</p>
                       </div>
-                      <div
-                        className={`sm:col-span-3 py-1 ${
-                          index % 2 === 0 ? "" : "bg-gray-100"
-                        }`}
-                      >
+                      <div className="sm:col-span-3">
                         <p className="font-medium text-gray-800">{item.name}</p>
                       </div>
-                      <div
-                        className={`text-center py-1 ${
-                          index % 2 === 0 ? "" : "bg-gray-100"
-                        }`}
-                      >
+                      <div className="text-center">
                         <p className="text-gray-800">{item.quantity}</p>
                       </div>
-                      <div
-                        className={`text-center py-1 ${
-                          index % 2 === 0 ? "" : "bg-gray-100"
-                        }`}
-                      >
+                      <div className="text-center">
                         <p className="text-gray-800">
                           {formatNumberWithCommas(Number(item.unitPrice))}
                         </p>
                       </div>
-                      <div
-                        className={`text-center py-1 ${
-                          index % 2 === 0 ? "" : "bg-gray-100"
-                        }`}
-                      >
+                      <div className="text-center">
                         <p className="text-gray-800">
                           {formatNumberWithCommas(Number(item.total))}
                         </p>
                       </div>
-                    </React.Fragment>
-                  ))}
-                </div>
-                <div className="sm:hidden border-b border-gray-200"></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
