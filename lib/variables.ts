@@ -9,9 +9,8 @@ export const ENV = process.env.NODE_ENV;
 /**
  * Websites
  */
+// TODO: Update to the new domain
 export const BASE_URL = "https://invoify.vercel.app";
-export const AUTHOR_WEBSITE = "https://aliabb.vercel.app";
-export const AUTHOR_GITHUB = "https://github.com/al1abb";
 
 /**
  * API endpoints

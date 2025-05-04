@@ -35,9 +35,8 @@ import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
 
 export const metadata: Metadata = {
-  title: "Invoify | Free Invoice Generator",
-  description:
-    "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
+  title: "Invoizer | Invoice Generator",
+  description: "Create invoices effortlessly with Invoizer Try it now!",
   icons: [{ rel: "icon", url: Favicon.src }],
   keywords: ROOTKEYWORDS,
   viewport: "width=device-width, initial-scale=1",
@@ -47,10 +46,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: BASE_URL,
-  },
-  authors: {
-    name: "Ali Abbasov",
-    url: "https://aliabb.vercel.app",
   },
   verification: {
     google: GOOGLE_SC_VERIFICATION,

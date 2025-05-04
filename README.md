@@ -1,99 +1,124 @@
-[![Discord](https://img.shields.io/badge/Discord-%40Invoify-000000?style=flat&logo=Discord&logoColor=#5865F2)](https://discord.gg/uhXKHbVKHZ)
-# Invoify
+# Invoizer - Professional Invoice Generator
 
-Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices.
+![Invoizer Logo](/public/assets/img/invoizer-logo.svg)
 
-![Invoify Website image](/public/assets/img/invoify-web-app.png)
+A modern, feature-rich invoice generator built with Next.js and React that helps businesses and freelancers create professional invoices quickly and efficiently.
 
-## Table of Contents
+## Features
 
-- [Invoify](#invoify)
-  - [Table of Contents](#table-of-contents)
-  - [Technologies](#technologies)
-    - [Core Technologies](#core-technologies)
-    - [Additional Dependencies](#additional-dependencies)
-  - [Roadmap](#roadmap)
-  - [Demo](#demo)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-  - [License](#license)
+- **🧙‍♂️ User-Friendly Interface**: Create invoices through a step-by-step wizard interface
+- **📋 Complete Invoice Management**:
+  - Create, save, and modify invoices
+  - Bill from/to sections with custom fields
+  - Line items with descriptions, quantities, and rates
+  - Support for discounts, taxes, shipping, and advance payments
+- **🎨 Multiple Invoice Templates**: Choose from various professional invoice designs
+- **💱 Currency Support**: Select from a wide range of currencies
+- **🌐 Multilingual Support**: Currently supports English and Arabic with an extendable framework
+- **🖊️ Digital Signatures**: Draw, type, or upload your signature
+- **📤 Export Options**: Export invoices as PDF, JSON, CSV, XML
+- **📧 Email Integration**: Send invoices directly via email
+- **🌓 Light/Dark Mode**: Switch between light and dark themes
+- **📱 Responsive Design**: Works on desktop and mobile devices
 
+## Technology Stack
 
-## Technologies
-
-### Core Technologies
-
-- **Next.js:** React framework for SSR and client-side navigation.
-- **TypeScript:** JavaScript superset with static typing.
-- **Shadcn-UI:** UI library for enhanced visuals.
-- **Tailwind:** Utility-first CSS framework.
-- **React Hook Form:** Form management for React.
-- **Zod:** TypeScript-first schema validation.
-- **Puppeteer:** PDF generation with headless browsers.
-
-### Additional Dependencies
-
-- **Nodemailer:** Node.js module for sending emails.
-- **Lucide Icons:** Collection of customizable SVG icons.
-
-## Roadmap
-
-- [x] **Easily Create Invoices:** Utilize a simple form to quickly generate invoices.
-- [x] **Save for Future Access:** Store your invoices directly in your browser for easy retrieval.
-- [x] **Retrieve Invoices Effortlessly:** Load and access invoices seamlessly from your saved list.
-- [x] **Flexible Download Options:** Download invoices directly or send them via email in PDF format.
-- [x] **Template Variety:** Choose from multiple (currently 2) invoice templates.
-- [x] **Live Preview:** Edit the form and see changes in real-time with the live preview feature.
-- [x] **Export in Various Formats:** Export invoices in different formats, including JSON, XLSX, CSV, and XML.
-- [ ] **I18N Support:** i18n support with multiple languages for UI and templates.
-- [ ] **Themeable Templates:** Select a theme color for the invoice
-- [ ] **Custom Inputs:** Define your own inputs that are missing from the default invoice builder. (Ex: VAT number)
-- [ ] **Individual Tax for Line Items:** Add tax details for a specific line item other than the general tax
-
-## Demo
-
-> [!NOTE]
-> Please be advised that there are currently issues when using this application in the Mozilla Firefox browser. For more information, refer to [Issue #11](https://github.com/aliabb01/invoify/issues/11).
-
-Visit the [live demo](https://invoify.vercel.app) to see Invoify in action.
+- **Framework**: Next.js 13+
+- **UI**: React 18, Tailwind CSS, shadcn/ui components
+- **Forms**: React Hook Form with Zod validation
+- **PDF Generation**: Puppeteer/Chromium
+- **Email**: React Email, Nodemailer
+- **Internationalization**: next-intl
+- **Styling**: Tailwind CSS
+- **State Management**: React Context API
 
 ## Getting Started
 
-Follow these instructions to get Invoify up and running on your local machine.
-
 ### Prerequisites
 
-- Node.js and npm installed on your system.
+- Node.js 16+ and npm/yarn
 
 ### Installation
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/al1abb/invoify.git
-   cd invoify
    ```
-2. Install dependencies
-   
-   ```bash
-   npm install
+   git clone https://github.com/yourusername/invoice-generator.git
+   cd invoice-generator
    ```
-3. Create an .env.local file with this content (This step is for sending pdf to email feature):
-   ```env
-   NODEMAILER_EMAIL=your_email@example.com
-   NODEMAILER_PW=your_email_password
-   ```
-4. Start development server
 
-    ```bash
-    npm run dev
-    ```
-5. Open your web browser and access the application at [http://localhost:3000](http://localhost:3000)
-<!-- LICENSE -->
+2. Install dependencies:
+
+   ```
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Run the development server:
+
+   ```
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Usage
+
+### Creating an Invoice
+
+1. Fill in the "Bill To" information for your client
+2. Add invoice details (number, date, due date, etc.)
+3. Add line items with descriptions, quantities, and rates
+4. Configure additional charges (tax, discount, shipping)
+5. Add payment information and terms
+6. Optionally add your signature
+7. Generate the PDF invoice
+8. Download, print, or email your invoice
+
+### Saving and Managing Invoices
+
+- Invoices are automatically saved to your browser's local storage
+- Load saved invoices from the invoice loader modal
+- Export invoices in various formats (JSON, CSV, XML)
+- Import previously exported JSON invoices
+
+## Deployment
+
+You can deploy this application using Vercel, Netlify, or any other platform that supports Next.js:
+
+```
+npm run build
+npm run start
+```
+
+The application is also Dockerized for easy deployment to container platforms:
+
+```
+docker build -t invoice-generator .
+docker run -p 3000:3000 invoice-generator
+```
+
+## Customization
+
+### Adding New Templates
+
+New invoice templates can be added by creating components in the `app/components/templates/invoice-pdf/` directory following the naming convention `InvoiceTemplateX.tsx` where X is the template number.
+
+### Adding New Languages
+
+1. Create a new language file in `i18n/locales/` (copy from existing)
+2. Translate all the keys in the new file
+3. Add the language to the language selector component
+
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Discord
-Join the Discord server [here](https://discord.gg/uhXKHbVKHZ)
+## Acknowledgements
+
+- The shadcn/ui team for the excellent component library
+- The React community for the amazing ecosystem
+- All open-source contributors who made this project possible

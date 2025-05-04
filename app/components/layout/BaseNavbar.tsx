@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 // Assets
+// TODO: Update to the new logo
 import Logo from "@/public/assets/img/invoify-logo.svg";
 
 // ShadCn
@@ -25,7 +26,7 @@ const BaseNavbar = () => {
           <Link href={"/"}>
             <Image
               src={Logo}
-              alt="Invoify Logo"
+              alt="Invoizer Logo"
               width={190}
               height={100}
               loading="eager"
