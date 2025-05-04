@@ -49,10 +49,45 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
     gap8: isPreview ? "@md:gap-8" : "sm:gap-8",
   };
 
+  // Classes and styles optimized for both preview and PDF modes
+  const styles = {
+    // Font sizes
+    fontSize: isPreview
+      ? {
+          xs: "text-[9px]", // Smaller
+          sm: "text-[10px]", // Smaller for top section
+          base: "text-xs", // Smaller
+          lg: "text-sm", // Smaller
+          xl: "text-base", // Smaller
+        }
+      : {
+          xs: "text-xs",
+          sm: "text-sm",
+          base: "text-base",
+          lg: "text-lg",
+          xl: "text-xl",
+        },
+    // Paddings and margins
+    spacing: isPreview
+      ? {
+          p: "p-2",
+          px: "px-2",
+          py: "py-1",
+          m: "m-1",
+          mb: "mb-0.5", // Reduced
+          mt: "mt-0.5", // Reduced
+          gap: "gap-0.5", // Reduced
+        }
+      : {
+          // ...existing code...
+        },
+    // ...existing code...
+  };
+
   return (
     <InvoiceLayout data={props}>
       <div
-        className={`relative bg-gray-200 h-full ${previewClasses.container}`}
+        className={`relative bg-gray-200 h-full ${previewClasses.container} ${isPreview ? "text-xs" : ""}`}
       >
         <div className="absolute w-full h-1/3 bg-black z-0" />
 
@@ -100,48 +135,48 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       <tbody>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Company name:
                           </td>
-                          <td className="text-gray-500">{receiver.name}</td>
+                          <td>{receiver.name}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Phone number:
                           </td>
-                          <td className="text-gray-500">{receiver.phone}</td>
+                          <td>{receiver.phone}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Email:
                           </td>
-                          <td className="text-gray-500">{receiver.email}</td>
+                          <td>{receiver.email}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Website:
                           </td>
-                          <td className="text-gray-500">{receiver.website}</td>
+                          <td>{receiver.website}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Address:
                           </td>
-                          <td className="text-gray-500">{receiver.address}</td>
+                          <td>{receiver.address}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -157,12 +192,12 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       <tbody>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Invoice date:
                           </td>
-                          <td className="text-gray-500">
+                          <td>
                             {new Date(details.invoiceDate).toLocaleDateString(
                               "en-US",
                               DATE_OPTIONS
@@ -171,45 +206,39 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Quotation no:
                           </td>
-                          <td className="text-gray-500">
-                            {details.quotationNumber}
-                          </td>
+                          <td>{details.quotationNumber}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Invoice no:
                           </td>
-                          <td className="text-gray-500">
-                            {details.invoiceNumber}
-                          </td>
+                          <td>{details.invoiceNumber}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Sales person:
                           </td>
-                          <td className="text-gray-500">
-                            {details.salesPerson}
-                          </td>
+                          <td>{details.salesPerson}</td>
                         </tr>
                         <tr>
                           <td
-                            style={{ width: "130px", paddingRight: "8px" }}
-                            className="font-semibold text-gray-800 align-top"
+                            style={{ width: isPreview ? "100px" : "130px", paddingRight: "8px" }}
+                            className="font-semibold align-top whitespace-nowrap"
                           >
                             Due date:
                           </td>
-                          <td className="text-gray-500">
+                          <td>
                             {new Date(details.dueDate).toLocaleDateString(
                               "en-US",
                               DATE_OPTIONS
@@ -316,11 +345,18 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
               </div>
 
               {/* Replace flex layout with table-based layout for proper PDF rendering */}
-              <div className="flex-1">
+              <div className="flex-1 mt-4">
                 <table className="ml-auto">
                   <tbody>
                     <tr>
-                      <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                      <td
+                        style={{
+                          width: "150px",
+                          textAlign: "right",
+                          paddingRight: "8px",
+                        }}
+                        className="font-semibold text-gray-800"
+                      >
                         Subtotal:
                       </td>
                       <td>
@@ -328,11 +364,18 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                         {details.currency}
                       </td>
                     </tr>
-                    
+
                     {details.discountDetails?.amount != undefined &&
                       details.discountDetails?.amount > 0 && (
                         <tr>
-                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                          <td
+                            style={{
+                              width: "150px",
+                              textAlign: "right",
+                              paddingRight: "8px",
+                            }}
+                            className="font-semibold text-gray-800"
+                          >
                             Discount:
                           </td>
                           <td>
@@ -342,25 +385,40 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           </td>
                         </tr>
                       )}
-                      
+
                     {details.advancePaymentDetails?.amount != undefined &&
                       details.advancePaymentDetails?.amount > 0 && (
                         <tr>
-                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                          <td
+                            style={{
+                              width: "150px",
+                              textAlign: "right",
+                              paddingRight: "8px",
+                            }}
+                            className="font-semibold text-gray-800"
+                          >
                             Advance payment:
                           </td>
                           <td>
-                            {details.advancePaymentDetails.amountType === "amount"
+                            {details.advancePaymentDetails.amountType ===
+                            "amount"
                               ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
                               : `- ${details.advancePaymentDetails.amount}%`}
                           </td>
                         </tr>
                       )}
-                      
+
                     {details.taxDetails?.amount != undefined &&
                       details.taxDetails?.amount > 0 && (
                         <tr>
-                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                          <td
+                            style={{
+                              width: "150px",
+                              textAlign: "right",
+                              paddingRight: "8px",
+                            }}
+                            className="font-semibold text-gray-800"
+                          >
                             VAT:
                           </td>
                           <td>
@@ -370,11 +428,18 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           </td>
                         </tr>
                       )}
-                      
+
                     {details.shippingDetails?.cost != undefined &&
                       details.shippingDetails?.cost > 0 && (
                         <tr>
-                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                          <td
+                            style={{
+                              width: "150px",
+                              textAlign: "right",
+                              paddingRight: "8px",
+                            }}
+                            className="font-semibold text-gray-800"
+                          >
                             Shipping:
                           </td>
                           <td>
@@ -384,9 +449,16 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           </td>
                         </tr>
                       )}
-                      
+
                     <tr>
-                      <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                      <td
+                        style={{
+                          width: "150px",
+                          textAlign: "right",
+                          paddingRight: "8px",
+                        }}
+                        className="font-semibold text-gray-800"
+                      >
                         Grand Total:
                       </td>
                       <td>
@@ -400,7 +472,7 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
             </div>
 
             <div>
-              <div className="my-4">
+              <div className="my-8">
                 <div className="my-2">
                   <div className="text-sm flex gap-2">
                     <p className="font-bold w-[6rem]">Bank Name:</p>
