@@ -40,7 +40,6 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
     padding: isPreview ? "@sm:p-4" : "",
     flexRow: isPreview ? "@md:flex-row" : "sm:flex-row",
     gap: isPreview ? "@sm:gap-2" : "",
-    minWidth: isPreview ? "@sm:min-w-[6rem]" : "",
     textSize: isPreview ? "@sm:text-sm" : "",
     justifyBetween: isPreview ? "@md:justify-between" : "sm:justify-between",
     marginLeft: isPreview ? "@md:ml-auto" : "sm:ml-auto",
@@ -91,113 +90,138 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
           </h1>
 
           <div className={`bg-white p-6 ${previewClasses.padding} rounded-xl`}>
-            <div
-              className={`flex flex-col ${previewClasses.flexCol} ${previewClasses.justifyBetween} ${previewClasses.gap8}`}
-            >
-              <div
-                className={`flex flex-col flex-1 ${previewClasses.textSize} mb-4 ${previewClasses.marginBottom}`}
-              >
-                <dl className={`flex gap-3 ${previewClasses.gap}`}>
-                  <dt
-                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                  >
-                    Company name:
-                  </dt>
-                  <dd className="text-gray-500">{receiver.name}</dd>
-                </dl>
-                <dl className={`flex gap-3 ${previewClasses.gap}`}>
-                  <dt
-                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                  >
-                    Phone number:
-                  </dt>
-                  <dd className="text-gray-500">{receiver.phone}</dd>
-                </dl>
-                <dl className={`flex gap-3 ${previewClasses.gap}`}>
-                  <dt
-                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                  >
-                    Email:
-                  </dt>
-                  <dd className="text-gray-500">{receiver.email}</dd>
-                </dl>
-                <dl className={`flex gap-3 ${previewClasses.gap}`}>
-                  <dt
-                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                  >
-                    Website:
-                  </dt>
-                  <dd className="col-span-3 text-gray-500">
-                    {receiver.website}
-                  </dd>
-                </dl>
-                <dl className={`flex gap-3 ${previewClasses.gap}`}>
-                  <dt
-                    className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                  >
-                    Address:
-                  </dt>
-                  <dd className="text-gray-500">{receiver.address}</dd>
-                </dl>
-              </div>
+            {/* Modified table layout with adjusted spacing and column widths */}
+            <table className="w-full border-collapse">
+              <tbody>
+                <tr>
+                  <td className="align-top w-[40%]">
+                    {/* Customer Info - Left Column */}
+                    <table className="w-full">
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Company name:
+                          </td>
+                          <td className="text-gray-500">{receiver.name}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Phone number:
+                          </td>
+                          <td className="text-gray-500">{receiver.phone}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Email:
+                          </td>
+                          <td className="text-gray-500">{receiver.email}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Website:
+                          </td>
+                          <td className="text-gray-500">{receiver.website}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Address:
+                          </td>
+                          <td className="text-gray-500">{receiver.address}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
 
-              <div
-                className={`flex flex-col flex-1 ${previewClasses.textSize}`}
-              >
-                <div className={`${previewClasses.marginLeft}`}>
-                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
-                    <dt
-                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                    >
-                      Invoice date:
-                    </dt>
-                    <dd className="text-gray-500">
-                      {new Date(details.invoiceDate).toLocaleDateString(
-                        "en-US",
-                        DATE_OPTIONS
-                      )}
-                    </dd>
-                  </dl>
-                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
-                    <dt
-                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                    >
-                      Quotation no:
-                    </dt>
-                    <dd className="text-gray-500">{details.quotationNumber}</dd>
-                  </dl>
-                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
-                    <dt
-                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                    >
-                      Invoice no:
-                    </dt>
-                    <dd className="text-gray-500">{details.invoiceNumber}</dd>
-                  </dl>
-                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
-                    <dt
-                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                    >
-                      Sales person:
-                    </dt>
-                    <dd className="text-gray-500">{details.salesPerson}</dd>
-                  </dl>
-                  <dl className={`flex gap-3 ${previewClasses.gap} w-fit`}>
-                    <dt
-                      className={`min-w-[8rem] ${previewClasses.minWidth} font-semibold text-gray-800`}
-                    >
-                      Due date:
-                    </dt>
-                    <dd className="text-gray-500">
-                      {new Date(details.dueDate).toLocaleDateString(
-                        "en-US",
-                        DATE_OPTIONS
-                      )}
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
+                  <td className="align-top w-[10%]">
+                    {/* Smaller spacer column */}
+                  </td>
+
+                  <td className="align-top w-[50%]">
+                    {/* Invoice Info - Right Column - moved closer to the edge */}
+                    <table className="w-full">
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Invoice date:
+                          </td>
+                          <td className="text-gray-500">
+                            {new Date(details.invoiceDate).toLocaleDateString(
+                              "en-US",
+                              DATE_OPTIONS
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Quotation no:
+                          </td>
+                          <td className="text-gray-500">
+                            {details.quotationNumber}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Invoice no:
+                          </td>
+                          <td className="text-gray-500">
+                            {details.invoiceNumber}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Sales person:
+                          </td>
+                          <td className="text-gray-500">
+                            {details.salesPerson}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style={{ width: "130px", paddingRight: "8px" }}
+                            className="font-semibold text-gray-800 align-top"
+                          >
+                            Due date:
+                          </td>
+                          <td className="text-gray-500">
+                            {new Date(details.dueDate).toLocaleDateString(
+                              "en-US",
+                              DATE_OPTIONS
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
             <div className="mt-8">
               <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -291,79 +315,87 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                 )}
               </div>
 
-              <div className="flex flex-col flex-1">
-                <div className="w-fit ml-auto">
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                      Subtotal:
-                    </dt>
-                    <dd>
-                      {formatNumberWithCommas(Number(details.subTotal))}{" "}
-                      {details.currency}
-                    </dd>
-                  </dl>
-                  {details.discountDetails?.amount != undefined &&
-                    details.discountDetails?.amount > 0 && (
-                      <dl className="flex gap-3 w-fit">
-                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                          Discount:
-                        </dt>
-                        <dd>
-                          {details.discountDetails.amountType === "amount"
-                            ? `- ${details.discountDetails.amount} ${details.currency}`
-                            : `- ${details.discountDetails.amount}%`}
-                        </dd>
-                      </dl>
-                    )}
-                  {details.advancePaymentDetails?.amount != undefined &&
-                    details.advancePaymentDetails?.amount > 0 && (
-                      <dl className="flex gap-3 w-fit">
-                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                          Advance payment:
-                        </dt>
-                        <dd>
-                          {details.advancePaymentDetails.amountType === "amount"
-                            ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
-                            : `- ${details.advancePaymentDetails.amount}%`}
-                        </dd>
-                      </dl>
-                    )}
-                  {details.taxDetails?.amount != undefined &&
-                    details.taxDetails?.amount > 0 && (
-                      <dl className="flex gap-3 w-fit">
-                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                          VAT:
-                        </dt>
-                        <dd>
-                          {details.taxDetails.amountType === "amount"
-                            ? `+ ${details.taxDetails.amount} ${details.currency}`
-                            : `+ ${details.taxDetails.amount}%`}
-                        </dd>
-                      </dl>
-                    )}
-                  {details.shippingDetails?.cost != undefined &&
-                    details.shippingDetails?.cost > 0 && (
-                      <dl className="flex gap-3 w-fit">
-                        <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                          Shipping:
-                        </dt>
-                        <dd>
-                          {details.shippingDetails.costType === "amount"
-                            ? `+ ${details.shippingDetails.cost} ${details.currency}`
-                            : `+ ${details.shippingDetails.cost}%`}
-                        </dd>
-                      </dl>
-                    )}
-                  <dl className="flex gap-3 w-fit">
-                    <dt className="text-right min-w-[9rem] font-semibold text-gray-800">
-                      Grand Total:
-                    </dt>
-                    <dd>
-                      {formatNumberWithCommas(Number(details.totalAmount))}{" "}
-                      {details.currency}
-                    </dd>
-                  </dl>
-                </div>
+              {/* Replace flex layout with table-based layout for proper PDF rendering */}
+              <div className="flex-1">
+                <table className="ml-auto">
+                  <tbody>
+                    <tr>
+                      <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                        Subtotal:
+                      </td>
+                      <td>
+                        {formatNumberWithCommas(Number(details.subTotal))}{" "}
+                        {details.currency}
+                      </td>
+                    </tr>
+                    
+                    {details.discountDetails?.amount != undefined &&
+                      details.discountDetails?.amount > 0 && (
+                        <tr>
+                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                            Discount:
+                          </td>
+                          <td>
+                            {details.discountDetails.amountType === "amount"
+                              ? `- ${details.discountDetails.amount} ${details.currency}`
+                              : `- ${details.discountDetails.amount}%`}
+                          </td>
+                        </tr>
+                      )}
+                      
+                    {details.advancePaymentDetails?.amount != undefined &&
+                      details.advancePaymentDetails?.amount > 0 && (
+                        <tr>
+                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                            Advance payment:
+                          </td>
+                          <td>
+                            {details.advancePaymentDetails.amountType === "amount"
+                              ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
+                              : `- ${details.advancePaymentDetails.amount}%`}
+                          </td>
+                        </tr>
+                      )}
+                      
+                    {details.taxDetails?.amount != undefined &&
+                      details.taxDetails?.amount > 0 && (
+                        <tr>
+                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                            VAT:
+                          </td>
+                          <td>
+                            {details.taxDetails.amountType === "amount"
+                              ? `+ ${details.taxDetails.amount} ${details.currency}`
+                              : `+ ${details.taxDetails.amount}%`}
+                          </td>
+                        </tr>
+                      )}
+                      
+                    {details.shippingDetails?.cost != undefined &&
+                      details.shippingDetails?.cost > 0 && (
+                        <tr>
+                          <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                            Shipping:
+                          </td>
+                          <td>
+                            {details.shippingDetails.costType === "amount"
+                              ? `+ ${details.shippingDetails.cost} ${details.currency}`
+                              : `+ ${details.shippingDetails.cost}%`}
+                          </td>
+                        </tr>
+                      )}
+                      
+                    <tr>
+                      <td style={{ width: "150px", textAlign: "right", paddingRight: "8px" }} className="font-semibold text-gray-800">
+                        Grand Total:
+                      </td>
+                      <td>
+                        {formatNumberWithCommas(Number(details.totalAmount))}{" "}
+                        {details.currency}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -371,23 +403,23 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
               <div className="my-4">
                 <div className="my-2">
                   <div className="text-sm flex gap-2">
-                    <p className="font-bold min-w-[6rem]">Bank Name:</p>
+                    <p className="font-bold w-[6rem]">Bank Name:</p>
                     <p>{details.paymentInformation?.bankName}</p>
                   </div>
                   <div className="text-sm flex gap-2">
-                    <p className="font-bold min-w-[6rem]">Account Name:</p>
+                    <p className="font-bold w-[6rem]">Account Name:</p>
                     <p>{details.paymentInformation?.accountName}</p>
                   </div>
                   <div className="text-sm flex gap-2">
-                    <p className="font-bold min-w-[6rem]">Account Class:</p>
+                    <p className="font-bold w-[6rem]">Account Class:</p>
                     <p>{details.paymentInformation?.accountClass}</p>
                   </div>
                   <div className="text-sm flex gap-2">
-                    <p className="font-bold min-w-[6rem]">Account No:</p>
+                    <p className="font-bold w-[6rem]">Account No:</p>
                     <p>{details.paymentInformation?.accountNumber}</p>
                   </div>
                   <div className="text-sm flex gap-2">
-                    <p className="font-bold min-w-[6rem]">IBAN:</p>
+                    <p className="font-bold w-[6rem]">IBAN:</p>
                     <p>{details.paymentInformation?.iban}</p>
                   </div>
                 </div>
