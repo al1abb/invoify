@@ -140,12 +140,16 @@ export const FORM_DEFAULT_VALUES = {
         total: 0,
       },
     ],
-    currency: "USD",
+    currency: "AED",
     language: "English",
     taxDetails: {
       amount: 0,
       amountType: "amount",
       taxID: "",
+    },
+    advancePaymentDetails: {
+      amount: 0,
+      amountType: "amount",
     },
     discountDetails: {
       amount: 0,
@@ -218,12 +222,16 @@ export const FORM_FILL_VALUES = {
         total: 400,
       },
     ],
-    currency: "USD",
+    currency: "AED",
     language: "English",
     taxDetails: {
       amount: 15,
       amountType: "percentage",
       taxID: "987654321",
+    },
+    advancePaymentDetails: {
+      amount: 5,
+      amountType: "percentage",
     },
     discountDetails: {
       amount: 5,

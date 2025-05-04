@@ -7,7 +7,6 @@
       "to": "To",
       "invoiceDetails": "Invoice Details",
       "lineItems": "Line Items",
-      "paymentInfo": "Payment Info",
       "summary": "Summary",
       "next": "Next",
       "back": "Back"
@@ -40,19 +39,12 @@
       "lineItems": {
         "heading": "Items",
         "item": "Item",
-        "name": "Name",
+        "name": "Description",
         "quantity": "Quantity",
         "rate": "Rate",
         "total": "Total",
-        "description": "Description",
         "addNewItem": "Add a new item",
         "removeItem": "Remove item"
-      },
-      "paymentInfo": {
-        "heading": "Payment Information",
-        "bankName": "Bank Name",
-        "accountName": "Account Name",
-        "accountNumber": "Account Number"
       },
       "summary": {
         "heading": "Summary",
@@ -65,6 +57,7 @@
         },
         "additionalNotes": "Additional Notes",
         "paymentTerms": "Payment Terms",
+        "advancePayment": "Advance",
         "discount": "Discount",
         "tax": "Tax",
         "shipping": "Shipping",
@@ -84,8 +77,5 @@
     "newInvoice": "New Invoice",
     "generatePdf": "Generate PDF",
     "pdfView": "PDF View"
-  },
-  "footer": {
-    "developedBy": "Developed by"
   }
 }
