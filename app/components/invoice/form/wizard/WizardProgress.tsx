@@ -98,7 +98,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
   ];
 
   return (
-    <div className="flex flex-wrap justify-around items-center gap-y-3">
+    <div className="flex flex-wrap items-center gap-3">
       {steps.map((step) => (
         <div key={step.id} className="flex items-center">
           <BaseButton

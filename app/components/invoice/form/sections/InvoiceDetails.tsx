@@ -1,12 +1,7 @@
 "use client";
 
 // Components
-import {
-  DatePickerFormField,
-  FormInput,
-  Subheading,
-  TemplateSelector,
-} from "@/app/components";
+import { DatePickerFormField, FormInput, Subheading } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
@@ -49,9 +44,7 @@ const InvoiceDetails = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <TemplateSelector />
-        </div>
+        <div className="flex flex-col gap-2">{/* <TemplateSelector /> */}</div>
       </div>
     </section>
   );
