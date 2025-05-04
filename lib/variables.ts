@@ -167,7 +167,7 @@ export const FORM_DEFAULT_VALUES = {
     additionalNotes: "",
     paymentTerms: "",
     totalAmountInWords: "",
-    pdfTemplate: 1,
+    pdfTemplate: 0,
   },
 };
 
@@ -254,6 +254,6 @@ export const FORM_FILL_VALUES = {
     subTotal: "850",
     totalAmount: "850",
     totalAmountInWords: "Eight Hundred Fifty",
-    pdfTemplate: 1,
+    pdfTemplate: 0,
   },
 };
