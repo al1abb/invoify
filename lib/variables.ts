@@ -144,7 +144,7 @@ export const FORM_DEFAULT_VALUES = {
     language: "English",
     taxDetails: {
       amount: 0,
-      amountType: "amount",
+      amountType: "percentage",
       taxID: "",
     },
     advancePaymentDetails: {

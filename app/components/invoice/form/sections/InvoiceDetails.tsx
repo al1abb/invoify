@@ -2,10 +2,8 @@
 
 // Components
 import {
-  CurrencySelector,
   DatePickerFormField,
   FormInput,
-  FormFile,
   Subheading,
   TemplateSelector,
 } from "@/app/components";
@@ -23,14 +21,26 @@ const InvoiceDetails = () => {
       <div className="flex flex-row flex-wrap gap-5">
         <div className="flex flex-col gap-2">
           <FormInput
-            name="details.invoiceNumber"
-            label={_t("form.steps.invoiceDetails.invoiceNumber")}
-            placeholder="Invoice number"
+            name="details.quotationNumber"
+            label={_t("form.steps.invoiceDetails.quotationNumber")}
+            placeholder="Quotation number"
           />
 
           <DatePickerFormField
             name="details.invoiceDate"
             label={_t("form.steps.invoiceDetails.issuedDate")}
+          />
+
+          <FormInput
+            name="details.invoiceNumber"
+            label={_t("form.steps.invoiceDetails.invoiceNumber")}
+            placeholder="Invoice number"
+          />
+
+          <FormInput
+            name="details.salesPerson"
+            label={_t("form.steps.invoiceDetails.salesPerson")}
+            placeholder="Sales person"
           />
 
           <DatePickerFormField

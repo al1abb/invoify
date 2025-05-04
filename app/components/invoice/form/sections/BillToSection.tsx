@@ -8,6 +8,7 @@ import {
   BaseButton,
   FormCustomInput,
   FormInput,
+  FormTextarea,
   Subheading,
 } from "@/app/components";
 
@@ -50,11 +51,6 @@ const BillToSection = () => {
         placeholder="Receiver name"
       />
       <FormInput
-        name="receiver.address"
-        label={_t("form.steps.to.address")}
-        placeholder="Receiver address"
-      />
-      <FormInput
         name="receiver.email"
         label={_t("form.steps.to.email")}
         placeholder="Receiver email"
@@ -71,6 +67,16 @@ const BillToSection = () => {
           const target = e.target as HTMLInputElement;
           target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
         }}
+      />
+      <FormInput
+        name="receiver.website"
+        label={_t("form.steps.to.website")}
+        placeholder="Receiver website"
+      />
+      <FormTextarea
+        name="receiver.address"
+        label={_t("form.steps.to.address")}
+        placeholder="Receiver address"
       />
     </section>
   );

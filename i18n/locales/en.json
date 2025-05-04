@@ -16,6 +16,7 @@
         "billTo": "Bill To",
         "name": "Name",
         "address": "Address",
+        "website": "Website",
         "zipCode": "Zip",
         "city": "City",
         "country": "Country",
@@ -31,8 +32,10 @@
           "label": "Invoice Logo",
           "placeholder": "Click to upload image"
         },
+        "quotationNumber": "Quotation Number",
         "invoiceNumber": "Invoice Number",
-        "issuedDate": "Issue Date",
+        "salesPerson": "Sales Person",
+        "issuedDate": "Invoice Date",
         "dueDate": "Due Date",
         "currency": "Currency"
       },
@@ -41,7 +44,7 @@
         "item": "Item",
         "name": "Description",
         "quantity": "Quantity",
-        "rate": "Rate",
+        "rate": "Price per unit",
         "total": "Total",
         "addNewItem": "Add a new item",
         "removeItem": "Remove item"
@@ -59,7 +62,7 @@
         "paymentTerms": "Payment Terms",
         "advancePayment": "Advance",
         "discount": "Discount",
-        "tax": "Tax",
+        "tax": "VAT",
         "shipping": "Shipping",
         "subTotal": "Subtotal",
         "totalAmount": "Total Amount",

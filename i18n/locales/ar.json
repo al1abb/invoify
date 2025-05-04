@@ -16,6 +16,7 @@
         "billTo": "الفاتورة إلى",
         "name": "الاسم",
         "address": "العنوان",
+        "website": "الموقع الإلكتروني",
         "zipCode": "الرمز البريدي",
         "city": "المدينة",
         "country": "الدولة",
@@ -31,7 +32,9 @@
           "label": "شعار الفاتورة",
           "placeholder": "اضغط لتحميل الصورة"
         },
+        "quotationNumber": "رقم الاقتباس",
         "invoiceNumber": "رقم الفاتورة",
+        "salesPerson": "اسم البائع",
         "issuedDate": "تاريخ الإصدار",
         "dueDate": "تاريخ الاستحقاق",
         "currency": "العملة"

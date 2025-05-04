@@ -81,6 +81,8 @@ const fieldValidators = {
     .transform((value) => {
       return formatNumberWithCommas(value);
     }),
+
+  url: z.string().url({ message: "Must be a valid URL" }),
 };
 
 const CustomInputSchema = z.object({
@@ -102,6 +104,7 @@ const InvoiceSenderSchema = z.object({
 const InvoiceReceiverSchema = z.object({
   name: fieldValidators.name,
   address: fieldValidators.address,
+  website: fieldValidators.url,
   zipCode: fieldValidators.zipCode,
   city: fieldValidators.city,
   country: fieldValidators.country,
@@ -152,7 +155,9 @@ const SignatureSchema = z.object({
 
 const InvoiceDetailsSchema = z.object({
   invoiceLogo: fieldValidators.stringOptional,
+  quotationNumber: fieldValidators.stringMin1,
   invoiceNumber: fieldValidators.stringMin1,
+  salesPerson: fieldValidators.name,
   invoiceDate: fieldValidators.date,
   dueDate: fieldValidators.date,
   purchaseOrderNumber: fieldValidators.stringOptional,
