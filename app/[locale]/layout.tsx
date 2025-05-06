@@ -23,7 +23,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/toaster";
 
 // Components
-import { BaseNavbar, BaseFooter } from "@/app/components";
+import { BaseNavbar } from "@/app/components";
 
 // Contexts
 import Providers from "@/contexts/Providers";
