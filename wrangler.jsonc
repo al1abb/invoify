@@ -13,9 +13,7 @@
     // See https://opennext.js.org/cloudflare/caching
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      // Create a bucket before deploying
-      // See https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create
-      "bucket_name": "<BUCKET_NAME>"
+      "bucket_name": "invoizer-app"
     }
   ]
 }
