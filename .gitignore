@@ -38,3 +38,4 @@ next-env.d.ts
 /.cache
 
 .open-next
+.wrangler
