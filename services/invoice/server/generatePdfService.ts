@@ -39,8 +39,15 @@ export async function generatePdfService(req: NextRequest) {
     // Use puppeteer-core with @sparticuz/chromium for all environments
     const puppeteer = await import("puppeteer-core");
 
+    process.env.PUPPETEER_CACHE_DIR = "/tmp";
+
+    // Use lightweight chromium in all environments
     browser = await puppeteer.launch({
-      args: chromium.args,
+      args: [
+        ...chromium.args,
+        "--disable-web-security",
+        "--font-render-hinting=none",
+      ],
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: true,
