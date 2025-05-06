@@ -33,42 +33,71 @@ export async function generatePdfService(req: NextRequest) {
       InvoiceTemplate(body)
     );
 
-    if (ENV === "production") {
-      const puppeteer = await import("puppeteer-core");
-      browser = await puppeteer.launch({
-        args: [...chromium.args, "--disable-dev-shm-usage"],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
-        headless: true,
-        ignoreHTTPSErrors: true,
-      });
-    } else {
-      const puppeteer = await import("puppeteer");
-      browser = await puppeteer.launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        headless: true,
-      });
-    }
+    // if (ENV !== "production") {
+    //   const puppeteer = await import("puppeteer-core");
+    //   browser = await puppeteer.launch({
+    //     args: [...chromium.args, "--disable-dev-shm-usage"],
+    //     defaultViewport: chromium.defaultViewport,
+    //     executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
+    //     headless: true,
+    //     ignoreHTTPSErrors: true,
+    //   });
+    // } else {
+    const puppeteer = await import("puppeteer");
+    browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+
+        "--no-zygote",
+
+        "--disable-dev-shm-usage",
+      ],
+    });
+    // }
 
     if (!browser) {
       throw new Error("Failed to launch browser");
     }
 
+    console.log("Browser launched successfully");
+
     page = await browser.newPage();
-    await page.setContent(await htmlTemplate, {
-      waitUntil: ["networkidle0", "load", "domcontentloaded"],
-      timeout: 30000,
-    });
+
+    console.log("New page created successfully");
+
+    const simpleHtml = `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Invoice</title>
+        </head>
+        <body></body>
+      </html>
+    `;
+    console.log("Simple HTML template created successfully");
+    await page.setContent(simpleHtml);
+
+    // await page.setContent(htmlTemplate);
+
+    console.log("Page content set successfully");
 
     await page.addStyleTag({
       url: TAILWIND_CDN,
     });
+
+    console.log("Tailwind CSS added successfully");
 
     const pdf = await page.pdf({
       format: "a4",
       printBackground: true,
       preferCSSPageSize: true,
     });
+
+    console.log("PDF generated successfully");
 
     return new NextResponse(
       new Blob([new Uint8Array(pdf)], { type: "application/pdf" }),
