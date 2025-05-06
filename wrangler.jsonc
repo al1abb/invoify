@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "invoizer",
+  "compatibility_date": "2025-05-06",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "r2_buckets": [
+    // Use R2 incremental cache
+    // See https://opennext.js.org/cloudflare/caching
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      // Create a bucket before deploying
+      // See https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create
+      "bucket_name": "<BUCKET_NAME>"
+    }
+  ]
+}

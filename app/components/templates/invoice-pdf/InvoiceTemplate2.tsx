@@ -41,10 +41,6 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
           <address className="mt-4 not-italic text-gray-800">
             {sender.address}
             <br />
-            {sender.zipCode}, {sender.city}
-            <br />
-            {sender.country}
-            <br />
           </address>
         </div>
       </div>
@@ -56,10 +52,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
             {receiver.name}
           </h3>
           <address className="mt-2 not-italic text-gray-500">
-            {receiver.address}, {receiver.zipCode}
-            <br />
-            {receiver.city}, {receiver.country}
-            <br />
+            {receiver.address}
           </address>
         </div>
         <div className="sm:text-right space-y-2">

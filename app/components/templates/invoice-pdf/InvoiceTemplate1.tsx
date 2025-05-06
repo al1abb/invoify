@@ -41,10 +41,6 @@ const InvoiceTemplate = (data: InvoiceType) => {
           <address className="mt-4 not-italic text-gray-800">
             {sender.address}
             <br />
-            {sender.zipCode}, {sender.city}
-            <br />
-            {sender.country}
-            <br />
           </address>
         </div>
       </div>
@@ -60,11 +56,6 @@ const InvoiceTemplate = (data: InvoiceType) => {
             {receiver.address && receiver.address.length > 0
               ? receiver.address
               : null}
-            {receiver.zipCode && receiver.zipCode.length > 0
-              ? `, ${receiver.zipCode}`
-              : null}
-            <br />
-            {receiver.city}, {receiver.country}
             <br />
           </address>
         </div>

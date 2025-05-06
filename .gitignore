@@ -36,3 +36,5 @@ next-env.d.ts
 
 # cache
 /.cache
+
+.open-next

@@ -33,19 +33,35 @@ export async function generatePdfService(req: NextRequest) {
       InvoiceTemplate(body)
     );
 
-    if (ENV === "production") {
+    // Check if we're in a Cloudflare Worker environment
+    const isCloudflareWorker =
+      typeof navigator !== "undefined" &&
+      navigator.userAgent === "Cloudflare-Workers";
+
+    if (isCloudflareWorker || ENV === "production") {
+      console.log("preparing to launch browser");
+
+      // Use @sparticuz/chromium for Cloudflare Workers environment
       const puppeteer = await import("puppeteer-core");
+
       browser = await puppeteer.launch({
-        args: [...chromium.args, "--disable-dev-shm-usage"],
+        args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
+        executablePath: await chromium.executablePath(),
         headless: true,
         ignoreHTTPSErrors: true,
       });
+
+      console.log("Cloudflare Worker detected, using @sparticuz/chromium");
     } else {
+      // Local development environment
       const puppeteer = await import("puppeteer");
       browser = await puppeteer.launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+        ],
         headless: true,
       });
     }
@@ -54,9 +70,11 @@ export async function generatePdfService(req: NextRequest) {
       throw new Error("Failed to launch browser");
     }
 
+    console.log("browser launched successfully");
+
     page = await browser.newPage();
-    await page.setContent(await htmlTemplate, {
-      waitUntil: ["networkidle0", "load", "domcontentloaded"],
+    await page.setContent(htmlTemplate, {
+      waitUntil: ["domcontentloaded", "networkidle0"],
       timeout: 30000,
     });
 
@@ -64,12 +82,15 @@ export async function generatePdfService(req: NextRequest) {
       url: TAILWIND_CDN,
     });
 
+    console.log("creating PDF");
+
     const pdf = await page.pdf({
       format: "a4",
       printBackground: true,
       preferCSSPageSize: true,
     });
 
+    console.log("PDF created successfully");
     return new NextResponse(
       new Blob([new Uint8Array(pdf)], { type: "application/pdf" }),
       {
@@ -85,7 +106,10 @@ export async function generatePdfService(req: NextRequest) {
   } catch (error) {
     console.error("PDF Generation Error:", error);
     return new NextResponse(
-      JSON.stringify({ error: "Failed to generate PDF", details: error }),
+      JSON.stringify({
+        error: "Failed to generate PDF",
+        details: error instanceof Error ? error.message : String(error),
+      }),
       {
         status: 500,
         headers: {
