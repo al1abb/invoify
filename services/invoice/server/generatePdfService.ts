@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Chromium
+// Lightweight Chromium for serverless environments
 import chromium from "@sparticuz/chromium";
 
 // Helpers
@@ -11,7 +11,6 @@ import { ENV, TAILWIND_CDN } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/types";
-import path from "path";
 
 /**
  * Generate a PDF document of an invoice based on the provided data.
@@ -35,55 +34,18 @@ export async function generatePdfService(req: NextRequest) {
     );
 
     console.log("Environment:", ENV);
-    console.log("Launching Puppeteer...");
+    console.log("Launching Puppeteer with lightweight Chromium...");
 
-    let puppeteer;
-    try {
-      puppeteer = await import("puppeteer");
-      console.log("Using puppeteer");
-    } catch (error) {
-      console.log("Falling back to puppeteer-core");
-      puppeteer = await import("puppeteer-core");
-    }
+    // Use puppeteer-core with @sparticuz/chromium for all environments
+    const puppeteer = await import("puppeteer-core");
 
-    // Determine the Chrome executable path
-    let executablePath;
-    
-    if (process.env.VERCEL) {
-      // We're in Vercel environment
-      console.log("Running in Vercel environment");
-      const chromePath = "/vercel/path0/.cache/puppeteer/chrome/linux-136.0.7103.49/chrome-linux64/chrome";
-      console.log("Looking for Chrome at:", chromePath);
-      executablePath = chromePath;
-    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      // We're in Docker environment
-      console.log("Running in Docker environment");
-      executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    } else {
-      // We're in local environment
-      console.log("Running in local environment");
-      executablePath = await chromium.executablePath();
-    }
-
-    console.log("Chrome executable path:", executablePath);
-    
-    const launchOptions = {
-      headless: true,
-      args: [
-        "--disable-setuid-sandbox",
-        "--no-sandbox",
-        "--no-zygote",
-        "--disable-dev-shm-usage",
-      ],
-      executablePath,
-    };
-    
-    console.log("Launch options:", JSON.stringify({
-      ...launchOptions,
-      executablePath: launchOptions.executablePath ? "PATH EXISTS" : "PATH NOT SET",
-    }));
-
-    browser = await puppeteer.launch(launchOptions);
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
+    });
 
     if (!browser) {
       throw new Error("Failed to launch browser");
@@ -127,11 +89,11 @@ export async function generatePdfService(req: NextRequest) {
   } catch (error) {
     console.error("PDF Generation Error:", error);
     return new NextResponse(
-      JSON.stringify({ 
-        error: "Failed to generate PDF", 
+      JSON.stringify({
+        error: "Failed to generate PDF",
         details: error,
         message: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined
+        stack: error instanceof Error ? error.stack : undefined,
       }),
       {
         status: 500,
