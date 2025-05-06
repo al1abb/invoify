@@ -4,20 +4,13 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 // Components
-import { BaseButton, SendPdfToEmailModal, Subheading } from "@/app/components";
+import { BaseButton, Subheading } from "@/app/components";
 
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
 
 // Icons
-import {
-  BookmarkIcon,
-  DownloadCloudIcon,
-  Eye,
-  Mail,
-  MoveLeft,
-  Printer,
-} from "lucide-react";
+import { DownloadCloudIcon, Eye, MoveLeft, Printer } from "lucide-react";
 
 export default function FinalPdf() {
   const {
