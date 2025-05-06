@@ -66,20 +66,7 @@ export async function generatePdfService(req: NextRequest) {
     page = await browser.newPage();
 
     console.log("New page created successfully");
-
-    const simpleHtml = `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Invoice</title>
-        </head>
-        <body></body>
-      </html>
-    `;
-    console.log("Simple HTML template created successfully");
-    await page.setContent(simpleHtml);
+    await page.setContent(htmlTemplate);
 
     // await page.setContent(htmlTemplate);
 
