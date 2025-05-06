@@ -36,6 +36,3 @@ next-env.d.ts
 
 # cache
 /.cache
-
-# cloudflare build output
-/.open-next
