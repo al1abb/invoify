@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.0.4",
+    "@sparticuz/chromium": "122.0.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@types/nodemailer": "^6.4.14",
     "@types/number-to-words": "^1.2.1",
