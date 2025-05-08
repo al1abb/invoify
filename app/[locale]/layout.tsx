@@ -18,6 +18,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 // Next Intl
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 // ShadCn
 import { Toaster } from "@/components/ui/toaster";
@@ -69,12 +70,8 @@ export default async function LocaleLayout({
     children: React.ReactNode;
     params: { locale: string };
 }) {
-    let messages;
-    try {
-        messages = (await import(`@/i18n/locales/${locale}.json`)).default;
-    } catch (error) {
-        notFound();
-    }
+    
+    const messages = await getMessages()
 
     return (
         <html lang={locale}>
@@ -88,7 +85,7 @@ export default async function LocaleLayout({
             <body
                 className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
             >
-                <NextIntlClientProvider locale={locale} messages={messages}>
+                <NextIntlClientProvider messages={messages}>
                     <Providers>
                         <BaseNavbar />
 
