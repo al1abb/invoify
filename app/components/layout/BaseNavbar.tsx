@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
 
 // Get package version
-import packageInfo from '../../../package.json';
+import packageInfo from "../../../package.json";
 
 const BaseNavbar = () => {
   const devEnv = useMemo(() => {
@@ -36,7 +36,8 @@ const BaseNavbar = () => {
                 loading="eager"
               />
             </Link>
-            <Badge variant="outline" className="text-xs">v{packageInfo.version}</Badge>
+            {/* TODO: should we show badge? */}
+            {/* <Badge variant="outline" className="text-xs">v{packageInfo.version}</Badge> */}
           </div>
           <div className="flex items-center gap-3">
             {/* ? DEV Only */}
