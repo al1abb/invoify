@@ -468,7 +468,11 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       >
                         Grand Total:
                       </td>
-                      <td className="font-bold text-lg">
+                      <td
+                        className={`font-bold ${
+                          isPreview ? "text-xs" : "text-lg"
+                        }`}
+                      >
                         {formatNumberWithCommas(Number(details.totalAmount))}{" "}
                         {details.currency}
                       </td>
