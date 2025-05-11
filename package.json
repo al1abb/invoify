@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "postinstall": "if [ \"$NODE_ENV\" != \"production\" ]; then node node_modules/puppeteer/install.mjs; fi"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

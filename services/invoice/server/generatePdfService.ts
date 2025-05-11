@@ -33,53 +33,56 @@ export async function generatePdfService(req: NextRequest) {
       InvoiceTemplate(body)
     );
 
-    console.log("Environment:", ENV);
-    console.log("Launching Puppeteer with lightweight Chromium...");
+    if (ENV === "development") {
+      const puppeteer = await import("puppeteer");
+      browser = await puppeteer.launch({
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-web-security",
+          "--font-render-hinting=none",
+        ],
+        defaultViewport: chromium.defaultViewport,
+        headless: true,
+      });
+    } else {
+      process.env.PUPPETEER_CACHE_DIR = "/tmp";
 
-    // Use puppeteer-core with @sparticuz/chromium for all environments
-    const puppeteer = await import("puppeteer-core");
-
-    process.env.PUPPETEER_CACHE_DIR = "/tmp";
-
-    // Use lightweight chromium in all environments
-    browser = await puppeteer.launch({
-      args: [
-        ...chromium.args,
-        "--disable-web-security",
-        "--font-render-hinting=none",
-      ],
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: true,
-      ignoreHTTPSErrors: true,
-    });
+      // Use lightweight chromium in all environments
+      const puppeteer = await import("puppeteer-core");
+      browser = await puppeteer.launch({
+        args: [
+          ...chromium.args,
+          "--disable-web-security",
+          "--font-render-hinting=none",
+        ],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: true,
+        ignoreHTTPSErrors: true,
+      });
+    }
 
     if (!browser) {
       throw new Error("Failed to launch browser");
     }
 
-    console.log("Browser launched successfully");
-
     page = await browser.newPage();
-    console.log("New page created successfully");
 
     await page.setContent(htmlTemplate, {
       waitUntil: "networkidle0",
       timeout: 30000,
     });
-    console.log("Page content set successfully");
 
     await page.addStyleTag({
       url: TAILWIND_CDN,
     });
-    console.log("Tailwind CSS added successfully");
 
     const pdf = await page.pdf({
       format: "a4",
       printBackground: true,
       preferCSSPageSize: true,
     });
-    console.log("PDF generated successfully");
 
     return new NextResponse(
       new Blob([new Uint8Array(pdf)], { type: "application/pdf" }),
