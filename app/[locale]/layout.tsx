@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-// Fonts
+import { BaseNavbar } from "@/app/components";
+import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/contexts/Providers";
 import {
   alexBrush,
   dancingScript,
@@ -9,30 +8,14 @@ import {
   outfit,
   parisienne,
 } from "@/lib/fonts";
-
-// Favicon
-import Favicon from "@/public/assets/favicon/favicon.ico";
-
-// Vercel Analytics
-import { Analytics } from "@vercel/analytics/react";
-
-// Next Intl
-import { NextIntlClientProvider } from "next-intl";
-
-// ShadCn
-import { Toaster } from "@/components/ui/toaster";
-
-// Components
-import { BaseNavbar } from "@/app/components";
-
-// Contexts
-import Providers from "@/contexts/Providers";
-
-// SEO
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
-
-// Variables
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
+import Favicon from "@/public/assets/favicon/favicon.ico";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Invoizer | Invoice Generator",
@@ -71,31 +54,33 @@ export default async function LocaleLayout({
   }
 
   return (
-    <html lang={locale}>
-      <head>
-        <script
-          type="application/ld+json"
-          id="json-ld"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
-        />
-      </head>
-      <body
-        className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
-      >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            <BaseNavbar />
+    <ClerkProvider>
+      <html lang={locale}>
+        <head>
+          <script
+            type="application/ld+json"
+            id="json-ld"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
+          />
+        </head>
+        <body
+          className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
+        >
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <Providers>
+              <BaseNavbar />
 
-            <div className="flex flex-col">{children}</div>
+              <div className="flex flex-col">{children}</div>
 
-            {/* Toast component */}
-            <Toaster />
+              {/* Toast component */}
+              <Toaster />
 
-            {/* Vercel analytics */}
-            <Analytics />
-          </Providers>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+              {/* Vercel analytics */}
+              <Analytics />
+            </Providers>
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

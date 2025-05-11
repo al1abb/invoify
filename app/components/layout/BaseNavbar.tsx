@@ -1,21 +1,16 @@
-import { useMemo } from "react";
-
-// Next
-import Link from "next/link";
-import Image from "next/image";
-
-// Assets
-import Logo from "@/public/assets/img/invoizer-logo.svg";
-
-// ShadCn
+import { DevDebug, ThemeSwitcher } from "@/app/components";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-
-// Components
-import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
-
-// Get package version
-import packageInfo from "../../../package.json";
+import Logo from "@/public/assets/img/invoizer-logo.svg";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
 
 const BaseNavbar = () => {
   const devEnv = useMemo(() => {
@@ -44,6 +39,16 @@ const BaseNavbar = () => {
             {devEnv && <DevDebug />}
             {/* TODO: Make i18n work */}
             {/* <LanguageSelector /> */}
+
+            <header className="flex justify-end items-center p-4 gap-4 h-16">
+              <SignedOut>
+                <SignInButton />
+                <SignUpButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </header>
             <ThemeSwitcher />
           </div>
         </Card>

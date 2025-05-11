@@ -39,3 +39,5 @@ next-env.d.ts
 
 .open-next
 .wrangler
+# clerk configuration (can include secrets)
+/.clerk/
