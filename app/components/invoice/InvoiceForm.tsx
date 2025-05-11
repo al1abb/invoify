@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
-
-// RHF
-import { useFormContext, useWatch } from "react-hook-form";
-
-// ShadCn
+import {
+  BillToSection,
+  InvoiceDetails,
+  InvoiceSummary,
+  Items,
+  WizardStep,
+} from "@/app/components";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -13,24 +15,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-
-// React Wizard
-import { Wizard } from "react-use-wizard";
-
-// Components
-import {
-  WizardStep,
-  BillFromSection,
-  BillToSection,
-  InvoiceDetails,
-  Items,
-  PaymentInformation,
-  InvoiceSummary,
-} from "@/app/components";
-
-// Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import { useMemo } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+import { Wizard } from "react-use-wizard";
 
 const InvoiceForm = () => {
   const { _t } = useTranslationContext();
