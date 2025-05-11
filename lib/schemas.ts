@@ -101,7 +101,7 @@ const InvoiceSenderSchema = z.object({
 const InvoiceReceiverSchema = z.object({
   name: fieldValidators.name,
   address: fieldValidators.address,
-  website: fieldValidators.url,
+  website: fieldValidators.stringOptional,
   email: fieldValidators.email,
   phone: fieldValidators.phone,
   customInputs: z.array(CustomInputSchema).optional(),

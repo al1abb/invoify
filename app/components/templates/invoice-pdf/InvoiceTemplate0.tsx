@@ -379,8 +379,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           </td>
                           <td>
                             {details.discountDetails.amountType === "amount"
-                              ? `- ${details.discountDetails.amount} ${details.currency}`
-                              : `- ${details.discountDetails.amount}%`}
+                              ? `${formatNumberWithCommas(
+                                  details.discountDetails.amount
+                                )} ${details.currency}`
+                              : `${details.discountDetails.amount}%`}
                           </td>
                         </tr>
                       )}
@@ -401,8 +403,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           <td>
                             {details.advancePaymentDetails.amountType ===
                             "amount"
-                              ? `- ${details.advancePaymentDetails.amount} ${details.currency}`
-                              : `- ${details.advancePaymentDetails.amount}%`}
+                              ? `${formatNumberWithCommas(
+                                  details.advancePaymentDetails.amount
+                                )} ${details.currency}`
+                              : `${details.advancePaymentDetails.amount}%`}
                           </td>
                         </tr>
                       )}
@@ -422,8 +426,10 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                           </td>
                           <td>
                             {details.taxDetails.amountType === "amount"
-                              ? `+ ${details.taxDetails.amount} ${details.currency}`
-                              : `+ ${details.taxDetails.amount}%`}
+                              ? `${formatNumberWithCommas(
+                                  details.taxDetails.amount
+                                )} ${details.currency}`
+                              : `${details.taxDetails.amount}%`}
                           </td>
                         </tr>
                       )}
@@ -439,12 +445,14 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                             }}
                             className="font-semibold text-gray-800"
                           >
-                            Shipping:
+                            Delivery:
                           </td>
                           <td>
                             {details.shippingDetails.costType === "amount"
-                              ? `+ ${details.shippingDetails.cost} ${details.currency}`
-                              : `+ ${details.shippingDetails.cost}%`}
+                              ? `${formatNumberWithCommas(
+                                  details.shippingDetails.cost
+                                )} ${details.currency}`
+                              : `${details.shippingDetails.cost}%`}
                           </td>
                         </tr>
                       )}
@@ -460,7 +468,7 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
                       >
                         Grand Total:
                       </td>
-                      <td>
+                      <td className="font-bold text-lg">
                         {formatNumberWithCommas(Number(details.totalAmount))}{" "}
                         {details.currency}
                       </td>
@@ -471,49 +479,42 @@ const DefaultTemplate = (props: InvoiceTypeWithPreview) => {
             </div>
 
             <div>
-              <div className="my-4">
+              <div className="my-4" style={{ fontSize: "11px" }}>
                 {/* Use table layout for bank details to ensure consistent alignment in PDF */}
-                <table className="w-full border-collapse">
+                <table
+                  className="w-full border-collapse"
+                  style={{ fontSize: "11px" }}
+                >
                   <tbody>
                     <tr>
-                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                      <td style={{ width: "120px" }} className="font-bold">
                         Bank Name:
                       </td>
-                      <td className="pb-1">
-                        {details.paymentInformation?.bankName}
-                      </td>
+                      <td>{details.paymentInformation?.bankName}</td>
                     </tr>
                     <tr>
-                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                      <td style={{ width: "120px" }} className="font-bold">
                         Account Name:
                       </td>
-                      <td className="pb-1">
-                        {details.paymentInformation?.accountName}
-                      </td>
+                      <td>{details.paymentInformation?.accountName}</td>
                     </tr>
                     <tr>
-                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                      <td style={{ width: "120px" }} className="font-bold">
                         Account Class:
                       </td>
-                      <td className="pb-1">
-                        {details.paymentInformation?.accountClass}
-                      </td>
+                      <td>{details.paymentInformation?.accountClass}</td>
                     </tr>
                     <tr>
-                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                      <td style={{ width: "120px" }} className="font-bold">
                         Account No:
                       </td>
-                      <td className="pb-1">
-                        {details.paymentInformation?.accountNumber}
-                      </td>
+                      <td>{details.paymentInformation?.accountNumber}</td>
                     </tr>
                     <tr>
-                      <td style={{ width: "120px" }} className="font-bold pb-1">
+                      <td style={{ width: "120px" }} className="font-bold">
                         IBAN:
                       </td>
-                      <td className="pb-1">
-                        {details.paymentInformation?.iban}
-                      </td>
+                      <td>{details.paymentInformation?.iban}</td>
                     </tr>
                   </tbody>
                 </table>
