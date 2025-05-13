@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 
 // Fonts
@@ -16,17 +16,12 @@ import Favicon from "@/public/assets/favicon/favicon.ico";
 // Vercel Analytics
 import { Analytics } from "@vercel/analytics/react";
 
-// Next Intl
-import { NextIntlClientProvider } from "next-intl";
-
 // ShadCn
 import { Toaster } from "@/components/ui/toaster";
 
 // Components
 import { BaseNavbar, BaseFooter } from "@/app/components";
-
-// Contexts
-import Providers from "@/contexts/Providers";
+import ProvidersWrapper from "./ProvidersWrapper";
 
 // SEO
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
@@ -34,13 +29,17 @@ import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
 // Variables
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
 
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+};
+
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
     description:
         "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
     icons: [{ rel: "icon", url: Favicon.src }],
     keywords: ROOTKEYWORDS,
-    viewport: "width=device-width, initial-scale=1",
     robots: {
         index: true,
         follow: true,
@@ -58,22 +57,34 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-    const locales = LOCALES.map((locale) => locale.code);
-    return locales;
+    return LOCALES.map((locale) => ({ locale: locale.code }));
+}
+
+interface LayoutProps {
+    children: React.ReactNode;
+    params: { locale: string };
 }
 
 export default async function LocaleLayout({
     children,
-    params: { locale },
-}: {
-    children: React.ReactNode;
-    params: { locale: string };
-}) {
+    params,
+}: LayoutProps) {
+    // Récupération de la locale des paramètres d'URL
+    const locale = params?.locale;
+
+    // Validate that the locale is configured
+    const isValidLocale = LOCALES.some(l => l.code === locale);
+    if (!isValidLocale) {
+        notFound();
+    }
+
+    // Load messages for the current locale
     let messages;
     try {
         messages = (await import(`@/i18n/locales/${locale}.json`)).default;
     } catch (error) {
-        notFound();
+        console.error(`Could not load messages for locale: ${locale}`, error);
+        messages = {};
     }
 
     return (
@@ -88,21 +99,13 @@ export default async function LocaleLayout({
             <body
                 className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
             >
-                <NextIntlClientProvider locale={locale} messages={messages}>
-                    <Providers>
-                        <BaseNavbar />
-
-                        <div className="flex flex-col">{children}</div>
-
-                        <BaseFooter />
-
-                        {/* Toast component */}
-                        <Toaster />
-
-                        {/* Vercel analytics */}
-                        <Analytics />
-                    </Providers>
-                </NextIntlClientProvider>
+                <ProvidersWrapper messages={messages}>
+                    <BaseNavbar />
+                    <div className="flex flex-col">{children}</div>
+                    <BaseFooter />
+                    <Toaster />
+                    <Analytics />
+                </ProvidersWrapper>
             </body>
         </html>
     );

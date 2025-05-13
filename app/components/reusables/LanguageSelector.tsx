@@ -2,9 +2,6 @@
 
 import { useParams } from "next/navigation";
 
-// Next Intl
-import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
-
 // ShadCn
 import {
     Select,
@@ -21,40 +18,45 @@ import { Badge } from "@/components/ui/badge";
 import { LOCALES } from "@/lib/variables";
 
 const LanguageSelector = () => {
-    const router = useRouter();
-    const params = useParams();
-
+    const params = useParams<{ locale: string }>();
+    
     const handleLanguageChange = (lang: string) => {
-        console.log(lang);
-
-        router.push("/", { locale: lang });
+        console.log("Changing language to:", lang);
+        
+        // Get current path without locale prefix
+        const pathname = window.location.pathname;
+        const currentLocale = params.locale;
+        
+        // Replace current locale with new locale in path
+        let newPath;
+        if (pathname === `/${currentLocale}`) {
+            // If we're at the root path for a locale
+            newPath = `/${lang}`;
+        } else {
+            // Replace the locale in the path
+            newPath = pathname.replace(`/${currentLocale}/`, `/${lang}/`);
+        }
+        
+        // Navigate to new path
+        window.location.href = newPath;
     };
+    
     return (
         <Select
-            value={params.locale.toLocaleString()}
-            onValueChange={(lang) => handleLanguageChange(lang)}
+            value={params.locale}
+            onValueChange={handleLanguageChange}
         >
-            <SelectTrigger
-                className="w-[10rem] relative"
-                aria-label="Languages"
-            >
-                <Badge className="position: absolute -top-4 -left-2 font-normal">
-                    BETA
-                </Badge>
-                <SelectValue placeholder="Select a language" />
+            <SelectTrigger className="w-[8rem]">
+                <SelectValue placeholder="Language" />
             </SelectTrigger>
-            <SelectContent
-                style={{
-                    overflowY: "hidden",
-                    height: "min-content",
-                }}
-            >
+            <SelectContent>
                 <SelectGroup>
                     <SelectLabel>Languages</SelectLabel>
-
                     {LOCALES.map((locale) => (
                         <SelectItem key={locale.code} value={locale.code}>
-                            {locale.name}
+                            <div className="flex items-center gap-x-2">
+                                {locale.name}
+                            </div>
                         </SelectItem>
                     ))}
                 </SelectGroup>

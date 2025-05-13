@@ -25,9 +25,10 @@ import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
 type ProvidersProps = {
     children: React.ReactNode;
+    messages?: Record<string, any>;
 };
 
-const Providers = ({ children }: ProvidersProps) => {
+const Providers = ({ children, messages = {} }: ProvidersProps) => {
     const form = useForm<InvoiceType>({
         resolver: zodResolver(InvoiceSchema),
         defaultValues: FORM_DEFAULT_VALUES,
@@ -40,7 +41,7 @@ const Providers = ({ children }: ProvidersProps) => {
             enableSystem
             disableTransitionOnChange
         >
-            <TranslationProvider>
+            <TranslationProvider messages={messages}>
                 <FormProvider {...form}>
                     <InvoiceContextProvider>
                         <ChargesContextProvider>
