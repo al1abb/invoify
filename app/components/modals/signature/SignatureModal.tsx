@@ -34,8 +34,9 @@ import { isDataUrl } from "@/lib/helpers";
 
 // Types
 import { SignatureTabs } from "@/types";
+import Image from "next/image";
 
-type SignatureModalProps = {};
+type SignatureModalProps = object;
 
 const SignatureModal = ({}: SignatureModalProps) => {
     const { setValue } = useFormContext();
@@ -116,7 +117,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
                 }
             }, 50);
         }
-    }, [open, tab]);
+    }, [open, tab, signatureData, signatureRef]);
 
     return (
         <>
@@ -128,11 +129,12 @@ const SignatureModal = ({}: SignatureModalProps) => {
                         </Label>
 
                         {signature && isDataUrl(signature) ? (
-                            <img
+                            <Image
                                 className="border border-black rounded-md hover:border-blue-500 bg-white"
                                 src={signature}
                                 width={300}
-                                alt=""
+                                height={100}
+                                alt="Signature preview"
                             />
                         ) : signature && typedSignature ? (
                             <div className="flex justify-center items-center w-[300px]">

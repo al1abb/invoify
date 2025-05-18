@@ -18,7 +18,8 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { ImageMinus, Image } from "lucide-react";
+import { ImageMinus } from "lucide-react";
+import Image from "next/image";
 
 // Types
 import { NameType } from "@/types";
@@ -67,11 +68,11 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
             <FormField
                 control={control}
                 name={name}
-                render={({ field }) => (
+                render={() => (
                     <FormItem>
                         <Label>{label}:</Label>
                         {base64Image ? (
-                            <img
+                            <Image
                                 id="logoImage"
                                 src={base64Image}
                                 style={{
@@ -79,6 +80,9 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
                                     width: "10rem",
                                     height: "7rem",
                                 }}
+                                width={160}
+                                height={112}
+                                alt="Uploaded logo preview"
                             />
                         ) : (
                             <div
@@ -94,7 +98,7 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
                                 >
                                     <>
                                         <div className="flex flex-col items-center">
-                                            <Image />
+                                            <ImageMinus />
                                             <p>{placeholder}</p>
                                         </div>
                                         <FormControl>

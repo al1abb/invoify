@@ -35,17 +35,24 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     // TODO: Remove "any" from the function below
     // Update fields when selected invoice is changed.
     // ? Reason: The fields don't go through validation when invoice loads
-    const updateFields = (selected: any) => {
-        // Next 2 lines are so that when invoice loads,
-        // the dates won't be in the wrong format
-        // ? Selected cannot be of type InvoiceType because of these 2 variables
-        selected.details.dueDate = new Date(selected.details.dueDate);
-        selected.details.invoiceDate = new Date(selected.details.invoiceDate);
-
-        selected.details.invoiceLogo = "";
-        selected.details.signature = {
-            data: "",
-        };
+    const updateFields = (selected: unknown) => {
+        if (
+            typeof selected === "object" &&
+            selected !== null &&
+            "details" in selected &&
+            typeof (selected as Record<string, unknown>).details === "object"
+        ) {
+            // Next 2 lines are so that when invoice loads,
+            // the dates won't be in the wrong format
+            // ? Selected cannot be of type InvoiceType because of these 2 variables
+            (selected as Record<string, unknown>).details = {
+                ...((selected as Record<string, unknown>).details as Record<string, unknown>),
+                dueDate: new Date((selected as Record<string, unknown>).details['dueDate'] as string),
+                invoiceDate: new Date((selected as Record<string, unknown>).details['invoiceDate'] as string),
+                invoiceLogo: "",
+                signature: { data: "" },
+            };
+        }
     };
 
     /**

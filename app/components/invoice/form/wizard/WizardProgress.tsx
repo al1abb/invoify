@@ -20,7 +20,7 @@ type WizardProgressProps = {
 };
 
 const WizardProgress = ({ wizard }: WizardProgressProps) => {
-    const { activeStep, stepCount } = wizard;
+    const { activeStep } = wizard;
 
     const {
         formState: { errors },
@@ -62,18 +62,6 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
         }
     };
 
-    /**
-     * Checks whether the given WizardStepType has been passed or not.
-     *
-     * @param {WizardStepType} currentStep - The WizardStepType object
-     * @returns `true` if the step has been passed, `false` if it hasn't, or `undefined` if the step is not valid.
-     */
-    const stepPassed = (currentStep: WizardStepType) => {
-        if (currentStep.isValid) {
-            return activeStep > currentStep.id ? true : false;
-        }
-    };
-
     const steps: WizardStepType[] = [
         {
             id: 0,
@@ -104,7 +92,7 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
 
     return (
         <div className="flex flex-wrap justify-around items-center gap-y-3">
-            {steps.map((step, idx) => (
+            {steps.map((step) => (
                 <div key={step.id} className="flex items-center">
                     <BaseButton
                         variant={returnButtonVariant(step)}
@@ -115,12 +103,6 @@ const WizardProgress = ({ wizard }: WizardProgressProps) => {
                     >
                         {step.id + 1}. {step.label}
                     </BaseButton>
-
-                    {/* {step.id != stepCount - 1 && (
-                        <div>
-                            <Dot />
-                        </div>
-                    )} */}
                 </div>
             ))}
         </div>

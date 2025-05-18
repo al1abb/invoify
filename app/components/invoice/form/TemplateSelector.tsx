@@ -24,12 +24,14 @@ import {
 // Template images
 import template1 from "@/public/assets/img/invoice-1-example.png";
 import template2 from "@/public/assets/img/invoice-2-example.png";
+import template3 from "@/public/assets/img/invoice3.png";
 
 // Icons
 import { Check } from "lucide-react";
 
 // Types
 import { InvoiceType } from "@/types";
+import InvoiceTemplate3 from "../../templates/invoice-pdf/InvoiceTemplate3";
 
 const TemplateSelector = () => {
     const { watch, setValue } = useFormContext<InvoiceType>();
@@ -48,6 +50,13 @@ const TemplateSelector = () => {
             description: "Second template",
             img: template2,
             component: <InvoiceTemplate2 {...formValues} />,
+        },
+        {
+            id: 3,
+            name: "Transcomis",
+            description: "Template Transcomis personnalisé",
+            img: template3,
+            component: <InvoiceTemplate3 {...formValues} />,
         },
     ];
     return (

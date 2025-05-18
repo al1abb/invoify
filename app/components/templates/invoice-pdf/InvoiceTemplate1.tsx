@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 // Components
 import { InvoiceLayout } from "@/app/components";
@@ -20,7 +21,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
 			<div className='flex justify-between'>
 				<div>
 					{details.invoiceLogo && (
-						<img
+						<Image
 							src={details.invoiceLogo}
 							width={140}
 							height={100}
@@ -202,7 +203,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
 			{details?.signature?.data && isDataUrl(details?.signature?.data) ? (
 				<div className='mt-6'>
 					<p className='font-semibold text-gray-800'>Signature:</p>
-					<img
+					<Image
 						src={details.signature.data}
 						width={120}
 						height={60}

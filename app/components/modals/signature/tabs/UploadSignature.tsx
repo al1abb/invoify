@@ -13,6 +13,7 @@ import { Check, Trash2 } from "lucide-react";
 
 // Types
 import { SignatureTabs } from "@/types";
+import Image from "next/image";
 
 type UploadSignatureProps = {
     handleSaveSignature: () => void;
@@ -32,14 +33,16 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
                 <CardContent className="space-y-2 p-0">
                     <div style={{ height: "15rem" }}>
                         {uploadSignatureImg ? (
-                            <img
+                            <Image
                                 style={{
                                     borderRadius: "10px",
                                     width: "100%",
                                     height: "15rem",
                                 }}
                                 width={300}
+                                height={240}
                                 src={uploadSignatureImg}
+                                alt="Uploaded signature preview"
                             />
                         ) : (
                             <div>Upload image</div>

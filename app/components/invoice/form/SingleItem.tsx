@@ -75,13 +75,23 @@ const SingleItem = ({
         control,
     });
 
+    // Ajout des champs pour status et eom dans le formulaire d'une ligne
+    const status = useWatch({
+        name: `${name}[${index}].status`,
+        control,
+    });
+    const eom = useWatch({
+        name: `${name}[${index}].eom`,
+        control,
+    });
+
     useEffect(() => {
         // Calculate total when rate or quantity changes
         if (rate != undefined && quantity != undefined) {
             const calculatedTotal = (rate * quantity).toFixed(2);
             setValue(`${name}[${index}].total`, calculatedTotal);
         }
-    }, [rate, quantity]);
+    }, [rate, quantity, setValue, name, index]);
 
     // DnD
     const {
@@ -158,43 +168,75 @@ const SingleItem = ({
                 key={index}
             >
                 <FormInput
-                    name={`${name}[${index}].name`}
-                    label={_t("form.steps.lineItems.name")}
-                    placeholder="Item name"
-                    vertical
+                    name={`${name}[${index}].description`}
+                    label="ITEMS DESCRIPTIONS"
+                    placeholder="Description de l'article"
                 />
-
+                <FormInput
+                    name={`${name}[${index}].status`}
+                    label="STATUT"
+                    placeholder="Statut (ex: Livré, En attente...)"
+                />
+                <FormInput
+                    name={`${name}[${index}].eom`}
+                    label="EOM"
+                    placeholder="EOM (ex: 2025-05, 2025-Q2...)"
+                />
                 <FormInput
                     name={`${name}[${index}].quantity`}
+                    label="QTY"
                     type="number"
-                    label={_t("form.steps.lineItems.quantity")}
-                    placeholder={_t("form.steps.lineItems.quantity")}
-                    className="w-[8rem]"
-                    vertical
+                    min={0}
                 />
-
                 <FormInput
                     name={`${name}[${index}].unitPrice`}
+                    label="PRIX U."
                     type="number"
-                    label={_t("form.steps.lineItems.rate")}
-                    labelHelper={`(${currency})`}
-                    placeholder={_t("form.steps.lineItems.rate")}
-                    className="w-[8rem]"
-                    vertical
+                    min={0}
                 />
-
-                <div className="flex flex-col gap-2">
-                    <div>
-                        <Label>{_t("form.steps.lineItems.total")}</Label>
-                    </div>
-                    <Input
-                        value={`${total} ${currency}`}
-                        readOnly
-                        placeholder="Item total"
-                        className="border-none font-medium text-lg bg-transparent"
-                        size={10}
-                    />
-                </div>
+                <FormInput
+                    name={`${name}[${index}].total`}
+                    label="PRIX TOTAL"
+                    type="number"
+                    min={0}
+                    disabled
+                />
+            </div>
+            <div className="flex flex-wrap gap-4 w-full">
+                <FormInput
+                    name={`${name}[${index}].description`}
+                    label={_t("form.steps.lineItems.description")}
+                    placeholder="Item description"
+                />
+                <FormInput
+                    name={`${name}[${index}].status`}
+                    label="STATUT"
+                    placeholder="Statut (ex: Livré, En attente...)"
+                />
+                <FormInput
+                    name={`${name}[${index}].eom`}
+                    label="EOM"
+                    placeholder="EOM (ex: 2025-05, 2025-Q2...)"
+                />
+                <FormInput
+                    name={`${name}[${index}].quantity`}
+                    label="QTY"
+                    type="number"
+                    min={0}
+                />
+                <FormInput
+                    name={`${name}[${index}].unitPrice`}
+                    label="PRIX U."
+                    type="number"
+                    min={0}
+                />
+                <FormInput
+                    name={`${name}[${index}].total`}
+                    label="PRIX TOTAL"
+                    type="number"
+                    min={0}
+                    disabled
+                />
             </div>
             <FormTextarea
                 name={`${name}[${index}].description`}

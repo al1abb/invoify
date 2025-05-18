@@ -5,7 +5,7 @@ import Providers from "@/contexts/Providers";
 
 interface ProvidersWrapperProps {
     children: React.ReactNode;
-    messages: any;
+    messages: unknown;
 }
 
 export default function ProvidersWrapper({ children, messages }: ProvidersWrapperProps) {
@@ -20,4 +20,4 @@ export default function ProvidersWrapper({ children, messages }: ProvidersWrappe
     }
     
     return <Providers messages={messages}>{children}</Providers>;
-} 
+}

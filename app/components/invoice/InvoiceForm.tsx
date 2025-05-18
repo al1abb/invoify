@@ -49,7 +49,7 @@ const InvoiceForm = () => {
         } else {
             return _t("form.newInvBadge");
         }
-    }, [invoiceNumber]);
+    }, [invoiceNumber, _t]);
 
     return (
         <div className={`xl:w-[55%]`}>

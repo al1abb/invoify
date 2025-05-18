@@ -1,6 +1,6 @@
 // Next
 import { NextResponse } from "next/server";
-
+import { Buffer } from "buffer";
 // Utils
 import numberToWords from "number-to-words";
 
@@ -173,15 +173,20 @@ const isDataUrl = (str: string) => str.startsWith("data:");
 const getInvoiceTemplate = async (templateId: number) => {
     // Dynamic template component name
     const componentName = `InvoiceTemplate${templateId}`;
-
     try {
         const module = await import(
             `@/app/components/templates/invoice-pdf/${componentName}`
         );
-        return module.default;
+        // On ne doit pas utiliser le composant Image de next/image côté serveur pour le rendu PDF
+        // Si le composant importé utilise next/image, il faut le remplacer par une balise <img> classique côté serveur
+        // On va injecter une variable d'environnement pour signaler le mode SSR/PDF
+        return (props: any) => {
+            // On passe isPdf à true pour signaler le rendu PDF côté serveur
+            const Comp = module.default || module[componentName];
+            return Comp ? Comp({ ...props, isPdf: true }) : null;
+        };
     } catch (err) {
         console.error(`Error importing template ${componentName}: ${err}`);
-
         // Provide a default template
         return null;
     }

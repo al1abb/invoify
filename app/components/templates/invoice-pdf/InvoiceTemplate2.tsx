@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 // Components
 import { InvoiceLayout } from "@/app/components";
@@ -25,7 +26,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         {details.invoiceNumber}
                     </span>
                     {details.invoiceLogo && (
-                        <img
+                        <Image
                             src={details.invoiceLogo}
                             width={140}
                             height={100}
@@ -49,44 +50,62 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                 </div>
             </div>
 
-            <div className="mt-6 grid sm:grid-cols-2 gap-3">
-                <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                        Bill to:
-                    </h3>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                        {receiver.name}
-                    </h3>
-                    <address className="mt-2 not-italic text-gray-500">
-                        {receiver.address}, {receiver.zipCode}
-                        <br />
-                        {receiver.city}, {receiver.country}
-                        <br />
-                    </address>
-                </div>
-                <div className="sm:text-right space-y-2">
-                    <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-                        <dl className="grid sm:grid-cols-6 gap-x-3">
-                            <dt className="col-span-3 font-semibold text-gray-800">
-                                Invoice date:
-                            </dt>
-                            <dd className="col-span-3 text-gray-500">
-                                {new Date(
-                                    details.invoiceDate
-                                ).toLocaleDateString("en-US", DATE_OPTIONS)}
-                            </dd>
-                        </dl>
-                        <dl className="grid sm:grid-cols-6 gap-x-3">
-                            <dt className="col-span-3 font-semibold text-gray-800">
-                                Due date:
-                            </dt>
-                            <dd className="col-span-3 text-gray-500">
-                                {new Date(details.dueDate).toLocaleDateString(
-                                    "en-US",
-                                    DATE_OPTIONS
-                                )}
-                            </dd>
-                        </dl>
+            <div className="mt-8 flex flex-col gap-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-8">
+                    {/* Propriétaire (Émetteur) */}
+                    <div className="text-left bg-gray-900 text-white p-4 rounded-md w-full sm:w-1/2">
+                        <div className="font-bold text-base mb-1">
+                            FACTURE N°. {details.invoiceNumber}
+                        </div>
+                        <div className="text-xs mb-2">
+                            Date :{" "}
+                            {new Date(
+                                details.invoiceDate
+                            ).toLocaleDateString("fr-FR")}
+                        </div>
+                        <div className="text-xs mb-2">
+                            Référence : {details.invoiceNumber}
+                        </div>
+                        <div className="text-xs mb-2">Émis par : {sender.name}</div>
+                        <div className="text-xs mb-2">{sender.address}</div>
+                        <div className="text-xs mb-2">
+                            {sender.zipCode}, {sender.city}
+                        </div>
+                        <div className="text-xs mb-2">{sender.country}</div>
+                        {sender.email && (
+                            <div className="text-xs mb-2">
+                                Email : {sender.email}
+                            </div>
+                        )}
+                        {sender.phone && (
+                            <div className="text-xs mb-2">
+                                Contact : {sender.phone}
+                            </div>
+                        )}
+                    </div>
+                    {/* Destinataire */}
+                    <div className="text-right bg-gray-900 text-white p-4 rounded-md w-full sm:w-1/2">
+                        <div className="font-bold text-base mb-1">
+                            {(receiver.name || '').toUpperCase()}
+                        </div>
+                        <div className="font-bold text-xs mb-1 underline">
+                            DESTINATAIRE
+                        </div>
+                        <div className="text-xs mb-2">{receiver.address || ''}</div>
+                        <div className="text-xs mb-2">
+                            {receiver.zipCode || ''}, {receiver.city || ''}
+                        </div>
+                        <div className="text-xs mb-2">{receiver.country || ''}</div>
+                        {receiver.email && (
+                            <div className="text-xs mb-2">
+                                Email : {receiver.email}
+                            </div>
+                        )}
+                        {receiver.phone && (
+                            <div className="text-xs mb-2">
+                                Tél : {receiver.phone}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -275,29 +294,33 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
             </div>
 
             {/* Signature */}
-            {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
-                <div className="mt-6">
-                    <p className="font-semibold text-gray-800">Signature:</p>
-                    <img
-                        src={details.signature.data}
-                        width={120}
-                        height={60}
-                        alt={`Signature of ${sender.name}`}
-                    />
+            {details?.signature && details.signature.data && isDataUrl(details.signature.data) ? (
+                <div className="mt-6 flex justify-end">
+                    <div className="text-right">
+                        <p className="font-semibold text-gray-800">Signature:</p>
+                        <Image
+                            src={details.signature.data}
+                            width={120}
+                            height={60}
+                            alt={`Signature of ${sender.name}`}
+                        />
+                    </div>
                 </div>
-            ) : details.signature?.data ? (
-                <div className="mt-6">
-                    <p className="text-gray-800">Signature:</p>
-                    <p
-                        style={{
-                            fontSize: 30,
-                            fontWeight: 400,
-                            fontFamily: `${details.signature.fontFamily}, cursive`,
-                            color: "black",
-                        }}
-                    >
-                        {details.signature.data}
-                    </p>
+            ) : details?.signature && details.signature.data ? (
+                <div className="mt-6 flex justify-end">
+                    <div className="text-right">
+                        <p className="text-gray-800">Signature:</p>
+                        <p
+                            style={{
+                                fontSize: 30,
+                                fontWeight: 400,
+                                fontFamily: `${details.signature.fontFamily || 'cursive'}, cursive`,
+                                color: "black",
+                            }}
+                        >
+                            {details.signature.data}
+                        </p>
+                    </div>
                 </div>
             ) : null}
         </InvoiceLayout>
