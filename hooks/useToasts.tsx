@@ -3,85 +3,94 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 
 const useToasts = () => {
-    type SendErrorType = {
-        email: string;
-        sendPdfToMail: (email: string) => void;
-    };
+  type SendErrorType = {
+    email: string;
+    sendPdfToMail: (email: string) => void;
+  };
 
-    const newInvoiceSuccess = () => {
-        toast({
-            variant: "default",
-            title: "Generated new invoice",
-            description: "Successfully created a new invoice",
-        });
-    };
+  const newInvoiceSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Generated new invoice",
+      description: "Successfully created a new invoice",
+    });
+  };
 
-    const pdfGenerationSuccess = () => {
-        toast({
-            variant: "default",
-            title: "Your invoice has been generated!",
-            description:
-                "You can preview, download, or save it from the actions tab",
-        });
-    };
+  const pdfGenerationSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Your invoice has been generated!",
+      description:
+        "You can preview, download, or save it from the actions tab",
+    });
+  };
 
-    const saveInvoiceSuccess = () => {
-        toast({
-            variant: "default",
-            title: "Saved Invoice",
-            description: "Your invoice details are saved now",
-        });
-    };
+  const saveInvoiceSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Saved Invoice",
+      description: "Your invoice details are saved now",
+    });
+  };
 
-    const modifiedInvoiceSuccess = () => {
-        toast({
-            variant: "default",
-            title: "Modified Invoice",
-            description: "Successfully modified your invoice",
-        });
-    };
+  const modifiedInvoiceSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Modified Invoice",
+      description: "Successfully modified your invoice",
+    });
+  };
 
-    const sendPdfSuccess = () => {
-        toast({
-            variant: "default",
-            title: "Email sent",
-            description: "Your invoice has been sent to the specified email",
-        });
-    };
+  const sendPdfSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Email sent",
+      description: "Your invoice has been sent to the specified email",
+    });
+  };
 
-    const sendPdfError = ({ email, sendPdfToMail }: SendErrorType) => {
-        toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Something went wrong. Try again in a moment",
-            action: (
-                <ToastAction
-                    onClick={() => sendPdfToMail(email)}
-                    altText="Try again"
-                >
-                    Try again
-                </ToastAction>
-            ),
-        });
-    };
+  const sendPdfError = ({ email, sendPdfToMail }: SendErrorType) => {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Something went wrong. Try again in a moment",
+      action: (
+        <ToastAction
+          onClick={() => sendPdfToMail(email)}
+          altText="Try again"
+        >
+          Try again
+        </ToastAction>
+      ),
+    });
+  };
 
-    const importInvoiceError = () => {
-        toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Something went importing the invoice. Make sure the file is a valid Invoify JSON export",
-        });
-    };
+  const importInvoiceError = () => {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Something went importing the invoice. Make sure the file is a valid Invoify JSON export",
+    });
+  };
 
-    return {
-        newInvoiceSuccess,
-        pdfGenerationSuccess,
-        saveInvoiceSuccess,
-        modifiedInvoiceSuccess,
-        sendPdfSuccess,
-        sendPdfError,
-        importInvoiceError,
-    };
+  const printPdfImmediatelyAndPrivatelyError = (error: string) => {
+    toast({
+      variant: "destructive",
+      title: "Something went wrong while printing the invoice. ",
+      description: error,
+    });
+  };
+
+  return {
+    newInvoiceSuccess,
+    pdfGenerationSuccess,
+    saveInvoiceSuccess,
+    modifiedInvoiceSuccess,
+    sendPdfSuccess,
+    sendPdfError,
+    importInvoiceError,
+    printPdfImmediatelyAndPrivatelyError
+  };
 };
 
 export default useToasts;
