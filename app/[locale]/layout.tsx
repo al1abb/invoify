@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-
+// Components
+import { BaseFooter, BaseNavbar } from "@/app/components";
+// ShadCn
+import { Toaster } from "@/components/ui/toaster";
+// Contexts
+import Providers from "@/contexts/Providers";
 // Fonts
 import {
     alexBrush,
@@ -9,30 +12,18 @@ import {
     outfit,
     parisienne,
 } from "@/lib/fonts";
-
-// Favicon
-import Favicon from "@/public/assets/favicon/favicon.ico";
-
-// Vercel Analytics
-import { Analytics } from "@vercel/analytics/react";
-
-// Next Intl
-import { NextIntlClientProvider } from "next-intl";
-
-// ShadCn
-import { Toaster } from "@/components/ui/toaster";
-
-// Components
-import { BaseNavbar, BaseFooter } from "@/app/components";
-
-// Contexts
-import Providers from "@/contexts/Providers";
-
 // SEO
 import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
-
 // Variables
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
+// Favicon
+import Favicon from "@/public/assets/favicon/favicon.ico";
+// Vercel Analytics
+import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
+// Next Intl
+import { NextIntlClientProvider } from "next-intl";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
@@ -58,25 +49,21 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-    const locales = LOCALES.map((locale) => locale.code);
+    // Next.js expects an array of objects: [{ locale: 'en' },
+    // ...]
+    const locales = LOCALES.map((locale) => ({ locale: locale.code }));
     return locales;
 }
 
-export default async function LocaleLayout(
-    props: {
-        children: React.ReactNode;
-        params: Promise<{ locale: string }>;
-    }
-) {
+export default async function LocaleLayout(props: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+}) {
     const params = await props.params;
 
-    const {
-        locale
-    } = params;
+    const { locale } = params;
 
-    const {
-        children
-    } = props;
+    const { children } = props;
 
     let messages;
     try {
