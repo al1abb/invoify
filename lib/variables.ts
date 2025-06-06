@@ -120,6 +120,7 @@ export const FORM_DEFAULT_VALUES = {
     sender: {
         name: "",
         address: "",
+        addressLine2: "",
         zipCode: "",
         city: "",
         country: "",
@@ -130,6 +131,7 @@ export const FORM_DEFAULT_VALUES = {
     receiver: {
         name: "",
         address: "",
+        addressLine2: "",
         zipCode: "",
         city: "",
         country: "",
