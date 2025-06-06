@@ -1,14 +1,11 @@
-"use client";;
-import { use } from "react";
-
-// Next
-import dynamic from "next/dynamic";
-
-// RHF
-import { useFormContext } from "react-hook-form";
-
+"use client";
 // Types
 import { InvoiceType } from "@/types";
+// Next
+import dynamic from "next/dynamic";
+import { use } from "react";
+// RHF
+import { useFormContext } from "react-hook-form";
 
 type ViewTemplatePageProps = {
     params: Promise<{ id: string }>;
