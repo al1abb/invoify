@@ -1,4 +1,5 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 // Next
 import dynamic from "next/dynamic";
@@ -10,10 +11,11 @@ import { useFormContext } from "react-hook-form";
 import { InvoiceType } from "@/types";
 
 type ViewTemplatePageProps = {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 };
 
-const ViewTemplate = ({ params }: ViewTemplatePageProps) => {
+const ViewTemplate = (props: ViewTemplatePageProps) => {
+    const params = use(props.params);
     const templateNumber = params.id;
 
     const DynamicComponent = dynamic<InvoiceType>(
