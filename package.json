@@ -3,12 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "analyze": "cross-env ANALYZE=true next build",
         "build": "next build",
-        "postinstall": "node node_modules/puppeteer/install.js",
-        "start": "next start",
+        "dev": "next dev",
         "lint": "next lint",
-        "analyze": "cross-env ANALYZE=true next build"
+        "start": "next start"
     },
     "dependencies": {
         "@dnd-kit/core": "^6.1.0",
@@ -38,17 +37,17 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.0.0",
         "lucide-react": "^0.279.0",
-        "next": "^13.5.6",
-        "next-intl": "^2.21.0",
+        "next": "^15.3.3",
+        "next-intl": "^4.1.0",
         "next-themes": "^0.2.1",
         "nodemailer": "^6.9.7",
         "number-to-words": "^1.2.4",
         "postcss": "8.4.31",
-        "puppeteer-core": "22.5.0",
+        "puppeteer-core": "^22.15.0",
         "react": "18.2.0",
         "react-day-picker": "^8.8.2",
         "react-dom": "18.2.0",
-        "react-email": "^1.9.5",
+        "react-email": "^4.0.16",
         "react-hook-form": "^7.46.1",
         "react-signature-canvas": "^1.0.6",
         "react-use-wizard": "^2.2.4",
@@ -63,8 +62,8 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
-        "@sparticuz/chromium": "122.0.0",
         "@next/bundle-analyzer": "^14.0.4",
+        "@sparticuz/chromium": "122.0.0",
         "@types/nodemailer": "^6.4.14",
         "@types/number-to-words": "^1.2.1",
         "@types/react": "^18.2.22",
@@ -73,6 +72,6 @@
         "@types/xml2js": "^0.4.13",
         "cross-env": "^7.0.3",
         "ignore-loader": "^0.1.2",
-        "puppeteer": "^21.3.1"
+        "puppeteer": "^24.10.0"
     }
 }

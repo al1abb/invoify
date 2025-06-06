@@ -1,10 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
-// Next Intl
-import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
-
+import { Badge } from "@/components/ui/badge";
 // ShadCn
 import {
     Select,
@@ -15,10 +11,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-
 // Variables
 import { LOCALES } from "@/lib/variables";
+// Next Intl
+import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
+import { useParams } from "next/navigation";
 
 const LanguageSelector = () => {
     const router = useRouter();
@@ -31,7 +28,7 @@ const LanguageSelector = () => {
     };
     return (
         <Select
-            value={params.locale.toLocaleString()}
+            value={params.locale!.toLocaleString()}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
             <SelectTrigger

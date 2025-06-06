@@ -1,12 +1,11 @@
-import React, { useMemo } from "react";
-
-import dynamic from "next/dynamic";
+"use client";
 
 // ShadCn
 import { Skeleton } from "@/components/ui/skeleton";
-
 // Types
 import { InvoiceType } from "@/types";
+import dynamic from "next/dynamic";
+import React, { useMemo } from "react";
 
 const DynamicInvoiceTemplateSkeleton = () => {
     return <Skeleton className="min-h-[60rem]" />;
