@@ -1,0 +1,92 @@
+{
+    "form": {
+        "title": "Faktura",
+        "description": "Napravi fakturu",
+        "newInvBadge": "Nova faktura",
+        "wizard": {
+            "fromAndTo": "Od i za",
+            "invoiceDetails": "Detalji fakture",
+            "lineItems": "Stavke",
+            "paymentInfo": "Informacije o plaćanju",
+            "summary": "Rezime",
+            "next": "Dalje",
+            "back": "Nazad"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "Faktura od",
+                "billTo": "Faktura za",
+                "name": "Ime",
+                "address": "Adresa",
+                "zipCode": "Zip",
+                "city": "Grad",
+                "country": "Država",
+                "email": "Email",
+                "phone": "Telefon",
+                "addCustomInput": "Dodajte prilagođeni unos",
+                "sender": "Pošiljalac",
+                "receiver": "Primalac"
+            },
+            "invoiceDetails": {
+                "heading": "Detalji fakture",
+                "invoiceLogo": {
+                    "label": "Logo fakture",
+                    "placeholder": "Kliknite da biste otpremili sliku"
+                },
+                "invoiceNumber": "Broj fakture",
+                "issuedDate": "Datum izdavanja",
+                "dueDate": "Krajnji rok",
+                "currency": "Valuta"
+            },
+            "lineItems": {
+                "heading": "Predmeti",
+                "item": "Predmet",
+                "name": "Ime",
+                "quantity": "Količina",
+                "rate": "Stopa",
+                "total": "Ukupno",
+                "description": "Opis",
+                "addNewItem": "Dodaj novi predmet",
+                "removeItem": "Ukloni predmet"
+            },
+            "paymentInfo": {
+                "heading": "Informacije o plaćanju",
+                "bankName": "Ime Banke",
+                "accountName": "Naziv naloga",
+                "accountNumber": "Broj računa"
+            },
+            "summary": {
+                "heading": "Rezime",
+                "signature": {
+                    "heading": "Potpis",
+                    "placeholder": "Klikni da dodaš potpis",
+                    "draw": "Crtaj",
+                    "type": "Piši",
+                    "upload": "Otpremi"
+                },
+                "additionalNotes": "Dodatne napomene",
+                "paymentTerms": "Uslovi plaćanja",
+                "discount": "Popust",
+                "tax": "Takse",
+                "shipping": "Dostava",
+                "subTotal": "Međuzbir",
+                "totalAmount": "Ukupan iznos",
+                "includeTotalInWords": "Uključiti ukupan iznos rečima?",
+                "yes": "Da",
+                "no": "Ne"
+            }
+        }
+    },
+    "actions": {
+        "title": "Radnje",
+        "description": "Operacije i pregled",
+        "loadInvoice": "Učitaj fakturu",
+        "exportInvoice": "Izbaci fakturu",
+        "newInvoice": "Nova faktura",
+        "generatePdf": "Generiši PDF",
+        "pdfView": "Pogledaj PDF"
+    },
+    "footer": {
+        "developedBy": "Napravljeno od strane"
+    }
+}
