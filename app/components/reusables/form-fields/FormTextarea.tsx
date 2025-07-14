@@ -42,7 +42,7 @@ const FormTextarea = ({
                 <Textarea
                   {...field}
                   placeholder={placeholder}
-                  className="w-[15rem] h-0"
+                  className="w-60 h-0"
                   {...props}
                 />
               </FormControl>

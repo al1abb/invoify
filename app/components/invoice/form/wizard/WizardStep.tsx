@@ -15,7 +15,7 @@ type WizardStepProps = {
 const WizardStep = ({ children }: WizardStepProps) => {
   const wizard = useWizard();
   return (
-    <div className="min-h-[25rem]">
+    <div className="min-h-100">
       <WizardProgress wizard={wizard} />
       <div className="my-7">{children}</div>
       <WizardNavigation />

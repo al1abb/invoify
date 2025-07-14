@@ -45,7 +45,7 @@ const FormInput = ({
             <Input
               {...field}
               placeholder={placeholder}
-              className="w-[13rem]"
+              className="w-52"
               {...props}
             />
           </FormControl>
@@ -70,7 +70,7 @@ const FormInput = ({
                 <Input
                   {...field}
                   placeholder={placeholder}
-                  className="w-[13rem]"
+                  className="w-52"
                   {...props}
                 />
               </FormControl>

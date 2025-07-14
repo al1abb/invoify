@@ -19,7 +19,7 @@ const BaseNavbar = () => {
   }, []);
 
   return (
-    <header className="lg:container z-[99]">
+    <header className="lg:container z-99">
       <nav>
         <Card className="flex flex-wrap justify-between items-center px-5 gap-5">
           <Link href={"/"}>

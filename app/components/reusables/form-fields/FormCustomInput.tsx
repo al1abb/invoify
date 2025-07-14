@@ -23,10 +23,10 @@ const FormCustomInput = ({
         <FormInput
           name={nameKey}
           placeholder="Name"
-          className="font-medium p-0 border-none h-[1.5rem] w-[4rem]"
+          className="font-medium p-0 border-none h-6 w-16"
         />
 
-        <FormInput name={nameValue} placeholder="Value" className="w-[10rem]" />
+        <FormInput name={nameValue} placeholder="Value" className="w-40" />
         <BaseButton
           size="icon"
           variant="destructive"

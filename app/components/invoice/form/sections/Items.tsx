@@ -122,7 +122,7 @@ const Items = () => {
                         easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
                     }}
                 >
-                    <div className="w-[10rem]">
+                    <div className="w-40">
                         <p>Click to drop</p>
                     </div>
                 </DragOverlay> */}

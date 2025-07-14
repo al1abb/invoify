@@ -60,7 +60,7 @@ const CurrencySelector = ({
                   onValueChange={field.onChange}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-[13rem]">
+                    <SelectTrigger className="w-52">
                       <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                   </FormControl>

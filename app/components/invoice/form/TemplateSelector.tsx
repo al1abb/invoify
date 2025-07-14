@@ -68,7 +68,7 @@ const TemplateSelector = () => {
                 {templates.map((template, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col flex-shrink-0 mr-4 gap-y-3"
+                    className="flex flex-col shrink-0 mr-4 gap-y-3"
                   >
                     <p>{template.name}</p>
 

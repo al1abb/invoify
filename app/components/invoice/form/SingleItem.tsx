@@ -169,7 +169,7 @@ const SingleItem = ({
           type="number"
           label={_t("form.steps.lineItems.quantity")}
           placeholder={_t("form.steps.lineItems.quantity")}
-          className="w-[8rem]"
+          className="w-32"
           vertical
         />
 
@@ -179,7 +179,7 @@ const SingleItem = ({
           label={_t("form.steps.lineItems.rate")}
           labelHelper={`(${currency})`}
           placeholder={_t("form.steps.lineItems.rate")}
-          className="w-[8rem]"
+          className="w-32"
           vertical
         />
 

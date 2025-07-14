@@ -68,7 +68,7 @@ const ChargeInput = ({
                   <FormControl>
                     <Input
                       {...field}
-                      className="w-[7rem]"
+                      className="w-28"
                       placeholder={label}
                       type="number"
                       min="0"
