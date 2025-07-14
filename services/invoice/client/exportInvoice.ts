@@ -25,12 +25,14 @@ export const exportInvoice = async (
   })
     .then((res) => res.blob())
     .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `invoice.${exportAs.toLowerCase()}`;
-      a.click();
-      window.URL.revokeObjectURL(url);
+      if (typeof window !== 'undefined') {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `invoice.${exportAs.toLowerCase()}`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
     })
     .catch((error) => {
       console.error("Error downloading:", error);

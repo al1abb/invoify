@@ -40,7 +40,6 @@ export const metadata: Metadata = {
     "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
   icons: [{ rel: "icon", url: Favicon.src }],
   keywords: ROOTKEYWORDS,
-  viewport: "width=device-width, initial-scale=1",
   robots: {
     index: true,
     follow: true,
@@ -57,18 +56,21 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export function generateStaticParams() {
-  const locales = LOCALES.map((locale) => locale.code);
-  return locales;
+  return LOCALES.map((locale) => ({ locale: locale.code }));
 }
 
-export default async function LocaleLayout({
-  children,
-  params: { locale },
-}: {
+export default async function LocaleLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  const { children, params } = props;
+  const { locale } = await params;
   let messages;
   try {
     messages = (await import(`@/i18n/locales/${locale}.json`)).default;
@@ -76,34 +78,24 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // Head logic should be moved to Next.js metadata API or a <Head> component if needed
+  // <head> content removed for next-themes compatibility
+
   return (
-    <html lang={locale}>
-      <head>
-        <script
-          type="application/ld+json"
-          id="json-ld"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
-        />
-      </head>
-      <body
-        className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
-      >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            <BaseNavbar />
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <Providers>
+        <BaseNavbar />
 
-            <div className="flex flex-col">{children}</div>
+        <div className="flex flex-col">{children}</div>
 
-            <BaseFooter />
+        <BaseFooter />
 
-            {/* Toast component */}
-            <Toaster />
+        {/* Toast component */}
+        <Toaster />
 
-            {/* Vercel analytics */}
-            <Analytics />
-          </Providers>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+        {/* Vercel analytics */}
+        <Analytics />
+      </Providers>
+    </NextIntlClientProvider>
   );
 }

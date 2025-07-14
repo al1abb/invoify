@@ -9,7 +9,7 @@ const BaseFooter = () => {
   const { _t } = useTranslationContext();
 
   return (
-    <footer className="container py-10">
+    <footer className="container py-10 mx-auto">
       <p>
         {_t("footer.developedBy")}{" "}
         <a
