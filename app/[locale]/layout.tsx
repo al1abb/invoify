@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 
 // Fonts
 import {
-    alexBrush,
-    dancingScript,
-    greatVibes,
-    outfit,
-    parisienne,
+  alexBrush,
+  dancingScript,
+  greatVibes,
+  outfit,
+  parisienne,
 } from "@/lib/fonts";
 
 // Favicon
@@ -35,75 +35,75 @@ import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
 
 export const metadata: Metadata = {
-    title: "Invoify | Free Invoice Generator",
-    description:
-        "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
-    icons: [{ rel: "icon", url: Favicon.src }],
-    keywords: ROOTKEYWORDS,
-    viewport: "width=device-width, initial-scale=1",
-    robots: {
-        index: true,
-        follow: true,
-    },
-    alternates: {
-        canonical: BASE_URL,
-    },
-    authors: {
-        name: "Ali Abbasov",
-        url: "https://aliabb.vercel.app",
-    },
-    verification: {
-        google: GOOGLE_SC_VERIFICATION,
-    },
+  title: "Invoify | Free Invoice Generator",
+  description:
+    "Create invoices effortlessly with Invoify, the free invoice generator. Try it now!",
+  icons: [{ rel: "icon", url: Favicon.src }],
+  keywords: ROOTKEYWORDS,
+  viewport: "width=device-width, initial-scale=1",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: BASE_URL,
+  },
+  authors: {
+    name: "Ali Abbasov",
+    url: "https://aliabb.vercel.app",
+  },
+  verification: {
+    google: GOOGLE_SC_VERIFICATION,
+  },
 };
 
 export function generateStaticParams() {
-    const locales = LOCALES.map((locale) => locale.code);
-    return locales;
+  const locales = LOCALES.map((locale) => locale.code);
+  return locales;
 }
 
 export default async function LocaleLayout({
-    children,
-    params: { locale },
+  children,
+  params: { locale },
 }: {
-    children: React.ReactNode;
-    params: { locale: string };
+  children: React.ReactNode;
+  params: { locale: string };
 }) {
-    let messages;
-    try {
-        messages = (await import(`@/i18n/locales/${locale}.json`)).default;
-    } catch (error) {
-        notFound();
-    }
+  let messages;
+  try {
+    messages = (await import(`@/i18n/locales/${locale}.json`)).default;
+  } catch (error) {
+    notFound();
+  }
 
-    return (
-        <html lang={locale}>
-            <head>
-                <script
-                    type="application/ld+json"
-                    id="json-ld"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
-                />
-            </head>
-            <body
-                className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
-            >
-                <NextIntlClientProvider locale={locale} messages={messages}>
-                    <Providers>
-                        <BaseNavbar />
+  return (
+    <html lang={locale}>
+      <head>
+        <script
+          type="application/ld+json"
+          id="json-ld"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
+        />
+      </head>
+      <body
+        className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
+      >
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            <BaseNavbar />
 
-                        <div className="flex flex-col">{children}</div>
+            <div className="flex flex-col">{children}</div>
 
-                        <BaseFooter />
+            <BaseFooter />
 
-                        {/* Toast component */}
-                        <Toaster />
+            {/* Toast component */}
+            <Toaster />
 
-                        {/* Vercel analytics */}
-                        <Analytics />
-                    </Providers>
-                </NextIntlClientProvider>
-            </body>
-        </html>
-    );
+            {/* Vercel analytics */}
+            <Analytics />
+          </Providers>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
 }

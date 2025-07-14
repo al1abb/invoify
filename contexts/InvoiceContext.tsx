@@ -1,12 +1,12 @@
 "use client";
 
 import React, {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -22,46 +22,46 @@ import { exportInvoice } from "@/services/invoice/client/exportInvoice";
 
 // Variables
 import {
-    FORM_DEFAULT_VALUES,
-    GENERATE_PDF_API,
-    SEND_PDF_API,
-    SHORT_DATE_OPTIONS,
+  FORM_DEFAULT_VALUES,
+  GENERATE_PDF_API,
+  SEND_PDF_API,
+  SHORT_DATE_OPTIONS,
 } from "@/lib/variables";
 
 // Types
 import { ExportTypes, InvoiceType } from "@/types";
 
 const defaultInvoiceContext = {
-    invoicePdf: new Blob(),
-    invoicePdfLoading: false,
-    savedInvoices: [] as InvoiceType[],
-    pdfUrl: null as string | null,
-    onFormSubmit: (values: InvoiceType) => {},
-    newInvoice: () => {},
-    generatePdf: async (data: InvoiceType) => {},
-    removeFinalPdf: () => {},
-    downloadPdf: () => {},
-    printPdf: () => {},
-    previewPdfInTab: () => {},
-    saveInvoice: () => {},
-    deleteInvoice: (index: number) => {},
-    sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
-    exportInvoiceAs: (exportAs: ExportTypes) => {},
-    importInvoice: (file: File) => {},
+  invoicePdf: new Blob(),
+  invoicePdfLoading: false,
+  savedInvoices: [] as InvoiceType[],
+  pdfUrl: null as string | null,
+  onFormSubmit: (values: InvoiceType) => {},
+  newInvoice: () => {},
+  generatePdf: async (data: InvoiceType) => {},
+  removeFinalPdf: () => {},
+  downloadPdf: () => {},
+  printPdf: () => {},
+  previewPdfInTab: () => {},
+  saveInvoice: () => {},
+  deleteInvoice: (index: number) => {},
+  sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
+  exportInvoiceAs: (exportAs: ExportTypes) => {},
+  importInvoice: (file: File) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
 
 export const useInvoiceContext = () => {
-    return useContext(InvoiceContext);
+  return useContext(InvoiceContext);
 };
 
 type InvoiceContextProviderProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export const InvoiceContextProvider = ({
-    children,
+  children,
 }: InvoiceContextProviderProps) => {
   const router = useRouter();
 
@@ -90,8 +90,7 @@ export const InvoiceContextProvider = ({
     let savedInvoicesDefault;
     if (typeof window !== undefined) {
       // Saved invoices variables
-            const savedInvoicesJSON =
-                window.localStorage.getItem("savedInvoices");
+      const savedInvoicesJSON = window.localStorage.getItem("savedInvoices");
       savedInvoicesDefault = savedInvoicesJSON
         ? JSON.parse(savedInvoicesJSON)
         : [];
@@ -234,7 +233,7 @@ export const InvoiceContextProvider = ({
 
         const updatedDate = new Date().toLocaleDateString(
           "en-US",
-          SHORT_DATE_OPTIONS
+          SHORT_DATE_OPTIONS,
         );
 
         const formValues = getValues();
@@ -243,10 +242,9 @@ export const InvoiceContextProvider = ({
         const existingInvoiceIndex = savedInvoices.findIndex(
           (invoice: InvoiceType) => {
             return (
-                            invoice.details.invoiceNumber ===
-                            formValues.details.invoiceNumber
+              invoice.details.invoiceNumber === formValues.details.invoiceNumber
             );
-          }
+          },
         );
 
         // If invoice already exists
@@ -263,10 +261,7 @@ export const InvoiceContextProvider = ({
           saveInvoiceSuccess();
         }
 
-                localStorage.setItem(
-                    "savedInvoices",
-                    JSON.stringify(savedInvoices)
-                );
+        localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
 
         setSavedInvoices(savedInvoices);
       }
@@ -353,12 +348,12 @@ export const InvoiceContextProvider = ({
         if (importedData.details) {
           if (importedData.details.invoiceDate) {
             importedData.details.invoiceDate = new Date(
-              importedData.details.invoiceDate
+              importedData.details.invoiceDate,
             );
           }
           if (importedData.details.dueDate) {
             importedData.details.dueDate = new Date(
-              importedData.details.dueDate
+              importedData.details.dueDate,
             );
           }
         }

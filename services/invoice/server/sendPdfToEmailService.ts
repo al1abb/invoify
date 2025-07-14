@@ -17,11 +17,11 @@ import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: NODEMAILER_EMAIL,
-        pass: NODEMAILER_PW,
-    },
+  service: "gmail",
+  auth: {
+    user: NODEMAILER_EMAIL,
+    pass: NODEMAILER_PW,
+  },
 });
 
 /**
@@ -32,39 +32,39 @@ const transporter = nodemailer.createTransport({
  * @throws {Error} Throws an error if there is an issue with sending the email.
  */
 export async function sendPdfToEmailService(
-    req: NextRequest
+  req: NextRequest,
 ): Promise<boolean> {
-    const fd = await req.formData();
+  const fd = await req.formData();
 
-    // Get form data values
-    const email = fd.get("email") as string;
-    const invoicePdf = fd.get("invoicePdf") as File;
-    const invoiceNumber = fd.get("invoiceNumber") as string;
+  // Get form data values
+  const email = fd.get("email") as string;
+  const invoicePdf = fd.get("invoicePdf") as File;
+  const invoiceNumber = fd.get("invoiceNumber") as string;
 
-    // Get email html content
-    const emailHTML = render(SendPdfEmail({ invoiceNumber }));
+  // Get email html content
+  const emailHTML = render(SendPdfEmail({ invoiceNumber }));
 
-    // Convert file to buffer
-    const invoiceBuffer = await fileToBuffer(invoicePdf);
+  // Convert file to buffer
+  const invoiceBuffer = await fileToBuffer(invoicePdf);
 
-    try {
-        const mailOptions: SendMailOptions = {
-            from: "Invoify",
-            to: email,
-            subject: `Invoice Ready: #${invoiceNumber}`,
-            html: emailHTML,
-            attachments: [
-                {
-                    filename: "invoice.pdf",
-                    content: invoiceBuffer,
-                },
-            ],
-        };
+  try {
+    const mailOptions: SendMailOptions = {
+      from: "Invoify",
+      to: email,
+      subject: `Invoice Ready: #${invoiceNumber}`,
+      html: emailHTML,
+      attachments: [
+        {
+          filename: "invoice.pdf",
+          content: invoiceBuffer,
+        },
+      ],
+    };
 
-        await transporter.sendMail(mailOptions);
-        return true;
-    } catch (error) {
-        console.error("Error sending email", error);
-        return false;
-    }
+    await transporter.sendMail(mailOptions);
+    return true;
+  } catch (error) {
+    console.error("Error sending email", error);
+    return false;
+  }
 }

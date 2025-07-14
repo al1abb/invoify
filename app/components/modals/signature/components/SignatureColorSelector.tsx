@@ -8,38 +8,38 @@ import { Check } from "lucide-react";
 import { SignatureColor } from "@/types";
 
 type SignatureColorSelectorProps = {
-    colors: SignatureColor[];
-    selectedColor: string;
-    handleColorButtonClick: (color: string) => void;
+  colors: SignatureColor[];
+  selectedColor: string;
+  handleColorButtonClick: (color: string) => void;
 };
 
 const SignatureColorSelector = ({
-    colors,
-    selectedColor,
-    handleColorButtonClick,
+  colors,
+  selectedColor,
+  handleColorButtonClick,
 }: SignatureColorSelectorProps) => {
-    return (
-        <div className="flex gap-2">
-            {colors.map((color) => (
-                <BaseButton
-                    key={color.color}
-                    size="icon"
-                    tooltipLabel={color.label}
-                    style={{
-                        backgroundColor: color.color,
-                    }}
-                    className="flex justify-center items-center h-6 w-6 rounded-full border-2 hover:border-blue-700"
-                    onClick={() => handleColorButtonClick(color.color)}
-                >
-                    {selectedColor === color.color && (
-                        <span className="text-white">
-                            <Check size={16} />
-                        </span>
-                    )}
-                </BaseButton>
-            ))}
-        </div>
-    );
+  return (
+    <div className="flex gap-2">
+      {colors.map((color) => (
+        <BaseButton
+          key={color.color}
+          size="icon"
+          tooltipLabel={color.label}
+          style={{
+            backgroundColor: color.color,
+          }}
+          className="flex justify-center items-center h-6 w-6 rounded-full border-2 hover:border-blue-700"
+          onClick={() => handleColorButtonClick(color.color)}
+        >
+          {selectedColor === color.color && (
+            <span className="text-white">
+              <Check size={16} />
+            </span>
+          )}
+        </BaseButton>
+      ))}
+    </div>
+  );
 };
 
 export default SignatureColorSelector;

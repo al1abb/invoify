@@ -10,31 +10,31 @@ import { useFormContext } from "react-hook-form";
 import { InvoiceType } from "@/types";
 
 type ViewTemplatePageProps = {
-    params: { id: string };
+  params: { id: string };
 };
 
 const ViewTemplate = ({ params }: ViewTemplatePageProps) => {
-    const templateNumber = params.id;
+  const templateNumber = params.id;
 
-    const DynamicComponent = dynamic<InvoiceType>(
-        () =>
-            import(
-                `@/app/components/templates/invoice-pdf/InvoiceTemplate${templateNumber}`
-            )
-    );
+  const DynamicComponent = dynamic<InvoiceType>(
+    () =>
+      import(
+        `@/app/components/templates/invoice-pdf/InvoiceTemplate${templateNumber}`
+      ),
+  );
 
-    const { getValues } = useFormContext();
-    const formValues = getValues();
+  const { getValues } = useFormContext();
+  const formValues = getValues();
 
-    return (
-        <div className="container">
-            <DynamicComponent
-                sender={formValues.sender}
-                receiver={formValues.receiver}
-                details={formValues.details}
-            />
-        </div>
-    );
+  return (
+    <div className="container">
+      <DynamicComponent
+        sender={formValues.sender}
+        receiver={formValues.receiver}
+        details={formValues.details}
+      />
+    </div>
+  );
 };
 
 export default ViewTemplate;

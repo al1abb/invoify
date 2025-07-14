@@ -9,29 +9,26 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { InvoiceType } from "@/types";
 
 const DynamicInvoiceTemplateSkeleton = () => {
-    return <Skeleton className="min-h-[60rem]" />;
+  return <Skeleton className="min-h-[60rem]" />;
 };
 
 const DynamicInvoiceTemplate = (props: InvoiceType) => {
-    // Dynamic template component name
-    const templateName = `InvoiceTemplate${props.details.pdfTemplate}`;
+  // Dynamic template component name
+  const templateName = `InvoiceTemplate${props.details.pdfTemplate}`;
 
-    const DynamicInvoice = useMemo(
-        () =>
-            dynamic<InvoiceType>(
-                () =>
-                    import(
-                        `@/app/components/templates/invoice-pdf/${templateName}`
-                    ),
-                {
-                    loading: () => <DynamicInvoiceTemplateSkeleton />,
-                    ssr: false,
-                }
-            ),
-        [templateName]
-    );
+  const DynamicInvoice = useMemo(
+    () =>
+      dynamic<InvoiceType>(
+        () => import(`@/app/components/templates/invoice-pdf/${templateName}`),
+        {
+          loading: () => <DynamicInvoiceTemplateSkeleton />,
+          ssr: false,
+        },
+      ),
+    [templateName],
+  );
 
-    return <DynamicInvoice {...props} />;
+  return <DynamicInvoice {...props} />;
 };
 
 export default DynamicInvoiceTemplate;

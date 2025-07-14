@@ -1,92 +1,92 @@
 {
-    "form": {
-        "title": "Invoice",
-        "description": "Generate Invoice",
-        "newInvBadge": "New Invoice",
-        "wizard": {
-            "fromAndTo": "From & To",
-            "invoiceDetails": "Invoice Details",
-            "lineItems": "Line Items",
-            "paymentInfo": "Payment Info",
-            "summary": "Summary",
-            "next": "Next",
-            "back": "Back"
+  "form": {
+    "title": "Invoice",
+    "description": "Generate Invoice",
+    "newInvBadge": "New Invoice",
+    "wizard": {
+      "fromAndTo": "From & To",
+      "invoiceDetails": "Invoice Details",
+      "lineItems": "Line Items",
+      "paymentInfo": "Payment Info",
+      "summary": "Summary",
+      "next": "Next",
+      "back": "Back"
+    },
+    "steps": {
+      "fromAndTo": {
+        "billFrom": "Bill From",
+        "billTo": "Bill To",
+        "name": "Name",
+        "address": "Address",
+        "zipCode": "Zip",
+        "city": "City",
+        "country": "Country",
+        "email": "Email",
+        "phone": "Phone",
+        "addCustomInput": "Add Custom Input",
+        "sender": "Sender",
+        "receiver": "Receiver"
+      },
+      "invoiceDetails": {
+        "heading": "Invoice Details",
+        "invoiceLogo": {
+          "label": "Invoice Logo",
+          "placeholder": "Click to upload image"
         },
-        "steps": {
-            "fromAndTo": {
-                "billFrom": "Bill From",
-                "billTo": "Bill To",
-                "name": "Name",
-                "address": "Address",
-                "zipCode": "Zip",
-                "city": "City",
-                "country": "Country",
-                "email": "Email",
-                "phone": "Phone",
-                "addCustomInput": "Add Custom Input",
-                "sender": "Sender",
-                "receiver": "Receiver"
-            },
-            "invoiceDetails": {
-                "heading": "Invoice Details",
-                "invoiceLogo": {
-                    "label": "Invoice Logo",
-                    "placeholder": "Click to upload image"
-                },
-                "invoiceNumber": "Invoice Number",
-                "issuedDate": "Issue Date",
-                "dueDate": "Due Date",
-                "currency": "Currency"
-            },
-            "lineItems": {
-                "heading": "Items",
-                "item": "Item",
-                "name": "Name",
-                "quantity": "Quantity",
-                "rate": "Rate",
-                "total": "Total",
-                "description": "Description",
-                "addNewItem": "Add a new item",
-                "removeItem": "Remove item"
-            },
-            "paymentInfo": {
-                "heading": "Payment Information",
-                "bankName": "Bank Name",
-                "accountName": "Account Name",
-                "accountNumber": "Account Number"
-            },
-            "summary": {
-                "heading": "Summary",
-                "signature": {
-                    "heading": "Signature",
-                    "placeholder": "Click to add signature",
-                    "draw": "Draw",
-                    "type": "Type",
-                    "upload": "Upload"
-                },
-                "additionalNotes": "Additional Notes",
-                "paymentTerms": "Payment Terms",
-                "discount": "Discount",
-                "tax": "Tax",
-                "shipping": "Shipping",
-                "subTotal": "Subtotal",
-                "totalAmount": "Total Amount",
-                "includeTotalInWords": "Include Total in Words?",
-                "yes": "Yes",
-                "no": "No"
-            }
-        }
-    },
-    "actions": {
-        "title": "Actions",
-        "description": "Operations and preview",
-        "loadInvoice": "Load Invoice",
-        "exportInvoice": "Export Invoice",
-        "newInvoice": "New Invoice",
-        "generatePdf": "Generate PDF",
-        "pdfView": "PDF View"
-    },
-    "footer": {
-        "developedBy": "Developed by"
+        "invoiceNumber": "Invoice Number",
+        "issuedDate": "Issue Date",
+        "dueDate": "Due Date",
+        "currency": "Currency"
+      },
+      "lineItems": {
+        "heading": "Items",
+        "item": "Item",
+        "name": "Name",
+        "quantity": "Quantity",
+        "rate": "Rate",
+        "total": "Total",
+        "description": "Description",
+        "addNewItem": "Add a new item",
+        "removeItem": "Remove item"
+      },
+      "paymentInfo": {
+        "heading": "Payment Information",
+        "bankName": "Bank Name",
+        "accountName": "Account Name",
+        "accountNumber": "Account Number"
+      },
+      "summary": {
+        "heading": "Summary",
+        "signature": {
+          "heading": "Signature",
+          "placeholder": "Click to add signature",
+          "draw": "Draw",
+          "type": "Type",
+          "upload": "Upload"
+        },
+        "additionalNotes": "Additional Notes",
+        "paymentTerms": "Payment Terms",
+        "discount": "Discount",
+        "tax": "Tax",
+        "shipping": "Shipping",
+        "subTotal": "Subtotal",
+        "totalAmount": "Total Amount",
+        "includeTotalInWords": "Include Total in Words?",
+        "yes": "Yes",
+        "no": "No"
+      }
     }
+  },
+  "actions": {
+    "title": "Actions",
+    "description": "Operations and preview",
+    "loadInvoice": "Load Invoice",
+    "exportInvoice": "Export Invoice",
+    "newInvoice": "New Invoice",
+    "generatePdf": "Generate PDF",
+    "pdfView": "PDF View"
+  },
+  "footer": {
+    "developedBy": "Developed by"
+  }
 }

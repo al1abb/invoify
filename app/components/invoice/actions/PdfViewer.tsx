@@ -16,22 +16,18 @@ import { useInvoiceContext } from "@/contexts/InvoiceContext";
 import { InvoiceType } from "@/types";
 
 const PdfViewer = () => {
-    const { invoicePdf } = useInvoiceContext();
+  const { invoicePdf } = useInvoiceContext();
 
-    const { watch } = useFormContext<InvoiceType>();
+  const { watch } = useFormContext<InvoiceType>();
 
-    const [debouncedWatch] = useDebounce(watch, 1000);
-    const formValues = debouncedWatch();
+  const [debouncedWatch] = useDebounce(watch, 1000);
+  const formValues = debouncedWatch();
 
-    return (
-        <div className="my-3">
-            {invoicePdf.size == 0 ? (
-                <LivePreview data={formValues} />
-            ) : (
-                <FinalPdf />
-            )}
-        </div>
-    );
+  return (
+    <div className="my-3">
+      {invoicePdf.size == 0 ? <LivePreview data={formValues} /> : <FinalPdf />}
+    </div>
+  );
 };
 
 export default PdfViewer;

@@ -13,26 +13,26 @@ import { ExportTypes, InvoiceType } from "@/types";
  * @returns {Promise<void>} A promise that resolves when the export is completed.
  */
 export const exportInvoice = async (
-    exportAs: ExportTypes,
-    formValues: InvoiceType
+  exportAs: ExportTypes,
+  formValues: InvoiceType,
 ) => {
-    return fetch(`${EXPORT_INVOICE_API}?format=${exportAs}`, {
-        method: "POST",
-        body: JSON.stringify(formValues),
-        headers: {
-            "Content-Type": "application/json",
-        },
+  return fetch(`${EXPORT_INVOICE_API}?format=${exportAs}`, {
+    method: "POST",
+    body: JSON.stringify(formValues),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `invoice.${exportAs.toLowerCase()}`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     })
-        .then((res) => res.blob())
-        .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `invoice.${exportAs.toLowerCase()}`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch((error) => {
-            console.error("Error downloading:", error);
-        });
+    .catch((error) => {
+      console.error("Error downloading:", error);
+    });
 };
