@@ -1,11 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 
 // Next Intl
-import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
-
-// ShadCn
 import {
   Select,
   SelectContent,
@@ -23,15 +20,24 @@ import { LOCALES } from "@/lib/variables";
 const LanguageSelector = () => {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
 
   const handleLanguageChange = (lang: string) => {
-    console.log(lang);
-
-    router.push("/", { locale: lang });
+    // Get the current path and replace the locale segment
+    const segments = pathname.split("/");
+    // segments[0] is always '', segments[1] is the locale
+    if (segments.length > 1) {
+      segments[1] = lang;
+      const newPath = segments.join("/");
+      router.push(newPath);
+    } else {
+      // fallback: just go to /{lang}
+      router.push(`/${lang}`);
+    }
   };
   return (
     <Select
-      value={params.locale.toLocaleString()}
+      value={params.locale?.toString() || "en"}
       onValueChange={(lang) => handleLanguageChange(lang)}
     >
       <SelectTrigger className="w-[10rem] relative" aria-label="Languages">

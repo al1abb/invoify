@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["puppeteer-core"],
   experimental: {
-    serverComponentsExternalPackages: ["puppeteer-core"],
   },
   webpack: (config) => {
     config.module.rules.push({

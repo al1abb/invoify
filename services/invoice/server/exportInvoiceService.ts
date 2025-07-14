@@ -7,7 +7,7 @@ import { AsyncParser } from "@json2csv/node";
 import { Builder } from "xml2js";
 
 // XLSX
-import XLSX from "xlsx";
+import ExcelJS from "exceljs";
 
 // Helpers
 import { flattenObject } from "@/lib/helpers";
@@ -56,31 +56,31 @@ export async function exportInvoiceService(req: NextRequest) {
             "Content-Disposition": "attachment; filename=invoice.xml",
           },
         });
-      // case ExportTypes.XLSX:
-      //     const flattenedData = flattenObject(body);
+      case ExportTypes.XLSX:
+        const flattenedData = flattenObject(body);
 
-      //     // Create a new worksheet and add the data
-      //     const worksheet = XLSX.utils.json_to_sheet([flattenedData]);
-      //     const workbook = XLSX.utils.book_new();
-      //     XLSX.utils.book_append_sheet(
-      //         workbook,
-      //         worksheet,
-      //         "invoice-worksheet"
-      //     );
-      //     // Generate the XLSX file as a buffer
-      //     const buffer = XLSX.write(workbook, {
-      //         bookType: "xlsx",
-      //         type: "buffer",
-      //     });
+        // Create a new workbook and worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("invoice-worksheet");
 
-      //     return new NextResponse(buffer, {
-      //         headers: {
-      //             "Content-Type":
-      //                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      //             "Content-Disposition":
-      //                 "attachment; filename=invoice.xlsx",
-      //         },
-      //     });
+        // Add header row
+        worksheet.columns = Object.keys(flattenedData).map((key) => ({
+          header: key,
+          key,
+        }));
+        // Add data row
+        worksheet.addRow(flattenedData);
+
+        // Write to buffer
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        return new NextResponse(buffer, {
+          headers: {
+            "Content-Type":
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-Disposition": "attachment; filename=invoice.xlsx",
+          },
+        });
     }
   } catch (error) {
     console.error(error);
