@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import Image from "next/image";
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
 
@@ -35,7 +35,7 @@ import { isDataUrl } from "@/lib/helpers";
 // Types
 import { SignatureTabs } from "@/types";
 
-type SignatureModalProps = {};
+type SignatureModalProps = Record<string, never>;
 
 const SignatureModal = ({}: SignatureModalProps) => {
   const { setValue } = useFormContext();
@@ -116,7 +116,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
         }
       }, 50);
     }
-  }, [open, tab]);
+  }, [open, tab, signatureData, signatureRef]);
 
   return (
     <>
@@ -126,7 +126,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
             <Label>{_t("form.steps.summary.signature.heading")}</Label>
 
             {signature && isDataUrl(signature) ? (
-              <img
+              <Image
                 className="border border-black rounded-md hover:border-blue-500 bg-white"
                 src={signature}
                 width={300}

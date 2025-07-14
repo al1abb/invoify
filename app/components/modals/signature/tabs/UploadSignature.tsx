@@ -1,7 +1,7 @@
 // ShadCn
 import { Card, CardContent } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
-
+import Image from "next/image";
 // Components
 import { BaseButton } from "@/app/components";
 
@@ -32,7 +32,7 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
         <CardContent className="space-y-2 p-0">
           <div style={{ height: "15rem" }}>
             {uploadSignatureImg ? (
-              <img
+              <Image
                 style={{
                   borderRadius: "10px",
                   width: "100%",
@@ -40,6 +40,7 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
                 }}
                 width={300}
                 src={uploadSignatureImg}
+                alt="Uploaded signature"
               />
             ) : (
               <div>Upload image</div>

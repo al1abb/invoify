@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// Fonts
-import {
-  alexBrush,
-  dancingScript,
-  greatVibes,
-  outfit,
-  parisienne,
-} from "@/lib/fonts";
+// Fonts - Unused imports removed
 
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
@@ -29,7 +22,7 @@ import { BaseNavbar, BaseFooter } from "@/app/components";
 import Providers from "@/contexts/Providers";
 
 // SEO
-import { JSONLD, ROOTKEYWORDS } from "@/lib/seo";
+import { ROOTKEYWORDS } from "@/lib/seo";
 
 // Variables
 import { BASE_URL, GOOGLE_SC_VERIFICATION, LOCALES } from "@/lib/variables";
@@ -74,7 +67,7 @@ export default async function LocaleLayout(props: {
   let messages;
   try {
     messages = (await import(`@/i18n/locales/${locale}.json`)).default;
-  } catch (error) {
+  } catch {
     notFound();
   }
 

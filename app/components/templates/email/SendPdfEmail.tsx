@@ -36,7 +36,7 @@ export default function SendPdfEmail({ invoiceNumber }: SendPdfEmailProps) {
               </Heading>
 
               <Text>
-                We're pleased to inform you that your invoice{" "}
+                We&apos;re pleased to inform you that your invoice{" "}
                 <b>#{invoiceNumber}</b> is ready for download. Please find the
                 attached PDF document.
               </Text>

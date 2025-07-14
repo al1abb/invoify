@@ -174,6 +174,7 @@ const getInvoiceTemplate = async (templateId: number) => {
   const componentName = `InvoiceTemplate${templateId}`;
 
   try {
+    // eslint-disable-next-line @next/next/no-assign-module-variable
     const module = await import(
       `@/app/components/templates/invoice-pdf/${componentName}`
     );

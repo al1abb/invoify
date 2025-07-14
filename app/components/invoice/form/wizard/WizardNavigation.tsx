@@ -13,7 +13,7 @@ import { useTranslationContext } from "@/contexts/TranslationContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const WizardNavigation = () => {
-  const { isFirstStep, isLastStep, handleStep, previousStep, nextStep } =
+  const { isFirstStep, isLastStep, previousStep, nextStep } =
     useWizard();
 
   const { _t } = useTranslationContext();

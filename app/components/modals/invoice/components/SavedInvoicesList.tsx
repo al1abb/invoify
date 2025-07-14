@@ -35,7 +35,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
   // TODO: Remove "any" from the function below
   // Update fields when selected invoice is changed.
   // ? Reason: The fields don't go through validation when invoice loads
-  const updateFields = (selected: any) => {
+  const updateFields = (selected: InvoiceType) => {
     // Next 2 lines are so that when invoice loads,
     // the dates won't be in the wrong format
     // ? Selected cannot be of type InvoiceType because of these 2 variables

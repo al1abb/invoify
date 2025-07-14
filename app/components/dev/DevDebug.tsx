@@ -12,7 +12,7 @@ import { BaseButton } from "@/app/components";
 // Variables
 import { FORM_FILL_VALUES } from "@/lib/variables";
 
-type DevDebugProps = {};
+type DevDebugProps = Record<string, never>;
 
 const DevDebug = ({}: DevDebugProps) => {
   const { reset, formState } = useFormContext();

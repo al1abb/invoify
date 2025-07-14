@@ -14,7 +14,6 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
-  DragOverlay,
   UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
@@ -35,7 +34,7 @@ import { Plus } from "lucide-react";
 import { InvoiceType } from "@/types";
 
 const Items = () => {
-  const { control, setValue } = useFormContext<InvoiceType>();
+  const { control } = useFormContext<InvoiceType>();
 
   const { _t } = useTranslationContext();
 
@@ -71,7 +70,7 @@ const Items = () => {
   };
 
   // DnD
-  const [activeId, setActiveId] = useState<UniqueIdentifier>();
+  const [, setActiveId] = useState<UniqueIdentifier>();
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -87,7 +86,7 @@ const Items = () => {
         move(oldIndex, newIndex);
       }
     },
-    [fields, setValue],
+    [fields, move],
   );
 
   return (

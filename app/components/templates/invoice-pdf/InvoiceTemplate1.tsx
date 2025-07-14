@@ -8,6 +8,7 @@ import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
+import Image from "next/image";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -20,7 +21,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
       <div className="flex justify-between">
         <div>
           {details.invoiceLogo && (
-            <img
+            <Image
               src={details.invoiceLogo}
               width={140}
               height={100}
@@ -77,7 +78,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
               <dd className="col-span-3 text-gray-500">
                 {new Date(details.invoiceDate).toLocaleDateString(
                   "en-US",
-                  DATE_OPTIONS,
+                  DATE_OPTIONS
                 )}
               </dd>
             </dl>
@@ -88,7 +89,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
               <dd className="col-span-3 text-gray-500">
                 {new Date(details.dueDate).toLocaleDateString(
                   "en-US",
-                  DATE_OPTIONS,
+                  DATE_OPTIONS
                 )}
               </dd>
             </dl>
@@ -261,7 +262,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
       {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
         <div className="mt-6">
           <p className="font-semibold text-gray-800">Signature:</p>
-          <img
+          <Image
             src={details.signature.data}
             width={120}
             height={60}

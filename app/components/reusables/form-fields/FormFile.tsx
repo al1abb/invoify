@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useRef, useState } from "react";
-
+import Image from "next/image";
 // RHF
 import { useFormContext, useWatch } from "react-hook-form";
 
@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { ImageMinus, Image } from "lucide-react";
+import { ImageMinus } from "lucide-react";
 
 // Types
 import { NameType } from "@/types";
@@ -67,13 +67,14 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
       <FormField
         control={control}
         name={name}
-        render={({ field }) => (
+        render={() => (
           <FormItem>
             <Label>{label}:</Label>
             {base64Image ? (
-              <img
+              <Image
                 id="logoImage"
                 src={base64Image}
+                alt="Logo preview"
                 style={{
                   objectFit: "contain",
                   width: "10rem",
@@ -94,7 +95,12 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
                 >
                   <>
                     <div className="flex flex-col items-center">
-                      <Image />
+                      <Image
+                        src="/images/upload-image.png"
+                        alt="Upload image icon"
+                        width={100}
+                        height={100}
+                      />
                       <p>{placeholder}</p>
                     </div>
                     <FormControl>
