@@ -3,7 +3,7 @@
 import React from "react";
 
 // ShadCn
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, VariantProps, buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -20,7 +20,8 @@ type BaseButtonProps = {
   loading?: boolean;
   loadingText?: string;
   children?: React.ReactNode;
-} & ButtonProps;
+} & React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean };
 
 const BaseButton = ({
   tooltipLabel,

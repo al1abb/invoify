@@ -75,6 +75,8 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
                 id="logoImage"
                 src={base64Image}
                 alt="Logo preview"
+                width={160}
+                height={112}
                 style={{
                   objectFit: "contain",
                   width: "10rem",

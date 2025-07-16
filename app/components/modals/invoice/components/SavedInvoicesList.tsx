@@ -39,8 +39,10 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     // Next 2 lines are so that when invoice loads,
     // the dates won't be in the wrong format
     // ? Selected cannot be of type InvoiceType because of these 2 variables
-    selected.details.dueDate = new Date(selected.details.dueDate);
-    selected.details.invoiceDate = new Date(selected.details.invoiceDate);
+    selected.details.dueDate = new Date(selected.details.dueDate).toISOString();
+    selected.details.invoiceDate = new Date(
+      selected.details.invoiceDate,
+    ).toISOString();
 
     selected.details.invoiceLogo = "";
     selected.details.signature = {
@@ -146,7 +148,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
                 <BaseButton
                   variant="destructive"
                   size="sm"
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
                     deleteInvoice(idx);
                   }}

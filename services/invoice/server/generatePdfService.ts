@@ -37,16 +37,14 @@ export async function generatePdfService(req: NextRequest) {
       const puppeteer = await import("puppeteer-core");
       browser = await puppeteer.launch({
         args: [...chromium.args, "--disable-dev-shm-usage"],
-        defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
         headless: true,
-        ignoreHTTPSErrors: true,
       });
     } else {
       const puppeteer = await import("puppeteer");
       browser = await puppeteer.launch({
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        headless: "new",
+        headless: true,
       });
     }
 
@@ -64,7 +62,7 @@ export async function generatePdfService(req: NextRequest) {
       url: TAILWIND_CDN,
     });
 
-    const pdf: Buffer = await page.pdf({
+    const pdf: Uint8Array = await page.pdf({
       format: "a4",
       printBackground: true,
       preferCSSPageSize: true,

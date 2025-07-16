@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input, InputProps } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 
 type FormInputProps = {
   name: string;
@@ -19,7 +19,7 @@ type FormInputProps = {
   labelHelper?: string;
   placeholder?: string;
   vertical?: boolean;
-} & InputProps;
+} & React.ComponentProps<"input">;
 
 const FormInput = ({
   name,

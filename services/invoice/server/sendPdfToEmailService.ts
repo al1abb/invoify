@@ -52,7 +52,7 @@ export async function sendPdfToEmailService(
       from: "Invoify",
       to: email,
       subject: `Invoice Ready: #${invoiceNumber}`,
-      html: emailHTML,
+      html: await emailHTML,
       attachments: [
         {
           filename: "invoice.pdf",

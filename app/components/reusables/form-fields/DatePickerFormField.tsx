@@ -80,7 +80,7 @@ const DatePickerFormField = ({ name, label }: DatePickerFormFieldProps) => {
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      captionLayout="dropdown-buttons"
+                      captionLayout="dropdown"
                       defaultMonth={field.value}
                       selected={new Date(field.value)}
                       onSelect={(e) => {

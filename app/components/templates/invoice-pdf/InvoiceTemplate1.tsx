@@ -78,7 +78,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
               <dd className="col-span-3 text-gray-500">
                 {new Date(details.invoiceDate).toLocaleDateString(
                   "en-US",
-                  DATE_OPTIONS
+                  DATE_OPTIONS,
                 )}
               </dd>
             </dl>
@@ -89,7 +89,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
               <dd className="col-span-3 text-gray-500">
                 {new Date(details.dueDate).toLocaleDateString(
                   "en-US",
-                  DATE_OPTIONS
+                  DATE_OPTIONS,
                 )}
               </dd>
             </dl>

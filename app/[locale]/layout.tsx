@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// Fonts - Unused imports removed
-
 // Favicon
 import Favicon from "@/public/assets/favicon/favicon.ico";
 
@@ -13,7 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { NextIntlClientProvider } from "next-intl";
 
 // ShadCn
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 // Components
 import { BaseNavbar, BaseFooter } from "@/app/components";
@@ -50,7 +48,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
 };
 

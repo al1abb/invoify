@@ -88,7 +88,7 @@ export const InvoiceContextProvider = ({
 
   useEffect(() => {
     let savedInvoicesDefault;
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Saved invoices variables
       const savedInvoicesJSON = window.localStorage.getItem("savedInvoices");
       savedInvoicesDefault = savedInvoicesJSON
@@ -100,7 +100,7 @@ export const InvoiceContextProvider = ({
 
   // Get pdf url from blob
   const pdfUrl = useMemo(() => {
-    if (invoicePdf.size > 0 && typeof window !== 'undefined') {
+    if (invoicePdf.size > 0 && typeof window !== "undefined") {
       return window.URL.createObjectURL(invoicePdf);
     }
     return null;
@@ -123,7 +123,7 @@ export const InvoiceContextProvider = ({
    * Generates a new invoice.
    */
   const newInvoice = () => {
-    reset(FORM_DEFAULT_VALUES);
+    reset(FORM_DEFAULT_VALUES as unknown as InvoiceType);
     setInvoicePdf(new Blob());
 
     router.refresh();
@@ -173,7 +173,7 @@ export const InvoiceContextProvider = ({
    * Generates a preview of a PDF file and opens it in a new browser tab.
    */
   const previewPdfInTab = () => {
-    if (invoicePdf && typeof window !== 'undefined') {
+    if (invoicePdf && typeof window !== "undefined") {
       const url = window.URL.createObjectURL(invoicePdf);
       window.open(url, "_blank");
     }
@@ -184,7 +184,11 @@ export const InvoiceContextProvider = ({
    */
   const downloadPdf = () => {
     // Only download if there is an invoice
-    if (invoicePdf instanceof Blob && invoicePdf.size > 0 && typeof window !== 'undefined') {
+    if (
+      invoicePdf instanceof Blob &&
+      invoicePdf.size > 0 &&
+      typeof window !== "undefined"
+    ) {
       // Create a blob URL to trigger the download
       const url = window.URL.createObjectURL(invoicePdf);
 
@@ -206,7 +210,7 @@ export const InvoiceContextProvider = ({
    * Prints a PDF file.
    */
   const printPdf = () => {
-    if (invoicePdf && typeof window !== 'undefined') {
+    if (invoicePdf && typeof window !== "undefined") {
       const pdfUrl = URL.createObjectURL(invoicePdf);
       const printWindow = window.open(pdfUrl, "_blank");
       if (printWindow) {
@@ -222,7 +226,7 @@ export const InvoiceContextProvider = ({
    * Saves the invoice data to local storage.
    */
   const saveInvoice = () => {
-    if (invoicePdf && typeof window !== 'undefined') {
+    if (invoicePdf && typeof window !== "undefined") {
       // If get values function is provided, allow to save the invoice
       if (getValues) {
         // Retrieve the existing array from local storage or initialize an empty array
@@ -275,7 +279,11 @@ export const InvoiceContextProvider = ({
    * @param {number} index - The index of the invoice to be deleted.
    */
   const deleteInvoice = (index: number) => {
-    if (index >= 0 && index < savedInvoices.length && typeof window !== 'undefined') {
+    if (
+      index >= 0 &&
+      index < savedInvoices.length &&
+      typeof window !== "undefined"
+    ) {
       const updatedInvoices = [...savedInvoices];
       updatedInvoices.splice(index, 1);
       setSavedInvoices(updatedInvoices);
@@ -359,7 +367,7 @@ export const InvoiceContextProvider = ({
         }
 
         // Reset form with imported data
-        reset(importedData);
+        reset(importedData as unknown as InvoiceType);
       } catch (error) {
         console.error("Error parsing JSON file:", error);
         importInvoiceError();

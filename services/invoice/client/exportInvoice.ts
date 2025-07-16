@@ -25,7 +25,7 @@ export const exportInvoice = async (
   })
     .then((res) => res.blob())
     .then((blob) => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;

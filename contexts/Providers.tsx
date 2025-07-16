@@ -3,7 +3,7 @@
 import React from "react";
 
 // RHF
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, Resolver, useForm } from "react-hook-form";
 
 // Zod
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,8 +29,8 @@ type ProvidersProps = {
 
 const Providers = ({ children }: ProvidersProps) => {
   const form = useForm<InvoiceType>({
-    resolver: zodResolver(InvoiceSchema),
-    defaultValues: FORM_DEFAULT_VALUES,
+    resolver: zodResolver(InvoiceSchema) as unknown as Resolver<InvoiceType>,
+    defaultValues: FORM_DEFAULT_VALUES as unknown as InvoiceType,
   });
 
   return (

@@ -11,14 +11,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea, TextareaProps } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormTextareaProps = {
   name: string;
   label?: string;
   labelHelper?: string;
   placeholder?: string;
-} & TextareaProps;
+} & React.ComponentProps<"textarea">;
 
 const FormTextarea = ({
   name,

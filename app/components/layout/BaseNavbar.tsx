@@ -19,16 +19,17 @@ const BaseNavbar = () => {
   }, []);
 
   return (
-    <header className="lg:container mx-auto z-99">
+    <header className="container mx-auto pt-10 z-99">
       <nav>
-        <Card className="flex flex-wrap justify-between items-center px-5 gap-5">
+        <Card className="flex flex-row justify-between items-center px-5">
           <Link href={"/"}>
             <Image
               src={Logo}
               alt="Invoify Logo"
-              width={190}
-              height={100}
+              width={150}
+              height={75}
               loading="eager"
+              draggable={false}
             />
           </Link>
           {/* ? DEV Only */}

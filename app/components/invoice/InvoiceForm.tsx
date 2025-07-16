@@ -69,7 +69,7 @@ const InvoiceForm = () => {
           <div className="space-y-8">
             <Wizard>
               <WizardStep>
-                <div className="flex gap-x-20 gap-y-10">
+                <div className="flex gap-x-16 gap-y-10">
                   <BillFromSection />
 
                   <BillToSection />

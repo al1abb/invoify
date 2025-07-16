@@ -81,7 +81,7 @@ const BillFromSection = () => {
         inputMode="tel"
         pattern="[0-9+\-\(\)\s]*"
         aria-describedby="phone-format"
-        onInput={(e) => {
+        onInput={(e: React.FormEvent<HTMLInputElement>) => {
           const target = e.target as HTMLInputElement;
           target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
         }}
