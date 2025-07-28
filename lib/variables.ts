@@ -63,6 +63,7 @@ export const LOCALES = [
     { code: "pl", name: "Polish"},
     { code: "pt-BR", name: "Português (Brasil)" },
     { code: "tr", name: "Türkçe" },
+    { code: "zh-CN", name: "简体中文" },
     { code: "ja", name: "日本語" },
     { code: "nb-NO", name: "Norwegian (bokmål)" },
     { code: "nn-NO", name: "Norwegian (nynorsk)" },
