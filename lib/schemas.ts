@@ -89,6 +89,7 @@ const CustomInputSchema = z.object({
 const InvoiceSenderSchema = z.object({
     name: fieldValidators.name,
     address: fieldValidators.address,
+    addressLine2: fieldValidators.stringOptional,
     zipCode: fieldValidators.zipCode,
     city: fieldValidators.city,
     country: fieldValidators.country,
@@ -100,6 +101,7 @@ const InvoiceSenderSchema = z.object({
 const InvoiceReceiverSchema = z.object({
     name: fieldValidators.name,
     address: fieldValidators.address,
+    addressLine2: fieldValidators.stringOptional,
     zipCode: fieldValidators.zipCode,
     city: fieldValidators.city,
     country: fieldValidators.country,
