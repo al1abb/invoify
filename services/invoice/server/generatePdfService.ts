@@ -76,14 +76,17 @@ export async function generatePdfService(req: NextRequest) {
 			},
 			status: 200,
 		});
-	} catch (error) {
+	} catch (error: any) {
 		console.error("PDF Generation Error:", error);
-		return new NextResponse(JSON.stringify({ error: "Failed to generate PDF", details: error }), {
-			status: 500,
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		return new NextResponse(
+			JSON.stringify({ error: "Failed to generate PDF", details: { message: error?.message, stack: error?.stack } }),
+			{
+				status: 500,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
 	} finally {
 		if (page) {
 			try {
