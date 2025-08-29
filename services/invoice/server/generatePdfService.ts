@@ -7,7 +7,7 @@ import chromium from "@sparticuz/chromium";
 import { getInvoiceTemplate } from "@/lib/helpers";
 
 // Variables
-import { CHROMIUM_EXECUTABLE_PATH, ENV, TAILWIND_CDN } from "@/lib/variables";
+import { ENV, TAILWIND_CDN } from "@/lib/variables";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -32,19 +32,18 @@ export async function generatePdfService(req: NextRequest) {
 		const htmlTemplate = ReactDOMServer.renderToStaticMarkup(InvoiceTemplate(body));
 
 		if (ENV === "production") {
-			const puppeteer = await import("puppeteer-core");
+			const puppeteer = (await import("puppeteer-core")).default;
 			browser = await puppeteer.launch({
-				args: [...chromium.args, "--disable-dev-shm-usage"],
+				args: [...chromium.args, "--disable-dev-shm-usage", "--ignore-certificate-errors"],
 				defaultViewport: chromium.defaultViewport,
-				executablePath: await chromium.executablePath(CHROMIUM_EXECUTABLE_PATH),
+				executablePath: await chromium.executablePath(),
 				headless: true,
-				ignoreHTTPSErrors: true,
 			});
 		} else {
-			const puppeteer = await import("puppeteer");
+			const puppeteer = (await import("puppeteer")).default;
 			browser = await puppeteer.launch({
 				args: ["--no-sandbox", "--disable-setuid-sandbox"],
-				headless: "new",
+				headless: true,
 			});
 		}
 
@@ -62,13 +61,13 @@ export async function generatePdfService(req: NextRequest) {
 			url: TAILWIND_CDN,
 		});
 
-		const pdf: Buffer = await page.pdf({
+		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
 		});
 
-		return new NextResponse(new Blob([new Uint8Array(pdf)], { type: "application/pdf" }), {
+		return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
 			headers: {
 				"Content-Type": "application/pdf",
 				"Content-Disposition": "attachment; filename=invoice.pdf",
