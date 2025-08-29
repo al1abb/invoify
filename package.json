@@ -62,7 +62,7 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
-        "@sparticuz/chromium": "129.0.2",
+        "@sparticuz/chromium": "138.0.2",
         "@next/bundle-analyzer": "^14.0.4",
         "@types/nodemailer": "^6.4.14",
         "@types/number-to-words": "^1.2.1",
