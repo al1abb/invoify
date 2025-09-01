@@ -1,12 +1,12 @@
 "use client";
 
 import React, {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -22,46 +22,47 @@ import { exportInvoice } from "@/services/invoice/client/exportInvoice";
 
 // Variables
 import {
-    FORM_DEFAULT_VALUES,
-    GENERATE_PDF_API,
-    SEND_PDF_API,
-    SHORT_DATE_OPTIONS,
+  FORM_DEFAULT_VALUES,
+  GENERATE_PDF_API,
+  SEND_PDF_API,
+  SHORT_DATE_OPTIONS,
+  LOCAL_STORAGE_INVOICE_DRAFT_KEY,
 } from "@/lib/variables";
 
 // Types
 import { ExportTypes, InvoiceType } from "@/types";
 
 const defaultInvoiceContext = {
-    invoicePdf: new Blob(),
-    invoicePdfLoading: false,
-    savedInvoices: [] as InvoiceType[],
-    pdfUrl: null as string | null,
-    onFormSubmit: (values: InvoiceType) => {},
-    newInvoice: () => {},
-    generatePdf: async (data: InvoiceType) => {},
-    removeFinalPdf: () => {},
-    downloadPdf: () => {},
-    printPdf: () => {},
-    previewPdfInTab: () => {},
-    saveInvoice: () => {},
-    deleteInvoice: (index: number) => {},
-    sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
-    exportInvoiceAs: (exportAs: ExportTypes) => {},
-    importInvoice: (file: File) => {},
+  invoicePdf: new Blob(),
+  invoicePdfLoading: false,
+  savedInvoices: [] as InvoiceType[],
+  pdfUrl: null as string | null,
+  onFormSubmit: (values: InvoiceType) => {},
+  newInvoice: () => {},
+  generatePdf: async (data: InvoiceType) => {},
+  removeFinalPdf: () => {},
+  downloadPdf: () => {},
+  printPdf: () => {},
+  previewPdfInTab: () => {},
+  saveInvoice: () => {},
+  deleteInvoice: (index: number) => {},
+  sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
+  exportInvoiceAs: (exportAs: ExportTypes) => {},
+  importInvoice: (file: File) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
 
 export const useInvoiceContext = () => {
-    return useContext(InvoiceContext);
+  return useContext(InvoiceContext);
 };
 
 type InvoiceContextProviderProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export const InvoiceContextProvider = ({
-    children,
+  children,
 }: InvoiceContextProviderProps) => {
   const router = useRouter();
 
@@ -77,7 +78,7 @@ export const InvoiceContextProvider = ({
   } = useToasts();
 
   // Get form values and methods from form context
-  const { getValues, reset } = useFormContext<InvoiceType>();
+  const { getValues, reset, watch } = useFormContext<InvoiceType>();
 
   // Variables
   const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
@@ -90,14 +91,27 @@ export const InvoiceContextProvider = ({
     let savedInvoicesDefault;
     if (typeof window !== undefined) {
       // Saved invoices variables
-            const savedInvoicesJSON =
-                window.localStorage.getItem("savedInvoices");
+      const savedInvoicesJSON = window.localStorage.getItem("savedInvoices");
       savedInvoicesDefault = savedInvoicesJSON
         ? JSON.parse(savedInvoicesJSON)
         : [];
       setSavedInvoices(savedInvoicesDefault);
     }
   }, []);
+
+  // Persist full form state with debounce
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const subscription = watch((value) => {
+      try {
+        window.localStorage.setItem(
+          LOCAL_STORAGE_INVOICE_DRAFT_KEY,
+          JSON.stringify(value)
+        );
+      } catch {}
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   // Get pdf url from blob
   const pdfUrl = useMemo(() => {
@@ -126,6 +140,13 @@ export const InvoiceContextProvider = ({
   const newInvoice = () => {
     reset(FORM_DEFAULT_VALUES);
     setInvoicePdf(new Blob());
+
+    // Clear the draft
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.removeItem(LOCAL_STORAGE_INVOICE_DRAFT_KEY);
+      } catch {}
+    }
 
     router.refresh();
 
@@ -243,8 +264,7 @@ export const InvoiceContextProvider = ({
         const existingInvoiceIndex = savedInvoices.findIndex(
           (invoice: InvoiceType) => {
             return (
-                            invoice.details.invoiceNumber ===
-                            formValues.details.invoiceNumber
+              invoice.details.invoiceNumber === formValues.details.invoiceNumber
             );
           }
         );
@@ -263,10 +283,7 @@ export const InvoiceContextProvider = ({
           saveInvoiceSuccess();
         }
 
-                localStorage.setItem(
-                    "savedInvoices",
-                    JSON.stringify(savedInvoices)
-                );
+        localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
 
         setSavedInvoices(savedInvoices);
       }

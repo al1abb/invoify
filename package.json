@@ -5,7 +5,6 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "postinstall": "node node_modules/puppeteer/install.js",
         "start": "next start",
         "lint": "next lint",
         "analyze": "cross-env ANALYZE=true next build"
@@ -44,7 +43,7 @@
         "nodemailer": "^6.9.7",
         "number-to-words": "^1.2.4",
         "postcss": "8.4.31",
-        "puppeteer-core": "22.5.0",
+        "puppeteer-core": "^24.9.0",
         "react": "18.2.0",
         "react-day-picker": "^8.8.2",
         "react-dom": "18.2.0",
@@ -63,7 +62,7 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
-        "@sparticuz/chromium": "122.0.0",
+        "@sparticuz/chromium": "138.0.2",
         "@next/bundle-analyzer": "^14.0.4",
         "@types/nodemailer": "^6.4.14",
         "@types/number-to-words": "^1.2.1",
@@ -73,6 +72,6 @@
         "@types/xml2js": "^0.4.13",
         "cross-env": "^7.0.3",
         "ignore-loader": "^0.1.2",
-        "puppeteer": "^21.3.1"
+        "puppeteer": "^24.9.0"
     }
 }
