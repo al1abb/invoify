@@ -1,3 +1,8 @@
+const withNextIntl = require("next-intl/plugin")(
+    // Point to the i18n request config
+    "./i18n/request.ts"
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     serverExternalPackages: ["puppeteer-core"],
@@ -15,4 +20,4 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 });
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(withNextIntl(nextConfig));

@@ -1,17 +1,13 @@
-import { useMemo } from "react";
-
-// Next
-import Link from "next/link";
 import Image from "next/image";
-
-// Assets
-import Logo from "@/public/assets/img/invoify-logo.svg";
-
-// ShadCn
-import { Card } from "@/components/ui/card";
-
+import { useMemo } from "react";
 // Components
 import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
+// ShadCn
+import { Card } from "@/components/ui/card";
+// Next i18n-aware Link
+import { Link } from "@/i18n/navigation";
+// Assets
+import Logo from "@/public/assets/img/invoify-logo.svg";
 
 const BaseNavbar = () => {
     const devEnv = useMemo(() => {

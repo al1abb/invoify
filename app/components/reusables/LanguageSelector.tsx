@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 // ShadCn
 import {
@@ -11,19 +12,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+// Next Intl navigation wrapper
+import { useRouter } from "@/i18n/navigation";
 // Variables
 import { LOCALES } from "@/lib/variables";
-// Next Intl
-import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
-import { useParams } from "next/navigation";
 
 const LanguageSelector = () => {
     const router = useRouter();
     const params = useParams();
 
     const handleLanguageChange = (lang: string) => {
-        console.log(lang);
-
         router.push("/", { locale: lang });
     };
     return (
