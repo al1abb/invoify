@@ -1,7 +1,10 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+
+// Next Intl
+import { useRouter } from "@/i18n/navigation"; // This useRouter is wrapped with next/navigation useRouter
+
 // ShadCn
 import {
     Select,
@@ -12,8 +15,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-// Next Intl navigation wrapper
-import { useRouter } from "@/i18n/navigation";
+import { Badge } from "@/components/ui/badge";
+
 // Variables
 import { LOCALES } from "@/lib/variables";
 
