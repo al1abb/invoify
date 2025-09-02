@@ -5,7 +5,7 @@ const withNextIntl = require("next-intl/plugin")(
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    serverExternalPackages: ["puppeteer-core"],
+    serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
     webpack: (config) => {
         config.module.rules.push({
             test: /\.map$/,
