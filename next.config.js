@@ -1,7 +1,4 @@
-const withNextIntl = require("next-intl/plugin")(
-    // Point to the i18n request config
-    "./i18n/request.ts"
-);
+const withNextIntl = require("next-intl/plugin")("./i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
