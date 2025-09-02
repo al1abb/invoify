@@ -21,15 +21,17 @@ import { InvoiceType } from "@/types";
  * @returns {Promise<NextResponse>} A promise that resolves to a NextResponse object containing the generated PDF.
  */
 export async function generatePdfService(req: NextRequest) {
-	const body: InvoiceType = await req.json();
-	let browser;
-	let page;
+    const body: InvoiceType = await req.json();
+    let browser;
+    let page;
 
-	try {
-		const ReactDOMServer = (await import("react-dom/server")).default;
-		const templateId = body.details.pdfTemplate;
-		const InvoiceTemplate = await getInvoiceTemplate(templateId);
-		const htmlTemplate = ReactDOMServer.renderToStaticMarkup(InvoiceTemplate(body));
+    try {
+        const ReactDOMServer = (await import("react-dom/server")).default;
+        const templateId = body.details.pdfTemplate;
+        const InvoiceTemplate = await getInvoiceTemplate(templateId);
+        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
+            InvoiceTemplate(body)
+        );
 
 		if (ENV === "production") {
 			const puppeteer = (await import("puppeteer-core")).default;
@@ -46,19 +48,19 @@ export async function generatePdfService(req: NextRequest) {
 			});
 		}
 
-		if (!browser) {
-			throw new Error("Failed to launch browser");
-		}
+        if (!browser) {
+            throw new Error("Failed to launch browser");
+        }
 
-		page = await browser.newPage();
-		await page.setContent(await htmlTemplate, {
-			waitUntil: ["networkidle0", "load", "domcontentloaded"],
-			timeout: 30000,
-		});
+        page = await browser.newPage();
+        await page.setContent(await htmlTemplate, {
+            waitUntil: ["networkidle0", "load", "domcontentloaded"],
+            timeout: 30000,
+        });
 
-		await page.addStyleTag({
-			url: TAILWIND_CDN,
-		});
+        await page.addStyleTag({
+            url: TAILWIND_CDN,
+        });
 
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",

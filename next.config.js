@@ -1,8 +1,8 @@
+const withNextIntl = require("next-intl/plugin")("./i18n/request.ts");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverComponentsExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
-    },
+    serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
     webpack: (config) => {
         config.module.rules.push({
             test: /\.map$/,
@@ -17,4 +17,4 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 });
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(withNextIntl(nextConfig));

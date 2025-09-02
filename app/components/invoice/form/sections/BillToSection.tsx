@@ -43,7 +43,6 @@ const BillToSection = () => {
     return (
         <section className="flex flex-col gap-3">
             <Subheading>{_t("form.steps.fromAndTo.billTo")}:</Subheading>
-
             <FormInput
                 name="receiver.name"
                 label={_t("form.steps.fromAndTo.name")}
@@ -87,7 +86,6 @@ const BillToSection = () => {
                     target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
                 }}
             />
-
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
             {fields?.map((field, index) => (
                 <FormCustomInput
@@ -97,7 +95,6 @@ const BillToSection = () => {
                     removeField={removeCustomInput}
                 />
             ))}
-
             <BaseButton
                 tooltipLabel="Add custom input to receiver"
                 size="sm"

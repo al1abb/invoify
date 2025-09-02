@@ -1,7 +1,7 @@
 "use client";
 
 // Next
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 // RHF
 import { useFormContext } from "react-hook-form";

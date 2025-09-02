@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 
 // Next Intl
-import { useRouter } from "next-intl/client"; // This useRouter is wrapped with next/navigation useRouter
+import { useRouter } from "@/i18n/navigation"; // This useRouter is wrapped with next/navigation useRouter
 
 // ShadCn
 import {
@@ -25,13 +25,11 @@ const LanguageSelector = () => {
     const params = useParams();
 
     const handleLanguageChange = (lang: string) => {
-        console.log(lang);
-
         router.push("/", { locale: lang });
     };
     return (
         <Select
-            value={params.locale.toLocaleString()}
+            value={params.locale!.toLocaleString()}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
             <SelectTrigger
