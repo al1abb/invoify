@@ -80,7 +80,7 @@ export async function generatePdfService(req: NextRequest) {
 	} catch (error: any) {
 		console.error("PDF Generation Error:", error);
 		return new NextResponse(
-			JSON.stringify({ error: "Failed to generate PDF", details: { message: error?.message, stack: error?.stack } }),
+			JSON.stringify({ error: "Failed to generate PDF" }),
 			{
 				status: 500,
 				headers: {
