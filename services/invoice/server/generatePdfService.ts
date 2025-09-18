@@ -26,12 +26,26 @@ export async function generatePdfService(req: NextRequest) {
     let page;
 
     try {
-        const ReactDOMServer = (await import("react-dom/server")).default;
+        const { renderToStaticMarkup } = await import("react-dom/server");
         const templateId = body.details.pdfTemplate;
         const InvoiceTemplate = await getInvoiceTemplate(templateId);
-        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
-            InvoiceTemplate(body)
-        );
+        const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
+
+        const htmlTemplate = `<!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <link href="${TAILWIND_CDN}" rel="stylesheet" />
+                <style>
+                  html, body { margin: 0; padding: 0; }
+                  @page { size: A4; margin: 0; }
+                </style>
+              </head>
+              <body>
+                ${appMarkup}
+              </body>
+            </html>`;
 
 		if (ENV === "production") {
 			const puppeteer = (await import("puppeteer-core")).default;
@@ -53,13 +67,9 @@ export async function generatePdfService(req: NextRequest) {
         }
 
         page = await browser.newPage();
-        await page.setContent(await htmlTemplate, {
+        await page.setContent(htmlTemplate, {
             waitUntil: ["networkidle0", "load", "domcontentloaded"],
             timeout: 30000,
-        });
-
-        await page.addStyleTag({
-            url: TAILWIND_CDN,
         });
 
 		const pdf: Uint8Array = await page.pdf({
@@ -68,7 +78,8 @@ export async function generatePdfService(req: NextRequest) {
 			preferCSSPageSize: true,
 		});
 
-		return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
+		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
+		return new NextResponse(blob, {
 			headers: {
 				"Content-Type": "application/pdf",
 				"Content-Disposition": "attachment; filename=invoice.pdf",
