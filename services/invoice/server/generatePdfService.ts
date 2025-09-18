@@ -31,6 +31,17 @@ export async function generatePdfService(req: NextRequest) {
         const InvoiceTemplate = await getInvoiceTemplate(templateId);
         const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
 
+        // Compact header template for every page
+        const headerTemplate = `
+          <div style="width: 100%; font-family: Arial, sans-serif; font-size: 10px; color: #111; padding: 6px 24px; border-bottom: 1px solid rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 600; font-size: 12px;">Tax Invoice</div>
+            <div style="display:flex; gap:16px; align-items:center;">
+              <span>Invoice No: ${(body.details as any).invoiceNumber || ""}</span>
+              <span>Date: ${new Date((body.details as any).invoiceDate || Date.now()).toLocaleDateString("en-US")}</span>
+              <span>Page <span class="pageNumber"></span>/<span class="totalPages"></span></span>
+            </div>
+          </div>`;
+
         const htmlTemplate = `<!DOCTYPE html>
             <html lang="en">
               <head>
@@ -39,7 +50,13 @@ export async function generatePdfService(req: NextRequest) {
                 <link href="${TAILWIND_CDN}" rel="stylesheet" />
                 <style>
                   html, body { margin: 0; padding: 0; }
-                  @page { size: A4; margin: 0; }
+                  /* Reserve space for header/footer so content never overlaps */
+                  @page { size: A4; margin: 96px 24px 72px 24px; }
+                  @media print {
+                    thead { display: table-header-group; }
+                    tfoot { display: table-footer-group; }
+                    tr { break-inside: avoid; page-break-inside: avoid; }
+                  }
                 </style>
               </head>
               <body>
@@ -76,6 +93,10 @@ export async function generatePdfService(req: NextRequest) {
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
+			displayHeaderFooter: true,
+			headerTemplate: headerTemplate,
+			footerTemplate: '<div style="width:100%; padding:6px 24px; font-size:10px; font-family:Arial, sans-serif; color:#777; display:flex; justify-content:flex-end;">Page <span class="pageNumber"></span>/<span class="totalPages"></span></div>',
+			margin: { top: 96, right: 24, bottom: 72, left: 24 },
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
