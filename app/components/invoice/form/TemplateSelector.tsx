@@ -19,11 +19,14 @@ import {
     BaseButton,
     InvoiceTemplate1,
     InvoiceTemplate2,
+    InvoiceTemplate3,
 } from "@/app/components";
 
 // Template images
 import template1 from "@/public/assets/img/invoice-1-example.png";
 import template2 from "@/public/assets/img/invoice-2-example.png";
+// Note: No preview image yet for template 3; we reuse template 2 as placeholder
+import template3 from "@/public/assets/img/invoice-2-example.png";
 
 // Icons
 import { Check } from "lucide-react";
@@ -48,6 +51,13 @@ const TemplateSelector = () => {
             description: "Second template",
             img: template2,
             component: <InvoiceTemplate2 {...formValues} />,
+        },
+        {
+            id: 3,
+            name: "Tax Invoice (India-style)",
+            description: "Layout with consignee/buyer and goods grid",
+            img: template3,
+            component: <InvoiceTemplate3 {...formValues} />,
         },
     ];
     return (
