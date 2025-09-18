@@ -188,8 +188,11 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                         {/* Final summary blocks only on last page */}
                         {isLast && (
                             <>
-                                {/* Charges summary: subtotal, discount, tax, shipping, total */}
-                                <div className="summary-break border border-t-0 border-black/70">
+                                {/* Summary page: always start on a new page and repeat header */}
+                                <div className="summary-page summary-break">
+                                    <Header />
+                                    {/* Charges summary: subtotal, discount, tax, shipping, total */}
+                                    <div className="border border-black/70">
                                     <div className="grid grid-cols-12 text-[11px]">
                                         <div className="col-span-7 p-1 border-r border-black/70"></div>
                                         <div className="col-span-5 p-1">
@@ -235,87 +238,91 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                {/* Amount in words + statement table */}
-                                <div className="grid grid-cols-2 border border-t-0 border-black/70">
-                                    <div className="p-2 text-[11px] border-r border-black/70">
-                                        <p className="font-semibold">Amount Chargeable (in words):</p>
-                                        <p className="mt-1">{details.totalAmountInWords}</p>
+                                    {/* Close charges container */}
                                     </div>
-                                    <div className="p-2 text-[11px]">
-                                        <div className="border border-black/70">
-                                            <div className="grid grid-cols-4 text-center text-[10px] font-semibold border-b border-black/70">
-                                                <div className="p-1 border-r border-black/70">Bill Date</div>
-                                                <div className="p-1 border-r border-black/70">Bill No</div>
-                                                <div className="p-1 border-r border-black/70">Bill Amt</div>
-                                                <div className="p-1">Outstand. Amt</div>
+
+                                    {/* Amount in words + statement table */}
+                                    <div className="grid grid-cols-2 border border-t-0 border-black/70">
+                                        <div className="p-2 text-[11px] border-r border-black/70">
+                                            <p className="font-semibold">Amount Chargeable (in words):</p>
+                                            <p className="mt-1">{details.totalAmountInWords}</p>
+                                        </div>
+                                        <div className="p-2 text-[11px]">
+                                            <div className="border border-black/70">
+                                                <div className="grid grid-cols-4 text-center text-[10px] font-semibold border-b border-black/70">
+                                                    <div className="p-1 border-r border-black/70">Bill Date</div>
+                                                    <div className="p-1 border-r border-black/70">Bill No</div>
+                                                    <div className="p-1 border-r border-black/70">Bill Amt</div>
+                                                    <div className="p-1">Outstand. Amt</div>
+                                                </div>
+                                                {/* Single current row */}
+                                                <div className="grid grid-cols-4 text-center text-[11px]">
+                                                    <div className="p-1 border-r border-black/20">{formatDate(details.invoiceDate)}</div>
+                                                    <div className="p-1 border-r border-black/20">{details.invoiceNumber}</div>
+                                                    <div className="p-1 border-r border-black/20">{formatNumberWithCommas(Number(details.totalAmount))}</div>
+                                                    <div className="p-1">0.00</div>
+                                                </div>
                                             </div>
-                                            {/* Single current row */}
-                                            <div className="grid grid-cols-4 text-center text-[11px]">
-                                                <div className="p-1 border-r border-black/20">{formatDate(details.invoiceDate)}</div>
-                                                <div className="p-1 border-r border-black/20">{details.invoiceNumber}</div>
-                                                <div className="p-1 border-r border-black/20">{formatNumberWithCommas(Number(details.totalAmount))}</div>
-                                                <div className="p-1">0.00</div>
-                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Declaration + signature block */}
+                                    <div className="grid grid-cols-2 border border-t-0 border-black/70">
+                                        <div className="p-2 text-[10px]">
+                                            <p className="font-semibold">Declaration</p>
+                                            <p>
+                                                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+                                            </p>
+                                        </div>
+                                        <div className="p-2 text-right text-[11px]">
+                                            <p className="font-semibold">For {sender.name}</p>
+                                            {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+                                                <div className="mt-2 inline-block">
+                                                    <img
+                                                        src={details.signature.data}
+                                                        width={120}
+                                                        height={60}
+                                                        alt={`Signature of ${sender.name}`}
+                                                    />
+                                                </div>
+                                            ) : details.signature?.data ? (
+                                                <p
+                                                    className="mt-4"
+                                                    style={{
+                                                        fontSize: 24,
+                                                        fontWeight: 400,
+                                                        fontFamily: `${details.signature.fontFamily}, cursive`,
+                                                        color: "black",
+                                                    }}
+                                                >
+                                                    {details.signature.data}
+                                                </p>
+                                            ) : (
+                                                <div className="h-10" />
+                                            )}
+                                            <p className="mt-6">Authorized Signatory</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Bottom totals area */}
+                                    <div className="mt-1 grid grid-cols-2 gap-2">
+                                        <div className="text-[10px] text-center text-gray-600">This is a Computer Generated Invoice</div>
+                                        <div className="text-right text-[12px] font-semibold">Total: {formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
+                                    </div>
+
+                                    {/* Watermark on summary page */}
+                                    <div className="pointer-events-none select-none absolute inset-0 flex items-center justify-center opacity-10">
+                                        <div className="text-center">
+                                            <p className="uppercase text-xs tracking-wide">Tally Add-On Developed By</p>
+                                            <p className="text-5xl font-bold">elogics</p>
+                                            <p className="tracking-widest">CORPORATION</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Declaration + signature block */}
-                                <div className="grid grid-cols-2 border border-t-0 border-black/70">
-                                    <div className="p-2 text-[10px]">
-                                        <p className="font-semibold">Declaration</p>
-                                        <p>
-                                            We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
-                                        </p>
-                                    </div>
-                                    <div className="p-2 text-right text-[11px]">
-                                        <p className="font-semibold">For {sender.name}</p>
-                                        {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
-                                            <div className="mt-2 inline-block">
-                                                <img
-                                                    src={details.signature.data}
-                                                    width={120}
-                                                    height={60}
-                                                    alt={`Signature of ${sender.name}`}
-                                                />
-                                            </div>
-                                        ) : details.signature?.data ? (
-                                            <p
-                                                className="mt-4"
-                                                style={{
-                                                    fontSize: 24,
-                                                    fontWeight: 400,
-                                                    fontFamily: `${details.signature.fontFamily}, cursive`,
-                                                    color: "black",
-                                                }}
-                                            >
-                                                {details.signature.data}
-                                            </p>
-                                        ) : (
-                                            <div className="h-10" />
-                                        )}
-                                        <p className="mt-6">Authorized Signatory</p>
-                                    </div>
-                                </div>
-
-                                {/* Bottom totals area */}
-                                <div className="mt-1 grid grid-cols-2 gap-2">
-                                    <div className="text-[10px] text-center text-gray-600">This is a Computer Generated Invoice</div>
-                                    <div className="text-right text-[12px] font-semibold">Total: {formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
-                                </div>
                             </>
                         )}
-
-                        {/* Watermark on every page */}
-                        <div className="pointer-events-none select-none absolute inset-0 flex items-center justify-center opacity-10">
-                            <div className="text-center">
-                                <p className="uppercase text-xs tracking-wide">Tally Add-On Developed By</p>
-                                <p className="text-5xl font-bold">elogics</p>
-                                <p className="tracking-widest">CORPORATION</p>
-                            </div>
-                        </div>
+                        
                     </div>
                 );
             })}
