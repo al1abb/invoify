@@ -21,43 +21,61 @@ import { InvoiceType } from "@/types";
  * @returns {Promise<NextResponse>} A promise that resolves to a NextResponse object containing the generated PDF.
  */
 export async function generatePdfService(req: NextRequest) {
-    const body: InvoiceType = await req.json();
-    let browser;
-    let page;
+	const body: InvoiceType = await req.json();
+	let browser;
+	let page;
+	const PRINT_STYLES = `
+@page {
+  size: A4;
+  margin: 2cm 1cm 2cm 1cm;
+  @top-center {
+    content: element(invoice-header);
+  }
+}
 
-    try {
-        const { renderToStaticMarkup } = await import("react-dom/server");
-        const templateId = body.details.pdfTemplate;
-        const InvoiceTemplate = await getInvoiceTemplate(templateId);
-        const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
 
-        // Compact header template for every page
-        const headerTemplate = `
-          <div style="width: 100%; font-family: Arial, sans-serif; font-size: 10px; color: #111; padding: 6px 24px; border-bottom: 1px solid rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-weight: 600; font-size: 12px;">Tax Invoice</div>
-            <div style="display:flex; gap:16px; align-items:center;">
-              <span>Invoice No: ${(body.details as any).invoiceNumber || ""}</span>
-              <span>Date: ${new Date((body.details as any).invoiceDate || Date.now()).toLocaleDateString("en-US")}</span>
-              <span>Page <span class="pageNumber"></span>/<span class="totalPages"></span></span>
-            </div>
-          </div>`;
+@media print {
+  .page-split {
+    break-after: page;
+    page-break-after: always;
+  }
 
-        const htmlTemplate = `<!DOCTYPE html>
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  table {
+    break-inside: auto;
+  }
+
+  tbody {
+    break-inside: auto;
+  }
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+`;
+
+
+	try {
+		const { renderToStaticMarkup } = await import("react-dom/server");
+		const templateId = body.details.pdfTemplate;
+		const InvoiceTemplate = await getInvoiceTemplate(templateId);
+		const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
+
+		const htmlTemplate = `<!DOCTYPE html>
             <html lang="en">
               <head>
                 <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link href="${TAILWIND_CDN}" rel="stylesheet" />
                 <style>
-                  html, body { margin: 0; padding: 0; }
-                  /* Reserve space for header/footer so content never overlaps */
-                  @page { size: A4; margin: 96px 24px 72px 24px; }
-                  @media print {
-                    thead { display: table-header-group; }
-                    tfoot { display: table-footer-group; }
-                    tr { break-inside: avoid; page-break-inside: avoid; }
-                  }
-                </style>
+					${PRINT_STYLES}
+    </style>
               </head>
               <body>
                 ${appMarkup}
@@ -79,24 +97,39 @@ export async function generatePdfService(req: NextRequest) {
 			});
 		}
 
-        if (!browser) {
-            throw new Error("Failed to launch browser");
-        }
+		if (!browser) {
+			throw new Error("Failed to launch browser");
+		}
 
-        page = await browser.newPage();
-        await page.setContent(htmlTemplate, {
-            waitUntil: ["networkidle0", "load", "domcontentloaded"],
-            timeout: 30000,
-        });
+		page = await browser.newPage();
+		await page.setContent(htmlTemplate, {
+			waitUntil: ["networkidle0", "load", "domcontentloaded"],
+			timeout: 30000,
+		});
 
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
 			displayHeaderFooter: true,
-			headerTemplate: headerTemplate,
-			footerTemplate: '<div style="width:100%; padding:6px 24px; font-size:10px; font-family:Arial, sans-serif; color:#777; display:flex; justify-content:flex-end;">Page <span class="pageNumber"></span>/<span class="totalPages"></span></div>',
-			margin: { top: 96, right: 24, bottom: 72, left: 24 },
+	margin: {
+		top: "160px",  // Adjust as needed to fit your header height
+		bottom: "60px",
+	},
+	headerTemplate: `
+		<style>
+			.header {
+				font-size: 10px;
+				width: 100%;
+				text-align: center;
+				padding: 10px;
+			}
+		</style>
+		<div class="header">
+			<strong>Tax Invoice</strong><br/>
+			Invoice No: ${body.details.invoiceNumber} | Date: ${new Date(body.details.invoiceDate).toLocaleDateString()}
+		</div>
+	`,
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });

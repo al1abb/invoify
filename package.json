@@ -36,6 +36,7 @@
         "autoprefixer": "10.4.15",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.0.0",
+        "html2pdf.js": "^0.12.1",
         "lucide-react": "^0.279.0",
         "next": "^15.3.3",
         "next-intl": "^4.1.0",
