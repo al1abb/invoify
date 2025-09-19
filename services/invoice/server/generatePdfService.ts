@@ -64,6 +64,7 @@ body, html {
 	try {
 		const { renderToStaticMarkup } = await import("react-dom/server");
 		const templateId = body.details.pdfTemplate;
+		console.log("Generating PDF with template:", templateId);
 		const InvoiceTemplate = await getInvoiceTemplate(templateId);
 		const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
 
@@ -110,26 +111,7 @@ body, html {
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
-			preferCSSPageSize: true,
-			displayHeaderFooter: true,
-	margin: {
-		top: "160px",  // Adjust as needed to fit your header height
-		bottom: "60px",
-	},
-	headerTemplate: `
-		<style>
-			.header {
-				font-size: 10px;
-				width: 100%;
-				text-align: center;
-				padding: 10px;
-			}
-		</style>
-		<div class="header">
-			<strong>Tax Invoice</strong><br/>
-			Invoice No: ${body.details.invoiceNumber} | Date: ${new Date(body.details.invoiceDate).toLocaleDateString()}
-		</div>
-	`,
+			preferCSSPageSize: true
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });

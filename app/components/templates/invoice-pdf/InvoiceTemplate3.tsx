@@ -132,6 +132,11 @@
             <style>{`
                 /* Basic page break styles - main CSS is in generatePdfService.ts */
                 tr { break-inside: avoid; }
+
+                /* Ensure table content fits within row blocks */
+                table.invoice-table { table-layout: fixed; width: 100%; }
+                table.invoice-table td, table.invoice-table th { word-break: break-word; overflow-wrap: anywhere; }
+                td.desc-cell, th.desc-cell { white-space: pre-wrap; hyphens: auto; }
             `}</style>
 
                 {/* Header - will be automatically repeated on every page */}
@@ -139,16 +144,24 @@
 
                 {/* Items table - will automatically break across pages */}
                 <div className="border border-t-0 border-black/70">
-                    <table className="w-full border-collapse">
+                    <table className="invoice-table w-full border-collapse">
+                        <colgroup>
+                            <col style={{ width: "40px" }} />
+                            <col />
+                            <col style={{ width: "100px" }} />
+                            <col style={{ width: "80px" }} />
+                            <col style={{ width: "60px" }} />
+                            <col style={{ width: "100px" }} />
+                        </colgroup>
                         <ItemsTableHeader />
                         <tbody>
                             {details.items.map((item, idx) => (
                                 <tr key={idx} className="text-[11px] border-b border-black/50 align-top">
                                     <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
-                                    <td className="p-1 border-r border-black/20">
+                                    <td className="p-1 border-r border-black/20 desc-cell">
                                         <p className="font-medium">{item.name}</p>
                                         {item.description && (
-                                            <p className="opacity-80 whitespace-pre-line">{item.description}</p>
+                                            <p className="opacity-80">{item.description}</p>
                                         )}
                                     </td>
                                     <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
@@ -163,10 +176,9 @@
 
                 {/* Totals row */}
                 <div className="grid grid-cols-12 text-[11px] font-semibold">
-                    <div className="col-span-7 p-1 border-l border-b border-black/70 text-right">Total</div>
-                    <div className="col-span-2 p-1 border-l border-b border-black/70 text-right">{qtyTotal} Nos</div>
-                    <div className="col-span-2 p-1 border-l border-b border-black/70" />
-                    <div className="col-span-1 p-1 border-l border-b border-r border-black/70 text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
+                    <div className="col-span-6 p-1 border-l border-b border-black/70 text-right">Total</div>
+                    <div className="col-span-3 p-1 border-l border-b border-black/70 text-right">{qtyTotal} Nos</div>
+                    <div className="col-span-3 p-1 border-l border-b border-r border-black/70 text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
                 </div>
 
                 {/* Charges summary: subtotal, discount, tax, shipping, total */}
