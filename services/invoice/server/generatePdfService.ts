@@ -25,39 +25,16 @@ export async function generatePdfService(req: NextRequest) {
 	let browser;
 	let page;
 	const PRINT_STYLES = `
-@page {
-  size: A4;
-  margin: 2cm 1cm 2cm 1cm;
-  @top-center {
-    content: element(invoice-header);
-  }
-}
-
+@page { size: A4; }
 
 @media print {
-  .page-split {
-    break-after: page;
-    page-break-after: always;
-  }
-
-  tr {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  table {
-    break-inside: auto;
-  }
-
-  tbody {
-    break-inside: auto;
-  }
+  .page-split { break-after: page; page-break-after: always; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  table { break-inside: auto; }
+  tbody { break-inside: auto; }
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
-}
+body, html { margin: 0; padding: 0; }
 `;
 
 
@@ -67,6 +44,68 @@ body, html {
 		console.log("Generating PDF with template:", templateId);
 		const InvoiceTemplate = await getInvoiceTemplate(templateId);
 		const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
+
+		// Build header markup separately for Puppeteer headerTemplate to repeat on each page
+		const { sender, receiver, details } = body;
+		const formatDate = (value: string | Date) => new Date(value).toLocaleDateString("en-US");
+		const headerMarkup = `
+<div  style="width:90%; margin: auto;  font-family: ui-sans-serif,system-ui,-apple-system; font-size:12px;">
+  <div style="text-align:center; font-size:18px; font-weight:600;">Tax Invoice</div>
+  <div style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid rgba(0,0,0,0.7);">
+    <div style="padding:8px; border-right:1px solid rgba(0,0,0,0.7);">
+      <div style="font-weight:600; font-size:14px;">${sender.name || ''}</div>
+      <div>${sender.address || ''}</div>
+      <div>${[sender.zipCode, sender.city].filter(Boolean).join(', ')}</div>
+      <div>${sender.country || ''}</div>
+      <div style="margin-top:4px;">
+        <div>Email: ${sender.email || ''}</div>
+        <div>Phone: ${sender.phone || ''}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Invoice No.</div>
+        <div style="padding:4px;">${details.invoiceNumber || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Dated</div>
+        <div style="padding:4px;">${details.invoiceDate ? formatDate(details.invoiceDate) : ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Delivery Note</div>
+        <div style="padding:4px;">${details.purchaseOrderNumber || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Mode/Terms of Payment</div>
+        <div style="padding:4px;">${details.paymentTerms || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Reference No. & Date</div>
+        <div style="padding:4px;">${details.updatedAt || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr;">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7);">Other References</div>
+        <div style="padding:4px;"></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; border:1px solid rgba(0,0,0,0.7); border-top:none;">
+    <div style="padding:8px; border-right:1px solid rgba(0,0,0,0.7);">
+      <div style="font-size:11px;">Consignee (Ship to)</div>
+      <div style="font-weight:600; font-size:13px;">${receiver.name || ''}</div>
+      <div style="font-size:12px;">${receiver.address || ''}</div>
+      <div style="font-size:12px;">${[receiver.zipCode, receiver.city].filter(Boolean).join(', ')}</div>
+      <div style="font-size:12px;">${receiver.country || ''}</div>
+    </div>
+    <div style="padding:8px;">
+      <div style="font-size:11px;">Buyer (Bill to)</div>
+      <div style="font-weight:600; font-size:13px;">${receiver.name || ''}</div>
+      <div style="font-size:12px;">${receiver.address || ''}</div>
+      <div style="font-size:12px;">${[receiver.zipCode, receiver.city].filter(Boolean).join(', ')}</div>
+      <div style="font-size:12px;">${receiver.country || ''}</div>
+    </div>
+  </div>
+</div>`;
 
 		const htmlTemplate = `<!DOCTYPE html>
             <html lang="en">
@@ -111,7 +150,10 @@ body, html {
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
-			preferCSSPageSize: true
+			preferCSSPageSize: true,
+			displayHeaderFooter: true,
+			headerTemplate: `<div style="padding: 16px 24px; width:100%;">${headerMarkup}</div>`,
+			margin: { top: "310px", bottom: "60px", left: "20px", right: "20px" },
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });

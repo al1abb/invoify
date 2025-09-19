@@ -137,13 +137,23 @@
                 table.invoice-table { table-layout: fixed; width: 100%; }
                 table.invoice-table td, table.invoice-table th { word-break: break-word; overflow-wrap: anywhere; }
                 td.desc-cell, th.desc-cell { white-space: pre-wrap; hyphens: auto; }
+
+                /* Prevent page breaks within key blocks */
+                .avoid-break { 
+                    break-inside: avoid; 
+                    page-break-inside: avoid; 
+                    -webkit-column-break-inside: avoid;
+                    -moz-column-break-inside: avoid;
+                }
             `}</style>
 
+                <div className="text-gray-900 dark:text-black">
+
                 {/* Header - will be automatically repeated on every page */}
-                <Header />
+                {/* <Header /> */}
 
                 {/* Items table - will automatically break across pages */}
-                <div className="border border-t-0 border-black/70">
+                <div className="border border-t-1 border-black/70">
                     <table className="invoice-table w-full border-collapse">
                         <colgroup>
                             <col style={{ width: "40px" }} />
@@ -160,9 +170,9 @@
                                     <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
                                     <td className="p-1 border-r border-black/20 desc-cell">
                                         <p className="font-medium">{item.name}</p>
-                                        {item.description && (
-                                            <p className="opacity-80">{item.description}</p>
-                                        )}
+                                    {item.description && (
+                                        <p className="opacity-80 dark:opacity-90 dark:text-black">{item.description}</p>
+                                    )}
                                     </td>
                                     <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
                                     <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
@@ -182,7 +192,7 @@
                 </div>
 
                 {/* Charges summary: subtotal, discount, tax, shipping, total */}
-                <div className="border border-black/70">
+                <div className="avoid-break border border-black/70">
                     <div className="grid grid-cols-12 text-[11px]">
                         <div className="col-span-7 p-1 border-r border-black/70"></div>
                         <div className="col-span-5 p-1">
@@ -231,10 +241,10 @@
                 </div>
 
                 {/* Amount in words + statement table */}
-                <div className="grid grid-cols-2 border border-t-0 border-black/70">
+                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
                     <div className="p-2 text-[11px] border-r border-black/70">
                         <p className="font-semibold">Amount Chargeable (in words):</p>
-                        <p className="mt-1">{details.totalAmountInWords}</p>
+                        <p className="mt-1 dark:text-black-200">{details.totalAmountInWords}</p>
                     </div>
                     <div className="p-2 text-[11px]">
                         <div className="border border-black/70">
@@ -256,7 +266,7 @@
                 </div>
 
                 {/* Declaration + signature block */}
-                <div className="grid grid-cols-2 border border-t-0 border-black/70">
+                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
                     <div className="p-2 text-[10px]">
                         <p className="font-semibold">Declaration</p>
                         <p>
@@ -294,9 +304,10 @@
                 </div>
 
                 {/* Bottom totals area */}
-                <div className="mt-1 grid grid-cols-2 gap-2">
-                    <div className="text-[10px] text-center text-gray-600">This is a Computer Generated Invoice</div>
+                <div className="avoid-break mt-1 grid grid-cols-2 gap-2">
+                    <div className="text-[10px] text-center text-gray-600 dark:text-black">This is a Computer Generated Invoice</div>
                     <div className="text-right text-[12px] font-semibold">Total: {formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
+                </div>
                 </div>
             </InvoiceLayout>
         );
