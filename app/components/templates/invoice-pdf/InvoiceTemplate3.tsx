@@ -145,169 +145,203 @@
                     -webkit-column-break-inside: avoid;
                     -moz-column-break-inside: avoid;
                 }
+
+                /* Table structure for repeating headers - now using native HTML table */
+                thead {
+                    display: table-header-group;
+                }
+                
+                tbody {
+                    display: table-row-group;
+                }
+                
+                tfoot {
+                    display: table-footer-group;
+                }
             `}</style>
 
                 <div className="text-gray-900 dark:text-black">
-
-                {/* Header - will be automatically repeated on every page */}
-                {/* <Header /> */}
-
-                {/* Items table - will automatically break across pages */}
-                <div className="border border-t-1 border-black/70">
-                    <table className="invoice-table w-full border-collapse">
-                        <colgroup>
-                            <col style={{ width: "40px" }} />
-                            <col />
-                            <col style={{ width: "100px" }} />
-                            <col style={{ width: "80px" }} />
-                            <col style={{ width: "60px" }} />
-                            <col style={{ width: "100px" }} />
-                        </colgroup>
+                <table className="invoice-table w-full border-collapse">
+                    <colgroup>
+                        <col style={{ width: "40px" }} />
+                        <col />
+                        <col style={{ width: "100px" }} />
+                        <col style={{ width: "80px" }} />
+                        <col style={{ width: "60px" }} />
+                        <col style={{ width: "100px" }} />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th colSpan={6}>
+                                <Header />
+                            </th>
+                        </tr>
                         <ItemsTableHeader />
-                        <tbody>
-                            {details.items.map((item, idx) => (
-                                <tr key={idx} className="text-[11px] border-b border-black/50 align-top">
-                                    <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
-                                    <td className="p-1 border-r border-black/20 desc-cell">
-                                        <p className="font-medium">{item.name}</p>
-                                    {item.description && (
-                                        <p className="opacity-80 dark:opacity-90 dark:text-black">{item.description}</p>
-                                    )}
-                                    </td>
-                                    <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
-                                    <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
-                                    <td className="p-1 border-r border-black/20 text-center align-top">Nos</td>
-                                    <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Totals row */}
-                <div className="grid grid-cols-12 text-[11px] font-semibold">
-                    <div className="col-span-6 p-1 border-l border-b border-black/70 text-right">Total</div>
-                    <div className="col-span-3 p-1 border-l border-b border-black/70 text-right">{qtyTotal} Nos</div>
-                    <div className="col-span-3 p-1 border-l border-b border-r border-black/70 text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
-                </div>
-
-                {/* Charges summary: subtotal, discount, tax, shipping, total */}
-                <div className="avoid-break border border-black/70">
-                    <div className="grid grid-cols-12 text-[11px]">
-                        <div className="col-span-7 p-1 border-r border-black/70"></div>
-                        <div className="col-span-5 p-1">
-                            <div className="grid grid-cols-2 gap-y-1">
-                                <div className="text-right font-semibold pr-2">Subtotal:</div>
-                                <div className="text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
-
-                                {details.discountDetails?.amount != undefined && details.discountDetails?.amount > 0 && (
-                                    <>
-                                        <div className="text-right font-semibold pr-2">Discount:</div>
-                                        <div className="text-right">
-                                            {details.discountDetails.amountType === "amount"
-                                                ? `- ${formatNumberWithCommas(Number(details.discountDetails.amount))}`
-                                                : `- ${details.discountDetails.amount}%`}
-                                        </div>
-                                    </>
+                    </thead>
+                    <tbody>
+                        {/* Items table rows */}
+                        {details.items.map((item, idx) => (
+                            <tr key={idx} className="text-[11px] border-b border-black/50 align-top">
+                                <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
+                                <td className="p-1 border-r border-black/20 desc-cell">
+                                    <p className="font-medium">{item.name}</p>
+                                {item.description && (
+                                    <p className="opacity-80 dark:opacity-90 dark:text-black">{item.description}</p>
                                 )}
+                                </td>
+                                <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
+                                <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
+                                <td className="p-1 border-r border-black/20 text-center align-top">Nos</td>
+                                <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
+                            </tr>
+                        ))}
 
-                                {details.taxDetails?.amount != undefined && details.taxDetails?.amount > 0 && (
-                                    <>
-                                        <div className="text-right font-semibold pr-2">Tax:</div>
-                                        <div className="text-right">
-                                            {details.taxDetails.amountType === "amount"
-                                                ? `+ ${formatNumberWithCommas(Number(details.taxDetails.amount))}`
-                                                : `+ ${details.taxDetails.amount}%`}
+                        {/* Totals row */}
+                        <tr>
+                            <td colSpan={6} className="p-0">
+                                <div className="grid grid-cols-12 text-[11px] font-semibold">
+                                    <div className="col-span-6 p-1 border-l border-b border-black/70 text-right">Total</div>
+                                    <div className="col-span-3 p-1 border-l border-b border-black/70 text-right">{qtyTotal} Nos</div>
+                                    <div className="col-span-3 p-1 border-l border-b border-r border-black/70 text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {/* Charges summary: subtotal, discount, tax, shipping, total */}
+                        <tr>
+                            <td colSpan={6} className="p-0">
+                                <div className="avoid-break border border-black/70">
+                                    <div className="grid grid-cols-12 text-[11px]">
+                                        <div className="col-span-7 p-1 border-r border-black/70"></div>
+                                        <div className="col-span-5 p-1">
+                                            <div className="grid grid-cols-2 gap-y-1">
+                                                <div className="text-right font-semibold pr-2">Subtotal:</div>
+                                                <div className="text-right">{formatNumberWithCommas(Number(details.subTotal))}</div>
+
+                                                {details.discountDetails?.amount != undefined && details.discountDetails?.amount > 0 && (
+                                                    <>
+                                                        <div className="text-right font-semibold pr-2">Discount:</div>
+                                                        <div className="text-right">
+                                                            {details.discountDetails.amountType === "amount"
+                                                                ? `- ${formatNumberWithCommas(Number(details.discountDetails.amount))}`
+                                                                : `- ${details.discountDetails.amount}%`}
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                {details.taxDetails?.amount != undefined && details.taxDetails?.amount > 0 && (
+                                                    <>
+                                                        <div className="text-right font-semibold pr-2">Tax:</div>
+                                                        <div className="text-right">
+                                                            {details.taxDetails.amountType === "amount"
+                                                                ? `+ ${formatNumberWithCommas(Number(details.taxDetails.amount))}`
+                                                                : `+ ${details.taxDetails.amount}%`}
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                {details.shippingDetails?.cost != undefined && details.shippingDetails?.cost > 0 && (
+                                                    <>
+                                                        <div className="text-right font-semibold pr-2">Shipping:</div>
+                                                        <div className="text-right">
+                                                            {details.shippingDetails.costType === "amount"
+                                                                ? `+ ${formatNumberWithCommas(Number(details.shippingDetails.cost))}`
+                                                                : `+ ${details.shippingDetails.cost}%`}
+                                                        </div>
+                                                    </>
+                                                )}
+
+                                                <div className="text-right font-semibold pr-2">Total:</div>
+                                                <div className="text-right">{formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
+                                            </div>
                                         </div>
-                                    </>
-                                )}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                                {details.shippingDetails?.cost != undefined && details.shippingDetails?.cost > 0 && (
-                                    <>
-                                        <div className="text-right font-semibold pr-2">Shipping:</div>
-                                        <div className="text-right">
-                                            {details.shippingDetails.costType === "amount"
-                                                ? `+ ${formatNumberWithCommas(Number(details.shippingDetails.cost))}`
-                                                : `+ ${details.shippingDetails.cost}%`}
+                        {/* Amount in words + statement table */}
+                        <tr>
+                            <td colSpan={6} className="p-0">
+                                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
+                                    <div className="p-2 text-[11px] border-r border-black/70">
+                                        <p className="font-semibold">Amount Chargeable (in words):</p>
+                                        <p className="mt-1 dark:text-black-200">{details.totalAmountInWords}</p>
+                                    </div>
+                                    <div className="p-2 text-[11px]">
+                                        <div className="border border-black/70">
+                                            <div className="grid grid-cols-4 text-center text-[10px] font-semibold border-b border-black/70">
+                                                <div className="p-1 border-r border-black/70">Bill Date</div>
+                                                <div className="p-1 border-r border-black/70">Bill No</div>
+                                                <div className="p-1 border-r border-black/70">Bill Amt</div>
+                                                <div className="p-1">Outstand. Amt</div>
+                                            </div>
+                                            {/* Single current row */}
+                                            <div className="grid grid-cols-4 text-center text-[11px]">
+                                                <div className="p-1 border-r border-black/20">{formatDate(details.invoiceDate)}</div>
+                                                <div className="p-1 border-r border-black/20">{details.invoiceNumber}</div>
+                                                <div className="p-1 border-r border-black/20">{formatNumberWithCommas(Number(details.totalAmount))}</div>
+                                                <div className="p-1">0.00</div>
+                                            </div>
                                         </div>
-                                    </>
-                                )}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                                <div className="text-right font-semibold pr-2">Total:</div>
-                                <div className="text-right">{formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        {/* Declaration + signature block */}
+                        <tr>
+                            <td colSpan={6} className="p-0">
+                                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
+                                    <div className="p-2 text-[10px]">
+                                        <p className="font-semibold">Declaration</p>
+                                        <p>
+                                            We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+                                        </p>
+                                    </div>
+                                    <div className="p-2 text-right text-[11px]">
+                                        <p className="font-semibold">For {sender.name}</p>
+                                        {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+                                            <div className="mt-2 inline-block">
+                                                <img
+                                                    src={details.signature.data}
+                                                    width={120}
+                                                    height={60}
+                                                    alt={`Signature of ${sender.name}`}
+                                                />
+                                            </div>
+                                        ) : details.signature?.data ? (
+                                            <p
+                                                className="mt-4"
+                                                style={{
+                                                    fontSize: 24,
+                                                    fontWeight: 400,
+                                                    fontFamily: `${details.signature.fontFamily}, cursive`,
+                                                    color: "black",
+                                                }}
+                                            >
+                                                {details.signature.data}
+                                            </p>
+                                        ) : (
+                                            <div className="h-10" />
+                                        )}
+                                        <p className="mt-6">Authorized Signatory</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                {/* Amount in words + statement table */}
-                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
-                    <div className="p-2 text-[11px] border-r border-black/70">
-                        <p className="font-semibold">Amount Chargeable (in words):</p>
-                        <p className="mt-1 dark:text-black-200">{details.totalAmountInWords}</p>
-                    </div>
-                    <div className="p-2 text-[11px]">
-                        <div className="border border-black/70">
-                            <div className="grid grid-cols-4 text-center text-[10px] font-semibold border-b border-black/70">
-                                <div className="p-1 border-r border-black/70">Bill Date</div>
-                                <div className="p-1 border-r border-black/70">Bill No</div>
-                                <div className="p-1 border-r border-black/70">Bill Amt</div>
-                                <div className="p-1">Outstand. Amt</div>
-                            </div>
-                            {/* Single current row */}
-                            <div className="grid grid-cols-4 text-center text-[11px]">
-                                <div className="p-1 border-r border-black/20">{formatDate(details.invoiceDate)}</div>
-                                <div className="p-1 border-r border-black/20">{details.invoiceNumber}</div>
-                                <div className="p-1 border-r border-black/20">{formatNumberWithCommas(Number(details.totalAmount))}</div>
-                                <div className="p-1">0.00</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Declaration + signature block */}
-                <div className="avoid-break grid grid-cols-2 border border-t-0 border-black/70">
-                    <div className="p-2 text-[10px]">
-                        <p className="font-semibold">Declaration</p>
-                        <p>
-                            We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
-                        </p>
-                    </div>
-                    <div className="p-2 text-right text-[11px]">
-                        <p className="font-semibold">For {sender.name}</p>
-                        {details?.signature?.data && isDataUrl(details?.signature?.data) ? (
-                            <div className="mt-2 inline-block">
-                                <img
-                                    src={details.signature.data}
-                                    width={120}
-                                    height={60}
-                                    alt={`Signature of ${sender.name}`}
-                                />
-                            </div>
-                        ) : details.signature?.data ? (
-                            <p
-                                className="mt-4"
-                                style={{
-                                    fontSize: 24,
-                                    fontWeight: 400,
-                                    fontFamily: `${details.signature.fontFamily}, cursive`,
-                                    color: "black",
-                                }}
-                            >
-                                {details.signature.data}
-                            </p>
-                        ) : (
-                            <div className="h-10" />
-                        )}
-                        <p className="mt-6">Authorized Signatory</p>
-                    </div>
-                </div>
-
-                {/* Bottom totals area */}
-                <div className="avoid-break mt-1 grid grid-cols-2 gap-2">
-                    <div className="text-[10px] text-center text-gray-600 dark:text-black">This is a Computer Generated Invoice</div>
-                    <div className="text-right text-[12px] font-semibold">Total: {formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
-                </div>
+                        {/* Bottom totals area */}
+                        <tr>
+                            <td colSpan={6} className="p-0">
+                                <div className="avoid-break mt-1 grid grid-cols-2 gap-2">
+                                    <div className="text-[10px] text-center text-gray-600 dark:text-black">This is a Computer Generated Invoice</div>
+                                    <div className="text-right text-[12px] font-semibold">Total: {formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
             </InvoiceLayout>
         );
