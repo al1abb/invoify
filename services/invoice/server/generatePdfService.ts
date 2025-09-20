@@ -147,13 +147,18 @@ body, html { margin: 0; padding: 0; }
 			timeout: 30000,
 		});
 
+		// Only apply header for template 3, others don't need it
+		const isTemplate3 = templateId === 3;
+		
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
-			displayHeaderFooter: true,
-			headerTemplate: `<div style="padding: 16px 24px; width:100%;">${headerMarkup}</div>`,
-			margin: { top: "310px", bottom: "60px", left: "20px", right: "20px" },
+			displayHeaderFooter: isTemplate3,
+			headerTemplate: isTemplate3 ? `<div style="padding: 16px 24px; width:100%;">${headerMarkup}</div>` : "",
+			margin: isTemplate3 
+				? { top: "310px", bottom: "60px", left: "20px", right: "20px" }
+				: { top: "20px", bottom: "60px", left: "20px", right: "20px" },
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
