@@ -5,6 +5,7 @@ type Props = { data: InvoiceType,isForPdf?: boolean; };
 
 export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 	const { sender, receiver, details } = data;
+	const shipTo = (data as any).shipTo || receiver;
 	const formatDate = (value: string | Date) => new Date(value).toLocaleDateString("en-US");
 
 	const paddingClass = isForPdf ? "0 60px" : "";
@@ -58,14 +59,14 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 				<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", border: "1px solid rgba(0,0,0,0.7)", borderTop: "none" }}>
 					{/* Consignee */}
 					<div style={{ padding: 8, borderRight: "1px solid rgba(0,0,0,0.7)" }}>
-						<div style={{ fontSize: 11 }}>Consignee (Ship to)</div>
-						<div style={{ fontWeight: 600, fontSize: 13 }}>{receiver.name}</div>
-						<div style={{ fontSize: 12 }}>{receiver.address}</div>
+					<div style={{ fontSize: 11 }}>Consignee (Ship to)</div>
+					<div style={{ fontWeight: 600, fontSize: 13 }}>{shipTo.name}</div>
+					<div style={{ fontSize: 12 }}>{shipTo.address}</div>
 						<div style={{ fontSize: 12 }}>
-							{receiver.zipCode}, {receiver.city}
+						{shipTo.zipCode}, {shipTo.city}
 						</div>
-						<div style={{ fontSize: 12 }}>{receiver.country}</div>
-						{(receiver as any).gstin && <div style={{ fontSize: 12, marginTop: 4 }}>GSTIN: {(receiver as any).gstin}</div>}
+					<div style={{ fontSize: 12 }}>{shipTo.country}</div>
+					{(shipTo as any).gstin && <div style={{ fontSize: 12, marginTop: 4 }}>GSTIN: {(shipTo as any).gstin}</div>}
 					</div>
 					{/* Buyer */}
 					<div style={{ padding: 8 }}>

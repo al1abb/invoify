@@ -182,6 +182,7 @@ const InvoiceDetailsSchema = z.object({
 const InvoiceSchema = z.object({
     sender: InvoiceSenderSchema,
     receiver: InvoiceReceiverSchema,
+    shipTo: InvoiceReceiverSchema.optional(),
     details: InvoiceDetailsSchema,
 });
 
