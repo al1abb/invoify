@@ -228,7 +228,7 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                                     <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
                                     <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
                                 </tr>
-                                {idx === 5 && details.items.length > 6 && (
+                                {idx === 6 && details.items.length > 7 && (
                                     <tr className="page-split">
                                         <td colSpan={5} style={{ padding: 0, border: 0 }} />
                                     </tr>
