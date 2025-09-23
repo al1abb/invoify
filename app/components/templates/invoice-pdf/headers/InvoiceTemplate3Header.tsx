@@ -26,7 +26,7 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 					}}
 				>
 					{/* Seller */}
-					<div style={{ padding: 8,  fontSize: 12, textAlign: "left" }}>
+				<div style={{ padding: 8,  fontSize: 12, textAlign: "left" }}>
 						<div style={{ fontWeight: 600, fontSize: 14 }}>{sender.name}</div>
 						<div>{sender.address}</div>
 						<div>
@@ -37,6 +37,7 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 							<div>Email: {sender.email}</div>
 							<div>Phone: {sender.phone}</div>
 						</div>
+					{(sender as any).gstin && <div style={{ marginTop: 4 }}>GSTIN: {(sender as any).gstin}</div>}
 					</div>
 
 				{/* Company logo (beside seller) */}
@@ -64,6 +65,7 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 							{receiver.zipCode}, {receiver.city}
 						</div>
 						<div style={{ fontSize: 12 }}>{receiver.country}</div>
+						{(receiver as any).gstin && <div style={{ fontSize: 12, marginTop: 4 }}>GSTIN: {(receiver as any).gstin}</div>}
 					</div>
 					{/* Buyer */}
 					<div style={{ padding: 8 }}>
@@ -74,8 +76,16 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 							{receiver.zipCode}, {receiver.city}
 						</div>
 						<div style={{ fontSize: 12 }}>{receiver.country}</div>
+						{(receiver as any).gstin && <div style={{ fontSize: 12, marginTop: 4 }}>GSTIN: {(receiver as any).gstin}</div>}
 					</div>
 					<div style={{ fontSize: 11, borderLeft: "1px solid rgba(0,0,0,0.7)", borderRight: "1px solid rgba(0,0,0,0.7)"}}>
+						{/* Company GSTIN if available (from taxDetails.taxID or sender.gstin) */}
+						{(details.taxDetails?.taxID || (sender as any).gstin) && (
+							<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid rgba(0,0,0,0.7)" }}>
+								<div style={{ padding: 4, borderRight: "1px solid rgba(0,0,0,0.7)" }}>GSTIN</div>
+								<div style={{ padding: 4 }}>{details.taxDetails?.taxID || (sender as any).gstin}</div>
+							</div>
+						)}
 						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid rgba(0,0,0,0.7)" }}>
 							<div style={{ padding: 4, borderRight: "1px solid rgba(0,0,0,0.7)" }}>Invoice No.</div>
 							<div style={{ padding: 4 }}>{details.invoiceNumber || ""}</div>

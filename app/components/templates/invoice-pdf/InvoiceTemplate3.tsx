@@ -135,6 +135,7 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
             <style>{`
                 /* Basic page break styles - main CSS is in generatePdfService.ts */
                 tr { break-inside: avoid; }
+                .page-split { break-after: page; page-break-after: always; }
 
                 /* Ensure table content fits within row blocks */
                 table.invoice-table { table-layout: fixed; width: 100%; }
@@ -214,18 +215,25 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                     </thead>
                     <tbody className="table-row-group">
                         {details.items.map((item, idx) => (
-                            <tr key={idx} className="text-[11px] border-2 border-black/50 align-top">
-                                <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
-                                <td className="p-1 border-r border-black/20 desc-cell">
-                                    <p className="font-medium">{item.name}</p>
-                                    {item.description && (
-                                        <p className="opacity-80 dark:opacity-90 dark:text-black">{item.description}</p>
-                                    )}
-                                </td>
-                                <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
-                                <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
-                                <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
-                            </tr>
+                            <React.Fragment key={idx}>
+                                <tr className="text-[11px] border-2 border-black/50 align-top">
+                                    <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
+                                    <td className="p-1 border-r border-black/20 desc-cell">
+                                        <p className="font-medium">{item.name}</p>
+                                        {item.description && (
+                                            <p className="opacity-80 dark:opacity-90 dark:text-black">{item.description}</p>
+                                        )}
+                                    </td>
+                                    <td className="p-1 border-r border-black/20 text-right align-top">{item.quantity}</td>
+                                    <td className="p-1 border-r border-black/20 text-right align-top">{formatNumberWithCommas(Number(item.unitPrice))}</td>
+                                    <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
+                                </tr>
+                                {idx === 5 && details.items.length > 6 && (
+                                    <tr className="page-split">
+                                        <td colSpan={5} style={{ padding: 0, border: 0 }} />
+                                    </tr>
+                                )}
+                            </React.Fragment>
                         ))}
                     </tbody>
                 </table>

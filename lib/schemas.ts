@@ -66,6 +66,17 @@ const fieldValidators = {
     stringToNumberWithMax: z.coerce.number().max(1000000),
 
     stringOptional: z.string().optional(),
+    // GSTIN (India) pattern: 15 chars -> 2 digits + 5 letters + 4 digits + 1 letter + 1 alphanumeric (not zero) + 'Z' + 1 alphanumeric
+    gstinOptional: z
+        .string()
+        .optional()
+        .transform((val) => (typeof val === "string" ? val.toUpperCase().trim() : val))
+        .refine(
+            (val) =>
+                val === undefined ||
+                /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(val),
+            { message: "GSTIN must be 15 characters (e.g., 22ABCDE1234F1Z5)" }
+        ),
 
     nonNegativeNumber: z.coerce.number().nonnegative({
         message: "Must be a positive number",
@@ -94,6 +105,7 @@ const InvoiceSenderSchema = z.object({
     country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
+    gstin: fieldValidators.gstinOptional,
     customInputs: z.array(CustomInputSchema).optional(),
 });
 
@@ -105,6 +117,7 @@ const InvoiceReceiverSchema = z.object({
     country: fieldValidators.country,
     email: fieldValidators.email,
     phone: fieldValidators.phone,
+    gstin: fieldValidators.gstinOptional,
     customInputs: z.array(CustomInputSchema).optional(),
 });
 

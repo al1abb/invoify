@@ -86,6 +86,15 @@ const BillToSection = () => {
                     target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
                 }}
             />
+            <FormInput
+                name="receiver.gstin"
+                label="GSTIN"
+                placeholder="Receiver GSTIN (e.g., 22ABCDE1234F1Z5)"
+                onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.toUpperCase();
+                }}
+            />
             {/* //? key = field.id fixes a bug where wrong field gets deleted  */}
             {fields?.map((field, index) => (
                 <FormCustomInput
