@@ -39,79 +39,91 @@
         // The browser will handle page breaks automatically
 
         const Header = () => (
-            <div className=" table-header-group running-header">
-                {/* Title */}
-                <h1 className="text-center text-xl font-semibold tracking-wide">Tax Invoice</h1>
+            <>
+                {/* Title row */}
+                <tr className="avoid-break">
+                    <td colSpan={6} className="p-0">
+                        <h1 className="text-center text-xl font-semibold tracking-wide">Tax Invoice</h1>
+                    </td>
+                </tr>
 
                 {/* Top header: Seller + Invoice meta */}
-                <div className="mt-2 grid grid-cols-2 border border-black/70">
-                    {/* Seller */}
-                    <div className="p-2 text-left border-r border-black/70 text-[12px]">
-                        <p className="font-semibold text-[14px]">{sender.name}</p>
-                        <p>{sender.address}</p>
-                        <p>
-                            {sender.zipCode}, {sender.city}
-                        </p>
-                        <p>{sender.country}</p>
-                        <div className="mt-1 text-[11px] space-y-0.5">
-                            <p>Email: {sender.email}</p>
-                            <p>Phone: {sender.phone}</p>
-                        </div>
-                    </div>
+                <tr className="avoid-break">
+                    <td colSpan={6} className="p-0">
+                        <div className="mt-2 grid grid-cols-2 border border-black/70">
+                            {/* Seller */}
+                            <div className="p-2 text-left border-r border-black/70 text-[12px]">
+                                <p className="font-semibold text-[14px]">{sender.name}</p>
+                                <p>{sender.address}</p>
+                                <p>
+                                    {sender.zipCode}, {sender.city}
+                                </p>
+                                <p>{sender.country}</p>
+                                <div className="mt-1 text-[11px] space-y-0.5">
+                                    <p>Email: {sender.email}</p>
+                                    <p>Phone: {sender.phone}</p>
+                                </div>
+                            </div>
 
-                    {/* Invoice / Dispatch details */}
-                    <div className="text-[11px] text-left">
-                        <Row>
-                            <Cell className="border-l-0">Invoice No.</Cell>
-                            <Cell>{details.invoiceNumber}</Cell>
-                        </Row>
-                        <Row>
-                            <Cell className="border-l-0">Dated</Cell>
-                            <Cell>{formatDate(details.invoiceDate)}</Cell>
-                        </Row>
-                        <Row>
-                            <Cell className="border-l-0">Delivery Note</Cell>
-                            <Cell>{details.purchaseOrderNumber || ""}</Cell>
-                        </Row>
-                        <Row>
-                            <Cell className="border-l-0">Mode/Terms of Payment</Cell>
-                            <Cell>{details.paymentTerms}</Cell>
-                        </Row>
-                        <Row>
-                            <Cell className="border-l-0">Reference No. & Date</Cell>
-                            <Cell>{details.updatedAt || ""}</Cell>
-                        </Row>
-                        <Row>
-                            <Cell className="border-l-0">Other References</Cell>
-                            <Cell>{""}</Cell>
-                        </Row>
-                    </div>
-                </div>
+                            {/* Invoice / Dispatch details */}
+                            <div className="text-[11px] text-left">
+                                <Row>
+                                    <Cell className="border-l-0">Invoice No.</Cell>
+                                    <Cell>{details.invoiceNumber}</Cell>
+                                </Row>
+                                <Row>
+                                    <Cell className="border-l-0">Dated</Cell>
+                                    <Cell>{formatDate(details.invoiceDate)}</Cell>
+                                </Row>
+                                <Row>
+                                    <Cell className="border-l-0">Delivery Note</Cell>
+                                    <Cell>{details.purchaseOrderNumber || ""}</Cell>
+                                </Row>
+                                <Row>
+                                    <Cell className="border-l-0">Mode/Terms of Payment</Cell>
+                                    <Cell>{details.paymentTerms}</Cell>
+                                </Row>
+                                <Row>
+                                    <Cell className="border-l-0">Reference No. & Date</Cell>
+                                    <Cell>{details.updatedAt || ""}</Cell>
+                                </Row>
+                                <Row>
+                                    <Cell className="border-l-0">Other References</Cell>
+                                    <Cell>{""}</Cell>
+                                </Row>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
 
                 {/* Consignee / Buyer */}
-                <div className="grid grid-cols-2 border border-t-0 text-left border-black/70">
-                    {/* Consignee */}
-                    <div className="p-2 border-r border-black/70">
-                        <p className="text-[11px]">Consignee (Ship to)</p>
-                        <p className="font-semibold text-[13px]">{receiver.name}</p>
-                        <p className="text-[12px]">{receiver.address}</p>
-                        <p className="text-[12px]">
-                            {receiver.zipCode}, {receiver.city}
-                        </p>
-                        <p className="text-[12px]">{receiver.country}</p>
-                    </div>
-                    {/* Buyer */}
-                    <div className="p-2">
-                        <p className="text-[11px]">Buyer (Bill to)</p>
-                        <p className="font-semibold text-[13px]">{receiver.name}</p>
-                        <p className="text-[12px]">{receiver.address}</p>
-                        <p className="text-[12px]">
-                            {receiver.zipCode}, {receiver.city}
-                        </p>
-                        <p className="text-[12px]">{receiver.country}</p>
-                    </div>
-                </div>
-            </div>
+                <tr className="avoid-break">
+                    <td colSpan={6} className="p-0">
+                        <div className="grid grid-cols-2 border border-t-0 text-left border-black/70">
+                            {/* Consignee */}
+                            <div className="p-2 border-r border-black/70">
+                                <p className="text-[11px]">Consignee (Ship to)</p>
+                                <p className="font-semibold text-[13px]">{receiver.name}</p>
+                                <p className="text-[12px]">{receiver.address}</p>
+                                <p className="text-[12px]">
+                                    {receiver.zipCode}, {receiver.city}
+                                </p>
+                                <p className="text-[12px]">{receiver.country}</p>
+                            </div>
+                            {/* Buyer */}
+                            <div className="p-2">
+                                <p className="text-[11px]">Buyer (Bill to)</p>
+                                <p className="font-semibold text-[13px]">{receiver.name}</p>
+                                <p className="text-[12px]">{receiver.address}</p>
+                                <p className="text-[12px]">
+                                    {receiver.zipCode}, {receiver.city}
+                                </p>
+                                <p className="text-[12px]">{receiver.country}</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </>
         );
 
         const ItemsTableHeader = () => (
@@ -158,10 +170,10 @@
                         display: table-footer-group !important;
                     }
                     
-                    /* Ensure header content is properly displayed */
-                    .running-header {
-                        display: block !important;
-                        width: 100%;
+                    /* Ensure header rows don't break across pages */
+                    .avoid-break {
+                        page-break-inside: avoid;
+                        break-inside: avoid;
                     }
                     
                     /* Ensure table cells don't break across pages */
@@ -183,11 +195,7 @@
                         <col style={{ width: "100px" }} />
                     </colgroup>
                     <thead>
-                        <tr>
-                            <th colSpan={6} className="p-0">
-                                <Header />
-                            </th>
-                        </tr>
+                        <Header />
                         <ItemsTableHeader />
                     </thead>
                     <tbody className="table-row-group"> 
