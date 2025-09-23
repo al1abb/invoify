@@ -32,11 +32,6 @@ export async function generatePdfService(req: NextRequest) {
   tr { break-inside: avoid; page-break-inside: avoid; }
   table { break-inside: auto; }
   tbody { break-inside: auto; }
-  
-  /* Table-based header/footer repetition - most reliable browser-supported method */
-  thead { display: table-header-group !important; }
-  tfoot { display: table-footer-group !important; }
-  tbody { display: table-row-group !important; }
 }
 
 body, html { margin: 0; padding: 0; }
@@ -50,6 +45,71 @@ body, html { margin: 0; padding: 0; }
 		const InvoiceTemplate = await getInvoiceTemplate(templateId);
 		const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
 
+		// Build header markup separately for Puppeteer's headerTemplate (Template 3)
+		let headerMarkup = "";
+		if (templateId === 3) {
+			const { sender, receiver, details } = body;
+			const formatDate = (value: string | Date) => new Date(value).toLocaleDateString("en-US");
+			headerMarkup = `
+<div style="width: 85%; margin:auto; padding: 8px 24px; font-family: ui-sans-serif,system-ui,-apple-system; color: #000;">
+  <div style="text-align:center; font-size:18px; font-weight:600; letter-spacing:1px;">Tax Invoice</div>
+  <div style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid rgba(0,0,0,0.7); font-size:12px;">
+    <div style="padding:8px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">
+      <div style="font-weight:600; font-size:14px;">${sender.name || ''}</div>
+      <div>${sender.address || ''}</div>
+      <div>${[sender.zipCode, sender.city].filter(Boolean).join(', ')}</div>
+      <div>${sender.country || ''}</div>
+      <div style="margin-top:4px; font-size:11px;">
+        <div>Email: ${sender.email || ''}</div>
+        <div>Phone: ${sender.phone || ''}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Invoice No.</div>
+        <div style="padding:4px;">${details.invoiceNumber || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Dated</div>
+        <div style="padding:4px;">${details.invoiceDate ? formatDate(details.invoiceDate) : ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Delivery Note</div>
+        <div style="padding:4px;">${details.purchaseOrderNumber || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Mode/Terms of Payment</div>
+        <div style="padding:4px;">${details.paymentTerms || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(0,0,0,0.7);">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Reference No. & Date</div>
+        <div style="padding:4px;">${details.updatedAt || ''}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr;">
+        <div style="padding:4px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">Other References</div>
+        <div style="padding:4px;"></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; border:1px solid rgba(0,0,0,0.7); border-top:none;">
+    <div style="padding:8px; border-right:1px solid rgba(0,0,0,0.7); text-align:left;">
+      <div style="font-size:11px;">Consignee (Ship to)</div>
+      <div style="font-weight:600; font-size:13px;">${receiver.name || ''}</div>
+      <div style="font-size:12px;">${receiver.address || ''}</div>
+      <div style="font-size:12px;">${[receiver.zipCode, receiver.city].filter(Boolean).join(', ')}</div>
+      <div style="font-size:12px;">${receiver.country || ''}</div>
+    </div>
+    <div style="padding:8px; text-align:left;">
+      <div style="font-size:11px;">Buyer (Bill to)</div>
+      <div style="font-weight:600; font-size:13px;">${receiver.name || ''}</div>
+      <div style="font-size:12px;">${receiver.address || ''}</div>
+      <div style="font-size:12px;">${[receiver.zipCode, receiver.city].filter(Boolean).join(', ')}</div>
+      <div style="font-size:12px;">${receiver.country || ''}</div>
+    </div>
+  </div>
+</div>`;
+		}
+
 		// Template 3 now uses CSS table-header-group for header repetition
 		// No need for separate header markup generation
 
@@ -61,7 +121,7 @@ body, html { margin: 0; padding: 0; }
                 <link href="${TAILWIND_CDN}" rel="stylesheet" />
                 <style>
 					${PRINT_STYLES}
-    </style>
+    			</style>
               </head>
               <body>
                 ${appMarkup}
@@ -93,15 +153,17 @@ body, html { margin: 0; padding: 0; }
 			timeout: 30000,
 		});
 
-		// Template 3 now uses CSS table-header-group for header repetition
-		// No need for Puppeteer headerTemplate anymore
+		// Generate PDF; for template 3, use Puppeteer's headerTemplate
+		const usePuppeteerHeader = templateId === 3 && headerMarkup;
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
-			displayHeaderFooter: false,
-			headerTemplate: "",
-			margin: { top: "20px", bottom: "60px", left: "20px", right: "20px" },
+			displayHeaderFooter: !!usePuppeteerHeader,
+			headerTemplate: usePuppeteerHeader ? headerMarkup : "",
+			margin: usePuppeteerHeader
+				? { top: "320px", bottom: "60px", left: "20px", right: "20px" }
+				: { top: "20px", bottom: "60px", left: "20px", right: "20px" },
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });

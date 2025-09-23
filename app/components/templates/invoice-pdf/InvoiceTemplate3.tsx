@@ -195,7 +195,7 @@
                         <col style={{ width: "100px" }} />
                     </colgroup>
                     <thead>
-                        <Header />
+                        {/* <Header /> */}
                         <ItemsTableHeader />
                     </thead>
                     <tbody className="table-row-group"> 

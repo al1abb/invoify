@@ -40,7 +40,7 @@ export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
         <>
             {head}
             <section style={{ fontFamily: "Outfit, sans-serif" }}>
-                <div className="flex flex-col p-4 sm:p-10 bg-white rounded-xl min-h-[60rem]">
+                <div className="flex flex-col p-4 sm:p-10 sm:pt-0 bg-white rounded-xl min-h-[60rem]">
                     {children}
                 </div>
             </section>
