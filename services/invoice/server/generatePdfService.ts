@@ -49,7 +49,7 @@ body, html { margin: 0; padding: 0; }
 		let headerMarkup = "";
 		if (templateId === 3) {
 			const { default: InvoiceTemplate3Header } = await import("@/app/components/templates/invoice-pdf/headers/InvoiceTemplate3Header");
-			headerMarkup = renderToStaticMarkup(InvoiceTemplate3Header({ data: body } as any));
+			headerMarkup = renderToStaticMarkup(InvoiceTemplate3Header({ data: body, isForPdf: true } as any));
 		}
 
 		const htmlTemplate = `<!DOCTYPE html>
@@ -60,7 +60,7 @@ body, html { margin: 0; padding: 0; }
                 <link href="${TAILWIND_CDN}" rel="stylesheet" />
                 <style>
 					${PRINT_STYLES}
-    </style>
+    			</style>
               </head>
               <body>
                 ${appMarkup}
@@ -98,7 +98,7 @@ body, html { margin: 0; padding: 0; }
 			const tmp = await browser.newPage();
 			await tmp.setContent(`<!DOCTYPE html><html><head>
 			<link href="${TAILWIND_CDN}" rel="stylesheet" />
-			<style>html,body{margin:0;padding:0}</style>
+			<style>html,body{margin:0;padding:0;}</style>
 			</head><body>${headerMarkup}</body></html>`);
 			const measured = await tmp.evaluate(() => {
 				const el = document.querySelector('#header-container') as HTMLElement | null;
