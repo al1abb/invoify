@@ -39,14 +39,14 @@
         // The browser will handle page breaks automatically
 
         const Header = () => (
-            <div id="invoice-header" className="running-header">
+            <div className=" table-header-group running-header">
                 {/* Title */}
                 <h1 className="text-center text-xl font-semibold tracking-wide">Tax Invoice</h1>
 
                 {/* Top header: Seller + Invoice meta */}
                 <div className="mt-2 grid grid-cols-2 border border-black/70">
                     {/* Seller */}
-                    <div className="p-2 border-r border-black/70 text-[12px]">
+                    <div className="p-2 text-left border-r border-black/70 text-[12px]">
                         <p className="font-semibold text-[14px]">{sender.name}</p>
                         <p>{sender.address}</p>
                         <p>
@@ -60,7 +60,7 @@
                     </div>
 
                     {/* Invoice / Dispatch details */}
-                    <div className="text-[11px]">
+                    <div className="text-[11px] text-left">
                         <Row>
                             <Cell className="border-l-0">Invoice No.</Cell>
                             <Cell>{details.invoiceNumber}</Cell>
@@ -89,7 +89,7 @@
                 </div>
 
                 {/* Consignee / Buyer */}
-                <div className="grid grid-cols-2 border border-t-0 border-black/70">
+                <div className="grid grid-cols-2 border border-t-0 text-left border-black/70">
                     {/* Consignee */}
                     <div className="p-2 border-r border-black/70">
                         <p className="text-[11px]">Consignee (Ship to)</p>
@@ -115,16 +115,14 @@
         );
 
         const ItemsTableHeader = () => (
-            <thead>
-                <tr className="text-[11px] font-semibold text-center border-b border-black/70">
-                    <th className="p-1 border-r border-black/70 w-[40px]">Sl No</th>
-                    <th className="p-1 border-r border-black/70 text-left">Description of Goods</th>
-                    <th className="p-1 border-r border-black/70 w-[100px]">Quantity</th>
-                    <th className="p-1 border-r border-black/70 w-[80px]">Rate</th>
-                    <th className="p-1 border-r border-black/70 w-[60px]">per</th>
-                    <th className="p-1 w-[100px]">Amount</th>
-                </tr>
-            </thead>
+            <tr className="text-[11px] font-semibold text-center border border-black/70">
+                <th className="p-1 border-r border-black/70 w-[40px]">Sl No</th>
+                <th className="p-1 border-r border-black/70 text-left">Description of Goods</th>
+                <th className="p-1 border-r border-black/70 w-[100px]">Quantity</th>
+                <th className="p-1 border-r border-black/70 w-[80px]">Rate</th>
+                <th className="p-1 border-r border-black/70 w-[60px]">per</th>
+                <th className="p-1 w-[100px]">Amount</th>
+            </tr>
         );
 
         return (
@@ -147,16 +145,30 @@
                 }
 
                 /* Table structure for repeating headers - now using native HTML table */
-                thead {
-                    display: table-header-group;
-                }
-                
-                tbody {
-                    display: table-row-group;
-                }
-                
-                tfoot {
-                    display: table-footer-group;
+                @media print {
+                    thead {
+                        display: table-header-group !important;
+                    }
+                    
+                    tbody {
+                        display: table-row-group !important;
+                    }
+                    
+                    tfoot {
+                        display: table-footer-group !important;
+                    }
+                    
+                    /* Ensure header content is properly displayed */
+                    .running-header {
+                        display: block !important;
+                        width: 100%;
+                    }
+                    
+                    /* Ensure table cells don't break across pages */
+                    thead th, tbody td, tfoot td {
+                        page-break-inside: avoid;
+                        break-inside: avoid;
+                    }
                 }
             `}</style>
 
@@ -172,16 +184,16 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th colSpan={6}>
+                            <th colSpan={6} className="p-0">
                                 <Header />
                             </th>
                         </tr>
                         <ItemsTableHeader />
                     </thead>
-                    <tbody>
+                    <tbody className="table-row-group"> 
                         {/* Items table rows */}
                         {details.items.map((item, idx) => (
-                            <tr key={idx} className="text-[11px] border-b border-black/50 align-top">
+                            <tr key={idx} className="text-[11px] border border-black/50 align-top">
                                 <td className="p-1 border-r border-black/20 text-center align-top">{idx + 1}</td>
                                 <td className="p-1 border-r border-black/20 desc-cell">
                                     <p className="font-medium">{item.name}</p>

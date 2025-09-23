@@ -32,6 +32,11 @@ export async function generatePdfService(req: NextRequest) {
   tr { break-inside: avoid; page-break-inside: avoid; }
   table { break-inside: auto; }
   tbody { break-inside: auto; }
+  
+  /* Table-based header/footer repetition - most reliable browser-supported method */
+  thead { display: table-header-group !important; }
+  tfoot { display: table-footer-group !important; }
+  tbody { display: table-row-group !important; }
 }
 
 body, html { margin: 0; padding: 0; }
