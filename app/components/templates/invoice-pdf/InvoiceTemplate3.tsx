@@ -40,13 +40,6 @@
 
         const Header = () => (
             <>
-                {/* Title row */}
-                <tr className="avoid-break">
-                    <td colSpan={6} className="p-0">
-                        <h1 className="text-center text-xl font-semibold tracking-wide">Tax Invoice</h1>
-                    </td>
-                </tr>
-
                 {/* Top header: Seller + Invoice meta */}
                 <tr className="avoid-break">
                     <td colSpan={6} className="p-0">
