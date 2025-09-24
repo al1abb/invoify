@@ -36,7 +36,6 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 						<div>{sender.country}</div>
 						<div style={{ marginTop: 4 }}>
 							<div>Email: {sender.email}</div>
-							<div>Phone: {sender.phone}</div>
 						</div>
 					{(sender as any).gstin && <div style={{ marginTop: 4 }}>GSTIN: {(sender as any).gstin}</div>}
 					</div>
@@ -81,12 +80,12 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 					</div>
 					<div style={{ fontSize: 11, borderLeft: "1px solid rgba(0,0,0,0.7)", borderRight: "1px solid rgba(0,0,0,0.7)"}}>
 						{/* Company GSTIN if available (from taxDetails.taxID or sender.gstin) */}
-						{(details.taxDetails?.taxID || (sender as any).gstin) && (
+						{/* {(details.taxDetails?.taxID || (sender as any).gstin) && (
 							<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid rgba(0,0,0,0.7)" }}>
 								<div style={{ padding: 4, borderRight: "1px solid rgba(0,0,0,0.7)" }}>GSTIN</div>
 								<div style={{ padding: 4 }}>{details.taxDetails?.taxID || (sender as any).gstin}</div>
 							</div>
-						)}
+						)} */}
 						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid rgba(0,0,0,0.7)" }}>
 							<div style={{ padding: 4, borderRight: "1px solid rgba(0,0,0,0.7)" }}>Invoice No.</div>
 							<div style={{ padding: 4 }}>{details.invoiceNumber || ""}</div>
@@ -101,7 +100,7 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 						</div>
 						<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
 							<div style={{ padding: 4, borderRight: "1px solid rgba(0,0,0,0.7)" }}>Reference No. & Date</div>
-							<div style={{ padding: 4 }}>{details.updatedAt || ""}</div>
+							<div style={{ padding: 4 }}>{formatDate(details.dueDate) || ""}</div>
 						</div>
 					</div>
 				</div>

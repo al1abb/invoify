@@ -115,7 +115,7 @@ body, html { margin: 0; padding: 0; }
 			preferCSSPageSize: true,
 			displayHeaderFooter: Boolean(headerMarkup),
 			headerTemplate: headerMarkup,
-			margin: { top: `${topMarginPx}px`, bottom: "60px", left: "20px", right: "20px" },
+			margin: { top: `${topMarginPx}px`, bottom: "10px", left: "20px", right: "20px" },
 		});
 
 		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });

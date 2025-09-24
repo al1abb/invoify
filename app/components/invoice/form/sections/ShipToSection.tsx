@@ -73,19 +73,6 @@ const ShipToSection = () => {
                 placeholder="Ship to email"
             />
             <FormInput
-                name="shipTo.phone"
-                label={_t("form.steps.fromAndTo.phone")}
-                placeholder="Ship to phone number"
-                type="text"
-                inputMode="tel"
-                pattern="[0-9+\-\(\)\s]*"
-                aria-describedby="phone-format"
-                onInput={(e) => {
-                    const target = e.target as HTMLInputElement;
-                    target.value = target.value.replace(/[^\d\+\-\(\)\s]/g, "");
-                }}
-            />
-            <FormInput
                 name="shipTo.gstin"
                 label="GSTIN"
                 placeholder="Ship to GSTIN (e.g., 22ABCDE1234F1Z5)"

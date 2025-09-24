@@ -11,6 +11,7 @@ import { DATE_OPTIONS } from "@/lib/variables";
 // Types
 import { InvoiceType } from "@/types";
 import InvoiceTemplate3Header from "./headers/InvoiceTemplate3Header";
+import TemplateHeaderForScreen from "./TemplateHeaderForScreen";
 
 const Row = ({ children }: { children: React.ReactNode }) => (
     <div className="grid grid-cols-2 border-b border-black/70 text-[11px]">
@@ -55,7 +56,6 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                             <p>{sender.country}</p>
                             <div className="mt-1 text-[11px] space-y-0.5">
                                 <p>Email: {sender.email}</p>
-                                <p>Phone: {sender.phone}</p>
                             </div>
                         </div>
 
@@ -176,30 +176,24 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                         break-inside: avoid;
                     }
 
-                    /* Styles for screen view */
-                    .screen-header {
-                        display: block;
-                        width: 100%;
+                    .page-split{
+                        display:none;
                     }
 
-                    /* Styles for print (PDF) view */
                     @media print {
-                        /* Hide the header intended for the screen */
-                        .screen-header {
-                        display: none;
+                            .page-split {
+                                display: table-row;
+                                break-after: page;
+                            }
                         }
-                    }
-                    #header-container {
-                        width: 100%;
-                    }
-                }
+                    }   
             `}</style>
 
             <div className="text-gray-900 dark:text-black">
                 {/* Header separated from body */}
-                <div className="avoid-break w-full screen-header">
+                <TemplateHeaderForScreen>
                     <InvoiceTemplate3Header data={data} />
-                </div>
+                </TemplateHeaderForScreen>
 
                 {/* Items table - the only remaining table */}
                 <table className="invoice-table w-full border-collapse mt-2">
@@ -229,7 +223,7 @@ const InvoiceTemplate3 = (data: InvoiceType) => {
                                     <td className="p-1 text-right align-top">{formatNumberWithCommas(Number(item.total))}</td>
                                 </tr>
                                 {idx === 6 && details.items.length > 7 && (
-                                    <tr className="page-split">
+                                    <tr className="page-split hide">
                                         <td colSpan={5} style={{ padding: 0, border: 0 }} />
                                     </tr>
                                 )}
