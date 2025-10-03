@@ -116,7 +116,18 @@ const InvoiceReceiverSchema = z.object({
     city: fieldValidators.city,
     country: fieldValidators.country,
     email: fieldValidators.email,
-    phone: fieldValidators.phone,
+    gstin: fieldValidators.gstinOptional,
+    customInputs: z.array(CustomInputSchema).optional(),
+});
+
+const BillToSchema = z.object({
+    name: fieldValidators.name,
+    address: fieldValidators.address,
+    zipCode: fieldValidators.zipCode,
+    city: fieldValidators.city,
+    country: fieldValidators.country,
+    email: fieldValidators.email,
+    phone: fieldValidators.phone.optional(),
     gstin: fieldValidators.gstinOptional,
     customInputs: z.array(CustomInputSchema).optional(),
 });
@@ -182,7 +193,7 @@ const InvoiceDetailsSchema = z.object({
 const InvoiceSchema = z.object({
     sender: InvoiceSenderSchema,
     receiver: InvoiceReceiverSchema,
-    shipTo: InvoiceReceiverSchema.optional(),
+    shipTo: BillToSchema.optional(),
     details: InvoiceDetailsSchema,
 });
 
