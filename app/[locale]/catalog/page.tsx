@@ -3,7 +3,8 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { BaseButton, Subheading } from "@/app/components";
 import { Eye, DownloadCloudIcon, Printer, MoveLeft } from "lucide-react";
-import ProductCatalogTemplate, { PRODUCT_CATALOG_DATA } from "@/app/components/templates/catalog-pdf/ProductCatalogTemplate";
+import ProductCatalogTemplate from "@/app/components/templates/catalog-pdf/ProductCatalogTemplate";
+import { PRODUCT_CATALOG_DATA } from "@/app/components/templates/catalog-pdf/catalog_contant";
 export default function CatalogPage() {
     const [loadingAction, setLoadingAction] = useState<"preview" | "download" | "print" | null>(null);
     const apiEndpoint = useMemo(() => "/api/catalog/generate", []);
@@ -13,10 +14,12 @@ export default function CatalogPage() {
         try {
             setLoadingAction("preview");
             const res = await fetch(apiEndpoint, { method: "POST" });
-            console.log(res);
+            
             if (!res.ok) return;
             const blob = await res.blob();
+            console.log("blob", blob);
             const url = URL.createObjectURL(blob);
+            console.log(url);
             window.open(url, "_blank", "noopener,noreferrer");
         }catch(error){
             console.error(error);
@@ -59,7 +62,7 @@ export default function CatalogPage() {
     }, [apiEndpoint]);
 
     return (
-        <div className="mx-auto">
+        <div className="mx-auto max-w-2xl">
             <Subheading>Product Catalog PDF:</Subheading>
             <div className="flex items-center mb-3">
                 <BaseButton variant={"ghost"} size="sm" onClick={() => history.back()}>
@@ -88,7 +91,7 @@ export default function CatalogPage() {
             )}
 
             {/* On-screen visual template preview before generating PDF */}
-            <div className="mt-3 max-w-3xl bg-white rounded-xl p-3 border border-gray-200">
+            <div className="mt-3 bg-white rounded-xl p-3 border border-gray-200">
                 {ProductCatalogTemplate(PRODUCT_CATALOG_DATA)}
             </div>
         </div>

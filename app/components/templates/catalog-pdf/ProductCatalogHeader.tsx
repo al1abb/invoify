@@ -2,23 +2,65 @@ import { CatalogCompanyInfo } from "./catalog_contant";
 
 export function PdfHeader({ company }: { company: CatalogCompanyInfo }) {
     return (
-        <div className="grid grid-cols-3 items-center gap-3 border-b border-black/30 py-2">
-            <div className="flex items-center gap-2 col-span-1">
+        <div 
+            id="catalog-header" 
+            style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                alignItems: "center",
+                gap: 12,
+                width:"100%",
+                
+                borderBottom: "1px solid rgba(0,0,0,0.3)",
+                padding:"10px 0",
+                color: "#000",
+            }}
+        >
+            <div 
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    gridColumn: "span 1",
+                }}
+            >
                 {company.logoUrl ? (
                     <img 
                         src={company.logoUrl} 
                         alt={company.legalName} 
-                        className="w-[100px] h-[50px] object-contain" 
+                        style={{
+                            width: 100,
+                            height: 50,
+                            objectFit: "contain",
+                        }} 
                     />
                 ) : (
-                    <div className="w-[100px] h-[50px] bg-gray-900 text-white flex items-center justify-center font-bold">
+                    <div 
+                        style={{
+                            width: 100,
+                            height: 50,
+                            backgroundColor: "#1f2937", // bg-gray-900
+                            color: "#fff", // text-white
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 700, // font-bold
+                        }}
+                    >
                         LOGO
                     </div>
                 )}
             </div>
-            <div className="flex justify-between text-xs col-span-2">
+            <div 
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: 12, // text-xs
+                    gridColumn: "span 2",
+                }}
+            >
                 <div>
-                    <div className="font-semibold">{company.tradeName || company.legalName}</div>
+                    <div style={{ fontWeight: 600 }}>{company.tradeName || company.legalName}</div>
                     <div>{company.city}, {company.state}</div>
                 </div>
                 <div>

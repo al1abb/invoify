@@ -18,24 +18,24 @@ const calculateBeforeDiscount = (price: number, discountPercent: number) => {
 export function ProductItem({ product }: { product: CatalogProduct }) {
     const beforeDiscount = calculateBeforeDiscount(product.price, product.discountPercent);
     return (
-        <div className="grid grid-cols-[1.2fr_1fr] gap-3 p-2 border border-black/20 rounded-md">
+        <div className="grid grid-cols-2 gap-3 p-3 border border-black/20 rounded-md h-full avoid-break">
             {/* Left visuals: 4 images in a grid */}
             <div className="grid grid-cols-2 gap-2">
                 {product.images.slice(0, 4).map((src, idx) => (
                     <div key={idx} className="w-full aspect-[4/3] rounded overflow-hidden bg-gray-100">
-                        <img 
-                            src={src} 
-                            alt={`${product.name} ${idx + 1}`} 
-                            className="w-full h-full object-cover" 
+                        <img
+                            src={src}
+                            alt={`${product.name} ${idx + 1}`}
+                            className="w-full h-full object-cover"
                         />
                     </div>
                 ))}
             </div>
 
             {/* Right core details */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 overflow-hidden">
                 <div>
-                    <div className="text-lg font-bold">{product.name}</div>
+                    <div className="text-lg font-bold line-clamp-2">{product.name}</div>
                     <div className="flex items-baseline gap-2 mt-1">
                         <span className="text-base font-semibold">{formatCurrencyINR(product.price)}</span>
                         {product.discountPercent > 0 && (
@@ -53,13 +53,13 @@ export function ProductItem({ product }: { product: CatalogProduct }) {
                         {product.specifications.map((spec, i) => (
                             <div key={i} className="flex gap-1.5">
                                 <div className="font-semibold">{spec.key}:</div>
-                                <div>{spec.value}</div>
+                                <div className="truncate">{spec.value}</div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="text-xs leading-relaxed text-gray-900">{product.details}</div>
+                <div className="text-xs leading-relaxed text-gray-900 line-clamp-3">{product.details}</div>
             </div>
         </div>
     );
@@ -67,7 +67,7 @@ export function ProductItem({ product }: { product: CatalogProduct }) {
 
 export function CompanySummary({ company }: { company: CatalogCompanyInfo }) {
     return (
-        <div className="grid gap-3 p-3">
+        <div className="grid gap-3 p-3 avoid-break">
             <div className="text-lg font-bold text-center">About Company</div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
@@ -95,7 +95,7 @@ export function CompanySummary({ company }: { company: CatalogCompanyInfo }) {
 // Chunk products into pages with exactly two per page
 const chunkByTwo = <T,>(arr: T[]): T[][] => {
     const out: T[][] = [];
-    for (let i = 0; i < arr.length; i += 2) out.push(arr.slice(i, i + 2));
+    for (let i = 0; i < arr.length; i += 4) out.push(arr.slice(i, i + 4));
     return out;
 };
 
@@ -104,9 +104,9 @@ export default function ProductCatalogTemplate(data: ProductCatalogData = PRODUC
     return (
         <div className="text-black">
             <style>{`
-                @page { size: A4; margin: 20px; }
                 .page { page-break-after: always; break-after: page; }
                 .avoid-break { break-inside: avoid; page-break-inside: avoid; }
+                .product-page { max-height: calc(100vh - 100px); }
             `}</style>
 
             <div className="avoid-break">
@@ -114,10 +114,10 @@ export default function ProductCatalogTemplate(data: ProductCatalogData = PRODUC
                     <PdfHeader company={data.company} />
                 </TemplateHeaderForScreen>
             </div>
-            
+
             {pages.map((pair, pageIndex) => (
-                <section key={pageIndex} className="page grid gap-2.5">
-                    <div className="grid gap-3">
+                <section key={pageIndex} className="mt-5 gap-2.5">
+                    <div className="grid gap-3 h-full">
                         {pair.map((p) => (
                             <ProductItem key={p.id} product={p} />
                         ))}
@@ -125,13 +125,7 @@ export default function ProductCatalogTemplate(data: ProductCatalogData = PRODUC
                 </section>
             ))}
 
-            {/* Final page: Company Summary */}
-            <section className="page avoid-break">
-                {/* <PdfHeader company={data.company} /> */}
-                <CompanySummary company={data.company} />
-            </section>
+            <CompanySummary company={data.company} />
         </div>
     );
 }
-
-

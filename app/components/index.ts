@@ -95,6 +95,11 @@ import InvoiceTemplate3 from "./templates/invoice-pdf/InvoiceTemplate3";
 // Email templates
 import SendPdfEmail from "./templates/email/SendPdfEmail";
 
+// Catalog templates
+import ProductCatalogTemplate from "./templates/catalog-pdf/ProductCatalogTemplate";
+import CatalogLivePreview from "./templates/catalog-pdf/CatalogLivePreview";
+import CatalogPdfViewer from "./templates/catalog-pdf/CatalogPdfViewer";
+
 /* =========================
    ? DEV ONLY
    ========================= */
@@ -151,5 +156,8 @@ export {
     InvoiceTemplate2,
     InvoiceTemplate3,
     SendPdfEmail,
+    ProductCatalogTemplate,
+    CatalogLivePreview,
+    CatalogPdfViewer,
     DevDebug,
 };
