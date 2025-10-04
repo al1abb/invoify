@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Chromium
 import chromium from "@sparticuz/chromium";
-import { PRODUCT_CATALOG_DATA } from "@/app/components/templates/catalog-pdf/ProductCatalogTemplate";
 import { TAILWIND_CDN } from "@/lib/variables";
+import { PRODUCT_CATALOG_DATA } from "@/app/components/templates/catalog-pdf/catalog_contant";
 
 export async function generateCatalogPdfService(_req: NextRequest) {
     let browser: any;
@@ -11,7 +11,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
     try {
         const { renderToStaticMarkup } = await import("react-dom/server");
         const { default: ProductCatalogTemplate } = await import("@/app/components/templates/catalog-pdf/ProductCatalogTemplate");
-        const { PdfHeader } = await import("@/app/components/templates/catalog-pdf/ProductCatalogTemplate");
+        const { PdfHeader } = await import("@/app/components/templates/catalog-pdf/ProductCatalogHeader");
         const headerMarkup = renderToStaticMarkup(PdfHeader({ company: PRODUCT_CATALOG_DATA.company }));
 
         const appMarkup = renderToStaticMarkup(ProductCatalogTemplate());
@@ -21,6 +21,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
           <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link href="${TAILWIND_CDN}" rel="stylesheet" />
             <style>
               @page { size: A4; margin: 20px; }
               body, html { margin: 0; padding: 0; }
@@ -45,30 +46,30 @@ export async function generateCatalogPdfService(_req: NextRequest) {
         if (!browser) throw new Error("Failed to launch browser");
 
         page = await browser.newPage();
-        await page.setContent(html, { waitUntil: ["networkidle0", "load", "domcontentloaded"], timeout: 3000 });
+        await page.setContent(html, { waitUntil: ["networkidle0", "load", "domcontentloaded"], timeout: 30000 });
 
-        // let topMarginPx = 20;
-		// if (headerMarkup) {
-		// 	const tmp = await browser.newPage();
-		// 	await tmp.setContent(`<!DOCTYPE html><html><head>
-		// 	<link href="${TAILWIND_CDN}" rel="stylesheet" />
-		// 	<style>html,body{margin:0;padding:0;}</style>
-		// 	</head><body>${headerMarkup}</body></html>`);
-		// 	const measured = await tmp.evaluate(() => {
-		// 		const el = document.querySelector('#header-container') as HTMLElement | null;
-		// 		return el ? el.offsetHeight : 0;
-		// 	});
-		// 	topMarginPx = (measured || 0) + 20; // small buffer
-		// 	await tmp.close();
-		// }
+        let topMarginPx = 20;
+		if (headerMarkup) {
+			const tmp = await browser.newPage();
+			await tmp.setContent(`<!DOCTYPE html><html><head>
+			<link href="${TAILWIND_CDN}" rel="stylesheet" />
+			<style>html,body{margin:0;padding:0;}</style>
+			</head><body>${headerMarkup}</body></html>`);
+			const measured = await tmp.evaluate(() => {
+				const el = document.querySelector('#header-container') as HTMLElement | null;
+				return el ? el.offsetHeight : 0;
+			});
+			topMarginPx = (measured || 0) + 20; // small buffer
+			await tmp.close();
+		}
 
         const pdf: Uint8Array = await page.pdf({ 
             format: "a4", 
             printBackground: true, 
             preferCSSPageSize: true,
-            // displayHeaderFooter:Boolean(headerMarkup),
-            // headerTemplate: headerMarkup,
-            // margin: { top: `${topMarginPx}px`, bottom: "10px", left: "20px", right: "20px" },
+            displayHeaderFooter:Boolean(headerMarkup),
+            headerTemplate: headerMarkup,
+            margin: { top: `${topMarginPx}px`, bottom: "10px", left: "20px", right: "20px" },
         });
         const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
         return new NextResponse(blob, {
