@@ -67,30 +67,66 @@ export function ProductItem({ product }: { product: CatalogProduct }) {
 
 export function CompanySummary({ company }: { company: CatalogCompanyInfo }) {
     return (
-        <div className="grid gap-3 p-3 avoid-break">
-            <div className="text-lg font-bold text-center">About Company</div>
-            <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                    <div className="text-base font-bold">{company.legalName}</div>
-                    <div className="text-sm text-gray-600">{company.overview}</div>
-                </div>
-                <div className="grid gap-1.5 text-sm">
-                    <div className="font-bold">Company Legal Details</div>
-                    <div>Legal Name: {company.legalName}</div>
-                    {company.tradeName && <div>Trade Name: {company.tradeName}</div>}
-                    <div>GSTIN: {company.gstin}</div>
-                    <div>Registration Date: {company.registrationDate}</div>
-                    <div>Taxpayer Type: {company.taxpayerType}</div>
-                    <div>Address: {company.fullAddress}</div>
-                </div>
-            </div>
-            <div className="grid grid-cols-2 text-sm">
-                <div>Email: {company.email}</div>
-                <div>Phone: {company.contactNumber}</div>
-            </div>
+      // Outer container with padding and a clear break-avoid class for PDF generation
+      <div className="p-5 my-4 avoid-break">
+        {/* "About Company" Section */}
+        <div className="text-xl font-bold text-center mb-4">About Company</div>
+        <div className="border border-gray-300 rounded-md p-4 mb-4">
+          <h3 className="text-base font-semibold mb-2">
+            {company.tradeName || company.legalName}
+          </h3>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            {company.overview}
+          </p>
         </div>
+  
+        {/* "Company Legal Details" Section */}
+        <div className="border border-gray-300 rounded-md p-4 mb-4">
+          <h3 className="text-base font-bold mb-3">Company Legal Details</h3>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-800">
+            <div className="flex flex-col">
+              <span className="font-semibold">Legal Name:</span>
+              <span>{company.legalName}</span>
+            </div>
+            {company.tradeName && (
+              <div className="flex flex-col">
+                <span className="font-semibold">Trade Name:</span>
+                <span>{company.tradeName}</span>
+              </div>
+            )}
+            <div className="flex flex-col">
+              <span className="font-semibold">GSTIN:</span>
+              <span>{company.gstin}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold">Registration Date:</span>
+              <span>{company.registrationDate}</span>
+            </div>
+            <div className="flex flex-col col-span-2">
+              <span className="font-semibold">Taxpayer Type:</span>
+              <span>{company.taxpayerType}</span>
+            </div>
+            <div className="flex flex-col col-span-2">
+              <span className="font-semibold">Address:</span>
+              <span>{company.fullAddress}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* "Contact Information" Section */}
+        <div className="grid grid-cols-2 gap-4 text-sm mt-4 p-4 border border-gray-300 rounded-md">
+          <div className="flex flex-col">
+            <span className="font-semibold">Email:</span>
+            <span>{company.email}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-semibold">Phone:</span>
+            <span>{company.contactNumber}</span>
+          </div>
+        </div>
+      </div>
     );
-}
+  }
 
 // Chunk products into pages with exactly two per page
 const chunkByTwo = <T,>(arr: T[]): T[][] => {

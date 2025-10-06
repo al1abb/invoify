@@ -31,7 +31,7 @@ export type ProductCatalogData = {
 // Single well-structured object that contains ALL content used in the PDF
 export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
     company: {
-        logoUrl: "https://images.unsplash.com/photo-1615915468538-0fbd857888ca?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGxvZ298ZW58MHx8MHx8fDA%3D",
+        logoUrl: "https://images.unsplash.com/photo-1615915468538-0fbd857888ca?w=300&h=120&auto=format&fit=crop&q=80",
         legalName: "Acme Manufacturing Pvt. Ltd.",
         tradeName: "Acme",
         city: "Pune",
@@ -52,10 +52,10 @@ export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
             price: 2499,
             discountPercent: 15,
             images: [
-                "https://dummyimage.com/600x400/222/ffffff&text=Aurora+1",
-                "https://dummyimage.com/600x400/333/ffffff&text=Aurora+2",
-                "https://dummyimage.com/600x400/444/ffffff&text=Aurora+3",
-                "https://dummyimage.com/600x400/555/ffffff&text=Aurora+4",
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80",
             ],
             specifications: [
                 { key: "Material", value: "Aluminum" },
@@ -72,10 +72,10 @@ export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
             price: 3999,
             discountPercent: 20,
             images: [
-                "https://dummyimage.com/600x400/223/ffffff&text=Nimbus+1",
-                "https://dummyimage.com/600x400/335/ffffff&text=Nimbus+2",
-                "https://dummyimage.com/600x400/447/ffffff&text=Nimbus+3",
-                "https://dummyimage.com/600x400/559/ffffff&text=Nimbus+4",
+                "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300&h=200&auto=format&fit=crop&q=80",
             ],
             specifications: [
                 { key: "Material", value: "ABS + Fabric" },
@@ -92,10 +92,10 @@ export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
             price: 3499,
             discountPercent: 10,
             images: [
-                "https://dummyimage.com/600x400/116/ffffff&text=Stratus+1",
-                "https://dummyimage.com/600x400/228/ffffff&text=Stratus+2",
-                "https://dummyimage.com/600x400/33a/ffffff&text=Stratus+3",
-                "https://dummyimage.com/600x400/44c/ffffff&text=Stratus+4",
+                "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=300&h=200&auto=format&fit=crop&q=80",
             ],
             specifications: [
                 { key: "Material", value: "600D Recycled Polyester" },
@@ -112,10 +112,10 @@ export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
             price: 5999,
             discountPercent: 18,
             images: [
-                "https://dummyimage.com/600x400/118/ffffff&text=Breeze+1",
-                "https://dummyimage.com/600x400/22a/ffffff&text=Breeze+2",
-                "https://dummyimage.com/600x400/33c/ffffff&text=Breeze+3",
-                "https://dummyimage.com/600x400/44e/ffffff&text=Breeze+4",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&auto=format&fit=crop&q=80",
             ],
             specifications: [
                 { key: "Height", value: "102 cm" },
