@@ -8,6 +8,7 @@ export default function InvoiceTemplate3Header({ data,isForPdf }: Props) {
 	const shipTo = (data as any).shipTo || receiver;
 	const formatDate = (value: string | Date) => new Date(value).toLocaleDateString("en-US");
 
+	console.log(details);
 	const paddingClass = isForPdf ? "0 60px" : "";
 
 	return (

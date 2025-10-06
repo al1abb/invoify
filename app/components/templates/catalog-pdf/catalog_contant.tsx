@@ -44,6 +44,7 @@ export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
         fullAddress: "Plot 21, MIDC Industrial Area, Pune, Maharashtra 411045, India",
         overview:
             "Acme is a leading manufacturer of precision-engineered consumer products. Our mission is to deliver durable, thoughtfully designed solutions that delight customers and respect the planet.",
+            
     },
     products: [
         {

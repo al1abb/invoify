@@ -1,7 +1,10 @@
+import { ImageToBase64 } from "@/lib/base64";
 import { CatalogCompanyInfo } from "./catalog_contant";
 
 export function PdfHeader({ company }: { company: CatalogCompanyInfo }) {
     console.log(company)
+
+    // const logoUrl = await ImageToBase64(company.logoUrl || "")
     
     return (
         <div 

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import chromium from "@sparticuz/chromium";
 import { TAILWIND_CDN } from "@/lib/variables";
 import { PRODUCT_CATALOG_DATA } from "@/app/components/templates/catalog-pdf/catalog_contant";
+import { ImageToBase64 } from "@/lib/base64";
 
 export async function generateCatalogPdfService(_req: NextRequest) {
     let browser: any;
@@ -13,7 +14,9 @@ export async function generateCatalogPdfService(_req: NextRequest) {
         const { default: ProductCatalogTemplate } = await import("@/app/components/templates/catalog-pdf/ProductCatalogTemplate");
         const { PdfHeader } = await import("@/app/components/templates/catalog-pdf/ProductCatalogHeader");
 
-        const headerComponent = renderToStaticMarkup(PdfHeader({ company: PRODUCT_CATALOG_DATA.company }));
+        const company = PRODUCT_CATALOG_DATA.company;
+        const base64String = await ImageToBase64(company.logoUrl|| "")
+        const headerComponent = renderToStaticMarkup(PdfHeader({ company: {...PRODUCT_CATALOG_DATA.company,logoUrl:base64String} }));
 
         const appMarkup = renderToStaticMarkup(ProductCatalogTemplate());
 

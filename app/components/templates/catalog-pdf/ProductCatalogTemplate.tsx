@@ -59,7 +59,8 @@ export function ProductItem({ product }: { product: CatalogProduct }) {
                     </div>
                 </div>
 
-                <div className="text-xs leading-relaxed text-gray-900 line-clamp-3">{product.details}</div>
+                {/* <div className="text-xs leading-relaxed text-gray-900 line-clamp-3">{product.details}</div> */}
+                <div className="text-xs leading-relaxed text-gray-900 ">{product.details}</div>
             </div>
         </div>
     );
