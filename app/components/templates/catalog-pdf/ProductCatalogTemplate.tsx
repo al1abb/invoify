@@ -116,7 +116,7 @@ export default function ProductCatalogTemplate(data: ProductCatalogData = PRODUC
             </div>
 
             {pages.map((pair, pageIndex) => (
-                <section key={pageIndex} className="mt-5 gap-2.5">
+                <section key={pageIndex} className="gap-2.5">
                     <div className="grid gap-3 h-full">
                         {pair.map((p) => (
                             <ProductItem key={p.id} product={p} />

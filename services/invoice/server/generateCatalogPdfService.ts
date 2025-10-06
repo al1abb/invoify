@@ -24,7 +24,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <link href="${TAILWIND_CDN}" rel="stylesheet" />
             <style>
-              @page { size: A4; margin: 20px; }
+              @page { size: A4; }
               body, html { margin: 0; padding: 0; }
               img { max-width: 100%; }
             </style>
@@ -49,7 +49,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
         page = await browser.newPage();
         await page.setContent(html, { waitUntil: ["networkidle0", "load", "domcontentloaded"], timeout: 30000 });
 
-        let topMarginPx = 20;
+        let topMarginPx = 0;
 		if (headerComponent) {
 			const tmp = await browser.newPage();
             const headerHtml = `<!DOCTYPE html>
@@ -80,7 +80,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
 				const el = document.querySelector('#catalog-header') as HTMLElement | null;
 				return el ? el.offsetHeight : 0;
 			});
-			topMarginPx = (measured || 0) + 40; // small buffer
+			topMarginPx = (measured || 0); // small buffer
             console.log(topMarginPx)
 			await tmp.close();
 		}
@@ -88,7 +88,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
         const pdf: Uint8Array = await page.pdf({ 
             format: "a4", 
             printBackground: true, 
-            preferCSSPageSize: false,
+            preferCSSPageSize: true,
             displayHeaderFooter: true,
             headerTemplate: headerComponent || '<div></div>',
             footerTemplate: '<div></div>',
@@ -97,7 +97,7 @@ export async function generateCatalogPdfService(_req: NextRequest) {
                 bottom: "20px", 
                 left: "20px", 
                 right: "20px" 
-            },
+            }
         });
         const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
         return new NextResponse(blob, {

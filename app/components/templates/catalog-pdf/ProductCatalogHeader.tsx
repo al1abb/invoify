@@ -1,6 +1,8 @@
 import { CatalogCompanyInfo } from "./catalog_contant";
 
 export function PdfHeader({ company }: { company: CatalogCompanyInfo }) {
+    console.log(company)
+    
     return (
         <div 
             id="catalog-header" 
@@ -10,9 +12,10 @@ export function PdfHeader({ company }: { company: CatalogCompanyInfo }) {
                 alignItems: "center",
                 gap: 12,
                 width:"100%",
-                
+                margin:"auto",
+                marginTop:0,
                 borderBottom: "1px solid rgba(0,0,0,0.3)",
-                padding:"10px 0",
+                padding:"10px 10px",
                 color: "#000",
             }}
         >

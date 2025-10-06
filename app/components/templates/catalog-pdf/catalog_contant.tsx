@@ -31,7 +31,7 @@ export type ProductCatalogData = {
 // Single well-structured object that contains ALL content used in the PDF
 export const PRODUCT_CATALOG_DATA: ProductCatalogData = {
     company: {
-        logoUrl: "https://dummyimage.com/300x120/111/ffffff&text=LOGO",
+        logoUrl: "https://images.unsplash.com/photo-1615915468538-0fbd857888ca?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGxvZ298ZW58MHx8MHx8fDA%3D",
         legalName: "Acme Manufacturing Pvt. Ltd.",
         tradeName: "Acme",
         city: "Pune",
