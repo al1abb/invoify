@@ -77,8 +77,8 @@ export default async function LocaleLayout(props: {
     }
 
     return (
-        <html lang={locale}>
-            <head>
+        <html lang={locale} suppressHydrationWarning>
+            <head suppressHydrationWarning>
                 <script
                     type="application/ld+json"
                     id="json-ld"
@@ -88,6 +88,7 @@ export default async function LocaleLayout(props: {
             </head>
             <body
                 className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}
+                suppressHydrationWarning
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>

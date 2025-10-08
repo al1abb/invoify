@@ -29,6 +29,7 @@ const BaseNavbar = () => {
                             width={190}
                             height={100}
                             loading="eager"
+                            style={{ width: "auto", height: "auto" }}
                         />
                     </Link>
                     {/* ? DEV Only */}

@@ -9,6 +9,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
@@ -167,6 +168,9 @@ const SignatureModal = ({}: SignatureModalProps) => {
                     <DialogTitle>
                         {_t("form.steps.summary.signature.heading")}
                     </DialogTitle>
+                    <DialogDescription>
+                        Choose a method to add your signature to the invoice
+                    </DialogDescription>
 
                     <Tabs value={tab} onValueChange={onTabChange}>
                         <TabsList className="grid w-full grid-cols-3">
