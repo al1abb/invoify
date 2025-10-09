@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Signature",
                     "placeholder": "Click to add signature",
+                    "description": "Choose a method to add your signature to the invoice",
                     "draw": "Draw",
                     "type": "Type",
                     "upload": "Upload"

@@ -60,6 +60,7 @@
         "signature": {
           "heading": "Tanda Tangan",
           "placeholder": "Klik untuk menambah tanda tangan",
+          "description": "Pilih metode untuk menambahkan tanda tangan Anda ke faktur",
           "draw": "Gambar",
           "type": "Ketik",
           "upload": "Unggah"

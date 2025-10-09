@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Potpis",
                     "placeholder": "Klikni da dodaš potpis",
+                    "description": "Izaberite metodu za dodavanje potpisa na fakturu",
                     "draw": "Crtaj",
                     "type": "Piši",
                     "upload": "Otpremi"

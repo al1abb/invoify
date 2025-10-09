@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "签名",
                     "placeholder": "点击添加签名",
+                    "description": "选择一种方法为发票添加签名",
                     "draw": "手写",
                     "type": "输入",
                     "upload": "上传"

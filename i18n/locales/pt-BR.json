@@ -67,6 +67,7 @@
                 "signature": {
                     "heading": "Assinatura",
                     "placeholder": "Clique para adicionar assinatura",
+                    "description": "Escolha um método para adicionar sua assinatura à fatura",
                     "draw": "Desenhar",
                     "type": "Digitar",
                     "upload": "Fazer upload"

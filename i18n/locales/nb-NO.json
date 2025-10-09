@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Signatur",
                     "placeholder": "Klikk for å legge til signatur",
+                    "description": "Velg en metode for å legge til signaturen din på fakturaen",
                     "draw": "Tegn",
                     "type": "Skriv",
                     "upload": "Last opp"

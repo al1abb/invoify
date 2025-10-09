@@ -169,7 +169,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
                         {_t("form.steps.summary.signature.heading")}
                     </DialogTitle>
                     <DialogDescription>
-                        Choose a method to add your signature to the invoice
+                        {_t("form.steps.summary.signature.description")}
                     </DialogDescription>
 
                     <Tabs value={tab} onValueChange={onTabChange}>
