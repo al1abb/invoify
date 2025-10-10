@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
             });
         }
     } catch (err) {
-        console.log(err);
-        return new NextResponse("Failed to send email", { status: 500 });
+        console.error("Email service error:", err);
+        const errorMessage = err instanceof Error ? err.message : "Failed to send email";
+        return new NextResponse(errorMessage, { status: 500 });
     }
 }

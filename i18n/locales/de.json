@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Unterschrift",
                     "placeholder": "Unterschrift hinzufügen",
+                    "description": "Wählen Sie eine Methode, um Ihre Unterschrift zur Rechnung hinzuzufügen",
                     "draw": "Zeichnen",
                     "type": "Typ",
                     "upload": "Hochladen"

@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Firma",
                     "placeholder": "Click para añadir una firma",
+                    "description": "Elige un método para añadir tu firma a la factura",
                     "draw": "Dibujar",
                     "type": "Escribir",
                     "upload": "Subir"

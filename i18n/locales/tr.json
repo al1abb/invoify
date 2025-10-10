@@ -60,6 +60,7 @@
         "signature": {
           "heading": "İmza",
           "placeholder": "İmza eklemek için tıklayın",
+          "description": "Faturaya imzanızı eklemek için bir yöntem seçin",
           "draw": "Çiz",
           "type": "Yaz",
           "upload": "Yükle"

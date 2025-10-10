@@ -60,6 +60,7 @@
                 "signature": {
                     "heading": "Podpis",
                     "placeholder": "Kliknij, aby dodać podpis",
+                    "description": "Wybierz metodę dodania podpisu do faktury",
                     "draw": "Narysuj",
                     "type": "Wpisz",
                     "upload": "Prześlij"

@@ -24,6 +24,11 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Check if email credentials are configured
+const isEmailConfigured = () => {
+    return !!(NODEMAILER_EMAIL && NODEMAILER_PW);
+};
+
 /**
  * Send a PDF as an email attachment.
  *
@@ -34,6 +39,16 @@ const transporter = nodemailer.createTransport({
 export async function sendPdfToEmailService(
     req: NextRequest
 ): Promise<boolean> {
+    // Check if email service is configured
+    if (!isEmailConfigured()) {
+        console.error(
+            "Email service not configured. Please set NODEMAILER_EMAIL and NODEMAILER_PW environment variables."
+        );
+        throw new Error(
+            "Email service not configured. Please contact the administrator."
+        );
+    }
+
     const fd = await req.formData();
 
     // Get form data values
