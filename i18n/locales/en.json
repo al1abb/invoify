@@ -16,6 +16,7 @@
             "fromAndTo": {
                 "billFrom": "Bill From",
                 "billTo": "Bill To",
+                "shipTo":"Ship To",
                 "name": "Name",
                 "address": "Address",
                 "zipCode": "Zip",

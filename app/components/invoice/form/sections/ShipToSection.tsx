@@ -17,13 +17,12 @@ import { useTranslationContext } from "@/contexts/TranslationContext";
 // Icons
 import { Plus } from "lucide-react";
 
-const BillToSection = () => {
+const ShipToSection = () => {
     const { control } = useFormContext();
 
     const { _t } = useTranslationContext();
 
-    const CUSTOM_INPUT_NAME = "receiver.customInputs";
-
+    const CUSTOM_INPUT_NAME = "shipTo.customInputs";
     const { fields, append, remove } = useFieldArray({
         control: control,
         name: CUSTOM_INPUT_NAME,
@@ -42,41 +41,41 @@ const BillToSection = () => {
 
     return (
         <section className="flex flex-col gap-3">
-            <Subheading>{_t("form.steps.fromAndTo.billTo")}:</Subheading>
+            <Subheading>{_t?.("form.steps.fromAndTo.shipTo") || "Ship To:"}</Subheading>
             <FormInput
-                name="receiver.name"
+                name="shipTo.name"
                 label={_t("form.steps.fromAndTo.name")}
-                placeholder="Receiver name"
+                placeholder="Ship to name"
             />
             <FormInput
-                name="receiver.address"
+                name="shipTo.address"
                 label={_t("form.steps.fromAndTo.address")}
-                placeholder="Receiver address"
+                placeholder="Ship to address"
             />
             <FormInput
-                name="receiver.zipCode"
+                name="shipTo.zipCode"
                 label={_t("form.steps.fromAndTo.zipCode")}
-                placeholder="Receiver zip code"
+                placeholder="Ship to zip code"
             />
             <FormInput
-                name="receiver.city"
+                name="shipTo.city"
                 label={_t("form.steps.fromAndTo.city")}
-                placeholder="Receiver city"
+                placeholder="Ship to city"
             />
             <FormInput
-                name="receiver.country"
+                name="shipTo.country"
                 label={_t("form.steps.fromAndTo.country")}
-                placeholder="Receiver country"
+                placeholder="Ship to country"
             />
             <FormInput
-                name="receiver.email"
+                name="shipTo.email"
                 label={_t("form.steps.fromAndTo.email")}
-                placeholder="Receiver email"
+                placeholder="Ship to email"
             />
             <FormInput
-                name="receiver.gstin"
+                name="shipTo.gstin"
                 label="GSTIN"
-                placeholder="Receiver GSTIN (e.g., 22ABCDE1234F1Z5)"
+                placeholder="Ship to GSTIN (e.g., 22ABCDE1234F1Z5)"
                 onInput={(e) => {
                     const target = e.target as HTMLInputElement;
                     target.value = target.value.toUpperCase();
@@ -92,7 +91,7 @@ const BillToSection = () => {
                 />
             ))}
             <BaseButton
-                tooltipLabel="Add custom input to receiver"
+                tooltipLabel="Add custom input to ship to"
                 size="sm"
                 variant="link"
                 className="w-fit"
@@ -105,4 +104,6 @@ const BillToSection = () => {
     );
 };
 
-export default BillToSection;
+export default ShipToSection;
+
+

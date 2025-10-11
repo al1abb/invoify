@@ -21,17 +21,51 @@ import { InvoiceType } from "@/types";
  * @returns {Promise<NextResponse>} A promise that resolves to a NextResponse object containing the generated PDF.
  */
 export async function generatePdfService(req: NextRequest) {
-    const body: InvoiceType = await req.json();
-    let browser;
-    let page;
+	const body: InvoiceType = await req.json();
+	let browser;
+	let page;
+	const PRINT_STYLES = `
+@page { size: A4; }
 
-    try {
-        const ReactDOMServer = (await import("react-dom/server")).default;
-        const templateId = body.details.pdfTemplate;
-        const InvoiceTemplate = await getInvoiceTemplate(templateId);
-        const htmlTemplate = ReactDOMServer.renderToStaticMarkup(
-            InvoiceTemplate(body)
-        );
+@media print {
+  .page-split { break-after: page; page-break-after: always; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  table { break-inside: auto; }
+  tbody { break-inside: auto; }
+}
+
+body, html { margin: 0; padding: 0; }
+`;
+
+
+	try {
+		const { renderToStaticMarkup } = await import("react-dom/server");
+		const templateId = body.details.pdfTemplate;
+		console.log("Generating PDF with template:", templateId);
+		const InvoiceTemplate = await getInvoiceTemplate(templateId);
+		const appMarkup = renderToStaticMarkup(InvoiceTemplate(body));
+
+		// Render header component separately for Puppeteer headerTemplate (template 3)
+		let headerMarkup = "";
+		if (templateId === 3) {
+			const { default: InvoiceTemplate3Header } = await import("@/app/components/templates/invoice-pdf/headers/InvoiceTemplate3Header");
+			headerMarkup = renderToStaticMarkup(InvoiceTemplate3Header({ data: body, isForPdf: true } as any));
+		}
+
+		const htmlTemplate = `<!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+	            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <link href="${TAILWIND_CDN}" rel="stylesheet" />
+                <style>
+					${PRINT_STYLES}
+    			</style>
+              </head>
+              <body>
+                ${appMarkup}
+              </body>
+            </html>`;
 
 		if (ENV === "production") {
 			const puppeteer = (await import("puppeteer-core")).default;
@@ -48,27 +82,44 @@ export async function generatePdfService(req: NextRequest) {
 			});
 		}
 
-        if (!browser) {
-            throw new Error("Failed to launch browser");
-        }
+		if (!browser) {
+			throw new Error("Failed to launch browser");
+		}
 
-        page = await browser.newPage();
-        await page.setContent(await htmlTemplate, {
-            waitUntil: ["networkidle0", "load", "domcontentloaded"],
-            timeout: 30000,
-        });
+		page = await browser.newPage();
+		await page.setContent(htmlTemplate, {
+			waitUntil: ["networkidle0", "load", "domcontentloaded"],
+			timeout: 30000,
+		});
 
-        await page.addStyleTag({
-            url: TAILWIND_CDN,
-        });
+		// If we have a header, measure its height in a separate temporary page to set dynamic top margin
+		let topMarginPx = 20;
+		if (headerMarkup) {
+			const tmp = await browser.newPage();
+			await tmp.setContent(`<!DOCTYPE html><html><head>
+			<link href="${TAILWIND_CDN}" rel="stylesheet" />
+			<style>html,body{margin:0;padding:0;}</style>
+			</head><body>${headerMarkup}</body></html>`);
+			const measured = await tmp.evaluate(() => {
+				const el = document.querySelector('#header-container') as HTMLElement | null;
+				return el ? el.offsetHeight : 0;
+			});
+			topMarginPx = (measured || 0) + 20; // small buffer
+			await tmp.close();
+		}
 
+		// Use Puppeteer headerTemplate with dynamic margin when headerMarkup is provided
 		const pdf: Uint8Array = await page.pdf({
 			format: "a4",
 			printBackground: true,
 			preferCSSPageSize: true,
+			displayHeaderFooter: Boolean(headerMarkup),
+			headerTemplate: headerMarkup,
+			margin: { top: `${topMarginPx}px`, bottom: "10px", left: "20px", right: "20px" },
 		});
 
-		return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
+		const blob = new Blob([pdf.buffer as ArrayBuffer], { type: "application/pdf" });
+		return new NextResponse(blob, {
 			headers: {
 				"Content-Type": "application/pdf",
 				"Content-Disposition": "attachment; filename=invoice.pdf",
