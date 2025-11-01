@@ -23,6 +23,7 @@ import {
     WizardStep,
     BillFromSection,
     BillToSection,
+    ShipToSection,
     InvoiceDetails,
     Items,
     PaymentInformation,
@@ -73,10 +74,10 @@ const InvoiceForm = () => {
                     <div className="space-y-8">
                         <Wizard>
                             <WizardStep>
-                                <div className="flex gap-x-20 gap-y-10">
+                                <div className="flex gap-x-20 gap-y-10 overflow-x-auto">
                                     <BillFromSection />
-
                                     <BillToSection />
+                                    <ShipToSection />
                                 </div>
                             </WizardStep>
                             <WizardStep>

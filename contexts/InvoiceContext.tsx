@@ -167,6 +167,11 @@ export const InvoiceContextProvider = ({
     try {
       const response = await fetch(GENERATE_PDF_API, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+        },
         body: JSON.stringify(data),
       });
 

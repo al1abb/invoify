@@ -28,6 +28,7 @@ import WizardProgress from "./invoice/form/wizard/WizardProgress";
 // Form / Sections
 import BillFromSection from "./invoice/form/sections/BillFromSection";
 import BillToSection from "./invoice/form/sections/BillToSection";
+import ShipToSection from "./invoice/form/sections/ShipToSection";
 import InvoiceDetails from "./invoice/form/sections/InvoiceDetails";
 import Items from "./invoice/form/sections/Items";
 import PaymentInformation from "./invoice/form/sections/PaymentInformation";
@@ -89,9 +90,15 @@ import DynamicInvoiceTemplate from "./templates/invoice-pdf/DynamicInvoiceTempla
 import InvoiceLayout from "./templates/invoice-pdf/InvoiceLayout";
 import InvoiceTemplate1 from "./templates/invoice-pdf/InvoiceTemplate1";
 import InvoiceTemplate2 from "./templates/invoice-pdf/InvoiceTemplate2";
+import InvoiceTemplate3 from "./templates/invoice-pdf/InvoiceTemplate3";
 
 // Email templates
 import SendPdfEmail from "./templates/email/SendPdfEmail";
+
+// Catalog templates
+import ProductCatalogTemplate from "./templates/catalog-pdf/ProductCatalogTemplate";
+import CatalogLivePreview from "./templates/catalog-pdf/CatalogLivePreview";
+import CatalogPdfViewer from "./templates/catalog-pdf/CatalogPdfViewer";
 
 /* =========================
    ? DEV ONLY
@@ -106,6 +113,7 @@ export {
     InvoiceActions,
     BillFromSection,
     BillToSection,
+    ShipToSection,
     InvoiceDetails,
     Items,
     SingleItem,
@@ -146,6 +154,10 @@ export {
     InvoiceLayout,
     InvoiceTemplate1,
     InvoiceTemplate2,
+    InvoiceTemplate3,
     SendPdfEmail,
+    ProductCatalogTemplate,
+    CatalogLivePreview,
+    CatalogPdfViewer,
     DevDebug,
 };

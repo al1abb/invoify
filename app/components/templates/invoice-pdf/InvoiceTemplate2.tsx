@@ -268,9 +268,6 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                     <p className="block text-sm font-medium text-gray-800">
                         {sender.email}
                     </p>
-                    <p className="block text-sm font-medium text-gray-800">
-                        {sender.phone}
-                    </p>
                 </div>
             </div>
 
