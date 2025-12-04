@@ -154,13 +154,14 @@ const SingleItem = ({
                 </div>
             </div>
             <div
-                className="flex flex-wrap justify-between gap-y-5 gap-x-2"
+                className="flex flex-col md:flex-row md:flex-wrap justify-between gap-y-3 gap-x-2"
                 key={index}
             >
                 <FormInput
                     name={`${name}[${index}].name`}
                     label={_t("form.steps.lineItems.name")}
                     placeholder="Item name"
+                    className="flex-1 min-w-[200px]"
                     vertical
                 />
 
@@ -169,7 +170,7 @@ const SingleItem = ({
                     type="number"
                     label={_t("form.steps.lineItems.quantity")}
                     placeholder={_t("form.steps.lineItems.quantity")}
-                    className="w-[8rem]"
+                    className="w-full md:w-[8rem]"
                     vertical
                 />
 
@@ -179,11 +180,11 @@ const SingleItem = ({
                     label={_t("form.steps.lineItems.rate")}
                     labelHelper={`(${currency})`}
                     placeholder={_t("form.steps.lineItems.rate")}
-                    className="w-[8rem]"
+                    className="w-full md:w-[8rem]"
                     vertical
                 />
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full md:w-auto">
                     <div>
                         <Label>{_t("form.steps.lineItems.total")}</Label>
                     </div>
@@ -192,7 +193,6 @@ const SingleItem = ({
                         readOnly
                         placeholder="Item total"
                         className="border-none font-medium text-lg bg-transparent"
-                        size={10}
                     />
                 </div>
             </div>

@@ -17,23 +17,17 @@ type DevDebugProps = {};
 const DevDebug = ({}: DevDebugProps) => {
     const { reset, formState } = useFormContext();
     return (
-        <div className="flex border-2 border-red-500 rounded-md">
-            <div className="flex flex-col">
-                <b>DEV:</b>
-                Form: {formState.isDirty ? "Dirty" : "Clean"}
-                <BaseButton
-                    tooltipLabel="Form Test Fill"
-                    variant="outline"
-                    onClick={() => reset(FORM_FILL_VALUES)}
-                >
-                    Fill in the form
-                </BaseButton>
-            </div>
-
-            <div className="flex flex-col">
-                <Link href={`/template/1`}>Template 1</Link>
-                <Link href={`/template/2`}>Template 2</Link>
-            </div>
+        <div className="hidden lg:flex items-center space-x-2 px-3 py-1 bg-gray-100 rounded-full text-xs">
+            <span className="text-gray-600">DEV</span>
+            <BaseButton
+                tooltipLabel="Fill form with test data"
+                variant="ghost"
+                size="sm"
+                onClick={() => reset(FORM_FILL_VALUES)}
+                className="h-6 px-2 text-xs"
+            >
+                Fill
+            </BaseButton>
         </div>
     );
 };

@@ -47,7 +47,7 @@ const FormInput = ({
                         <Input
                             {...field}
                             placeholder={placeholder}
-                            className="w-[13rem]"
+                            className="w-full md:w-[13rem]"
                             {...props}
                         />
                     </FormControl>
@@ -63,18 +63,18 @@ const FormInput = ({
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <div className="flex w-full gap-5 items-center text-sm">
-                        {label && <FormLabel className="flex-1">{`${label}:`}</FormLabel>}
+                    <div className="flex flex-col md:flex-row w-full gap-2 md:gap-5 md:items-center text-sm">
+                        {label && <FormLabel className="md:flex-1">{`${label}:`}</FormLabel>}
                         {labelHelper && (
                             <span className="text-xs"> {labelHelper}</span>
                         )}
 
-                        <div className="flex-1">
+                        <div className="w-full md:flex-1">
                             <FormControl>
                                 <Input
                                     {...field}
                                     placeholder={placeholder}
-                                    className="w-[13rem]"
+                                    className="w-full md:w-[13rem]"
                                     {...props}
                                 />
                             </FormControl>

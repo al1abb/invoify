@@ -42,7 +42,6 @@ const BillToSection = () => {
 
     return (
         <section className="flex flex-col gap-3">
-            <Subheading>{_t("form.steps.fromAndTo.billTo")}:</Subheading>
             <FormInput
                 name="receiver.name"
                 label={_t("form.steps.fromAndTo.name")}

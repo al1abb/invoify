@@ -36,3 +36,6 @@ next-env.d.ts
 
 # cache
 /.cache
+
+# separate projects
+rembg.io-main/

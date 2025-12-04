@@ -60,7 +60,7 @@ const Charges = () => {
     return (
         <>
             {/* Charges */}
-            <div className="flex flex-col gap-3 min-w-[20rem]">
+            <div className="flex flex-col gap-3 w-full md:min-w-[20rem]">
                 {/* Switches */}
                 <div className="flex justify-evenly pb-6">
                     <div>

@@ -38,18 +38,16 @@ const FormTextarea = ({
                     {labelHelper && (
                         <span className="text-xs"> {labelHelper}</span>
                     )}
-                    <div className="flex justify-between gap-5 items-center text-sm">
-                        <div>
-                            <FormControl>
-                                <Textarea
-                                    {...field}
-                                    placeholder={placeholder}
-                                    className="w-[15rem] h-0"
-                                    {...props}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </div>
+                    <div className="w-full text-sm">
+                        <FormControl>
+                            <Textarea
+                                {...field}
+                                placeholder={placeholder}
+                                className="w-full md:w-[15rem] min-h-[80px]"
+                                {...props}
+                            />
+                        </FormControl>
+                        <FormMessage />
                     </div>
                 </FormItem>
             )}

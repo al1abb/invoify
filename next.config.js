@@ -8,6 +8,7 @@ const nextConfig = {
             test: /\.map$/,
             use: "ignore-loader",
         });
+        
         return config;
     },
 };
