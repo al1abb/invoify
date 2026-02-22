@@ -84,10 +84,16 @@ Follow these instructions to get Invoify up and running on your local machine.
    NODEMAILER_EMAIL=your_email@example.com
    NODEMAILER_PW=your_gmail_app_password
    NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=local
+   NEXT_PUBLIC_SYNC_DEBOUNCE_MS=5000
+   NEXT_PUBLIC_SYNC_MAX_INVOICES=250
+   NEXT_PUBLIC_SYNC_MAX_TEMPLATES=100
+   NEXT_PUBLIC_SYNC_MAX_PAYLOAD_BYTES=524288
    ```
    `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
    PDF caching is browser-side only and does not require any environment variables.
-   `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` placeholder adapter).
+   `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` and `supabase-rest` supported).
+   For `supabase-rest`, also set:
+   `NEXT_PUBLIC_SYNC_INGEST_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 4. Start development server
 
     ```bash
@@ -133,7 +139,20 @@ npx playwright install --with-deps chromium
   - ESLint CLI configuration and CI workflow for lint/build/e2e.
   - Lightweight client telemetry for runtime, PDF, and email failures.
   - Worker-first PDF generation request path with direct-fetch fallback.
-  - Cloud-sync interface layer (local adapter by default, noop cloud adapter stub).
+  - Cloud-sync interface layer with `supabase-rest` option and free-plan guardrails.
+  - Sync is debounced and deduplicated to reduce write volume.
+  - Sync snapshots are capped by item count and payload size.
+
+## Supabase Free-Plan Guardrails
+
+- Keep `NEXT_PUBLIC_SYNC_DEBOUNCE_MS` at `5000` or higher.
+- Keep snapshot caps conservative:
+  - `NEXT_PUBLIC_SYNC_MAX_INVOICES=250`
+  - `NEXT_PUBLIC_SYNC_MAX_TEMPLATES=100`
+- Keep payload guard enabled:
+  - `NEXT_PUBLIC_SYNC_MAX_PAYLOAD_BYTES=524288` (512 KB)
+- PDFs are not part of cloud snapshots; they remain browser-cached locally.
+- If payload exceeds guard limit, sync is skipped and logged to telemetry instead of spamming failed writes.
 
 ## Local Data and Migration
 

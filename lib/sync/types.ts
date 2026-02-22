@@ -1,6 +1,9 @@
 import { CustomerTemplateRecord, SavedInvoiceRecord } from "@/types";
 
-export type InvoiceSyncProviderName = "local" | "noop-cloud";
+export type InvoiceSyncProviderName =
+  | "local"
+  | "noop-cloud"
+  | "supabase-rest";
 
 export type InvoiceSyncSnapshot = {
   reason: string;

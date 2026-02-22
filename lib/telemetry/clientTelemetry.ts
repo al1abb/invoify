@@ -5,6 +5,8 @@ export type ClientTelemetryEventName =
   | "app_unhandled_rejection"
   | "sync_provider_unavailable"
   | "sync_push_failure"
+  | "sync_snapshot_skipped"
+  | "sync_push_success"
   | "pdf_generate_success"
   | "pdf_generate_failure"
   | "pdf_cache_write_failure"

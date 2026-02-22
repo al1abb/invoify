@@ -57,6 +57,12 @@ import { generatePdfBlob } from "@/lib/workers/pdfGeneratorClient";
 
 // Sync
 import { createInvoiceSyncProvider } from "@/lib/sync/createInvoiceSyncProvider";
+import { getSyncRuntimeConfig } from "@/lib/sync/runtimeConfig";
+import {
+  buildCappedSyncSnapshot,
+  buildSyncSignature,
+  toSnapshotPayloadSize,
+} from "@/lib/sync/snapshot";
 
 // Telemetry
 import {
@@ -148,7 +154,10 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     useState<Record<string, CachedPdfMeta>>({});
 
   const draftPersistTimeoutRef = useRef<number | null>(null);
+  const syncTimeoutRef = useRef<number | null>(null);
+  const lastSyncSignatureRef = useRef<string>("");
   const syncProvider = useMemo(() => createInvoiceSyncProvider(), []);
+  const syncConfig = useMemo(() => getSyncRuntimeConfig(), []);
 
   const refreshCachedPdfMetadata = useCallback(async () => {
     try {
@@ -221,25 +230,69 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   useEffect(() => {
     if (!isStorageHydrated) return;
 
-    const pushSnapshot = async () => {
+    if (syncTimeoutRef.current) {
+      window.clearTimeout(syncTimeoutRef.current);
+    }
+
+    syncTimeoutRef.current = window.setTimeout(async () => {
+      const snapshot = buildCappedSyncSnapshot({
+        reason: "state_change",
+        savedInvoices,
+        customerTemplates,
+        maxInvoices: syncConfig.maxInvoices,
+        maxTemplates: syncConfig.maxTemplates,
+      });
+
+      const signature = buildSyncSignature(snapshot);
+      if (signature === lastSyncSignatureRef.current) {
+        return;
+      }
+
+      const payloadBytes = toSnapshotPayloadSize(snapshot);
+      if (payloadBytes > syncConfig.maxPayloadBytes) {
+        trackClientEvent(
+          "sync_snapshot_skipped",
+          {
+            provider: syncProvider.name,
+            payloadBytes,
+            maxPayloadBytes: syncConfig.maxPayloadBytes,
+          },
+          "warn"
+        );
+        return;
+      }
+
       try {
-        await syncProvider.pushSnapshot({
-          reason: "state_change",
-          timestamp: Date.now(),
-          savedInvoices,
-          customerTemplates,
+        await syncProvider.pushSnapshot(snapshot);
+        lastSyncSignatureRef.current = signature;
+        trackClientEvent("sync_push_success", {
+          provider: syncProvider.name,
+          payloadBytes,
+          savedInvoices: snapshot.savedInvoices.length,
+          customerTemplates: snapshot.customerTemplates.length,
         });
       } catch (error) {
         captureClientError("sync_push_failure", error, {
           provider: syncProvider.name,
-          savedInvoices: savedInvoices.length,
-          customerTemplates: customerTemplates.length,
+          payloadBytes,
+          savedInvoices: snapshot.savedInvoices.length,
+          customerTemplates: snapshot.customerTemplates.length,
         });
       }
-    };
+    }, syncConfig.debounceMs);
 
-    void pushSnapshot();
-  }, [customerTemplates, isStorageHydrated, savedInvoices, syncProvider]);
+    return () => {
+      if (syncTimeoutRef.current) {
+        window.clearTimeout(syncTimeoutRef.current);
+      }
+    };
+  }, [
+    customerTemplates,
+    isStorageHydrated,
+    savedInvoices,
+    syncConfig,
+    syncProvider,
+  ]);
 
   // Keep an object URL in sync with blob state and always revoke previous URLs.
   const pdfUrl = useMemo(() => {
