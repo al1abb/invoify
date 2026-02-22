@@ -180,11 +180,11 @@ Deno.serve(async (req) => {
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(token);
 
   if (authError || !user) {
     return new Response(
-      JSON.stringify({ error: "Unauthorized" }),
+      JSON.stringify({ error: authError?.message || "Unauthorized" }),
       {
         status: 401,
         headers: jsonHeaders,

@@ -14,21 +14,19 @@ export const createInvoiceSyncProvider = (): InvoiceSyncProvider => {
   }
 
   if (selectedProvider === "supabase-rest") {
-    if (!config.syncIngestUrl || !config.supabaseUrl || !config.syncAnonKey) {
+    if (!config.supabaseUrl || !config.syncAnonKey) {
       trackClientEvent(
         "sync_provider_unavailable",
         {
           message:
-            "supabase-rest selected but NEXT_PUBLIC_SYNC_INGEST_URL, NEXT_PUBLIC_SUPABASE_URL, or NEXT_PUBLIC_SUPABASE_ANON_KEY is missing. Falling back to noop-cloud.",
+            "supabase-rest selected but NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY is missing. Falling back to noop-cloud.",
         },
         "warn"
       );
       return noopCloudSyncProvider;
     }
 
-    return createSupabaseRestSyncProvider({
-      ingestUrl: config.syncIngestUrl,
-    });
+    return createSupabaseRestSyncProvider({});
   }
 
   return localSyncProvider;

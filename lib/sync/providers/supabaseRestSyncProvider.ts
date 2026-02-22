@@ -1,26 +1,7 @@
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import {
-  InvoiceSyncProvider,
-  SyncProviderError,
-} from "@/lib/sync/types";
+import { InvoiceSyncProvider, SyncProviderError } from "@/lib/sync/types";
 
-type CreateSupabaseRestSyncProviderArgs = {
-  ingestUrl: string;
-};
-
-const isRetryableStatus = (status: number) => {
-  return status === 408 || status === 429 || status >= 500;
-};
-
-const getFunctionNameFromIngestUrl = (ingestUrl: string) => {
-  try {
-    const parsedUrl = new URL(ingestUrl);
-    const parts = parsedUrl.pathname.split("/").filter(Boolean);
-    return parts[parts.length - 1] || "invoice-sync";
-  } catch {
-    return "invoice-sync";
-  }
-};
+type CreateSupabaseRestSyncProviderArgs = {};
 
 const getAccessToken = async () => {
   const supabase = getSupabaseBrowserClient();
@@ -36,8 +17,13 @@ const getAccessToken = async () => {
     });
   }
 
-  if (sessionData.session?.access_token) {
-    return sessionData.session.access_token;
+  const existingSession = sessionData.session;
+  if (existingSession?.access_token) {
+    const expiresAtMs = (existingSession.expires_at || 0) * 1000;
+    const refreshThresholdMs = Date.now() + 30_000;
+    if (expiresAtMs > refreshThresholdMs) {
+      return existingSession.access_token;
+    }
   }
 
   const { data: refreshedData, error: refreshError } =
@@ -49,11 +35,13 @@ const getAccessToken = async () => {
   return refreshedData.session?.access_token ?? null;
 };
 
-export const createSupabaseRestSyncProvider = ({
-  ingestUrl,
-}: CreateSupabaseRestSyncProviderArgs): InvoiceSyncProvider => {
-  const functionName = getFunctionNameFromIngestUrl(ingestUrl);
+const toPayloadBytes = (snapshot: unknown) => {
+  return new TextEncoder().encode(JSON.stringify(snapshot)).length;
+};
 
+export const createSupabaseRestSyncProvider = (
+  _args: CreateSupabaseRestSyncProviderArgs
+): InvoiceSyncProvider => {
   return {
     name: "supabase-rest",
     isCloudProvider: true,
@@ -67,8 +55,8 @@ export const createSupabaseRestSyncProvider = ({
         };
       }
 
-      const providedToken = options?.accessToken?.trim();
-      const accessToken = providedToken || (await getAccessToken());
+      const providedToken = options?.accessToken?.trim() || null;
+      const accessToken = (await getAccessToken()) || providedToken;
       if (!accessToken) {
         return {
           status: "skipped",
@@ -77,35 +65,39 @@ export const createSupabaseRestSyncProvider = ({
         };
       }
 
-      supabase.functions.setAuth(accessToken);
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser(accessToken);
 
-      const { error, response } = await supabase.functions.invoke(functionName, {
-        body: snapshot,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      if (userError || !user) {
+        return {
+          status: "skipped",
+          provider: "supabase-rest",
+          reason: "unauthenticated",
+        };
+      }
 
-      if (error) {
-        const statusCode = response?.status;
-        if (statusCode === 401 || statusCode === 403) {
-          return {
-            status: "skipped",
-            provider: "supabase-rest",
-            reason: "function_unauthorized",
-          };
-        }
+      const payloadBytes = toPayloadBytes(snapshot);
+      const { error: upsertError } = await supabase
+        .from("invoice_sync_snapshots")
+        .upsert(
+          {
+            user_id: user.id,
+            reason: snapshot.reason,
+            snapshot_timestamp: snapshot.timestamp,
+            saved_invoices: snapshot.savedInvoices,
+            customer_templates: snapshot.customerTemplates,
+            payload_bytes: payloadBytes,
+          },
+          {
+            onConflict: "user_id",
+          }
+        );
 
-        const baseMessage = statusCode
-          ? `Supabase sync failed (${statusCode})`
-          : "Supabase sync failed";
-        const message = error.message
-          ? `${baseMessage}: ${error.message}`
-          : baseMessage;
-
-        throw new SyncProviderError(message, {
-          retryable: statusCode ? isRetryableStatus(statusCode) : true,
-          statusCode,
+      if (upsertError) {
+        throw new SyncProviderError(`Supabase sync failed: ${upsertError.message}`, {
+          retryable: false,
         });
       }
 
