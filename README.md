@@ -88,12 +88,14 @@ Follow these instructions to get Invoify up and running on your local machine.
    NEXT_PUBLIC_SYNC_MAX_INVOICES=250
    NEXT_PUBLIC_SYNC_MAX_TEMPLATES=100
    NEXT_PUBLIC_SYNC_MAX_PAYLOAD_BYTES=524288
+   NEXT_PUBLIC_SYNC_RETRY_MAX_ATTEMPTS=3
+   NEXT_PUBLIC_SYNC_RETRY_BASE_DELAY_MS=1000
    ```
    `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
    PDF caching is browser-side only and does not require any environment variables.
    `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` and `supabase-rest` supported).
    For `supabase-rest`, also set:
-   `NEXT_PUBLIC_SYNC_INGEST_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+   `NEXT_PUBLIC_SYNC_INGEST_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 4. Start development server
 
     ```bash
@@ -146,6 +148,9 @@ npx playwright install --with-deps chromium
 ## Supabase Free-Plan Guardrails
 
 - Keep `NEXT_PUBLIC_SYNC_DEBOUNCE_MS` at `5000` or higher.
+- Keep retry conservative:
+  - `NEXT_PUBLIC_SYNC_RETRY_MAX_ATTEMPTS=3`
+  - `NEXT_PUBLIC_SYNC_RETRY_BASE_DELAY_MS=1000`
 - Keep snapshot caps conservative:
   - `NEXT_PUBLIC_SYNC_MAX_INVOICES=250`
   - `NEXT_PUBLIC_SYNC_MAX_TEMPLATES=100`
@@ -153,6 +158,27 @@ npx playwright install --with-deps chromium
   - `NEXT_PUBLIC_SYNC_MAX_PAYLOAD_BYTES=524288` (512 KB)
 - PDFs are not part of cloud snapshots; they remain browser-cached locally.
 - If payload exceeds guard limit, sync is skipped and logged to telemetry instead of spamming failed writes.
+
+## Supabase Setup (Authenticated Sync)
+
+1. Install Supabase CLI (if needed) and login:
+   - `brew install supabase/tap/supabase`
+   - `supabase login`
+2. Initialize/local-link project:
+   - `supabase init`
+   - `supabase link --project-ref <your-project-ref>`
+3. Apply migration:
+   - `supabase db push`
+4. Deploy edge function:
+   - `supabase functions deploy invoice-sync --no-verify-jwt=false`
+5. Configure app env:
+   - `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=supabase-rest`
+   - `NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>`
+   - `NEXT_PUBLIC_SYNC_INGEST_URL=https://<project-ref>.supabase.co/functions/v1/invoice-sync`
+6. Important behavior:
+   - Sync only runs for authenticated users.
+   - Unauthenticated users stay fully local and sync attempts are skipped (telemetry event only).
 
 ## Local Data and Migration
 

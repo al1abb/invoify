@@ -63,6 +63,7 @@ import {
   buildSyncSignature,
   toSnapshotPayloadSize,
 } from "@/lib/sync/snapshot";
+import { SyncProviderError } from "@/lib/sync/types";
 
 // Telemetry
 import {
@@ -124,6 +125,17 @@ const toMetaMap = (items: CachedPdfMeta[]) => {
     acc[item.invoiceNumber] = item;
     return acc;
   }, {});
+};
+
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+
+const toBackoffDelayMs = (baseDelayMs: number, attempt: number) => {
+  const exponential = baseDelayMs * 2 ** (attempt - 1);
+  const jitterMultiplier = 0.85 + Math.random() * 0.3;
+  return Math.round(exponential * jitterMultiplier);
 };
 
 export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps) => {
@@ -262,22 +274,81 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
         return;
       }
 
-      try {
-        await syncProvider.pushSnapshot(snapshot);
-        lastSyncSignatureRef.current = signature;
-        trackClientEvent("sync_push_success", {
-          provider: syncProvider.name,
-          payloadBytes,
-          savedInvoices: snapshot.savedInvoices.length,
-          customerTemplates: snapshot.customerTemplates.length,
-        });
-      } catch (error) {
-        captureClientError("sync_push_failure", error, {
-          provider: syncProvider.name,
-          payloadBytes,
-          savedInvoices: snapshot.savedInvoices.length,
-          customerTemplates: snapshot.customerTemplates.length,
-        });
+      const maxAttempts = syncProvider.isCloudProvider
+        ? Math.max(1, syncConfig.retryMaxAttempts)
+        : 1;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        try {
+          const result = await syncProvider.pushSnapshot(snapshot);
+          if (result.status === "skipped") {
+            trackClientEvent(
+              result.reason === "unauthenticated"
+                ? "sync_push_skipped_unauthenticated"
+                : "sync_push_skipped",
+              {
+                provider: result.provider,
+                reason: result.reason,
+                attempt,
+                maxAttempts,
+                payloadBytes,
+                savedInvoices: snapshot.savedInvoices.length,
+                customerTemplates: snapshot.customerTemplates.length,
+              },
+              result.reason === "unauthenticated" ? "warn" : "info"
+            );
+            return;
+          }
+
+          lastSyncSignatureRef.current = signature;
+          trackClientEvent("sync_push_success", {
+            provider: result.provider,
+            payloadBytes,
+            attempt,
+            maxAttempts,
+            savedInvoices: snapshot.savedInvoices.length,
+            customerTemplates: snapshot.customerTemplates.length,
+          });
+          return;
+        } catch (error) {
+          const retryable =
+            error instanceof SyncProviderError ? error.retryable : true;
+          const statusCode =
+            error instanceof SyncProviderError ? error.statusCode : undefined;
+          const willRetry = retryable && attempt < maxAttempts;
+
+          captureClientError("sync_push_failure", error, {
+            provider: syncProvider.name,
+            payloadBytes,
+            attempt,
+            maxAttempts,
+            retryable,
+            willRetry,
+            statusCode,
+            savedInvoices: snapshot.savedInvoices.length,
+            customerTemplates: snapshot.customerTemplates.length,
+          });
+
+          if (!willRetry) {
+            return;
+          }
+
+          const delayMs = toBackoffDelayMs(syncConfig.retryBaseDelayMs, attempt);
+          trackClientEvent(
+            "sync_push_retry",
+            {
+              provider: syncProvider.name,
+              attempt,
+              nextAttempt: attempt + 1,
+              maxAttempts,
+              delayMs,
+              statusCode,
+            },
+            "warn"
+          );
+
+          await sleep(delayMs);
+        }
       }
     }, syncConfig.debounceMs);
 

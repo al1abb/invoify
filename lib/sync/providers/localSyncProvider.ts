@@ -5,5 +5,10 @@ export const localSyncProvider: InvoiceSyncProvider = {
   isCloudProvider: false,
   async pushSnapshot() {
     // Local mode intentionally performs no external sync.
+    return {
+      status: "skipped",
+      provider: "local",
+      reason: "local_provider_noop",
+    };
   },
 };

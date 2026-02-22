@@ -34,6 +34,7 @@
         "@react-email/components": "^1.0.8",
         "@react-email/render": "^2.0.4",
         "@react-email/tailwind": "^2.0.5",
+        "@supabase/supabase-js": "^2.97.0",
         "@types/node": "20.6.2",
         "@vercel/analytics": "^1.1.1",
         "autoprefixer": "10.4.15",
