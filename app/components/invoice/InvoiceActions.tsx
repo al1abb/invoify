@@ -1,5 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 // ShadCn
 import {
   Card,
@@ -9,13 +11,8 @@ import {
 } from "@/components/ui/card";
 
 // Components
-import {
-  PdfViewer,
-  BaseButton,
-  NewInvoiceAlert,
-  InvoiceLoaderModal,
-  InvoiceExportModal,
-} from "@/app/components";
+import BaseButton from "@/app/components/reusables/BaseButton";
+import PdfViewer from "@/app/components/invoice/actions/PdfViewer";
 
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
@@ -23,6 +20,21 @@ import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Icons
 import { FileInput, FolderUp, Import, Plus, RotateCcw } from "lucide-react";
+
+const NewInvoiceAlert = dynamic(
+  () => import("@/app/components/modals/alerts/NewInvoiceAlert"),
+  { ssr: false }
+);
+
+const InvoiceLoaderModal = dynamic(
+  () => import("@/app/components/modals/invoice/InvoiceLoaderModal"),
+  { ssr: false }
+);
+
+const InvoiceExportModal = dynamic(
+  () => import("@/app/components/modals/invoice/InvoiceExportModal"),
+  { ssr: false }
+);
 
 const InvoiceActions = () => {
   const { invoicePdfLoading, newInvoice } = useInvoiceContext();
@@ -44,6 +56,7 @@ const InvoiceActions = () => {
                 variant="outline"
                 tooltipLabel="Open load invoice menu"
                 disabled={invoicePdfLoading}
+                data-testid="load-invoice-btn"
               >
                 <FolderUp />
                 {_t("actions.loadInvoice")}
@@ -56,6 +69,7 @@ const InvoiceActions = () => {
                 variant="outline"
                 tooltipLabel="Open load invoice menu"
                 disabled={invoicePdfLoading}
+                data-testid="export-invoice-btn"
               >
                 <Import />
                 {_t("actions.exportInvoice")}
@@ -70,6 +84,7 @@ const InvoiceActions = () => {
                 variant="outline"
                 tooltipLabel="Get a new invoice form"
                 disabled={invoicePdfLoading}
+                data-testid="new-invoice-btn"
               >
                 <Plus />
                 {_t("actions.newInvoice")}
@@ -78,18 +93,19 @@ const InvoiceActions = () => {
 
             {/* Reset form button */}
             <NewInvoiceAlert
-              title="Reset form?"
-              description="This will clear all fields and the saved draft."
-              confirmLabel="Reset"
+              title={_t("actions.resetFormTitle")}
+              description={_t("actions.resetFormDescription")}
+              confirmLabel={_t("actions.resetFormConfirm")}
               onConfirm={newInvoice}
             >
               <BaseButton
                 variant="destructive"
                 tooltipLabel="Reset entire form"
                 disabled={invoicePdfLoading}
+                data-testid="reset-form-btn"
               >
                 <RotateCcw />
-                Reset Form
+                {_t("actions.resetForm")}
               </BaseButton>
             </NewInvoiceAlert>
 
@@ -99,6 +115,7 @@ const InvoiceActions = () => {
               tooltipLabel="Generate your invoice"
               loading={invoicePdfLoading}
               loadingText="Generating your invoice"
+              data-testid="generate-pdf-btn"
             >
               <FileInput />
               {_t("actions.generatePdf")}

@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { BaseButton } from "@/app/components";
 
 // Icons
-import { ImageMinus, Image } from "lucide-react";
+import { ImageMinus, Image as ImageIcon } from "lucide-react";
 
 // Types
 import { NameType } from "@/types";
@@ -67,13 +67,14 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
             <FormField
                 control={control}
                 name={name}
-                render={({ field }) => (
+                render={() => (
                     <FormItem>
                         <Label>{label}:</Label>
                         {base64Image ? (
                             <img
                                 id="logoImage"
                                 src={base64Image}
+                                alt="Invoice logo preview"
                                 style={{
                                     objectFit: "contain",
                                     width: "10rem",
@@ -94,7 +95,7 @@ const FormFile = ({ name, label, placeholder }: FormFileProps) => {
                                 >
                                     <>
                                         <div className="flex flex-col items-center">
-                                            <Image />
+                                            <ImageIcon />
                                             <p>{placeholder}</p>
                                         </div>
                                         <FormControl>

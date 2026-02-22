@@ -27,21 +27,21 @@ const defaultSignatureContext = {
     signatureRef: null as MutableRefObject<SignatureCanvas | null> | null,
     colors: [] as SignatureColor[],
     selectedColor: "",
-    handleColorButtonClick: (color: string) => {},
+    handleColorButtonClick: (_color: string) => {},
     clearSignature: () => {},
     handleCanvasEnd: () => {},
     typedSignature: "",
-    setTypedSignature: (value: string) => {},
+    setTypedSignature: (_value: string) => {},
     typedSignatureRef: null as MutableRefObject<HTMLInputElement | null> | null,
     typedSignatureFonts: [] as SignatureFont[],
     selectedFont: {} as SignatureFont,
-    setSelectedFont: (value: SignatureFont) => {},
+    setSelectedFont: (_value: SignatureFont) => {},
     typedSignatureFontSize: 0 as number,
     clearTypedSignature: () => {},
     uploadSignatureRef:
         null as MutableRefObject<HTMLInputElement | null> | null,
     uploadSignatureImg: "",
-    handleUploadSignatureChange: (e: React.ChangeEvent<HTMLInputElement>) => {},
+    handleUploadSignatureChange: (_e: React.ChangeEvent<HTMLInputElement>) => {},
     handleRemoveUploadedSignature: () => {},
 };
 
@@ -97,7 +97,7 @@ export const SignatureContextProvider = ({
             setSignatureData("");
             setValue("details.signature", "");
         }
-    }, []);
+    }, [setValue]);
 
     /**
      * Fires every time canvas drawing stops

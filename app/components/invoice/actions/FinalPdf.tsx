@@ -38,6 +38,7 @@ export default function FinalPdf() {
                     variant={"ghost"}
                     size="sm"
                     onClick={removeFinalPdf}
+                    data-testid="back-live-preview-btn"
                 >
                     <MoveLeft className="w-5 h-5" />
                     Back to Live Preview
@@ -51,6 +52,7 @@ export default function FinalPdf() {
                     onClick={previewPdfInTab}
                     size="sm"
                     variant={"outline"}
+                    data-testid="preview-pdf-btn"
                 >
                     <Eye className="w-5 h-5" />
                     Preview
@@ -60,6 +62,7 @@ export default function FinalPdf() {
                     onClick={downloadPdf}
                     size="sm"
                     variant={"outline"}
+                    data-testid="download-pdf-btn"
                 >
                     <DownloadCloudIcon className="w-5 h-5" />
                     Download
@@ -70,6 +73,7 @@ export default function FinalPdf() {
                     onClick={printPdf}
                     size="sm"
                     variant={"outline"}
+                    data-testid="print-pdf-btn"
                 >
                     <Printer className="w-5 h-5" />
                     Print
@@ -80,6 +84,7 @@ export default function FinalPdf() {
                     onClick={saveInvoice}
                     size="sm"
                     variant={"outline"}
+                    data-testid="save-invoice-btn"
                 >
                     <BookmarkIcon className="w-5 h-5" />
                     Save
@@ -90,6 +95,7 @@ export default function FinalPdf() {
                         tooltipLabel="Send invoice PDF to mail"
                         size="sm"
                         variant={"outline"}
+                        data-testid="send-to-mail-btn"
                     >
                         <Mail className="w-5 h-5" />
                         Send to mail

@@ -1,10 +1,13 @@
 import React, { createContext, useContext } from "react";
 
 // Next Intl
-import { useTranslations } from "next-intl";
+import { useMessages, useTranslations } from "next-intl";
+
+// Locales
+import fallbackEnMessages from "@/i18n/locales/en.json";
 
 const defaultTranslationContext = {
-    _t: (key: string) => "",
+    _t: (key: string) => key,
 };
 
 export const TranslationContext = createContext(defaultTranslationContext);
@@ -21,8 +24,39 @@ type TranslationProviderProps = {
     children: React.ReactNode;
 };
 
+const getMessageByPath = (messages: unknown, key: string): string | null => {
+    if (!messages || typeof messages !== "object") return null;
+
+    const keys = key.split(".");
+    let current: unknown = messages;
+
+    for (const segment of keys) {
+        if (!current || typeof current !== "object") return null;
+        const next = (current as Record<string, unknown>)[segment];
+        if (typeof next === "undefined") return null;
+        current = next;
+    }
+
+    return typeof current === "string" ? current : null;
+};
+
 export const TranslationProvider = ({ children }: TranslationProviderProps) => {
-    const _t = useTranslations();
+    const t = useTranslations();
+    const localeMessages = useMessages();
+
+    const _t = (key: string) => {
+        const localeValue = getMessageByPath(localeMessages, key);
+        if (localeValue) return localeValue;
+
+        const fallbackValue = getMessageByPath(fallbackEnMessages, key);
+        if (fallbackValue) return fallbackValue;
+
+        try {
+            return t(key);
+        } catch {
+            return key;
+        }
+    };
 
     return (
         <TranslationContext.Provider value={{ _t }}>

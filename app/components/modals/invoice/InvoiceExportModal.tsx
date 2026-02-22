@@ -70,14 +70,6 @@ const InvoiceExportModal = ({ children }: InvoiceExportModalType) => {
                         Export as XML
                     </BaseButton>
 
-                    <BaseButton
-                        tooltipLabel="Export Invoice as XLSX"
-                        variant="outline"
-                        disabled={invoicePdfLoading}
-                        onClick={() => exportInvoiceAs(ExportTypes.XLSX)}
-                    >
-                        Export as XLSX
-                    </BaseButton>
                 </div>
             </DialogContent>
         </Dialog>

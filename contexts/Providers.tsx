@@ -26,6 +26,9 @@ import {
   LOCAL_STORAGE_INVOICE_DRAFT_KEY,
 } from "@/lib/variables";
 
+// Telemetry
+import { captureClientError } from "@/lib/telemetry/clientTelemetry";
+
 // Helpers
 const readDraftFromLocalStorage = (): InvoiceType | null => {
   if (typeof window === "undefined") return null;
@@ -62,6 +65,29 @@ const Providers = ({ children }: ProvidersProps) => {
     if (draft) {
       form.reset(draft, { keepDefaultValues: false });
     }
+
+    const handleWindowError = (event: ErrorEvent) => {
+      captureClientError("app_error", event.error || event.message, {
+        source: event.filename,
+        line: event.lineno,
+        column: event.colno,
+      });
+    };
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      captureClientError("app_unhandled_rejection", event.reason);
+    };
+
+    window.addEventListener("error", handleWindowError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener("error", handleWindowError);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection
+      );
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -3,6 +3,7 @@
 import React, {
     SetStateAction,
     createContext,
+    useCallback,
     useContext,
     useEffect,
     useState,
@@ -12,26 +13,26 @@ import React, {
 import { useFormContext, useWatch } from "react-hook-form";
 
 // Helpers
-import { formatPriceToString } from "@/lib/helpers";
+import { formatPriceToString } from "@/lib/helpers/currency";
 
 // Types
 import { InvoiceType, ItemType } from "@/types";
 
 const defaultChargesContext = {
     discountSwitch: false,
-    setDiscountSwitch: (newValue: boolean) => {},
+    setDiscountSwitch: (_newValue: boolean) => {},
     taxSwitch: false,
-    setTaxSwitch: (newValue: boolean) => {},
+    setTaxSwitch: (_newValue: boolean) => {},
     shippingSwitch: false,
-    setShippingSwitch: (newValue: boolean) => {},
+    setShippingSwitch: (_newValue: boolean) => {},
     discountType: "amount",
-    setDiscountType: (newValue: SetStateAction<string>) => {},
+    setDiscountType: (_newValue: SetStateAction<string>) => {},
     taxType: "amount",
-    setTaxType: (newValue: SetStateAction<string>) => {},
+    setTaxType: (_newValue: SetStateAction<string>) => {},
     shippingType: "amount",
-    setShippingType: (newValue: SetStateAction<string>) => {},
+    setShippingType: (_newValue: SetStateAction<string>) => {},
     totalInWordsSwitch: true,
-    setTotalInWordsSwitch: (newValue: boolean) => {},
+    setTotalInWordsSwitch: (_newValue: boolean) => {},
     currency: "USD",
     subTotal: 0,
     totalAmount: 0,
@@ -49,7 +50,7 @@ type ChargesContextProps = {
 };
 
 export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
-    const { control, setValue, getValues } = useFormContext<InvoiceType>();
+    const { control, setValue } = useFormContext<InvoiceType>();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -79,6 +80,9 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     };
 
     const { discount, tax, shipping } = charges;
+    const discountAmountInput = discount?.amount;
+    const taxAmountInput = tax?.amount;
+    const shippingCostInput = shipping?.cost;
 
     // Switch states. On/Off
     const [discountSwitch, setDiscountSwitch] = useState<boolean>(
@@ -104,73 +108,10 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     const [taxType, setTaxType] = useState("amount");
     const [shippingType, setShippingType] = useState("amount");
 
-    // When loading invoice, if received values, turn on the switches
-    useEffect(() => {
-        if (discount?.amount) {
-            setDiscountSwitch(true);
-        }
-
-        if (tax?.amount) {
-            setTaxSwitch(true);
-        }
-
-        if (shipping?.cost) {
-            setShippingSwitch(true);
-        }
-
-        if (discount?.amountType == "amount") {
-            setDiscountType("amount");
-        } else {
-            setDiscountType("percentage");
-        }
-
-        if (tax?.amountType == "amount") {
-            setTaxType("amount");
-        } else {
-            setTaxType("percentage");
-        }
-
-        if (shipping?.costType == "amount") {
-            setShippingType("amount");
-        } else {
-            setShippingType("percentage");
-        }
-    }, [discount?.amount, tax?.amount, shipping?.cost]);
-
-    // Check switches, if off set values to zero
-    useEffect(() => {
-        if (!discountSwitch) {
-            setValue("details.discountDetails.amount", 0);
-        }
-
-        if (!taxSwitch) {
-            setValue("details.taxDetails.amount", 0);
-        }
-
-        if (!shippingSwitch) {
-            setValue("details.shippingDetails.cost", 0);
-        }
-    }, [discountSwitch, taxSwitch, shippingSwitch]);
-
-    // Calculate total when values change
-    useEffect(() => {
-        calculateTotal();
-    }, [
-        itemsArray,
-        totalInWordsSwitch,
-        discountType,
-        discount?.amount,
-        taxType,
-        tax?.amount,
-        shippingType,
-        shipping?.cost,
-        currency,
-    ]);
-
     /**
      * Calculates the subtotal, total, and the total amount in words on the invoice.
      */
-    const calculateTotal = () => {
+    const calculateTotal = useCallback(() => {
         // Here Number(item.total) fixes a bug where an extra zero appears
         // at the beginning of subTotal caused by toFixed(2) in item.total in single item
         // Reason: toFixed(2) returns string, not a number instance
@@ -183,9 +124,11 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         setSubTotal(totalSum);
 
         let discountAmount: number =
-            parseFloat(discount!.amount.toString()) ?? 0;
-        let taxAmount: number = parseFloat(tax!.amount.toString()) ?? 0;
-        let shippingCost: number = parseFloat(shipping!.cost.toString()) ?? 0;
+            parseFloat(discountAmountInput?.toString() ?? "0") ?? 0;
+        let taxAmount: number =
+            parseFloat(taxAmountInput?.toString() ?? "0") ?? 0;
+        let shippingCost: number =
+            parseFloat(shippingCostInput?.toString() ?? "0") ?? 0;
 
         let discountAmountType: string = "amount";
         let taxAmountType: string = "amount";
@@ -235,11 +178,82 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         setValue("details.totalAmount", total);
         
         if (totalInWordsSwitch) {
-            setValue("details.totalAmountInWords", formatPriceToString(total, getValues("details.currency")));
+            setValue("details.totalAmountInWords", formatPriceToString(total, currency));
         } else {
             setValue("details.totalAmountInWords", "");
         }
-    };
+    }, [
+        currency,
+        discountAmountInput,
+        discountType,
+        itemsArray,
+        setValue,
+        shippingCostInput,
+        shippingType,
+        taxAmountInput,
+        taxType,
+        totalInWordsSwitch,
+    ]);
+
+    // When loading invoice, if received values, turn on the switches
+    useEffect(() => {
+        if (discount?.amount) {
+            setDiscountSwitch(true);
+        }
+
+        if (tax?.amount) {
+            setTaxSwitch(true);
+        }
+
+        if (shipping?.cost) {
+            setShippingSwitch(true);
+        }
+
+        if (discount?.amountType == "amount") {
+            setDiscountType("amount");
+        } else {
+            setDiscountType("percentage");
+        }
+
+        if (tax?.amountType == "amount") {
+            setTaxType("amount");
+        } else {
+            setTaxType("percentage");
+        }
+
+        if (shipping?.costType == "amount") {
+            setShippingType("amount");
+        } else {
+            setShippingType("percentage");
+        }
+    }, [
+        discount?.amount,
+        discount?.amountType,
+        shipping?.cost,
+        shipping?.costType,
+        tax?.amount,
+        tax?.amountType,
+    ]);
+
+    // Check switches, if off set values to zero
+    useEffect(() => {
+        if (!discountSwitch) {
+            setValue("details.discountDetails.amount", 0);
+        }
+
+        if (!taxSwitch) {
+            setValue("details.taxDetails.amount", 0);
+        }
+
+        if (!shippingSwitch) {
+            setValue("details.shippingDetails.cost", 0);
+        }
+    }, [discountSwitch, shippingSwitch, taxSwitch, setValue]);
+
+    // Calculate total when values change
+    useEffect(() => {
+        calculateTotal();
+    }, [calculateTotal]);
 
     return (
         <ChargesContext.Provider

@@ -45,7 +45,7 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 - [x] **Flexible Download Options:** Download invoices directly or send them via email in PDF format.
 - [x] **Template Variety:** Choose from multiple (currently 2) invoice templates.
 - [x] **Live Preview:** Edit the form and see changes in real-time with the live preview feature.
-- [x] **Export in Various Formats:** Export invoices in different formats, including JSON, XLSX, CSV, and XML.
+- [x] **Export in Various Formats:** Export invoices in different formats, including JSON, CSV, and XML.
 - [ ] **I18N Support:** i18n support with multiple languages for UI and templates.
 - [ ] **Themeable Templates:** Select a theme color for the invoice
 - [ ] **Custom Inputs:** Define your own inputs that are missing from the default invoice builder. (Ex: VAT number)
@@ -83,14 +83,92 @@ Follow these instructions to get Invoify up and running on your local machine.
    ```env
    NODEMAILER_EMAIL=your_email@example.com
    NODEMAILER_PW=your_gmail_app_password
+   NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=local
    ```
    `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
+   PDF caching is browser-side only and does not require any environment variables.
+   `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` placeholder adapter).
 4. Start development server
 
     ```bash
     npm run dev
     ```
 5. Open your web browser and access the application at [http://localhost:3000](http://localhost:3000)
+
+### Quality Checks
+
+Run lint/build/e2e locally:
+
+```bash
+npm run lint
+npm run build
+npm run test:e2e
+```
+
+Before first e2e run, install Playwright browser binaries:
+
+```bash
+npx playwright install --with-deps chromium
+```
+
+## New in This Release
+
+- Faster startup optimizations:
+  - Split shared helper module into client/server/currency helper files.
+  - Lazy-loaded secondary action modals.
+  - BuyMeACoffee widget now loads with `lazyOnload`.
+  - Signature fonts are no longer preloaded on first render.
+  - Draft form writes are debounced to reduce localStorage churn.
+- PDF cache in browser IndexedDB:
+  - Generated PDFs are cached by invoice number.
+  - Cache retention removes entries older than 90 days.
+  - Cache is capped at 100 PDFs (oldest by `updatedAt` are evicted first).
+  - Saved invoice loader shows cached-PDF badge, size, and cache update time.
+- Workflow features:
+  - Duplicate saved invoice with unique number suffix (`-copy`, `-copy-2`, ...).
+  - Invoice status tracking (`draft`, `sent`, `paid`).
+  - Customer templates for sender/receiver with save/apply/rename/delete actions.
+- Reliability and architecture:
+  - Playwright smoke tests for invoice and template workflows.
+  - ESLint CLI configuration and CI workflow for lint/build/e2e.
+  - Lightweight client telemetry for runtime, PDF, and email failures.
+  - Worker-first PDF generation request path with direct-fetch fallback.
+  - Cloud-sync interface layer (local adapter by default, noop cloud adapter stub).
+
+## Local Data and Migration
+
+- Draft key:
+  - `invoify:invoiceDraft`
+- Saved invoices:
+  - Legacy key: `savedInvoices`
+  - Current key: `invoify:savedInvoices:v2`
+  - Migration runs automatically on read and is idempotent.
+- Customer templates:
+  - `invoify:customerTemplates:v1`
+- Client telemetry:
+  - `invoify:telemetry:v1`
+- PDF cache (IndexedDB):
+  - DB: `invoify-client-cache-v1`
+  - Store: `pdfs`
+
+## Troubleshooting
+
+- Clear only saved invoices:
+  - Open browser devtools console and run:
+  - `localStorage.removeItem('invoify:savedInvoices:v2')`
+- Clear customer templates:
+  - `localStorage.removeItem('invoify:customerTemplates:v1')`
+- Clear draft form:
+  - `localStorage.removeItem('invoify:invoiceDraft')`
+- Clear legacy invoices key:
+  - `localStorage.removeItem('savedInvoices')`
+- Clear PDF cache:
+  - In devtools Application tab, delete IndexedDB `invoify-client-cache-v1`.
+- Clear telemetry events:
+  - `localStorage.removeItem('invoify:telemetry:v1')`
+- Full local reset:
+  - Clear all related localStorage keys above and remove the IndexedDB database.
+
 <!-- LICENSE -->
 ## License
 

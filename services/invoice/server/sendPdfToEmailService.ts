@@ -6,11 +6,11 @@ import nodemailer, { SendMailOptions } from "nodemailer";
 // React-email
 import { render } from "@react-email/render";
 
-// Components
-import { SendPdfEmail } from "@/app/components";
+// Templates
+import SendPdfEmail from "@/app/components/templates/email/SendPdfEmail";
 
 // Helpers
-import { fileToBuffer } from "@/lib/helpers";
+import { fileToBuffer } from "@/lib/helpers/server";
 
 // Variables
 import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";

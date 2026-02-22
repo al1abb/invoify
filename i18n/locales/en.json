@@ -25,7 +25,22 @@
                 "phone": "Phone",
                 "addCustomInput": "Add Custom Input",
                 "sender": "Sender",
-                "receiver": "Receiver"
+                "receiver": "Receiver",
+                "templates": {
+                    "heading": "Customer Templates",
+                    "description": "Save sender/receiver pairs and apply them in one click.",
+                    "savedCount": "saved",
+                    "nameLabel": "Template Name",
+                    "namePlaceholder": "Example: Main Client",
+                    "saveCurrent": "Save Current",
+                    "existingLabel": "Existing Templates",
+                    "selectPlaceholder": "Select a template",
+                    "apply": "Apply",
+                    "rename": "Rename",
+                    "delete": "Delete",
+                    "empty": "No saved templates yet.",
+                    "selected": "Selected"
+                }
             },
             "invoiceDetails": {
                 "heading": "Invoice Details",
@@ -84,8 +99,34 @@
         "loadInvoice": "Load Invoice",
         "exportInvoice": "Export Invoice",
         "newInvoice": "New Invoice",
+        "resetForm": "Reset Form",
+        "resetFormTitle": "Reset form?",
+        "resetFormDescription": "This will clear all fields and the saved draft.",
+        "resetFormConfirm": "Reset",
         "generatePdf": "Generate PDF",
         "pdfView": "PDF View"
+    },
+    "savedInvoices": {
+        "title": "Saved Invoices",
+        "descriptionPrefix": "You have",
+        "descriptionSuffix": "saved invoices",
+        "status": {
+            "draft": "Draft",
+            "sent": "Sent",
+            "paid": "Paid"
+        },
+        "sender": "Sender",
+        "receiver": "Receiver",
+        "total": "Total",
+        "updatedAt": "Updated",
+        "cachedPdf": "Cached PDF",
+        "cachedUpdatedAt": "Cache updated",
+        "load": "Load",
+        "loadAndGenerate": "Load & Generate",
+        "duplicate": "Duplicate",
+        "markPaid": "Mark Paid",
+        "delete": "Delete",
+        "empty": "No saved invoices yet."
     },
     "footer": {
         "developedBy": "Developed by"

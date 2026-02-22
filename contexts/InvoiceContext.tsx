@@ -6,10 +6,9 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
-
-import { useRouter } from "next/navigation";
 
 // RHF
 import { useFormContext } from "react-hook-form";
@@ -23,32 +22,85 @@ import { exportInvoice } from "@/services/invoice/client/exportInvoice";
 // Variables
 import {
   FORM_DEFAULT_VALUES,
-  GENERATE_PDF_API,
+  LOCAL_STORAGE_INVOICE_DRAFT_KEY,
   SEND_PDF_API,
   SHORT_DATE_OPTIONS,
-  LOCAL_STORAGE_INVOICE_DRAFT_KEY,
 } from "@/lib/variables";
 
+// Storage
+import {
+  addCustomerTemplate,
+  findCustomerTemplate,
+  readCustomerTemplates,
+  renameCustomerTemplate as renameCustomerTemplateInRecords,
+  removeCustomerTemplate,
+  writeCustomerTemplates,
+} from "@/lib/storage/customerTemplates";
+import {
+  cleanupPdfCache,
+  getCachedPdf,
+  listCachedPdfMetadata,
+  upsertCachedPdf,
+} from "@/lib/storage/pdfCache";
+import {
+  duplicateSavedInvoiceRecord,
+  readSavedInvoices,
+  removeSavedInvoiceRecord,
+  upsertSavedInvoiceRecord,
+  updateSavedInvoiceStatus as updateSavedInvoiceStatusInRecords,
+  updateSavedInvoiceStatusByInvoiceNumber as updateSavedInvoiceStatusByInvoiceNumberInRecords,
+  writeSavedInvoices,
+} from "@/lib/storage/savedInvoices";
+
+// Workers
+import { generatePdfBlob } from "@/lib/workers/pdfGeneratorClient";
+
+// Sync
+import { createInvoiceSyncProvider } from "@/lib/sync/createInvoiceSyncProvider";
+
+// Telemetry
+import {
+  captureClientError,
+  trackClientEvent,
+} from "@/lib/telemetry/clientTelemetry";
+
 // Types
-import { ExportTypes, InvoiceType } from "@/types";
+import {
+  CachedPdfMeta,
+  CustomerTemplateRecord,
+  ExportTypes,
+  InvoiceStatus,
+  InvoiceType,
+  SavedInvoiceRecord,
+} from "@/types";
 
 const defaultInvoiceContext = {
   invoicePdf: new Blob(),
   invoicePdfLoading: false,
-  savedInvoices: [] as InvoiceType[],
+  savedInvoices: [] as SavedInvoiceRecord[],
+  customerTemplates: [] as CustomerTemplateRecord[],
   pdfUrl: null as string | null,
-  onFormSubmit: (values: InvoiceType) => {},
+  onFormSubmit: (_values: InvoiceType) => {},
   newInvoice: () => {},
-  generatePdf: async (data: InvoiceType) => {},
+  generatePdf: async (_data: InvoiceType) => {},
   removeFinalPdf: () => {},
   downloadPdf: () => {},
   printPdf: () => {},
   previewPdfInTab: () => {},
   saveInvoice: () => {},
-  deleteInvoice: (index: number) => {},
-  sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
-  exportInvoiceAs: (exportAs: ExportTypes) => {},
-  importInvoice: (file: File) => {},
+  deleteInvoice: (_id: string) => {},
+  duplicateInvoice: (_id: string) => {},
+  updateSavedInvoiceStatus: (_id: string, _status: InvoiceStatus) => {},
+  sendPdfToMail: (_email: string): Promise<void> => Promise.resolve(),
+  exportInvoiceAs: (_exportAs: ExportTypes) => {},
+  importInvoice: (_file: File) => {},
+  restorePdfFromCache: async (_invoiceNumber: string) => false,
+  getCachedPdfMeta: (_invoiceNumber: string) => null as CachedPdfMeta | null,
+  hasCachedPdf: (_invoiceNumber: string) => false,
+  saveCustomerTemplate: (_name: string) => {},
+  applyCustomerTemplate: (_templateId: string) => false,
+  renameCustomerTemplate: (_templateId: string, _name: string) => false,
+  deleteCustomerTemplate: (_templateId: string) => {},
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -61,11 +113,14 @@ type InvoiceContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const InvoiceContextProvider = ({
-  children,
-}: InvoiceContextProviderProps) => {
-  const router = useRouter();
+const toMetaMap = (items: CachedPdfMeta[]) => {
+  return items.reduce<Record<string, CachedPdfMeta>>((acc, item) => {
+    acc[item.invoiceNumber] = item;
+    return acc;
+  }, {});
+};
 
+export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps) => {
   // Toasts
   const {
     newInvoiceSuccess,
@@ -77,248 +132,394 @@ export const InvoiceContextProvider = ({
     importInvoiceError,
   } = useToasts();
 
-  // Get form values and methods from form context
-  const { getValues, reset, watch } = useFormContext<InvoiceType>();
+  // RHF values and methods
+  const { getValues, reset, setValue, watch } = useFormContext<InvoiceType>();
 
   // Variables
   const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
   const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
 
-  // Saved invoices
-  const [savedInvoices, setSavedInvoices] = useState<InvoiceType[]>([]);
+  const [savedInvoices, setSavedInvoices] = useState<SavedInvoiceRecord[]>([]);
+  const [customerTemplates, setCustomerTemplates] = useState<
+    CustomerTemplateRecord[]
+  >([]);
+  const [isStorageHydrated, setIsStorageHydrated] = useState(false);
+  const [cachedPdfMetaByInvoiceNumber, setCachedPdfMetaByInvoiceNumber] =
+    useState<Record<string, CachedPdfMeta>>({});
 
-  useEffect(() => {
-    let savedInvoicesDefault;
-    if (typeof window !== undefined) {
-      // Saved invoices variables
-      const savedInvoicesJSON = window.localStorage.getItem("savedInvoices");
-      savedInvoicesDefault = savedInvoicesJSON
-        ? JSON.parse(savedInvoicesJSON)
-        : [];
-      setSavedInvoices(savedInvoicesDefault);
+  const draftPersistTimeoutRef = useRef<number | null>(null);
+  const syncProvider = useMemo(() => createInvoiceSyncProvider(), []);
+
+  const refreshCachedPdfMetadata = useCallback(async () => {
+    try {
+      const meta = await listCachedPdfMetadata();
+      setCachedPdfMetaByInvoiceNumber(toMetaMap(meta));
+    } catch {
+      setCachedPdfMetaByInvoiceNumber({});
     }
   }, []);
+
+  // Load local persisted state once
+  useEffect(() => {
+    try {
+      setSavedInvoices(readSavedInvoices());
+      setCustomerTemplates(readCustomerTemplates());
+    } catch (error) {
+      captureClientError("app_error", error, {
+        area: "invoice_context_storage_hydrate",
+      });
+    }
+
+    const hydratePdfCache = async () => {
+      try {
+        await cleanupPdfCache();
+        await refreshCachedPdfMetadata();
+      } catch (error) {
+        setCachedPdfMetaByInvoiceNumber({});
+        captureClientError("app_error", error, {
+          area: "invoice_context_pdf_cache_hydrate",
+        });
+      } finally {
+        setIsStorageHydrated(true);
+      }
+    };
+
+    void hydratePdfCache();
+  }, [refreshCachedPdfMetadata]);
 
   // Persist full form state with debounce
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const subscription = watch((value) => {
-      try {
-        window.localStorage.setItem(
-          LOCAL_STORAGE_INVOICE_DRAFT_KEY,
-          JSON.stringify(value)
-        );
-      } catch {}
+      if (draftPersistTimeoutRef.current) {
+        window.clearTimeout(draftPersistTimeoutRef.current);
+      }
+
+      draftPersistTimeoutRef.current = window.setTimeout(() => {
+        try {
+          window.localStorage.setItem(
+            LOCAL_STORAGE_INVOICE_DRAFT_KEY,
+            JSON.stringify(value)
+          );
+        } catch {
+          // no-op: local storage may be unavailable
+        }
+      }, 300);
     });
-    return () => subscription.unsubscribe();
+
+    return () => {
+      subscription.unsubscribe();
+
+      if (draftPersistTimeoutRef.current) {
+        window.clearTimeout(draftPersistTimeoutRef.current);
+      }
+    };
   }, [watch]);
 
-  // Get pdf url from blob
+  // Optional sync interface layer (local by default, cloud-ready abstraction).
+  useEffect(() => {
+    if (!isStorageHydrated) return;
+
+    const pushSnapshot = async () => {
+      try {
+        await syncProvider.pushSnapshot({
+          reason: "state_change",
+          timestamp: Date.now(),
+          savedInvoices,
+          customerTemplates,
+        });
+      } catch (error) {
+        captureClientError("sync_push_failure", error, {
+          provider: syncProvider.name,
+          savedInvoices: savedInvoices.length,
+          customerTemplates: customerTemplates.length,
+        });
+      }
+    };
+
+    void pushSnapshot();
+  }, [customerTemplates, isStorageHydrated, savedInvoices, syncProvider]);
+
+  // Keep an object URL in sync with blob state and always revoke previous URLs.
   const pdfUrl = useMemo(() => {
-    if (invoicePdf.size > 0) {
-      return window.URL.createObjectURL(invoicePdf);
+    if (typeof window === "undefined" || invoicePdf.size === 0) {
+      return null;
     }
-    return null;
+
+    return window.URL.createObjectURL(invoicePdf);
   }, [invoicePdf]);
+
+  useEffect(() => {
+    return () => {
+      if (pdfUrl) {
+        window.URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [pdfUrl]);
 
   /**
    * Handles form submission.
-   *
-   * @param {InvoiceType} data - The form values used to generate the PDF.
    */
   const onFormSubmit = (data: InvoiceType) => {
-    console.log("VALUE");
-    console.log(data);
-
-    // Call generate pdf method
     generatePdf(data);
   };
 
   /**
-   * Generates a new invoice.
+   * Generate a clean invoice and clear draft/pdf state.
    */
   const newInvoice = () => {
     reset(FORM_DEFAULT_VALUES);
     setInvoicePdf(new Blob());
 
-    // Clear the draft
     if (typeof window !== "undefined") {
       try {
         window.localStorage.removeItem(LOCAL_STORAGE_INVOICE_DRAFT_KEY);
-      } catch {}
+      } catch {
+        // no-op
+      }
     }
 
-    router.refresh();
-
-    // Toast
     newInvoiceSuccess();
   };
 
   /**
    * Generate a PDF document based on the provided data.
-   *
-   * @param {InvoiceType} data - The data used to generate the PDF.
-   * @returns {Promise<void>} - A promise that resolves when the PDF is successfully generated.
-   * @throws {Error} - If an error occurs during the PDF generation process.
    */
-  const generatePdf = useCallback(async (data: InvoiceType) => {
-    setInvoicePdfLoading(true);
+  const generatePdf = useCallback(
+    async (data: InvoiceType) => {
+      setInvoicePdfLoading(true);
 
-    try {
-      const response = await fetch(GENERATE_PDF_API, {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      try {
+        const result = await generatePdfBlob(data);
+        setInvoicePdf(result);
 
-      const result = await response.blob();
-      setInvoicePdf(result);
+        if (result.size > 0) {
+          pdfGenerationSuccess();
+          trackClientEvent("pdf_generate_success", {
+            invoiceNumber: data.details.invoiceNumber,
+            sizeBytes: result.size,
+          });
 
-      if (result.size > 0) {
-        // Toast
-        pdfGenerationSuccess();
+          const invoiceNumber = data.details.invoiceNumber?.trim();
+          if (invoiceNumber) {
+            try {
+              await upsertCachedPdf(invoiceNumber, result);
+              await refreshCachedPdfMetadata();
+            } catch (error) {
+              captureClientError("pdf_cache_write_failure", error, {
+                invoiceNumber,
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        captureClientError("pdf_generate_failure", error, {
+          invoiceNumber: data.details.invoiceNumber,
+        });
+      } finally {
+        setInvoicePdfLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setInvoicePdfLoading(false);
-    }
-  }, []);
+    },
+    [pdfGenerationSuccess, refreshCachedPdfMetadata]
+  );
 
   /**
-   * Removes the final PDF file and switches to Live Preview
+   * Removes the final PDF file and switches back to live preview.
    */
   const removeFinalPdf = () => {
     setInvoicePdf(new Blob());
   };
 
   /**
-   * Generates a preview of a PDF file and opens it in a new browser tab.
+   * Opens the generated PDF in a new tab.
    */
   const previewPdfInTab = () => {
-    if (invoicePdf) {
-      const url = window.URL.createObjectURL(invoicePdf);
-      window.open(url, "_blank");
+    if (pdfUrl) {
+      window.open(pdfUrl, "_blank");
     }
   };
 
   /**
-   * Downloads a PDF file.
+   * Downloads the generated PDF.
    */
   const downloadPdf = () => {
-    // Only download if there is an invoice
     if (invoicePdf instanceof Blob && invoicePdf.size > 0) {
-      // Create a blob URL to trigger the download
       const url = window.URL.createObjectURL(invoicePdf);
-
-      // Create an anchor element to initiate the download
       const a = document.createElement("a");
       a.href = url;
       a.download = "invoice.pdf";
       document.body.appendChild(a);
-
-      // Trigger the download
       a.click();
-
-      // Clean up the URL object
       window.URL.revokeObjectURL(url);
     }
   };
 
   /**
-   * Prints a PDF file.
+   * Prints the generated PDF.
    */
   const printPdf = () => {
-    if (invoicePdf) {
-      const pdfUrl = URL.createObjectURL(invoicePdf);
-      const printWindow = window.open(pdfUrl, "_blank");
+    if (invoicePdf.size > 0) {
+      const generatedPdfUrl = URL.createObjectURL(invoicePdf);
+      const printWindow = window.open(generatedPdfUrl, "_blank");
       if (printWindow) {
         printWindow.onload = () => {
           printWindow.print();
+          URL.revokeObjectURL(generatedPdfUrl);
         };
       }
     }
   };
 
-  // TODO: Change function name. (saveInvoiceData maybe?)
   /**
-   * Saves the invoice data to local storage.
+   * Save/overwrite current invoice in browser storage.
    */
   const saveInvoice = () => {
-    if (invoicePdf) {
-      // If get values function is provided, allow to save the invoice
-      if (getValues) {
-        // Retrieve the existing array from local storage or initialize an empty array
-        const savedInvoicesJSON = localStorage.getItem("savedInvoices");
-        const savedInvoices = savedInvoicesJSON
-          ? JSON.parse(savedInvoicesJSON)
-          : [];
+    if (!invoicePdf || invoicePdf.size === 0) return;
 
-        const updatedDate = new Date().toLocaleDateString(
-          "en-US",
-          SHORT_DATE_OPTIONS
-        );
+    const formValues = JSON.parse(JSON.stringify(getValues())) as InvoiceType;
+    formValues.details.updatedAt = new Date().toLocaleDateString(
+      "en-US",
+      SHORT_DATE_OPTIONS
+    );
 
-        const formValues = getValues();
-        formValues.details.updatedAt = updatedDate;
+    const alreadyExists = savedInvoices.some(
+      (record) => record.invoiceNumber === formValues.details.invoiceNumber
+    );
 
-        const existingInvoiceIndex = savedInvoices.findIndex(
-          (invoice: InvoiceType) => {
-            return (
-              invoice.details.invoiceNumber === formValues.details.invoiceNumber
-            );
-          }
-        );
+    const { nextRecords } = upsertSavedInvoiceRecord(
+      savedInvoices,
+      formValues,
+      "draft"
+    );
 
-        // If invoice already exists
-        if (existingInvoiceIndex !== -1) {
-          savedInvoices[existingInvoiceIndex] = formValues;
-
-          // Toast
-          modifiedInvoiceSuccess();
-        } else {
-          // Add the form values to the array
-          savedInvoices.push(formValues);
-
-          // Toast
-          saveInvoiceSuccess();
+    setSavedInvoices(nextRecords);
+    const persisted = writeSavedInvoices(nextRecords);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist saved invoices"),
+        {
+          action: "save_invoice",
         }
+      );
+    }
 
-        localStorage.setItem("savedInvoices", JSON.stringify(savedInvoices));
-
-        setSavedInvoices(savedInvoices);
-      }
+    if (alreadyExists) {
+      modifiedInvoiceSuccess();
+    } else {
+      saveInvoiceSuccess();
     }
   };
 
-  // TODO: Change function name. (deleteInvoiceData maybe?)
   /**
-   * Delete an invoice from local storage based on the given index.
-   *
-   * @param {number} index - The index of the invoice to be deleted.
+   * Delete a saved invoice record.
    */
-  const deleteInvoice = (index: number) => {
-    if (index >= 0 && index < savedInvoices.length) {
-      const updatedInvoices = [...savedInvoices];
-      updatedInvoices.splice(index, 1);
-      setSavedInvoices(updatedInvoices);
-
-      const updatedInvoicesJSON = JSON.stringify(updatedInvoices);
-
-      localStorage.setItem("savedInvoices", updatedInvoicesJSON);
+  const deleteInvoice = (id: string) => {
+    const updatedInvoices = removeSavedInvoiceRecord(savedInvoices, id);
+    setSavedInvoices(updatedInvoices);
+    const persisted = writeSavedInvoices(updatedInvoices);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist saved invoices"),
+        {
+          action: "delete_invoice",
+        }
+      );
     }
   };
 
   /**
-   * Send the invoice PDF to the specified email address.
-   *
-   * @param {string} email - The email address to which the Invoice PDF will be sent.
-   * @returns {Promise<void>} A promise that resolves once the email is successfully sent.
+   * Duplicate an existing saved invoice.
+   */
+  const duplicateInvoice = (id: string) => {
+    const updatedInvoices = duplicateSavedInvoiceRecord(savedInvoices, id);
+    setSavedInvoices(updatedInvoices);
+    const persisted = writeSavedInvoices(updatedInvoices);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist saved invoices"),
+        {
+          action: "duplicate_invoice",
+        }
+      );
+    }
+  };
+
+  /**
+   * Update a record status by id.
+   */
+  const updateSavedInvoiceStatus = (id: string, status: InvoiceStatus) => {
+    const updatedInvoices = updateSavedInvoiceStatusInRecords(
+      savedInvoices,
+      id,
+      status
+    );
+
+    setSavedInvoices(updatedInvoices);
+    const persisted = writeSavedInvoices(updatedInvoices);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist saved invoices"),
+        {
+          action: "update_status",
+          status,
+        }
+      );
+    }
+  };
+
+  /**
+   * Try restoring a generated PDF from browser cache by invoice number.
+   */
+  const restorePdfFromCache = async (invoiceNumber: string) => {
+    try {
+      const cached = await getCachedPdf(invoiceNumber);
+      if (!cached) return false;
+
+      setInvoicePdf(cached.pdfBlob);
+
+      try {
+        await upsertCachedPdf(invoiceNumber, cached.pdfBlob);
+        await refreshCachedPdfMetadata();
+      } catch (error) {
+        captureClientError("pdf_cache_write_failure", error, {
+          invoiceNumber,
+          source: "restore",
+        });
+      }
+
+      return true;
+    } catch (error) {
+      captureClientError("pdf_cache_restore_failure", error, {
+        invoiceNumber,
+      });
+      return false;
+    }
+  };
+
+  const getCachedPdfMeta = (invoiceNumber: string) => {
+    return cachedPdfMetaByInvoiceNumber[invoiceNumber] || null;
+  };
+
+  const hasCachedPdf = (invoiceNumber: string) => {
+    return Boolean(cachedPdfMetaByInvoiceNumber[invoiceNumber]);
+  };
+
+  /**
+   * Send generated PDF to recipient email.
    */
   const sendPdfToMail = (email: string) => {
+    const invoiceNumber = getValues().details.invoiceNumber;
+
     const fd = new FormData();
     fd.append("email", email);
     fd.append("invoicePdf", invoicePdf, "invoice.pdf");
-    fd.append("invoiceNumber", getValues().details.invoiceNumber);
+    fd.append("invoiceNumber", invoiceNumber);
 
     return fetch(SEND_PDF_API, {
       method: "POST",
@@ -326,12 +527,43 @@ export const InvoiceContextProvider = ({
     })
       .then(async (res) => {
         if (res.ok) {
-          // Successful toast msg
           sendPdfSuccess();
+          trackClientEvent("email_send_success", {
+            email,
+            invoiceNumber,
+          });
+
+          if (invoiceNumber) {
+            const updatedInvoices = updateSavedInvoiceStatusByInvoiceNumberInRecords(
+              savedInvoices,
+              invoiceNumber,
+              "sent"
+            );
+            setSavedInvoices(updatedInvoices);
+            const persisted = writeSavedInvoices(updatedInvoices);
+            if (!persisted) {
+              captureClientError(
+                "app_error",
+                new Error("Failed to persist saved invoices"),
+                {
+                  action: "email_status_update",
+                  invoiceNumber,
+                }
+              );
+            }
+          }
         } else {
           const errorMessage = (await res.text()).trim();
+          captureClientError(
+            "email_send_failure",
+            new Error(errorMessage || "Failed to send email"),
+            {
+              email,
+              invoiceNumber,
+              status: res.status,
+            }
+          );
 
-          // Error toast msg
           sendPdfError({
             email,
             sendPdfToMail,
@@ -340,9 +572,12 @@ export const InvoiceContextProvider = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+        captureClientError("email_send_failure", error, {
+          email,
+          invoiceNumber,
+        });
 
-        // Error toast msg
         sendPdfError({
           email,
           sendPdfToMail,
@@ -352,52 +587,145 @@ export const InvoiceContextProvider = ({
   };
 
   /**
-   * Export an invoice in the specified format using the provided form values.
-   *
-   * This function initiates the export process with the chosen export format and the form data.
-   *
-   * @param {ExportTypes} exportAs - The format in which to export the invoice.
+   * Export invoice using selected format.
    */
   const exportInvoiceAs = (exportAs: ExportTypes) => {
     const formValues = getValues();
-
-    // Service to export invoice with given parameters
     exportInvoice(exportAs, formValues);
   };
 
   /**
-   * Import an invoice from a JSON file.
-   *
-   * @param {File} file - The JSON file to import.
+   * Import an invoice from JSON.
    */
   const importInvoice = (file: File) => {
     const reader = new FileReader();
+
     reader.onload = (event) => {
       try {
         const importedData = JSON.parse(event.target?.result as string);
 
-        // Parse the dates
         if (importedData.details) {
           if (importedData.details.invoiceDate) {
             importedData.details.invoiceDate = new Date(
               importedData.details.invoiceDate
             );
           }
+
           if (importedData.details.dueDate) {
-            importedData.details.dueDate = new Date(
-              importedData.details.dueDate
-            );
+            importedData.details.dueDate = new Date(importedData.details.dueDate);
           }
         }
 
-        // Reset form with imported data
         reset(importedData);
       } catch (error) {
         console.error("Error parsing JSON file:", error);
+        captureClientError("invoice_import_failure", error, {
+          fileName: file.name,
+        });
         importInvoiceError();
       }
     };
+
+    reader.onerror = (error) => {
+      captureClientError("invoice_import_failure", error, {
+        fileName: file.name,
+      });
+      importInvoiceError();
+    };
+
     reader.readAsText(file);
+  };
+
+  /**
+   * Save current sender/receiver as a reusable customer template.
+   */
+  const saveCustomerTemplate = (name: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    const formValues = getValues();
+    const nextTemplates = addCustomerTemplate(
+      customerTemplates,
+      trimmedName,
+      formValues.sender,
+      formValues.receiver
+    );
+
+    setCustomerTemplates(nextTemplates);
+    const persisted = writeCustomerTemplates(nextTemplates);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist customer templates"),
+        {
+          action: "save_template",
+        }
+      );
+    }
+  };
+
+  /**
+   * Apply a customer template to sender/receiver fields.
+   */
+  const applyCustomerTemplate = (templateId: string) => {
+    const template = findCustomerTemplate(customerTemplates, templateId);
+    if (!template) return false;
+
+    setValue("sender", template.sender, {
+      shouldDirty: true,
+    });
+
+    setValue("receiver", template.receiver, {
+      shouldDirty: true,
+    });
+
+    return true;
+  };
+
+  /**
+   * Delete customer template by id.
+   */
+  const deleteCustomerTemplate = (templateId: string) => {
+    const nextTemplates = removeCustomerTemplate(customerTemplates, templateId);
+    setCustomerTemplates(nextTemplates);
+    const persisted = writeCustomerTemplates(nextTemplates);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist customer templates"),
+        {
+          action: "delete_template",
+        }
+      );
+    }
+  };
+
+  /**
+   * Rename customer template by id.
+   */
+  const renameCustomerTemplate = (templateId: string, name: string) => {
+    const nextTemplates = renameCustomerTemplateInRecords(
+      customerTemplates,
+      templateId,
+      name
+    );
+
+    if (nextTemplates === customerTemplates) {
+      return false;
+    }
+
+    setCustomerTemplates(nextTemplates);
+    const persisted = writeCustomerTemplates(nextTemplates);
+    if (!persisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist customer templates"),
+        {
+          action: "rename_template",
+        }
+      );
+    }
+    return true;
   };
 
   return (
@@ -406,6 +734,7 @@ export const InvoiceContextProvider = ({
         invoicePdf,
         invoicePdfLoading,
         savedInvoices,
+        customerTemplates,
         pdfUrl,
         onFormSubmit,
         newInvoice,
@@ -416,9 +745,18 @@ export const InvoiceContextProvider = ({
         previewPdfInTab,
         saveInvoice,
         deleteInvoice,
+        duplicateInvoice,
+        updateSavedInvoiceStatus,
         sendPdfToMail,
         exportInvoiceAs,
         importInvoice,
+        restorePdfFromCache,
+        getCachedPdfMeta,
+        hasCachedPdf,
+        saveCustomerTemplate,
+        applyCustomerTemplate,
+        renameCustomerTemplate,
+        deleteCustomerTemplate,
       }}
     >
       {children}

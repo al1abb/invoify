@@ -4,7 +4,7 @@ import React from "react";
 import { InvoiceLayout } from "@/app/components";
 
 // Helpers
-import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
+import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers/client";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";

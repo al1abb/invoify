@@ -15,7 +15,7 @@ import { useChargesContext } from "@/contexts/ChargesContext";
 import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Helpers
-import { formatNumberWithCommas } from "@/lib/helpers";
+import { formatNumberWithCommas } from "@/lib/helpers/client";
 
 // Types
 import { InvoiceType } from "@/types";

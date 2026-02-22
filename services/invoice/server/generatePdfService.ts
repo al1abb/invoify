@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import chromium from "@sparticuz/chromium";
 
 // Helpers
-import { getInvoiceTemplate } from "@/lib/helpers";
+import { getInvoiceTemplate } from "@/lib/helpers/server";
 
 // Variables
 import { ENV, TAILWIND_CDN } from "@/lib/variables";

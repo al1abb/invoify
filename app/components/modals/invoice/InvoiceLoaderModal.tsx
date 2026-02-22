@@ -18,6 +18,7 @@ import { ImportJsonButton } from "@/app/components";
 
 // Context
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 type InvoiceLoaderModalType = {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ const InvoiceLoaderModal = ({ children }: InvoiceLoaderModalType) => {
   const [open, setOpen] = useState(false);
 
   const { savedInvoices } = useInvoiceContext();
+  const { _t } = useTranslationContext();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -34,10 +36,13 @@ const InvoiceLoaderModal = ({ children }: InvoiceLoaderModalType) => {
 
       <DialogContent>
         <DialogHeader className="pb-2 border-b">
-          <DialogTitle>Saved Invoices</DialogTitle>
+          <DialogTitle>{_t("savedInvoices.title")}</DialogTitle>
           <DialogDescription asChild>
             <div className="space-y-2">
-              <p>You have {savedInvoices.length} saved invoices</p>
+              <p>
+                {_t("savedInvoices.descriptionPrefix")} {savedInvoices.length}{" "}
+                {_t("savedInvoices.descriptionSuffix")}
+              </p>
               <ImportJsonButton setOpen={setOpen} />
             </div>
           </DialogDescription>

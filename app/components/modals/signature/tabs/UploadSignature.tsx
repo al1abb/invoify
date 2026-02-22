@@ -40,6 +40,7 @@ const UploadSignature = ({ handleSaveSignature }: UploadSignatureProps) => {
                                 }}
                                 width={300}
                                 src={uploadSignatureImg}
+                                alt="Uploaded signature preview"
                             />
                         ) : (
                             <div>Upload image</div>

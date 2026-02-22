@@ -31,14 +31,12 @@ import { useSignatureContext } from "@/contexts/SignatureContext";
 import { FileSignature } from "lucide-react";
 
 // Helpers
-import { isDataUrl } from "@/lib/helpers";
+import { isDataUrl } from "@/lib/helpers/client";
 
 // Types
 import { SignatureTabs } from "@/types";
 
-type SignatureModalProps = {};
-
-const SignatureModal = ({}: SignatureModalProps) => {
+const SignatureModal = () => {
     const { setValue } = useFormContext();
 
     const {
@@ -117,7 +115,7 @@ const SignatureModal = ({}: SignatureModalProps) => {
                 }
             }, 50);
         }
-    }, [open, tab]);
+    }, [open, tab, signatureData, signatureRef]);
 
     return (
         <>

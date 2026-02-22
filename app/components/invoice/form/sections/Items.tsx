@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React from "react";
 
 // RHF
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -14,8 +14,6 @@ import {
     useSensor,
     useSensors,
     DragEndEvent,
-    DragOverlay,
-    UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
     SortableContext,
@@ -35,7 +33,7 @@ import { Plus } from "lucide-react";
 import { InvoiceType } from "@/types";
 
 const Items = () => {
-    const { control, setValue } = useFormContext<InvoiceType>();
+    const { control } = useFormContext<InvoiceType>();
 
     const { _t } = useTranslationContext();
 
@@ -70,29 +68,18 @@ const Items = () => {
         }
     };
 
-    // DnD
-    const [activeId, setActiveId] = useState<UniqueIdentifier>();
-
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-    const handleDragEnd = useCallback(
-        async (event: DragEndEvent) => {
-            const { active, over } = event;
-            setActiveId(active.id);
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
 
-            if (active.id !== over?.id) {
-                const oldIndex = fields.findIndex(
-                    (item) => item.id === active.id
-                );
-                const newIndex = fields.findIndex(
-                    (item) => item.id === over?.id
-                );
+        if (active.id !== over?.id) {
+            const oldIndex = fields.findIndex((item) => item.id === active.id);
+            const newIndex = fields.findIndex((item) => item.id === over?.id);
 
-                move(oldIndex, newIndex);
-            }
-        },
-        [fields, setValue]
-    );
+            move(oldIndex, newIndex);
+        }
+    };
 
     return (
         <section className="flex flex-col gap-2 w-full">
@@ -100,10 +87,6 @@ const Items = () => {
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
-                onDragStart={(event) => {
-                    const { active } = event;
-                    setActiveId(active.id);
-                }}
                 onDragEnd={handleDragEnd}
             >
                 <SortableContext
@@ -123,16 +106,6 @@ const Items = () => {
                         />
                     ))}
                 </SortableContext>
-                {/* <DragOverlay
-                    dropAnimation={{
-                        duration: 500,
-                        easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
-                    }}
-                >
-                    <div className="w-[10rem]">
-                        <p>Click to drop</p>
-                    </div>
-                </DragOverlay> */}
             </DndContext>
             <BaseButton
                 tooltipLabel="Add a new item to the list"

@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { BaseButton } from "@/app/components";
 
 // Helpers
-import { isValidEmail } from "@/lib/helpers";
+import { isValidEmail } from "@/lib/helpers/client";
 
 type SendPdfToEmailModalProps = {
     sendPdfToMail: (email: string) => Promise<void>;
@@ -68,6 +68,7 @@ const SendPdfToEmailModal = ({
                     placeholder="Enter email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    data-testid="send-email-input"
                 ></Input>
 
                 {!loading && error && (
@@ -79,6 +80,7 @@ const SendPdfToEmailModal = ({
                     loading={loading}
                     loadingText="Sending email"
                     onClick={handleSendPdf}
+                    data-testid="confirm-send-email-btn"
                 >
                     Send PDF
                 </BaseButton>

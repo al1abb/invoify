@@ -23,6 +23,7 @@ import {
     WizardStep,
     BillFromSection,
     BillToSection,
+    CustomerTemplatesPanel,
     InvoiceDetails,
     Items,
     PaymentInformation,
@@ -49,7 +50,7 @@ const InvoiceForm = () => {
         } else {
             return _t("form.newInvBadge");
         }
-    }, [invoiceNumber]);
+    }, [invoiceNumber, _t]);
 
     return (
         <div className={`xl:w-[55%]`}>
@@ -73,10 +74,13 @@ const InvoiceForm = () => {
                     <div className="space-y-8">
                         <Wizard>
                             <WizardStep>
-                                <div className="flex gap-x-20 gap-y-10">
-                                    <BillFromSection />
+                                <div className="flex flex-col gap-6">
+                                    <CustomerTemplatesPanel />
 
-                                    <BillToSection />
+                                    <div className="flex gap-x-20 gap-y-10">
+                                        <BillFromSection />
+                                        <BillToSection />
+                                    </div>
                                 </div>
                             </WizardStep>
                             <WizardStep>

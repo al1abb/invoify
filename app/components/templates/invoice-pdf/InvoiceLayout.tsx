@@ -9,7 +9,7 @@ type InvoiceLayoutProps = {
 };
 
 export default function InvoiceLayout({ data, children }: InvoiceLayoutProps) {
-    const { sender, receiver, details } = data;
+    const { details } = data;
 
     // Instead of fetching all signature fonts, get the specific one user selected.
     const fontHref = details.signature?.fontFamily

@@ -24,6 +24,7 @@ import type { Metadata } from "next";
 // Next Intl
 import { NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 export const metadata: Metadata = {
     title: "Invoify | Free Invoice Generator",
@@ -72,7 +73,7 @@ export default async function LocaleLayout(props: {
     let messages;
     try {
         messages = (await import(`@/i18n/locales/${locale}.json`)).default;
-    } catch (error) {
+    } catch {
         notFound();
     }
 
@@ -84,7 +85,20 @@ export default async function LocaleLayout(props: {
                     id="json-ld"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
                 />
-                <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="aliabb" data-description="Support me on Buy me a coffee!" data-message="Thank you for using Invoify" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+                <Script
+                    id="bmc-widget"
+                    data-name="BMC-Widget"
+                    data-cfasync="false"
+                    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+                    data-id="aliabb"
+                    data-description="Support me on Buy me a coffee!"
+                    data-message="Thank you for using Invoify"
+                    data-color="#5F7FFF"
+                    data-position="Right"
+                    data-x_margin="18"
+                    data-y_margin="18"
+                    strategy="lazyOnload"
+                />
             </head>
             <body
                 className={`${outfit.className} ${dancingScript.variable} ${parisienne.variable} ${greatVibes.variable} ${alexBrush.variable} antialiased bg-slate-100 dark:bg-slate-800`}

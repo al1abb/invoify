@@ -81,7 +81,7 @@ const SingleItem = ({
             const calculatedTotal = (rate * quantity).toFixed(2);
             setValue(`${name}[${index}].total`, calculatedTotal);
         }
-    }, [rate, quantity]);
+    }, [index, name, quantity, rate, setValue]);
 
     // DnD
     const {

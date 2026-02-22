@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Helpers
-import { formatNumberWithCommas } from "@/lib/helpers";
+import { formatNumberWithCommas } from "@/lib/helpers/client";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
