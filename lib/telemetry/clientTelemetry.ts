@@ -62,6 +62,26 @@ const createEventId = () => {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
+const normalizeErrorPayload = (error: unknown) => {
+  if (error instanceof Error) {
+    return {
+      message: error.message || error.name || "Unknown error",
+      stack: error.stack,
+      errorName: error.name,
+    };
+  }
+
+  if (typeof error === "string") {
+    return { message: error };
+  }
+
+  try {
+    return { message: JSON.stringify(error) };
+  } catch {
+    return { message: String(error) };
+  }
+};
+
 export const trackClientEvent = (
   name: ClientTelemetryEventName,
   payload?: Record<string, unknown>,
@@ -82,12 +102,15 @@ export const trackClientEvent = (
 
   if (process.env.NODE_ENV !== "production") {
     const logLabel = `[telemetry:${level}] ${name}`;
-    if (level === "error") {
-      console.error(logLabel, payload || {});
-    } else if (level === "warn") {
-      console.warn(logLabel, payload || {});
+    const logPayload =
+      payload && Object.keys(payload).length > 0
+        ? payload
+        : { info: "no-payload" };
+
+    if (level === "warn" || level === "error") {
+      console.warn(logLabel, logPayload);
     } else {
-      console.info(logLabel, payload || {});
+      console.info(logLabel, logPayload);
     }
   }
 };
@@ -97,12 +120,13 @@ export const captureClientError = (
   error: unknown,
   payload?: Record<string, unknown>
 ) => {
+  const normalized = normalizeErrorPayload(error);
+
   trackClientEvent(
     name,
     {
       ...payload,
-      message: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
+      ...normalized,
     },
     "error"
   );

@@ -15,6 +15,19 @@ export type NameType = FieldPath<InvoiceType>;
 
 export type InvoiceStatus = "draft" | "sent" | "paid";
 
+export type SyncProviderName = "local" | "noop-cloud" | "supabase-rest";
+
+export type SyncState = "idle" | "syncing" | "success" | "skipped" | "error";
+
+export type SyncStatus = {
+    state: SyncState;
+    provider: SyncProviderName;
+    lastAttemptAt: number | null;
+    lastSuccessAt: number | null;
+    reason: string | null;
+    errorMessage: string | null;
+};
+
 export type SavedInvoiceRecord = {
     id: string;
     invoiceNumber: string;

@@ -28,8 +28,6 @@ export const createInvoiceSyncProvider = (): InvoiceSyncProvider => {
 
     return createSupabaseRestSyncProvider({
       ingestUrl: config.syncIngestUrl,
-      supabaseUrl: config.supabaseUrl,
-      anonKey: config.syncAnonKey,
     });
   }
 

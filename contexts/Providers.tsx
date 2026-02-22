@@ -16,6 +16,7 @@ import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { TranslationProvider } from "@/contexts/TranslationContext";
 import { InvoiceContextProvider } from "@/contexts/InvoiceContext";
 import { ChargesContextProvider } from "@/contexts/ChargesContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -99,11 +100,13 @@ const Providers = ({ children }: ProvidersProps) => {
       disableTransitionOnChange
     >
       <TranslationProvider>
-        <FormProvider {...form}>
-          <InvoiceContextProvider>
-            <ChargesContextProvider>{children}</ChargesContextProvider>
-          </InvoiceContextProvider>
-        </FormProvider>
+        <AuthProvider>
+          <FormProvider {...form}>
+            <InvoiceContextProvider>
+              <ChargesContextProvider>{children}</ChargesContextProvider>
+            </InvoiceContextProvider>
+          </FormProvider>
+        </AuthProvider>
       </TranslationProvider>
     </ThemeProvider>
   );

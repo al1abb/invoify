@@ -12,6 +12,10 @@ export type InvoiceSyncSnapshot = {
   customerTemplates: CustomerTemplateRecord[];
 };
 
+export type SyncPushOptions = {
+  accessToken?: string | null;
+};
+
 export type SyncPushResult =
   | {
       status: "pushed";
@@ -38,5 +42,8 @@ export class SyncProviderError extends Error {
 export interface InvoiceSyncProvider {
   name: InvoiceSyncProviderName;
   isCloudProvider: boolean;
-  pushSnapshot: (snapshot: InvoiceSyncSnapshot) => Promise<SyncPushResult>;
+  pushSnapshot: (
+    snapshot: InvoiceSyncSnapshot,
+    options?: SyncPushOptions
+  ) => Promise<SyncPushResult>;
 }

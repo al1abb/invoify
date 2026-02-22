@@ -128,6 +128,43 @@
         "delete": "Delete",
         "empty": "No saved invoices yet."
     },
+    "auth": {
+        "notConfigured": "Auth Off",
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "signOut": "Sign Out",
+        "email": "Email",
+        "password": "Password",
+        "dialogDescription": "Sign in to enable Supabase cloud sync.",
+        "switchToSignUp": "Need an account? Sign up",
+        "switchToSignIn": "Already have an account? Sign in",
+        "signUpSuccess": "Account created. Check your inbox if email confirmation is enabled."
+    },
+    "sync": {
+        "title": "Cloud Sync",
+        "provider": "Provider",
+        "lastSuccess": "Last success",
+        "lastAttempt": "Last attempt",
+        "reason": "Reason",
+        "error": "Error",
+        "state": {
+            "idle": "Idle",
+            "syncing": "Syncing",
+            "success": "Up to date",
+            "skipped": "Skipped",
+            "error": "Error"
+        },
+        "reasons": {
+            "none": "None",
+            "unauthenticated": "Sign in required",
+            "unauthenticated_no_token": "No access token in session",
+            "function_unauthorized": "Function rejected auth token",
+            "cloud_provider_not_configured": "Provider not configured",
+            "local_provider_noop": "Local mode only",
+            "supabase_client_unavailable": "Supabase client unavailable",
+            "payload_too_large": "Snapshot exceeded size limit"
+        }
+    },
     "footer": {
         "developedBy": "Developed by"
     }

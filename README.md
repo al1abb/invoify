@@ -179,6 +179,7 @@ npx playwright install --with-deps chromium
 6. Important behavior:
    - Sync only runs for authenticated users.
    - Unauthenticated users stay fully local and sync attempts are skipped (telemetry event only).
+   - Use the top-right `Sign In` button in the app navbar to authenticate with Supabase Auth.
 
 ## Local Data and Migration
 

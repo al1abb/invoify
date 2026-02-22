@@ -13,6 +13,7 @@ import {
 // Components
 import BaseButton from "@/app/components/reusables/BaseButton";
 import PdfViewer from "@/app/components/invoice/actions/PdfViewer";
+import SyncStatusIndicator from "@/app/components/invoice/actions/SyncStatusIndicator";
 
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
@@ -49,6 +50,8 @@ const InvoiceActions = () => {
         </CardHeader>
 
         <div className="flex flex-col flex-wrap items-center gap-2">
+          <SyncStatusIndicator />
+
           <div className="flex flex-wrap gap-3">
             {/* Load modal button */}
             <InvoiceLoaderModal>

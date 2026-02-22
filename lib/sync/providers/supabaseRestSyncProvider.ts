@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   InvoiceSyncProvider,
   SyncProviderError,
@@ -6,89 +6,106 @@ import {
 
 type CreateSupabaseRestSyncProviderArgs = {
   ingestUrl: string;
-  supabaseUrl: string;
-  anonKey: string;
-};
-
-let browserSupabaseClient: SupabaseClient | null = null;
-
-const getBrowserSupabaseClient = (supabaseUrl: string, anonKey: string) => {
-  if (browserSupabaseClient) return browserSupabaseClient;
-
-  browserSupabaseClient = createClient(supabaseUrl, anonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-  });
-
-  return browserSupabaseClient;
 };
 
 const isRetryableStatus = (status: number) => {
   return status === 408 || status === 429 || status >= 500;
 };
 
+const getFunctionNameFromIngestUrl = (ingestUrl: string) => {
+  try {
+    const parsedUrl = new URL(ingestUrl);
+    const parts = parsedUrl.pathname.split("/").filter(Boolean);
+    return parts[parts.length - 1] || "invoice-sync";
+  } catch {
+    return "invoice-sync";
+  }
+};
+
+const getAccessToken = async () => {
+  const supabase = getSupabaseBrowserClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
+  if (sessionError) {
+    throw new SyncProviderError("Unable to read Supabase session", {
+      retryable: false,
+    });
+  }
+
+  if (sessionData.session?.access_token) {
+    return sessionData.session.access_token;
+  }
+
+  const { data: refreshedData, error: refreshError } =
+    await supabase.auth.refreshSession();
+  if (refreshError) {
+    return null;
+  }
+
+  return refreshedData.session?.access_token ?? null;
+};
+
 export const createSupabaseRestSyncProvider = ({
   ingestUrl,
-  supabaseUrl,
-  anonKey,
 }: CreateSupabaseRestSyncProviderArgs): InvoiceSyncProvider => {
-  const supabase = getBrowserSupabaseClient(supabaseUrl, anonKey);
+  const functionName = getFunctionNameFromIngestUrl(ingestUrl);
 
   return {
     name: "supabase-rest",
     isCloudProvider: true,
-    async pushSnapshot(snapshot) {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        throw new SyncProviderError("Unable to read Supabase session", {
-          retryable: false,
-        });
+    async pushSnapshot(snapshot, options) {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase) {
+        return {
+          status: "skipped",
+          provider: "supabase-rest",
+          reason: "supabase_client_unavailable",
+        };
       }
 
-      const accessToken = data.session?.access_token;
+      const providedToken = options?.accessToken?.trim();
+      const accessToken = providedToken || (await getAccessToken());
       if (!accessToken) {
         return {
           status: "skipped",
           provider: "supabase-rest",
-          reason: "unauthenticated",
+          reason: "unauthenticated_no_token",
         };
       }
 
-      let response: Response;
-      try {
-        response = await fetch(ingestUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: anonKey,
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(snapshot),
-        });
-      } catch {
-        throw new SyncProviderError("Supabase sync request failed", {
-          retryable: true,
-        });
-      }
+      supabase.functions.setAuth(accessToken);
 
-      if (!response.ok) {
-        let message = `Supabase sync failed (${response.status})`;
+      const { error, response } = await supabase.functions.invoke(functionName, {
+        body: snapshot,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-        try {
-          const body = await response.json();
-          if (body?.error && typeof body.error === "string") {
-            message = `${message}: ${body.error}`;
-          }
-        } catch {
-          // fall back to status-only message
+      if (error) {
+        const statusCode = response?.status;
+        if (statusCode === 401 || statusCode === 403) {
+          return {
+            status: "skipped",
+            provider: "supabase-rest",
+            reason: "function_unauthorized",
+          };
         }
 
+        const baseMessage = statusCode
+          ? `Supabase sync failed (${statusCode})`
+          : "Supabase sync failed";
+        const message = error.message
+          ? `${baseMessage}: ${error.message}`
+          : baseMessage;
+
         throw new SyncProviderError(message, {
-          retryable: isRetryableStatus(response.status),
-          statusCode: response.status,
+          retryable: statusCode ? isRetryableStatus(statusCode) : true,
+          statusCode,
         });
       }
 

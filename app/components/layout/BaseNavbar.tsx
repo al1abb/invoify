@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 // Next
 import Link from "next/link";
 import Image from "next/image";
@@ -12,11 +10,10 @@ import { Card } from "@/components/ui/card";
 
 // Components
 import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
+import AuthControls from "@/app/components/reusables/AuthControls";
 
 const BaseNavbar = () => {
-    const devEnv = useMemo(() => {
-        return process.env.NODE_ENV === "development";
-    }, []);
+    const devEnv = process.env.NODE_ENV === "development";
 
     return (
         <header className="lg:container z-[99]">
@@ -32,10 +29,13 @@ const BaseNavbar = () => {
                             style={{ height: "auto" }}
                         />
                     </Link>
-                    {/* ? DEV Only */}
-                    {devEnv && <DevDebug />}
-                    <LanguageSelector />
-                    <ThemeSwitcher />
+                    <div className="flex flex-wrap items-center gap-2">
+                        {/* ? DEV Only */}
+                        {devEnv && <DevDebug />}
+                        <AuthControls />
+                        <LanguageSelector />
+                        <ThemeSwitcher />
+                    </div>
                 </Card>
             </nav>
         </header>
