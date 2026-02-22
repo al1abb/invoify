@@ -26,7 +26,7 @@ export const createInvoiceSyncProvider = (): InvoiceSyncProvider => {
       return noopCloudSyncProvider;
     }
 
-    return createSupabaseRestSyncProvider({});
+    return createSupabaseRestSyncProvider();
   }
 
   return localSyncProvider;

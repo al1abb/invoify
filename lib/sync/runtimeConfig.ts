@@ -55,7 +55,6 @@ export const getSyncRuntimeConfig = () => {
       process.env.NEXT_PUBLIC_SYNC_RETRY_BASE_DELAY_MS,
       SYNC_DEFAULTS.retryBaseDelayMs
     ),
-    syncIngestUrl: process.env.NEXT_PUBLIC_SYNC_INGEST_URL || "",
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     syncAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
   };

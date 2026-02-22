@@ -95,7 +95,7 @@ Follow these instructions to get Invoify up and running on your local machine.
    PDF caching is browser-side only and does not require any environment variables.
    `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` and `supabase-rest` supported).
    For `supabase-rest`, also set:
-   `NEXT_PUBLIC_SYNC_INGEST_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+   `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 4. Start development server
 
     ```bash
@@ -169,15 +169,13 @@ npx playwright install --with-deps chromium
    - `supabase link --project-ref <your-project-ref>`
 3. Apply migration:
    - `supabase db push`
-4. Deploy edge function:
-   - `supabase functions deploy invoice-sync --no-verify-jwt=false`
-5. Configure app env:
+4. Configure app env:
    - `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=supabase-rest`
    - `NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>`
-   - `NEXT_PUBLIC_SYNC_INGEST_URL=https://<project-ref>.supabase.co/functions/v1/invoice-sync`
-6. Important behavior:
+5. Important behavior:
    - Sync only runs for authenticated users.
+   - Sync writes directly to `public.invoice_sync_snapshots` through Supabase RLS.
    - Unauthenticated users stay fully local and sync attempts are skipped (telemetry event only).
    - Use the top-right `Sign In` button in the app navbar to authenticate with Supabase Auth.
 

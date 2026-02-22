@@ -1,8 +1,6 @@
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { InvoiceSyncProvider, SyncProviderError } from "@/lib/sync/types";
 
-type CreateSupabaseRestSyncProviderArgs = {};
-
 const getAccessToken = async () => {
   const supabase = getSupabaseBrowserClient();
   if (!supabase) {
@@ -39,9 +37,7 @@ const toPayloadBytes = (snapshot: unknown) => {
   return new TextEncoder().encode(JSON.stringify(snapshot)).length;
 };
 
-export const createSupabaseRestSyncProvider = (
-  _args: CreateSupabaseRestSyncProviderArgs
-): InvoiceSyncProvider => {
+export const createSupabaseRestSyncProvider = (): InvoiceSyncProvider => {
   return {
     name: "supabase-rest",
     isCloudProvider: true,
