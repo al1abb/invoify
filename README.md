@@ -79,11 +79,12 @@ Follow these instructions to get Invoify up and running on your local machine.
    ```bash
    npm install
    ```
-3. Create an .env.local file with this content (This step is for sending pdf to email feature):
+3. Create an `.env.local` file with this content (required only for "Send PDF to Email"):
    ```env
    NODEMAILER_EMAIL=your_email@example.com
-   NODEMAILER_PW=your_email_password
+   NODEMAILER_PW=your_gmail_app_password
    ```
+   `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
 4. Start development server
 
     ```bash

@@ -5,7 +5,8 @@ import { toast } from "@/components/ui/use-toast";
 const useToasts = () => {
     type SendErrorType = {
         email: string;
-        sendPdfToMail: (email: string) => void;
+        sendPdfToMail: (email: string) => Promise<void>;
+        reason?: string;
     };
 
     const newInvoiceSuccess = () => {
@@ -49,12 +50,18 @@ const useToasts = () => {
         });
     };
 
-    const sendPdfError = ({ email, sendPdfToMail }: SendErrorType) => {
+    const sendPdfError = ({ email, sendPdfToMail, reason }: SendErrorType) => {
+        const isEmailConfigError =
+            reason?.toLowerCase().includes("email service not configured") ??
+            false;
+
         toast({
             variant: "destructive",
-            title: "Error",
-            description: "Something went wrong. Try again in a moment",
-            action: (
+            title: isEmailConfigError ? "Email is not configured" : "Error",
+            description: isEmailConfigError
+                ? "Set NODEMAILER_EMAIL and NODEMAILER_PW in .env.local, then restart the dev server."
+                : reason || "Something went wrong. Try again in a moment",
+            action: isEmailConfigError ? undefined : (
                 <ToastAction
                     onClick={() => sendPdfToMail(email)}
                     altText="Try again"

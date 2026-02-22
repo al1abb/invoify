@@ -13,8 +13,7 @@ import { useTranslationContext } from "@/contexts/TranslationContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const WizardNavigation = () => {
-    const { isFirstStep, isLastStep, handleStep, previousStep, nextStep } =
-        useWizard();
+    const { isFirstStep, isLastStep, previousStep, nextStep } = useWizard();
 
     const { _t } = useTranslationContext();
     return (
@@ -28,14 +27,15 @@ const WizardNavigation = () => {
                     {_t("form.wizard.back")}
                 </BaseButton>
             )}
-            <BaseButton
-                tooltipLabel="Go to the next step"
-                disabled={isLastStep}
-                onClick={nextStep}
-            >
-                {_t("form.wizard.next")}
-                <ArrowRight />
-            </BaseButton>
+            {!isLastStep && (
+                <BaseButton
+                    tooltipLabel="Go to the next step"
+                    onClick={nextStep}
+                >
+                    {_t("form.wizard.next")}
+                    <ArrowRight />
+                </BaseButton>
+            )}
         </div>
     );
 };

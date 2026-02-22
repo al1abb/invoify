@@ -36,3 +36,4 @@ next-env.d.ts
 
 # cache
 /.cache
+/.codex/

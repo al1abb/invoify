@@ -57,7 +57,7 @@ export async function sendPdfToEmailService(
     const invoiceNumber = fd.get("invoiceNumber") as string;
 
     // Get email html content
-    const emailHTML = render(SendPdfEmail({ invoiceNumber }));
+    const emailHTML = await render(SendPdfEmail({ invoiceNumber }));
 
     // Convert file to buffer
     const invoiceBuffer = await fileToBuffer(invoicePdf);

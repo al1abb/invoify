@@ -35,10 +35,10 @@ const InvoiceLoaderModal = ({ children }: InvoiceLoaderModalType) => {
       <DialogContent>
         <DialogHeader className="pb-2 border-b">
           <DialogTitle>Saved Invoices</DialogTitle>
-          <DialogDescription>
+          <DialogDescription asChild>
             <div className="space-y-2">
               <p>You have {savedInvoices.length} saved invoices</p>
-              <ImportJsonButton setOpen={setOpen}/>
+              <ImportJsonButton setOpen={setOpen} />
             </div>
           </DialogDescription>
         </DialogHeader>

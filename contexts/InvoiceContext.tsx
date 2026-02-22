@@ -324,20 +324,30 @@ export const InvoiceContextProvider = ({
       method: "POST",
       body: fd,
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) {
           // Successful toast msg
           sendPdfSuccess();
         } else {
+          const errorMessage = (await res.text()).trim();
+
           // Error toast msg
-          sendPdfError({ email, sendPdfToMail });
+          sendPdfError({
+            email,
+            sendPdfToMail,
+            reason: errorMessage || "Failed to send email",
+          });
         }
       })
       .catch((error) => {
         console.log(error);
 
         // Error toast msg
-        sendPdfError({ email, sendPdfToMail });
+        sendPdfError({
+          email,
+          sendPdfToMail,
+          reason: error instanceof Error ? error.message : "Failed to send email",
+        });
       });
   };
 
