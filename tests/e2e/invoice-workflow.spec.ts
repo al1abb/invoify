@@ -188,38 +188,36 @@ test.describe("invoice workflow", () => {
 
     await page.goto("/en");
 
-    await page
-      .getByPlaceholder("Your name")
-      .fill("Template Sender");
-    await page
-      .getByPlaceholder("Receiver name")
-      .fill("Template Receiver");
+    const senderNameInput = page.getByPlaceholder("Your name");
+    const receiverNameInput = page.getByPlaceholder("Receiver name");
+    const templateSelectTrigger = page.getByTestId(
+      "customer-template-select-trigger"
+    );
+    const applyTemplateButton = page.getByTestId("customer-template-apply-btn");
+
+    await senderNameInput.fill("Template Sender");
+    await receiverNameInput.fill("Template Receiver");
 
     await page.getByTestId("customer-template-name-input").fill("Main Client");
     await page.getByTestId("customer-template-save-btn").click();
 
-    await page
-      .getByPlaceholder("Your name")
-      .fill("Mutated Sender");
-    await page
-      .getByPlaceholder("Receiver name")
-      .fill("Mutated Receiver");
+    await senderNameInput.fill("Mutated Sender");
+    await receiverNameInput.fill("Mutated Receiver");
 
-    await page.getByTestId("customer-template-select-trigger").click();
+    await templateSelectTrigger.click();
     await page.getByRole("option", { name: "Main Client" }).click();
-    await page.getByTestId("customer-template-apply-btn").click();
+    await expect(applyTemplateButton).toBeEnabled();
+    await applyTemplateButton.click();
 
-    await expect(page.getByPlaceholder("Your name")).toHaveValue("Template Sender");
-    await expect(page.getByPlaceholder("Receiver name")).toHaveValue(
-      "Template Receiver"
-    );
+    await expect(senderNameInput).toHaveValue("Template Sender");
+    await expect(receiverNameInput).toHaveValue("Template Receiver");
 
     await page
       .getByTestId("customer-template-name-input")
       .fill("Main Client Renamed");
     await page.getByTestId("customer-template-rename-btn").click();
 
-    await page.getByTestId("customer-template-select-trigger").click();
+    await templateSelectTrigger.click();
     await expect(
       page.getByRole("option", { name: "Main Client Renamed" })
     ).toBeVisible();
