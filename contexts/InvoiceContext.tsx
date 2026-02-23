@@ -168,6 +168,21 @@ const toSavedInvoiceKey = (record: SavedInvoiceRecord) => {
   return record.id;
 };
 
+const toSafeFilenamePart = (value: string, removeSpaces = false) => {
+  const normalized = value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+  const withSpacesHandled = removeSpaces
+    ? normalized.replace(/\s+/g, "")
+    : normalized.replace(/\s+/g, "_");
+
+  return withSpacesHandled
+    .replace(/[^a-zA-Z0-9_-]/g, "")
+    .replace(/^[-_]+|[-_]+$/g, "");
+};
+
 const replaceSavedInvoiceByKey = (
   records: SavedInvoiceRecord[],
   key: string,
@@ -1016,10 +1031,22 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const downloadPdf = () => {
     if (invoicePdf instanceof Blob && invoicePdf.size > 0) {
+      const formValues = getValues();
+      const invoiceToName = toSafeFilenamePart(
+        formValues.receiver?.name ?? "",
+        true
+      );
+      const invoiceNumber = toSafeFilenamePart(
+        formValues.details?.invoiceNumber ?? ""
+      );
+      const fileName = `${invoiceToName || "Invoice"}_${
+        invoiceNumber || "invoice"
+      }.pdf`;
+
       const url = window.URL.createObjectURL(invoicePdf);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "invoice.pdf";
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
