@@ -144,6 +144,23 @@ test.describe("invoice workflow", () => {
     await page.getByTestId("load-invoice-btn").click();
     const originalCard = page.getByTestId(`saved-invoice-card-${invoiceId}`);
 
+    await expect(page.getByTestId("saved-invoices-search")).toBeVisible();
+    await expect(page.getByTestId("saved-invoices-status-filter")).toBeVisible();
+    await expect(page.getByTestId("saved-invoices-sort")).toBeVisible();
+
+    await page.getByTestId("saved-invoices-search").fill("does-not-exist");
+    await expect(page.getByText("No invoices match your filters.")).toBeVisible();
+    await page.getByTestId("saved-invoices-search").fill(invoiceNumber);
+
+    await page.getByTestId("saved-invoices-status-filter").click();
+    await page.getByRole("option", { name: "Sent" }).click();
+    await expect(originalCard).toBeVisible();
+    await page.getByTestId("saved-invoices-status-filter").click();
+    await page.getByRole("option", { name: "All statuses" }).click();
+
+    await page.getByTestId("saved-invoices-sort").click();
+    await page.getByRole("option", { name: "Total (high to low)" }).click();
+
     await expect(originalCard).toBeVisible();
     await expect(originalCard.getByText("Sent")).toBeVisible();
 

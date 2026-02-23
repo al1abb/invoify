@@ -159,6 +159,8 @@ const toBackoffDelayMs = (baseDelayMs: number, attempt: number) => {
   return Math.round(exponential * jitterMultiplier);
 };
 
+const SYNC_PUSH_TIMEOUT_MS = 8000;
+
 export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps) => {
   // Toasts
   const {
@@ -189,9 +191,12 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
 
   const draftPersistTimeoutRef = useRef<number | null>(null);
   const syncTimeoutRef = useRef<number | null>(null);
+  const syncInFlightRef = useRef(false);
+  const syncQueuedRef = useRef(false);
   const lastSyncSignatureRef = useRef<string>("");
   const syncProvider = useMemo(() => createInvoiceSyncProvider(), []);
   const syncConfig = useMemo(() => getSyncRuntimeConfig(), []);
+  const [syncScheduleVersion, setSyncScheduleVersion] = useState(0);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(() =>
     createInitialSyncStatus(syncProvider.name)
   );
@@ -263,6 +268,22 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     };
   }, [watch]);
 
+  // When the tab becomes visible again, schedule a sync attempt.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        setSyncScheduleVersion((version) => version + 1);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   // Optional sync interface layer (local by default, cloud-ready abstraction).
   useEffect(() => {
     if (!isStorageHydrated) return;
@@ -272,165 +293,195 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     }
 
     syncTimeoutRef.current = window.setTimeout(async () => {
-      const snapshot = buildCappedSyncSnapshot({
-        reason: "state_change",
-        savedInvoices,
-        customerTemplates,
-        maxInvoices: syncConfig.maxInvoices,
-        maxTemplates: syncConfig.maxTemplates,
-      });
-
-      const signature = buildSyncSignature(snapshot);
-      if (signature === lastSyncSignatureRef.current) {
-        return;
-      }
-
-      const payloadBytes = toSnapshotPayloadSize(snapshot);
-      if (payloadBytes > syncConfig.maxPayloadBytes) {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") {
         const skippedAt = Date.now();
         setSyncStatus((prev) => ({
           ...prev,
           state: "skipped",
           provider: syncProvider.name,
           lastAttemptAt: skippedAt,
-          reason: "payload_too_large",
+          reason: "tab_hidden",
           errorMessage: null,
         }));
-
-        trackClientEvent(
-          "sync_snapshot_skipped",
-          {
-            provider: syncProvider.name,
-            payloadBytes,
-            maxPayloadBytes: syncConfig.maxPayloadBytes,
-          },
-          "warn"
-        );
         return;
       }
 
-      const maxAttempts = syncProvider.isCloudProvider
-        ? Math.max(1, syncConfig.retryMaxAttempts)
-        : 1;
-      const startedAt = Date.now();
-      setSyncStatus((prev) => ({
-        ...prev,
-        state: "syncing",
-        provider: syncProvider.name,
-        lastAttemptAt: startedAt,
-        reason: null,
-        errorMessage: null,
-      }));
+      if (syncInFlightRef.current) {
+        syncQueuedRef.current = true;
+        return;
+      }
 
-      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-        try {
-          const result = await syncProvider.pushSnapshot(snapshot, {
-            accessToken,
-          });
-          if (result.status === "skipped") {
-            const skippedAt = Date.now();
-            setSyncStatus((prev) => ({
-              ...prev,
-              state: "skipped",
-              provider: result.provider,
-              lastAttemptAt: skippedAt,
-              reason: result.reason,
-              errorMessage: null,
-            }));
+      syncInFlightRef.current = true;
 
-            trackClientEvent(
-              result.reason === "unauthenticated" ||
-                result.reason === "unauthenticated_no_token" ||
-                result.reason === "function_unauthorized"
-                ? "sync_push_skipped_unauthenticated"
-                : "sync_push_skipped",
-              {
-                provider: result.provider,
-                reason: result.reason,
-                attempt,
-                maxAttempts,
-                payloadBytes,
-                savedInvoices: snapshot.savedInvoices.length,
-                customerTemplates: snapshot.customerTemplates.length,
-              },
-              result.reason === "unauthenticated" ||
-                result.reason === "unauthenticated_no_token" ||
-                result.reason === "function_unauthorized"
-                ? "warn"
-                : "info"
-            );
-            return;
-          }
+      try {
+        const snapshot = buildCappedSyncSnapshot({
+          reason: "state_change",
+          savedInvoices,
+          customerTemplates,
+          maxInvoices: syncConfig.maxInvoices,
+          maxTemplates: syncConfig.maxTemplates,
+        });
 
-          lastSyncSignatureRef.current = signature;
-          const syncedAt = Date.now();
+        const signature = buildSyncSignature(snapshot);
+        if (signature === lastSyncSignatureRef.current) {
+          return;
+        }
+
+        const payloadBytes = toSnapshotPayloadSize(snapshot);
+        if (payloadBytes > syncConfig.maxPayloadBytes) {
+          const skippedAt = Date.now();
           setSyncStatus((prev) => ({
             ...prev,
-            state: "success",
-            provider: result.provider,
-            lastAttemptAt: syncedAt,
-            lastSuccessAt: syncedAt,
-            reason: null,
+            state: "skipped",
+            provider: syncProvider.name,
+            lastAttemptAt: skippedAt,
+            reason: "payload_too_large",
             errorMessage: null,
           }));
 
-          trackClientEvent("sync_push_success", {
-            provider: result.provider,
-            payloadBytes,
-            attempt,
-            maxAttempts,
-            savedInvoices: snapshot.savedInvoices.length,
-            customerTemplates: snapshot.customerTemplates.length,
-          });
-          return;
-        } catch (error) {
-          const retryable =
-            error instanceof SyncProviderError ? error.retryable : true;
-          const statusCode =
-            error instanceof SyncProviderError ? error.statusCode : undefined;
-          const willRetry = retryable && attempt < maxAttempts;
-
-          captureClientError("sync_push_failure", error, {
-            provider: syncProvider.name,
-            payloadBytes,
-            attempt,
-            maxAttempts,
-            retryable,
-            willRetry,
-            statusCode,
-            savedInvoices: snapshot.savedInvoices.length,
-            customerTemplates: snapshot.customerTemplates.length,
-          });
-
-          if (!willRetry) {
-            const failedAt = Date.now();
-            setSyncStatus((prev) => ({
-              ...prev,
-              state: "error",
-              provider: syncProvider.name,
-              lastAttemptAt: failedAt,
-              reason: null,
-              errorMessage:
-                error instanceof Error ? error.message : "Sync failed",
-            }));
-            return;
-          }
-
-          const delayMs = toBackoffDelayMs(syncConfig.retryBaseDelayMs, attempt);
           trackClientEvent(
-            "sync_push_retry",
+            "sync_snapshot_skipped",
             {
               provider: syncProvider.name,
-              attempt,
-              nextAttempt: attempt + 1,
-              maxAttempts,
-              delayMs,
-              statusCode,
+              payloadBytes,
+              maxPayloadBytes: syncConfig.maxPayloadBytes,
             },
             "warn"
           );
+          return;
+        }
 
-          await sleep(delayMs);
+        const maxAttempts = syncProvider.isCloudProvider
+          ? Math.max(1, syncConfig.retryMaxAttempts)
+          : 1;
+        const startedAt = Date.now();
+        setSyncStatus((prev) => ({
+          ...prev,
+          state: "syncing",
+          provider: syncProvider.name,
+          lastAttemptAt: startedAt,
+          reason: null,
+          errorMessage: null,
+        }));
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+          try {
+            const result = await syncProvider.pushSnapshot(snapshot, {
+              accessToken,
+              timeoutMs: SYNC_PUSH_TIMEOUT_MS,
+            });
+            if (result.status === "skipped") {
+              const skippedAt = Date.now();
+              setSyncStatus((prev) => ({
+                ...prev,
+                state: "skipped",
+                provider: result.provider,
+                lastAttemptAt: skippedAt,
+                reason: result.reason,
+                errorMessage: null,
+              }));
+
+              const unauthenticatedReasons = new Set([
+                "unauthenticated",
+                "unauthenticated_no_token",
+                "auth_rejected",
+                "function_unauthorized",
+              ]);
+
+              trackClientEvent(
+                unauthenticatedReasons.has(result.reason)
+                  ? "sync_push_skipped_unauthenticated"
+                  : "sync_push_skipped",
+                {
+                  provider: result.provider,
+                  reason: result.reason,
+                  attempt,
+                  maxAttempts,
+                  payloadBytes,
+                  savedInvoices: snapshot.savedInvoices.length,
+                  customerTemplates: snapshot.customerTemplates.length,
+                },
+                unauthenticatedReasons.has(result.reason) ? "warn" : "info"
+              );
+              return;
+            }
+
+            lastSyncSignatureRef.current = signature;
+            const syncedAt = Date.now();
+            setSyncStatus((prev) => ({
+              ...prev,
+              state: "success",
+              provider: result.provider,
+              lastAttemptAt: syncedAt,
+              lastSuccessAt: syncedAt,
+              reason: null,
+              errorMessage: null,
+            }));
+
+            trackClientEvent("sync_push_success", {
+              provider: result.provider,
+              payloadBytes,
+              attempt,
+              maxAttempts,
+              savedInvoices: snapshot.savedInvoices.length,
+              customerTemplates: snapshot.customerTemplates.length,
+            });
+            return;
+          } catch (error) {
+            const retryable =
+              error instanceof SyncProviderError ? error.retryable : true;
+            const statusCode =
+              error instanceof SyncProviderError ? error.statusCode : undefined;
+            const willRetry = retryable && attempt < maxAttempts;
+
+            captureClientError("sync_push_failure", error, {
+              provider: syncProvider.name,
+              payloadBytes,
+              attempt,
+              maxAttempts,
+              retryable,
+              willRetry,
+              statusCode,
+              savedInvoices: snapshot.savedInvoices.length,
+              customerTemplates: snapshot.customerTemplates.length,
+            });
+
+            if (!willRetry) {
+              const failedAt = Date.now();
+              setSyncStatus((prev) => ({
+                ...prev,
+                state: "error",
+                provider: syncProvider.name,
+                lastAttemptAt: failedAt,
+                reason: null,
+                errorMessage:
+                  error instanceof Error ? error.message : "Sync failed",
+              }));
+              return;
+            }
+
+            const delayMs = toBackoffDelayMs(syncConfig.retryBaseDelayMs, attempt);
+            trackClientEvent(
+              "sync_push_retry",
+              {
+                provider: syncProvider.name,
+                attempt,
+                nextAttempt: attempt + 1,
+                maxAttempts,
+                delayMs,
+                statusCode,
+              },
+              "warn"
+            );
+
+            await sleep(delayMs);
+          }
+        }
+      } finally {
+        syncInFlightRef.current = false;
+        if (syncQueuedRef.current) {
+          syncQueuedRef.current = false;
+          setSyncScheduleVersion((version) => version + 1);
         }
       }
     }, syncConfig.debounceMs);
@@ -446,6 +497,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     isAuthenticated,
     isStorageHydrated,
     savedInvoices,
+    syncScheduleVersion,
     syncConfig,
     syncProvider,
   ]);

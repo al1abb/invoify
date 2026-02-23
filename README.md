@@ -101,7 +101,14 @@ Follow these instructions to get Invoify up and running on your local machine.
     ```bash
     npm run dev
     ```
-5. Open your web browser and access the application at [http://localhost:3000](http://localhost:3000)
+5. Open your web browser and access the application at [http://localhost:3010](http://localhost:3010)
+
+`npm run dev` now safely reuses port `3010` by stopping stale listeners first (prevents `EADDRINUSE` loops).  
+If you want raw Next.js behavior without that safety wrapper, run:
+
+```bash
+npm run dev:raw
+```
 
 ### Quality Checks
 

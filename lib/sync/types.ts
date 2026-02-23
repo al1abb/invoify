@@ -14,6 +14,7 @@ export type InvoiceSyncSnapshot = {
 
 export type SyncPushOptions = {
   accessToken?: string | null;
+  timeoutMs?: number;
 };
 
 export type SyncPushResult =
