@@ -1,7 +1,16 @@
-import { InvoiceStatus, InvoiceType, SavedInvoiceRecord } from "@/types";
+import {
+  InvoiceStatus,
+  InvoiceTimelineEvent,
+  InvoiceTimelineEventType,
+  InvoiceType,
+  RecurringFrequency,
+  SavedInvoiceRecord,
+} from "@/types";
 
 export const LEGACY_SAVED_INVOICES_KEY = "savedInvoices";
 export const SAVED_INVOICES_KEY_V2 = "invoify:savedInvoices:v2";
+
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 const createId = () => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -13,6 +22,66 @@ const createId = () => {
 
 const cloneInvoice = (invoice: InvoiceType): InvoiceType => {
   return JSON.parse(JSON.stringify(invoice)) as InvoiceType;
+};
+
+const toBaseInvoiceNumber = (invoiceNumber: string) => {
+  const trimmed = invoiceNumber.trim();
+  if (!trimmed) return "invoice";
+
+  return trimmed.replace(/-R\d+$/i, "");
+};
+
+const addRecurringInterval = (fromTimestamp: number, frequency: RecurringFrequency) => {
+  const nextDate = new Date(fromTimestamp);
+
+  if (frequency === "monthly") {
+    nextDate.setMonth(nextDate.getMonth() + 1);
+    return nextDate.getTime();
+  }
+
+  nextDate.setDate(nextDate.getDate() + 7);
+  return nextDate.getTime();
+};
+
+const toTimestamp = (value: unknown) => {
+  const parsed = Date.parse(String(value ?? ""));
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const getInvoiceTotal = (record: SavedInvoiceRecord) => {
+  const total = Number(record.data.details.totalAmount);
+  return Number.isFinite(total) ? Math.max(0, total) : 0;
+};
+
+const createTimelineEvent = (
+  type: InvoiceTimelineEventType,
+  at: number,
+  options?: {
+    note?: string;
+    amount?: number;
+  }
+): InvoiceTimelineEvent => {
+  return {
+    id: createId(),
+    type,
+    at,
+    ...(options?.note ? { note: options.note } : {}),
+    ...(typeof options?.amount === "number" ? { amount: options.amount } : {}),
+  };
+};
+
+const appendTimelineEvent = (
+  record: SavedInvoiceRecord,
+  event: InvoiceTimelineEvent
+) => {
+  const nextTimeline = [event, ...record.timeline]
+    .sort((a, b) => b.at - a.at)
+    .slice(0, 50);
+
+  return {
+    ...record,
+    timeline: nextTimeline,
+  };
 };
 
 const isRecordArray = (value: unknown): value is SavedInvoiceRecord[] => {
@@ -30,24 +99,6 @@ const isRecordArray = (value: unknown): value is SavedInvoiceRecord[] => {
       typeof (record as SavedInvoiceRecord).data === "object"
     );
   });
-};
-
-const toRecord = (
-  invoice: InvoiceType,
-  status: InvoiceStatus,
-  existing?: SavedInvoiceRecord
-): SavedInvoiceRecord => {
-  const now = Date.now();
-  const invoiceNumber = invoice.details.invoiceNumber || `invoice-${now}`;
-
-  return {
-    id: existing?.id ?? createId(),
-    invoiceNumber,
-    status: existing?.status ?? status,
-    createdAt: existing?.createdAt ?? now,
-    updatedAt: now,
-    data: cloneInvoice(invoice),
-  };
 };
 
 const sortByUpdatedAt = (records: SavedInvoiceRecord[]) => {
@@ -88,6 +139,126 @@ const readLegacyInvoices = (): InvoiceType[] => {
   }
 };
 
+const toDefaultRecurring = (invoiceNumber: string) => {
+  return {
+    enabled: false,
+    frequency: null,
+    baseInvoiceNumber: toBaseInvoiceNumber(invoiceNumber),
+    counter: 0,
+    lastIssuedAt: null,
+    nextIssueAt: null,
+  };
+};
+
+const toDefaultPayment = () => {
+  return {
+    amountPaid: 0,
+    lastPaymentAt: null,
+  };
+};
+
+const toDefaultReminder = () => {
+  return {
+    enabled: true,
+    lastSentAt: null,
+    sendCount: 0,
+    nextReminderAt: null,
+  };
+};
+
+const normalizeRecord = (record: SavedInvoiceRecord): SavedInvoiceRecord => {
+  const recurring = record.recurring || toDefaultRecurring(record.invoiceNumber);
+  const payment = record.payment || toDefaultPayment();
+  const reminder = record.reminder || toDefaultReminder();
+  const timeline = Array.isArray(record.timeline) ? record.timeline : [];
+
+  const normalizedTimeline = timeline.length
+    ? timeline
+        .filter(
+          (event) =>
+            event &&
+            typeof event.id === "string" &&
+            typeof event.type === "string" &&
+            typeof event.at === "number"
+        )
+        .sort((a, b) => b.at - a.at)
+        .slice(0, 50)
+    : [createTimelineEvent("created", record.createdAt)];
+
+  return {
+    ...record,
+    recurring: {
+      ...toDefaultRecurring(record.invoiceNumber),
+      ...recurring,
+      baseInvoiceNumber:
+        recurring.baseInvoiceNumber || toBaseInvoiceNumber(record.invoiceNumber),
+    },
+    payment: {
+      ...toDefaultPayment(),
+      ...payment,
+      amountPaid: Math.max(0, Number(payment.amountPaid || 0)),
+    },
+    reminder: {
+      ...toDefaultReminder(),
+      ...reminder,
+      sendCount: Math.max(0, Number(reminder.sendCount || 0)),
+    },
+    timeline: normalizedTimeline,
+  };
+};
+
+const toRecord = (
+  invoice: InvoiceType,
+  status: InvoiceStatus,
+  existing?: SavedInvoiceRecord
+): SavedInvoiceRecord => {
+  const now = Date.now();
+  const invoiceNumber = invoice.details.invoiceNumber || `invoice-${now}`;
+
+  if (existing) {
+    const normalizedExisting = normalizeRecord(existing);
+    const nextStatus = normalizedExisting.status ?? status;
+
+    let nextRecord: SavedInvoiceRecord = {
+      ...normalizedExisting,
+      invoiceNumber,
+      status: nextStatus,
+      updatedAt: now,
+      data: cloneInvoice(invoice),
+      recurring: {
+        ...normalizedExisting.recurring,
+        baseInvoiceNumber:
+          normalizedExisting.recurring.baseInvoiceNumber ||
+          toBaseInvoiceNumber(invoiceNumber),
+      },
+    };
+
+    if (normalizedExisting.status !== nextStatus) {
+      nextRecord = appendTimelineEvent(
+        nextRecord,
+        createTimelineEvent("status_changed", now, {
+          note: `${normalizedExisting.status} -> ${nextStatus}`,
+        })
+      );
+    }
+
+    return nextRecord;
+  }
+
+  return {
+    id: createId(),
+    invoiceNumber,
+    status,
+    createdAt: now,
+    updatedAt: now,
+    data: cloneInvoice(invoice),
+    recurring: toDefaultRecurring(invoiceNumber),
+    payment: toDefaultPayment(),
+    reminder: toDefaultReminder(),
+    timeline: [createTimelineEvent("created", now)],
+  };
+};
+
 export const readSavedInvoices = (): SavedInvoiceRecord[] => {
   const raw = safeRead(SAVED_INVOICES_KEY_V2);
 
@@ -95,7 +266,9 @@ export const readSavedInvoices = (): SavedInvoiceRecord[] => {
     try {
       const parsed = JSON.parse(raw);
       if (isRecordArray(parsed)) {
-        return sortByUpdatedAt(parsed);
+        const normalized = sortByUpdatedAt(parsed.map(normalizeRecord));
+        safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(normalized));
+        return normalized;
       }
     } catch {
       // fallback to legacy migration
@@ -109,12 +282,15 @@ export const readSavedInvoices = (): SavedInvoiceRecord[] => {
     legacyInvoices.map((invoice) => toRecord(invoice, "draft"))
   );
 
-  const persisted = safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(migrated));
-  return persisted ? migrated : migrated;
+  safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(migrated));
+  return migrated;
 };
 
 export const writeSavedInvoices = (records: SavedInvoiceRecord[]) => {
-  return safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(sortByUpdatedAt(records)));
+  return safeWrite(
+    SAVED_INVOICES_KEY_V2,
+    JSON.stringify(sortByUpdatedAt(records.map(normalizeRecord)))
+  );
 };
 
 export const upsertSavedInvoiceRecord = (
@@ -128,7 +304,9 @@ export const upsertSavedInvoiceRecord = (
   if (existing) {
     const nextRecord = toRecord(invoice, status, existing);
     const nextRecords = sortByUpdatedAt(
-      records.map((record) => (record.id === existing.id ? nextRecord : record))
+      records.map((record) =>
+        record.id === existing.id ? normalizeRecord(nextRecord) : normalizeRecord(record)
+      )
     );
 
     return {
@@ -139,7 +317,7 @@ export const upsertSavedInvoiceRecord = (
 
   const newRecord = toRecord(invoice, status);
   return {
-    nextRecords: sortByUpdatedAt([newRecord, ...records]),
+    nextRecords: sortByUpdatedAt([newRecord, ...records.map(normalizeRecord)]),
     record: newRecord,
   };
 };
@@ -180,14 +358,35 @@ export const duplicateSavedInvoiceRecord = (
   const source = records.find((record) => record.id === id);
   if (!source) return records;
 
-  const duplicatedInvoice = cloneInvoice(source.data);
+  const normalizedSource = normalizeRecord(source);
+  const duplicatedInvoice = cloneInvoice(normalizedSource.data);
   duplicatedInvoice.details.invoiceNumber = nextDuplicateInvoiceNumber(
     source.invoiceNumber,
     records
   );
 
-  const duplicated = toRecord(duplicatedInvoice, "draft");
-  return sortByUpdatedAt([duplicated, ...records]);
+  const now = Date.now();
+  const duplicated: SavedInvoiceRecord = {
+    id: createId(),
+    invoiceNumber: duplicatedInvoice.details.invoiceNumber,
+    status: "draft",
+    createdAt: now,
+    updatedAt: now,
+    data: duplicatedInvoice,
+    recurring: toDefaultRecurring(duplicatedInvoice.details.invoiceNumber),
+    payment: toDefaultPayment(),
+    reminder: toDefaultReminder(),
+    timeline: [
+      createTimelineEvent("created", now, {
+        note: `Created from ${normalizedSource.invoiceNumber}`,
+      }),
+      createTimelineEvent("duplicated", now, {
+        note: `Duplicated from ${normalizedSource.invoiceNumber}`,
+      }),
+    ],
+  };
+
+  return sortByUpdatedAt([duplicated, ...records.map(normalizeRecord)]);
 };
 
 export const updateSavedInvoiceStatus = (
@@ -196,16 +395,29 @@ export const updateSavedInvoiceStatus = (
   status: InvoiceStatus
 ) => {
   const now = Date.now();
+
   return sortByUpdatedAt(
-    records.map((record) =>
-      record.id === id
-        ? {
-            ...record,
-            status,
-            updatedAt: now,
-          }
-        : record
-    )
+    records.map((record) => {
+      const normalized = normalizeRecord(record);
+      if (normalized.id !== id) return normalized;
+
+      let nextRecord: SavedInvoiceRecord = {
+        ...normalized,
+        status,
+        updatedAt: now,
+      };
+
+      if (normalized.status !== status) {
+        nextRecord = appendTimelineEvent(
+          nextRecord,
+          createTimelineEvent("status_changed", now, {
+            note: `${normalized.status} -> ${status}`,
+          })
+        );
+      }
+
+      return nextRecord;
+    })
   );
 };
 
@@ -225,4 +437,248 @@ export const findSavedInvoiceByInvoiceNumber = (
   invoiceNumber: string
 ) => {
   return records.find((record) => record.invoiceNumber === invoiceNumber) || null;
+};
+
+export const getSavedInvoiceBalance = (record: SavedInvoiceRecord) => {
+  const normalized = normalizeRecord(record);
+  const total = getInvoiceTotal(normalized);
+  const paid = Math.max(0, normalized.payment.amountPaid);
+  return Math.max(0, total - paid);
+};
+
+export const isSavedInvoiceOverdue = (
+  record: SavedInvoiceRecord,
+  now = Date.now()
+) => {
+  const normalized = normalizeRecord(record);
+  if (normalized.status === "paid") return false;
+
+  const dueAt = toTimestamp(normalized.data.details.dueDate);
+  if (!dueAt) return false;
+
+  return dueAt < now;
+};
+
+export const recordSavedInvoicePayment = (
+  records: SavedInvoiceRecord[],
+  id: string,
+  amount: number
+) => {
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return records;
+  }
+
+  const now = Date.now();
+
+  return sortByUpdatedAt(
+    records.map((record) => {
+      const normalized = normalizeRecord(record);
+      if (normalized.id !== id) return normalized;
+
+      const total = getInvoiceTotal(normalized);
+      const nextPaid = normalized.payment.amountPaid + amount;
+      const amountPaid = total > 0 ? Math.min(nextPaid, total) : nextPaid;
+      const nextStatus: InvoiceStatus =
+        total > 0 && amountPaid >= total ? "paid" : normalized.status;
+
+      let nextRecord: SavedInvoiceRecord = {
+        ...normalized,
+        status: nextStatus,
+        updatedAt: now,
+        payment: {
+          amountPaid,
+          lastPaymentAt: now,
+        },
+      };
+
+      nextRecord = appendTimelineEvent(
+        nextRecord,
+        createTimelineEvent("payment_recorded", now, {
+          amount,
+        })
+      );
+
+      if (normalized.status !== nextStatus) {
+        nextRecord = appendTimelineEvent(
+          nextRecord,
+          createTimelineEvent("status_changed", now, {
+            note: `${normalized.status} -> ${nextStatus}`,
+          })
+        );
+      }
+
+      return nextRecord;
+    })
+  );
+};
+
+export const markSavedInvoiceReminderSent = (
+  records: SavedInvoiceRecord[],
+  id: string
+) => {
+  const now = Date.now();
+
+  return sortByUpdatedAt(
+    records.map((record) => {
+      const normalized = normalizeRecord(record);
+      if (normalized.id !== id) return normalized;
+
+      let nextRecord: SavedInvoiceRecord = {
+        ...normalized,
+        updatedAt: now,
+        reminder: {
+          ...normalized.reminder,
+          enabled: true,
+          sendCount: normalized.reminder.sendCount + 1,
+          lastSentAt: now,
+          nextReminderAt: now + SEVEN_DAYS_MS,
+        },
+      };
+
+      nextRecord = appendTimelineEvent(
+        nextRecord,
+        createTimelineEvent("reminder_sent", now)
+      );
+
+      return nextRecord;
+    })
+  );
+};
+
+export const setSavedInvoiceRecurring = (
+  records: SavedInvoiceRecord[],
+  id: string,
+  frequency: RecurringFrequency | null
+) => {
+  const now = Date.now();
+
+  return sortByUpdatedAt(
+    records.map((record) => {
+      const normalized = normalizeRecord(record);
+      if (normalized.id !== id) return normalized;
+
+      let nextRecord: SavedInvoiceRecord = {
+        ...normalized,
+        updatedAt: now,
+        recurring: {
+          ...normalized.recurring,
+          enabled: Boolean(frequency),
+          frequency,
+          baseInvoiceNumber:
+            normalized.recurring.baseInvoiceNumber ||
+            toBaseInvoiceNumber(normalized.invoiceNumber),
+          nextIssueAt: frequency
+            ? addRecurringInterval(
+                toTimestamp(normalized.data.details.invoiceDate) || now,
+                frequency
+              )
+            : null,
+        },
+      };
+
+      nextRecord = appendTimelineEvent(
+        nextRecord,
+        createTimelineEvent(
+          frequency ? "recurring_enabled" : "recurring_disabled",
+          now,
+          frequency ? { note: frequency } : undefined
+        )
+      );
+
+      return nextRecord;
+    })
+  );
+};
+
+export const generateNextRecurringInvoice = (
+  records: SavedInvoiceRecord[],
+  id: string
+) => {
+  const source = records.find((record) => record.id === id);
+  if (!source) return records;
+
+  const normalizedSource = normalizeRecord(source);
+  if (!normalizedSource.recurring.enabled || !normalizedSource.recurring.frequency) {
+    return records;
+  }
+
+  const frequency = normalizedSource.recurring.frequency;
+  const baseInvoiceNumber =
+    normalizedSource.recurring.baseInvoiceNumber ||
+    toBaseInvoiceNumber(normalizedSource.invoiceNumber);
+
+  let nextCounter = normalizedSource.recurring.counter;
+  let nextInvoiceNumber = "";
+
+  do {
+    nextCounter += 1;
+    nextInvoiceNumber = `${baseInvoiceNumber}-R${nextCounter}`;
+  } while (records.some((record) => record.invoiceNumber === nextInvoiceNumber));
+
+  const now = Date.now();
+  const invoiceDateAt = toTimestamp(normalizedSource.data.details.invoiceDate) || now;
+  const dueDateAt = toTimestamp(normalizedSource.data.details.dueDate);
+  const nextInvoiceDateAt = addRecurringInterval(invoiceDateAt, frequency);
+
+  const nextDueDateAt = dueDateAt
+    ? Math.max(nextInvoiceDateAt, nextInvoiceDateAt + (dueDateAt - invoiceDateAt))
+    : addRecurringInterval(nextInvoiceDateAt, frequency);
+
+  const nextInvoice = cloneInvoice(normalizedSource.data);
+  nextInvoice.details.invoiceNumber = nextInvoiceNumber;
+  nextInvoice.details.invoiceDate = new Date(nextInvoiceDateAt).toISOString();
+  nextInvoice.details.dueDate = new Date(nextDueDateAt).toISOString();
+  nextInvoice.details.updatedAt = new Date(now).toLocaleString();
+
+  const nextRecord: SavedInvoiceRecord = {
+    id: createId(),
+    invoiceNumber: nextInvoiceNumber,
+    status: "draft",
+    createdAt: now,
+    updatedAt: now,
+    data: nextInvoice,
+    recurring: {
+      enabled: true,
+      frequency,
+      baseInvoiceNumber,
+      counter: nextCounter,
+      lastIssuedAt: now,
+      nextIssueAt: addRecurringInterval(nextInvoiceDateAt, frequency),
+    },
+    payment: toDefaultPayment(),
+    reminder: toDefaultReminder(),
+    timeline: [
+      createTimelineEvent("created", now, {
+        note: `Recurring from ${normalizedSource.invoiceNumber}`,
+      }),
+      createTimelineEvent("recurring_generated", now, {
+        note: `Generated from ${normalizedSource.invoiceNumber}`,
+      }),
+    ],
+  };
+
+  const updatedSource = appendTimelineEvent(
+    {
+      ...normalizedSource,
+      updatedAt: now,
+      recurring: {
+        ...normalizedSource.recurring,
+        enabled: true,
+        frequency,
+        baseInvoiceNumber,
+        counter: nextCounter,
+        lastIssuedAt: now,
+        nextIssueAt: addRecurringInterval(nextInvoiceDateAt, frequency),
+      },
+    },
+    createTimelineEvent("recurring_generated", now, {
+      note: `Generated ${nextInvoiceNumber}`,
+    })
+  );
+
+  const nextRecords = records.map((record) =>
+    record.id === updatedSource.id ? updatedSource : normalizeRecord(record)
+  );
+
+  return sortByUpdatedAt([nextRecord, ...nextRecords]);
 };

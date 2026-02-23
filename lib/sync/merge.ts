@@ -39,9 +39,27 @@ type MergeSnapshotArgs = {
 const byUpdatedAtDesc = <T extends { updatedAt: number }>(a: T, b: T) =>
   b.updatedAt - a.updatedAt;
 
+const toStableComparable = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => toStableComparable(item));
+  }
+
+  if (value && typeof value === "object") {
+    const objectValue = value as Record<string, unknown>;
+    return Object.keys(objectValue)
+      .sort()
+      .reduce<Record<string, unknown>>((acc, key) => {
+        acc[key] = toStableComparable(objectValue[key]);
+        return acc;
+      }, {});
+  }
+
+  return value;
+};
+
 const toComparableJson = (value: unknown) => {
   try {
-    return JSON.stringify(value);
+    return JSON.stringify(toStableComparable(value));
   } catch {
     return "";
   }
@@ -56,6 +74,56 @@ const toDefaultChoice = (
   cloudUpdatedAt: number
 ): SyncConflictChoice => {
   return localUpdatedAt >= cloudUpdatedAt ? "local" : "cloud";
+};
+
+const toInvoiceSemanticComparable = (record: SavedInvoiceRecord) => {
+  return {
+    id: record.id,
+    invoiceNumber: record.invoiceNumber,
+    status: record.status,
+    createdAt: record.createdAt,
+    updatedAt: record.updatedAt,
+    data: record.data,
+  };
+};
+
+const isSemanticallyEqualInvoice = (
+  local: SavedInvoiceRecord,
+  remote: SavedInvoiceRecord
+) => {
+  return isDeepEqual(
+    toInvoiceSemanticComparable(local),
+    toInvoiceSemanticComparable(remote)
+  );
+};
+
+const hasInvoiceWorkflowMetadata = (record: SavedInvoiceRecord) => {
+  const hasRecurring =
+    Boolean(record.recurring) && typeof record.recurring === "object";
+  const hasPayment = Boolean(record.payment) && typeof record.payment === "object";
+  const hasReminder =
+    Boolean(record.reminder) && typeof record.reminder === "object";
+  const hasTimeline = Array.isArray(record.timeline) && record.timeline.length > 0;
+
+  return hasRecurring || hasPayment || hasReminder || hasTimeline;
+};
+
+const pickPreferredInvoiceVersion = (
+  local: SavedInvoiceRecord,
+  remote: SavedInvoiceRecord
+) => {
+  if (local.updatedAt !== remote.updatedAt) {
+    return local.updatedAt > remote.updatedAt ? local : remote;
+  }
+
+  const localHasWorkflowMetadata = hasInvoiceWorkflowMetadata(local);
+  const remoteHasWorkflowMetadata = hasInvoiceWorkflowMetadata(remote);
+
+  if (localHasWorkflowMetadata !== remoteHasWorkflowMetadata) {
+    return localHasWorkflowMetadata ? local : remote;
+  }
+
+  return local;
 };
 
 const toInvoiceKey = (record: SavedInvoiceRecord) => {
@@ -111,8 +179,8 @@ const mergeSavedInvoices = (
       continue;
     }
 
-    if (isDeepEqual(local, remote)) {
-      merged.push(local.updatedAt >= remote.updatedAt ? local : remote);
+    if (isDeepEqual(local, remote) || isSemanticallyEqualInvoice(local, remote)) {
+      merged.push(pickPreferredInvoiceVersion(local, remote));
       continue;
     }
 

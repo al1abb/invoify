@@ -45,8 +45,12 @@ import {
 } from "@/lib/storage/pdfCache";
 import {
   duplicateSavedInvoiceRecord,
+  generateNextRecurringInvoice as generateNextRecurringInvoiceInRecords,
+  markSavedInvoiceReminderSent as markSavedInvoiceReminderSentInRecords,
   readSavedInvoices,
+  recordSavedInvoicePayment as recordSavedInvoicePaymentInRecords,
   removeSavedInvoiceRecord,
+  setSavedInvoiceRecurring as setSavedInvoiceRecurringInRecords,
   upsertSavedInvoiceRecord,
   updateSavedInvoiceStatus as updateSavedInvoiceStatusInRecords,
   updateSavedInvoiceStatusByInvoiceNumber as updateSavedInvoiceStatusByInvoiceNumberInRecords,
@@ -84,6 +88,7 @@ import {
   ExportTypes,
   InvoiceStatus,
   InvoiceType,
+  RecurringFrequency,
   SavedInvoiceRecord,
   SyncConflictChoice,
   SyncConflictSummary,
@@ -116,6 +121,11 @@ const defaultInvoiceContext = {
   deleteInvoice: (_id: string) => {},
   duplicateInvoice: (_id: string) => {},
   updateSavedInvoiceStatus: (_id: string, _status: InvoiceStatus) => {},
+  recordInvoicePayment: (_id: string, _amount: number) => false,
+  markInvoiceReminderSent: (_id: string) => false,
+  setInvoiceRecurring: (_id: string, _frequency: RecurringFrequency | null) =>
+    false,
+  generateRecurringInvoice: (_id: string) => false,
   sendPdfToMail: (_email: string): Promise<void> => Promise.resolve(),
   exportInvoiceAs: (_exportAs: ExportTypes) => {},
   importInvoice: (_file: File) => {},
@@ -522,7 +532,8 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
               provider: result.provider,
               lastAttemptAt: syncedAt,
               lastSuccessAt: syncedAt,
-              reason: null,
+              reason:
+                syncConflictRef.current.length > 0 ? "conflict_detected" : null,
               errorMessage: null,
             }));
 
@@ -895,6 +906,28 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     };
   }, [pdfUrl]);
 
+  const persistSavedInvoices = useCallback(
+    (
+      nextRecords: SavedInvoiceRecord[],
+      action: string,
+      metadata?: Record<string, unknown>
+    ) => {
+      setSavedInvoices(nextRecords);
+      const persisted = writeSavedInvoices(nextRecords);
+      if (!persisted) {
+        captureClientError(
+          "app_error",
+          new Error("Failed to persist saved invoices"),
+          {
+            action,
+            ...(metadata || {}),
+          }
+        );
+      }
+    },
+    []
+  );
+
   /**
    * Handles form submission.
    */
@@ -1031,17 +1064,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       "draft"
     );
 
-    setSavedInvoices(nextRecords);
-    const persisted = writeSavedInvoices(nextRecords);
-    if (!persisted) {
-      captureClientError(
-        "app_error",
-        new Error("Failed to persist saved invoices"),
-        {
-          action: "save_invoice",
-        }
-      );
-    }
+    persistSavedInvoices(nextRecords, "save_invoice");
 
     if (alreadyExists) {
       modifiedInvoiceSuccess();
@@ -1055,17 +1078,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const deleteInvoice = (id: string) => {
     const updatedInvoices = removeSavedInvoiceRecord(savedInvoices, id);
-    setSavedInvoices(updatedInvoices);
-    const persisted = writeSavedInvoices(updatedInvoices);
-    if (!persisted) {
-      captureClientError(
-        "app_error",
-        new Error("Failed to persist saved invoices"),
-        {
-          action: "delete_invoice",
-        }
-      );
-    }
+    persistSavedInvoices(updatedInvoices, "delete_invoice", { id });
   };
 
   /**
@@ -1073,17 +1086,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const duplicateInvoice = (id: string) => {
     const updatedInvoices = duplicateSavedInvoiceRecord(savedInvoices, id);
-    setSavedInvoices(updatedInvoices);
-    const persisted = writeSavedInvoices(updatedInvoices);
-    if (!persisted) {
-      captureClientError(
-        "app_error",
-        new Error("Failed to persist saved invoices"),
-        {
-          action: "duplicate_invoice",
-        }
-      );
-    }
+    persistSavedInvoices(updatedInvoices, "duplicate_invoice", { id });
   };
 
   /**
@@ -1096,18 +1099,70 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       status
     );
 
-    setSavedInvoices(updatedInvoices);
-    const persisted = writeSavedInvoices(updatedInvoices);
-    if (!persisted) {
-      captureClientError(
-        "app_error",
-        new Error("Failed to persist saved invoices"),
-        {
-          action: "update_status",
-          status,
-        }
-      );
-    }
+    persistSavedInvoices(updatedInvoices, "update_status", { id, status });
+  };
+
+  /**
+   * Record a partial/full payment on a saved invoice.
+   */
+  const recordInvoicePayment = (id: string, amount: number) => {
+    if (!Number.isFinite(amount) || amount <= 0) return false;
+
+    const hasTarget = savedInvoices.some((record) => record.id === id);
+    if (!hasTarget) return false;
+
+    const updatedInvoices = recordSavedInvoicePaymentInRecords(
+      savedInvoices,
+      id,
+      amount
+    );
+    persistSavedInvoices(updatedInvoices, "record_payment", { id, amount });
+    return true;
+  };
+
+  /**
+   * Record that an overdue reminder was sent.
+   */
+  const markInvoiceReminderSent = (id: string) => {
+    const hasTarget = savedInvoices.some((record) => record.id === id);
+    if (!hasTarget) return false;
+
+    const updatedInvoices = markSavedInvoiceReminderSentInRecords(savedInvoices, id);
+    persistSavedInvoices(updatedInvoices, "mark_reminder_sent", { id });
+    return true;
+  };
+
+  /**
+   * Configure recurring frequency on a saved invoice.
+   */
+  const setInvoiceRecurring = (
+    id: string,
+    frequency: RecurringFrequency | null
+  ) => {
+    const hasTarget = savedInvoices.some((record) => record.id === id);
+    if (!hasTarget) return false;
+
+    const updatedInvoices = setSavedInvoiceRecurringInRecords(
+      savedInvoices,
+      id,
+      frequency
+    );
+    persistSavedInvoices(updatedInvoices, "set_recurring", {
+      id,
+      frequency: frequency || "none",
+    });
+    return true;
+  };
+
+  /**
+   * Generate the next invoice in the recurring sequence.
+   */
+  const generateRecurringInvoice = (id: string) => {
+    const updatedInvoices = generateNextRecurringInvoiceInRecords(savedInvoices, id);
+    if (updatedInvoices === savedInvoices) return false;
+
+    persistSavedInvoices(updatedInvoices, "generate_recurring_invoice", { id });
+    return true;
   };
 
   /**
@@ -1176,18 +1231,9 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
               invoiceNumber,
               "sent"
             );
-            setSavedInvoices(updatedInvoices);
-            const persisted = writeSavedInvoices(updatedInvoices);
-            if (!persisted) {
-              captureClientError(
-                "app_error",
-                new Error("Failed to persist saved invoices"),
-                {
-                  action: "email_status_update",
-                  invoiceNumber,
-                }
-              );
-            }
+            persistSavedInvoices(updatedInvoices, "email_status_update", {
+              invoiceNumber,
+            });
           }
         } else {
           const errorMessage = (await res.text()).trim();
@@ -1386,6 +1432,10 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
         deleteInvoice,
         duplicateInvoice,
         updateSavedInvoiceStatus,
+        recordInvoicePayment,
+        markInvoiceReminderSent,
+        setInvoiceRecurring,
+        generateRecurringInvoice,
         sendPdfToMail,
         exportInvoiceAs,
         importInvoice,

@@ -138,6 +138,41 @@
         "loadAndGenerate": "Load & Generate",
         "duplicate": "Duplicate",
         "markPaid": "Mark Paid",
+        "markUnpaid": "Mark Unpaid",
+        "overdue": "Overdue",
+        "payment": {
+            "paid": "Collected",
+            "balance": "Balance",
+            "amountPlaceholder": "Payment amount",
+            "record": "Record Payment"
+        },
+        "recurring": {
+            "label": "Recurring",
+            "badge": "Recurring",
+            "none": "Recurring: Off",
+            "weekly": "Recurring: Weekly",
+            "monthly": "Recurring: Monthly",
+            "generateNext": "Generate Next",
+            "nextIssue": "Next issue"
+        },
+        "reminder": {
+            "send": "Send Reminder",
+            "lastSent": "Last reminder",
+            "next": "Next reminder"
+        },
+        "timeline": {
+            "heading": "Timeline",
+            "empty": "No events yet.",
+            "amount": "Amount",
+            "created": "Created",
+            "statusChanged": "Status updated",
+            "paymentRecorded": "Payment recorded",
+            "reminderSent": "Reminder sent",
+            "duplicated": "Duplicated",
+            "recurringEnabled": "Recurring enabled",
+            "recurringDisabled": "Recurring disabled",
+            "recurringGenerated": "Recurring invoice generated"
+        },
         "delete": "Delete",
         "empty": "No saved invoices yet.",
         "noResults": "No invoices match your filters.",

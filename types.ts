@@ -15,6 +15,47 @@ export type NameType = FieldPath<InvoiceType>;
 
 export type InvoiceStatus = "draft" | "sent" | "paid";
 
+export type InvoiceTimelineEventType =
+    | "created"
+    | "status_changed"
+    | "payment_recorded"
+    | "reminder_sent"
+    | "duplicated"
+    | "recurring_enabled"
+    | "recurring_disabled"
+    | "recurring_generated";
+
+export type InvoiceTimelineEvent = {
+    id: string;
+    type: InvoiceTimelineEventType;
+    at: number;
+    note?: string;
+    amount?: number;
+};
+
+export type RecurringFrequency = "weekly" | "monthly";
+
+export type SavedInvoiceRecurringConfig = {
+    enabled: boolean;
+    frequency: RecurringFrequency | null;
+    baseInvoiceNumber: string;
+    counter: number;
+    lastIssuedAt: number | null;
+    nextIssueAt: number | null;
+};
+
+export type SavedInvoicePaymentSummary = {
+    amountPaid: number;
+    lastPaymentAt: number | null;
+};
+
+export type SavedInvoiceReminder = {
+    enabled: boolean;
+    lastSentAt: number | null;
+    sendCount: number;
+    nextReminderAt: number | null;
+};
+
 export type SyncProviderName = "local" | "noop-cloud" | "supabase-rest";
 
 export type SyncState = "idle" | "syncing" | "success" | "skipped" | "error";
@@ -49,6 +90,10 @@ export type SavedInvoiceRecord = {
     createdAt: number;
     updatedAt: number;
     data: InvoiceType;
+    recurring: SavedInvoiceRecurringConfig;
+    payment: SavedInvoicePaymentSummary;
+    reminder: SavedInvoiceReminder;
+    timeline: InvoiceTimelineEvent[];
 };
 
 export type CustomerTemplateRecord = {

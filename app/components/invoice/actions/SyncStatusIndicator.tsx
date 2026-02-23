@@ -22,7 +22,11 @@ const SyncStatusIndicator = () => {
   const { syncStatus, syncConflicts } = useInvoiceContext();
   const { _t } = useTranslationContext();
 
-  const reasonKey = syncStatus.reason
+  const hasConflicts = syncConflicts.length > 0;
+  const effectiveState: SyncState = hasConflicts ? "skipped" : syncStatus.state;
+  const reasonKey = hasConflicts
+    ? "sync.reasons.conflict_detected"
+    : syncStatus.reason
     ? `sync.reasons.${syncStatus.reason}`
     : "sync.reasons.none";
 
@@ -30,8 +34,8 @@ const SyncStatusIndicator = () => {
     <div className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="font-medium">{_t("sync.title")}</span>
-        <Badge variant={toBadgeVariant(syncStatus.state)} data-testid="sync-status-badge">
-          {_t(`sync.state.${syncStatus.state}`)}
+        <Badge variant={toBadgeVariant(effectiveState)} data-testid="sync-status-badge">
+          {_t(`sync.state.${effectiveState}`)}
         </Badge>
       </div>
 
@@ -48,7 +52,7 @@ const SyncStatusIndicator = () => {
         <span>
           {_t("sync.reason")}: {_t(reasonKey)}
         </span>
-        {syncConflicts.length > 0 ? (
+        {hasConflicts ? (
           <span className="text-destructive">
             {_t("sync.conflicts.open")}: {syncConflicts.length}
           </span>

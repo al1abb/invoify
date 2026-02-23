@@ -26,11 +26,11 @@ const createDraft = (invoiceNumber: string) => ({
     phone: "222-222-2222",
     customInputs: [],
   },
-  details: {
-    invoiceLogo: "",
-    invoiceNumber,
-    invoiceDate: "2026-02-20T00:00:00.000Z",
-    dueDate: "2026-03-20T00:00:00.000Z",
+    details: {
+      invoiceLogo: "",
+      invoiceNumber,
+      invoiceDate: "2026-02-20T00:00:00.000Z",
+      dueDate: "2020-03-20T00:00:00.000Z",
     items: [
       {
         name: "Contract Work",
@@ -170,10 +170,28 @@ test.describe("invoice workflow", () => {
     await page.getByRole("option", { name: "Total (high to low)" }).click();
 
     await expect(originalCard).toBeVisible();
-    await expect(originalCard.getByText("Sent")).toBeVisible();
+    await expect(originalCard.getByText("Sent", { exact: true })).toBeVisible();
+
+    const paymentInput = originalCard.getByTestId(
+      `saved-invoice-payment-input-${invoiceId}`
+    );
+    await paymentInput.fill("250");
+    await originalCard.getByTestId(`saved-invoice-record-payment-${invoiceId}`).click();
+    await expect(paymentInput).toHaveValue("");
+
+    await originalCard.getByTestId(`saved-invoice-recurring-${invoiceId}`).click();
+    await page.getByRole("option", { name: "Recurring: Weekly" }).click();
+    await expect(
+      originalCard.getByTestId(`saved-invoice-generate-next-${invoiceId}`)
+    ).toBeVisible();
+    await originalCard.getByTestId(`saved-invoice-generate-next-${invoiceId}`).click();
+    await expect(page.getByTestId("saved-invoice-card-inv-1001-r1")).toBeVisible();
+
+    await originalCard.getByTestId(`saved-invoice-send-reminder-${invoiceId}`).click();
+    await expect(originalCard.getByText("Last reminder:")).toBeVisible();
 
     await originalCard.getByTestId(`saved-invoice-mark-paid-${invoiceId}`).click();
-    await expect(originalCard.getByText("Paid")).toBeVisible();
+    await expect(originalCard.getByText("Paid", { exact: true })).toBeVisible();
 
     await originalCard.getByTestId(`saved-invoice-duplicate-${invoiceId}`).click();
     await expect(page.getByTestId("saved-invoice-card-inv-1001-copy")).toBeVisible();
