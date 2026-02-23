@@ -147,6 +147,15 @@
         "lastAttempt": "Last attempt",
         "reason": "Reason",
         "error": "Error",
+        "diagnostics": {
+            "open": "Diagnostics",
+            "title": "Sync Diagnostics",
+            "description": "Latest client-side sync telemetry events.",
+            "refresh": "Refresh",
+            "clear": "Clear logs",
+            "empty": "No sync events recorded yet.",
+            "level": "Level"
+        },
         "state": {
             "idle": "Idle",
             "syncing": "Syncing",

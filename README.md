@@ -113,6 +113,13 @@ npm run build
 npm run test:e2e
 ```
 
+Optional cloud-sync e2e test credentials:
+
+```bash
+E2E_SUPABASE_EMAIL=your_test_user@example.com
+E2E_SUPABASE_PASSWORD=your_test_user_password
+```
+
 Before first e2e run, install Playwright browser binaries:
 
 ```bash
