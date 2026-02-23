@@ -35,9 +35,8 @@ const InvoiceTemplate = (data: InvoiceType) => {
 					<address className='mt-4 not-italic text-gray-800'>
 						{sender.address}
 						<br />
-						{sender.zipCode}, {sender.city}
-						<br />
-						{sender.country}
+						{sender.city}
+						{sender.zipCode ? `, ${sender.zipCode}` : ""}
 						<br />
 					</address>
 				</div>
@@ -50,9 +49,9 @@ const InvoiceTemplate = (data: InvoiceType) => {
 					{}
 					<address className='mt-2 not-italic text-gray-500'>
 						{receiver.address && receiver.address.length > 0 ? receiver.address : null}
-						{receiver.zipCode && receiver.zipCode.length > 0 ? `, ${receiver.zipCode}` : null}
 						<br />
-						{receiver.city}, {receiver.country}
+						{receiver.city}
+						{receiver.zipCode ? `, ${receiver.zipCode}` : ""}
 						<br />
 					</address>
 				</div>
@@ -156,16 +155,6 @@ const InvoiceTemplate = (data: InvoiceType) => {
 								{formatNumberWithCommas(Number(details.totalAmount))} {details.currency}
 							</dd>
 						</dl>
-						{details.totalAmountInWords && (
-							<dl className='grid sm:grid-cols-5 gap-x-3'>
-								<dt className='col-span-3 font-semibold text-gray-800'>Total in words:</dt>
-								<dd className='col-span-2 text-gray-500'>
-									<em>
-										{details.totalAmountInWords} {details.currency}
-									</em>
-								</dd>
-							</dl>
-						)}
 					</div>
 				</div>
 			</div>

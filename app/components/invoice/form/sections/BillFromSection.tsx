@@ -53,19 +53,14 @@ const BillFromSection = () => {
                 placeholder="Your address"
             />
             <FormInput
-                name="sender.zipCode"
-                label={_t("form.steps.fromAndTo.zipCode")}
-                placeholder="Your zip code"
-            />
-            <FormInput
                 name="sender.city"
                 label={_t("form.steps.fromAndTo.city")}
                 placeholder="Your city"
             />
             <FormInput
-                name="sender.country"
-                label={_t("form.steps.fromAndTo.country")}
-                placeholder="Your country"
+                name="sender.zipCode"
+                label={_t("form.steps.fromAndTo.zipCode")}
+                placeholder="Your postal code"
             />
             <FormInput
                 name="sender.email"

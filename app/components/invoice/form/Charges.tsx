@@ -40,8 +40,6 @@ const Charges = () => {
         setTaxType,
         shippingType,
         setShippingType,
-        totalInWordsSwitch,
-        setTotalInWordsSwitch,
         currency,
         subTotal,
         totalAmount,
@@ -164,20 +162,6 @@ const Charges = () => {
                         </div>
                     </div>
 
-                    <div className="flex justify-between items-center">
-                        <p>{_t("form.steps.summary.includeTotalInWords")}</p>{" "}
-                        <p>
-                            {totalInWordsSwitch
-                                ? _t("form.steps.summary.yes")
-                                : _t("form.steps.summary.no")}
-                        </p>
-                        <Switch
-                            checked={totalInWordsSwitch}
-                            onCheckedChange={(value) => {
-                                setTotalInWordsSwitch(value);
-                            }}
-                        />
-                    </div>
                 </div>
             </div>
         </>

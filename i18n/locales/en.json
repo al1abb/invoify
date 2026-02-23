@@ -18,7 +18,7 @@
                 "billTo": "Bill To",
                 "name": "Name",
                 "address": "Address",
-                "zipCode": "Zip",
+                "zipCode": "Postal Code",
                 "city": "City",
                 "country": "Country",
                 "email": "Email",
