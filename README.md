@@ -170,6 +170,7 @@ npx playwright install --with-deps chromium
   - Cloud-sync interface layer with `supabase-rest` option and free-plan guardrails.
   - Sync is debounced and deduplicated to reduce write volume.
   - Sync snapshots are capped by item count and payload size.
+  - Cloud sync now pulls on authenticated sessions, merges local/cloud by `updatedAt`, and exposes a conflict-resolution modal when records diverge.
 
 ## Supabase Free-Plan Guardrails
 

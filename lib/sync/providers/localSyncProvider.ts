@@ -11,4 +11,11 @@ export const localSyncProvider: InvoiceSyncProvider = {
       reason: "local_provider_noop",
     };
   },
+  async pullSnapshot() {
+    return {
+      status: "skipped",
+      provider: "local",
+      reason: "local_provider_noop",
+    };
+  },
 };

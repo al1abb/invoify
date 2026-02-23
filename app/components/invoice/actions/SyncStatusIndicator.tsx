@@ -19,7 +19,7 @@ const toBadgeVariant = (state: SyncState): "default" | "secondary" | "destructiv
 };
 
 const SyncStatusIndicator = () => {
-  const { syncStatus } = useInvoiceContext();
+  const { syncStatus, syncConflicts } = useInvoiceContext();
   const { _t } = useTranslationContext();
 
   const reasonKey = syncStatus.reason
@@ -48,6 +48,11 @@ const SyncStatusIndicator = () => {
         <span>
           {_t("sync.reason")}: {_t(reasonKey)}
         </span>
+        {syncConflicts.length > 0 ? (
+          <span className="text-destructive">
+            {_t("sync.conflicts.open")}: {syncConflicts.length}
+          </span>
+        ) : null}
         {syncStatus.errorMessage ? (
           <span className="text-destructive">
             {_t("sync.error")}: {syncStatus.errorMessage}

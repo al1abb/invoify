@@ -17,10 +17,28 @@ export type SyncPushOptions = {
   timeoutMs?: number;
 };
 
+export type SyncPullOptions = {
+  accessToken?: string | null;
+  timeoutMs?: number;
+};
+
 export type SyncPushResult =
   | {
       status: "pushed";
       provider: InvoiceSyncProviderName;
+    }
+  | {
+      status: "skipped";
+      provider: InvoiceSyncProviderName;
+      reason: string;
+    };
+
+export type SyncPullResult =
+  | {
+      status: "pulled";
+      provider: InvoiceSyncProviderName;
+      snapshot: InvoiceSyncSnapshot;
+      remoteUpdatedAt: number | null;
     }
   | {
       status: "skipped";
@@ -47,4 +65,5 @@ export interface InvoiceSyncProvider {
     snapshot: InvoiceSyncSnapshot,
     options?: SyncPushOptions
   ) => Promise<SyncPushResult>;
+  pullSnapshot: (options?: SyncPullOptions) => Promise<SyncPullResult>;
 }

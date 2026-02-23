@@ -65,6 +65,11 @@ import {
   toSnapshotPayloadSize,
 } from "@/lib/sync/snapshot";
 import { SyncProviderError } from "@/lib/sync/types";
+import {
+  mergeRemoteSnapshotWithLocal,
+  SyncConflictRecord,
+  toSyncConflictSummaries,
+} from "@/lib/sync/merge";
 
 // Telemetry
 import {
@@ -80,6 +85,8 @@ import {
   InvoiceStatus,
   InvoiceType,
   SavedInvoiceRecord,
+  SyncConflictChoice,
+  SyncConflictSummary,
   SyncStatus,
 } from "@/types";
 
@@ -88,6 +95,7 @@ const defaultInvoiceContext = {
   invoicePdfLoading: false,
   savedInvoices: [] as SavedInvoiceRecord[],
   customerTemplates: [] as CustomerTemplateRecord[],
+  syncConflicts: [] as SyncConflictSummary[],
   syncStatus: {
     state: "idle",
     provider: "local",
@@ -118,6 +126,9 @@ const defaultInvoiceContext = {
   applyCustomerTemplate: (_templateId: string) => false,
   renameCustomerTemplate: (_templateId: string, _name: string) => false,
   deleteCustomerTemplate: (_templateId: string) => {},
+  resolveSyncConflict: (_conflictId: string, _choice: SyncConflictChoice) =>
+    false,
+  resolveSyncConflictsWithDefaults: () => 0,
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -135,6 +146,34 @@ const toMetaMap = (items: CachedPdfMeta[]) => {
     acc[item.invoiceNumber] = item;
     return acc;
   }, {});
+};
+
+const byUpdatedAtDesc = <T extends { updatedAt: number }>(a: T, b: T) =>
+  b.updatedAt - a.updatedAt;
+
+const toSavedInvoiceKey = (record: SavedInvoiceRecord) => {
+  const invoiceNumber = record.invoiceNumber?.trim();
+  if (invoiceNumber) return invoiceNumber;
+
+  return record.id;
+};
+
+const replaceSavedInvoiceByKey = (
+  records: SavedInvoiceRecord[],
+  key: string,
+  nextRecord: SavedInvoiceRecord
+) => {
+  const filtered = records.filter((record) => toSavedInvoiceKey(record) !== key);
+  return [...filtered, nextRecord].sort(byUpdatedAtDesc);
+};
+
+const replaceTemplateById = (
+  records: CustomerTemplateRecord[],
+  templateId: string,
+  nextRecord: CustomerTemplateRecord
+) => {
+  const filtered = records.filter((record) => record.id !== templateId);
+  return [...filtered, nextRecord].sort(byUpdatedAtDesc);
 };
 
 const createInitialSyncStatus = (provider: SyncStatus["provider"]): SyncStatus => {
@@ -175,7 +214,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
 
   // RHF values and methods
   const { getValues, reset, setValue, watch } = useFormContext<InvoiceType>();
-  const { accessToken, isAuthenticated } = useAuthContext();
+  const { accessToken, isAuthenticated, user } = useAuthContext();
 
   // Variables
   const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
@@ -194,9 +233,12 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   const syncInFlightRef = useRef(false);
   const syncQueuedRef = useRef(false);
   const lastSyncSignatureRef = useRef<string>("");
+  const syncConflictRef = useRef<SyncConflictRecord[]>([]);
+  const lastPulledUserIdRef = useRef<string | null>(null);
   const syncProvider = useMemo(() => createInvoiceSyncProvider(), []);
   const syncConfig = useMemo(() => getSyncRuntimeConfig(), []);
   const [syncScheduleVersion, setSyncScheduleVersion] = useState(0);
+  const [syncConflicts, setSyncConflicts] = useState<SyncConflictSummary[]>([]);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(() =>
     createInitialSyncStatus(syncProvider.name)
   );
@@ -209,6 +251,154 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       setCachedPdfMetaByInvoiceNumber({});
     }
   }, []);
+
+  const updateConflictState = useCallback((conflicts: SyncConflictRecord[]) => {
+    syncConflictRef.current = conflicts;
+    setSyncConflicts(toSyncConflictSummaries(conflicts));
+  }, []);
+
+  const resolveSyncConflict = useCallback(
+    (conflictId: string, choice: SyncConflictChoice) => {
+      const conflict = syncConflictRef.current.find((item) => item.id === conflictId);
+      if (!conflict) return false;
+
+      if (conflict.entityType === "invoice") {
+        const selected =
+          choice === "local" ? conflict.localVersion : conflict.cloudVersion;
+        const nextInvoices = replaceSavedInvoiceByKey(
+          savedInvoices,
+          conflict.key,
+          selected
+        );
+        setSavedInvoices(nextInvoices);
+        const persisted = writeSavedInvoices(nextInvoices);
+        if (!persisted) {
+          captureClientError(
+            "app_error",
+            new Error("Failed to persist saved invoices"),
+            {
+              action: "resolve_sync_conflict",
+              entityType: conflict.entityType,
+            }
+          );
+        }
+      } else {
+        const selected =
+          choice === "local" ? conflict.localVersion : conflict.cloudVersion;
+        const nextTemplates = replaceTemplateById(
+          customerTemplates,
+          conflict.key,
+          selected
+        );
+        setCustomerTemplates(nextTemplates);
+        const persisted = writeCustomerTemplates(nextTemplates);
+        if (!persisted) {
+          captureClientError(
+            "app_error",
+            new Error("Failed to persist customer templates"),
+            {
+              action: "resolve_sync_conflict",
+              entityType: conflict.entityType,
+            }
+          );
+        }
+      }
+
+      const remaining = syncConflictRef.current.filter(
+        (item) => item.id !== conflictId
+      );
+      updateConflictState(remaining);
+
+      if (remaining.length === 0) {
+        setSyncStatus((prev) => ({
+          ...prev,
+          reason: null,
+        }));
+      }
+
+      trackClientEvent("sync_conflict_resolved", {
+        conflictId,
+        entityType: conflict.entityType,
+        choice,
+        remaining: remaining.length,
+      });
+
+      return true;
+    },
+    [
+      customerTemplates,
+      savedInvoices,
+      updateConflictState,
+    ]
+  );
+
+  const resolveSyncConflictsWithDefaults = useCallback(() => {
+    const conflicts = syncConflictRef.current;
+    if (conflicts.length === 0) return 0;
+
+    let nextInvoices = savedInvoices;
+    let nextTemplates = customerTemplates;
+
+    for (const conflict of conflicts) {
+      if (conflict.entityType === "invoice") {
+        const selected =
+          conflict.defaultChoice === "local"
+            ? conflict.localVersion
+            : conflict.cloudVersion;
+        nextInvoices = replaceSavedInvoiceByKey(
+          nextInvoices,
+          conflict.key,
+          selected
+        );
+      } else {
+        const selected =
+          conflict.defaultChoice === "local"
+            ? conflict.localVersion
+            : conflict.cloudVersion;
+        nextTemplates = replaceTemplateById(
+          nextTemplates,
+          conflict.key,
+          selected
+        );
+      }
+    }
+
+    setSavedInvoices(nextInvoices);
+    const invoicesPersisted = writeSavedInvoices(nextInvoices);
+    if (!invoicesPersisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist saved invoices"),
+        {
+          action: "resolve_sync_conflicts_defaults",
+        }
+      );
+    }
+    setCustomerTemplates(nextTemplates);
+    const templatesPersisted = writeCustomerTemplates(nextTemplates);
+    if (!templatesPersisted) {
+      captureClientError(
+        "app_error",
+        new Error("Failed to persist customer templates"),
+        {
+          action: "resolve_sync_conflicts_defaults",
+        }
+      );
+    }
+    updateConflictState([]);
+
+    setSyncStatus((prev) => ({
+      ...prev,
+      reason: null,
+    }));
+
+    trackClientEvent("sync_conflict_resolved", {
+      strategy: "defaults",
+      totalResolved: conflicts.length,
+    });
+
+    return conflicts.length;
+  }, [customerTemplates, savedInvoices, updateConflictState]);
 
   // Load local persisted state once
   useEffect(() => {
@@ -283,6 +473,192 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
+
+  // Pull latest remote snapshot after auth and merge with local records.
+  useEffect(() => {
+    if (!isStorageHydrated) return;
+    if (!syncProvider.isCloudProvider) return;
+
+    const userId = user?.id || null;
+    if (!isAuthenticated || !userId) {
+      lastPulledUserIdRef.current = null;
+      updateConflictState([]);
+      return;
+    }
+
+    if (lastPulledUserIdRef.current === userId) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    const pullSnapshotOnAuth = async () => {
+      const startedAt = Date.now();
+      setSyncStatus((prev) => ({
+        ...prev,
+        state: "syncing",
+        provider: syncProvider.name,
+        lastAttemptAt: startedAt,
+        reason: "pull_on_login",
+        errorMessage: null,
+      }));
+
+      try {
+        const result = await syncProvider.pullSnapshot({
+          accessToken,
+          timeoutMs: SYNC_PUSH_TIMEOUT_MS,
+        });
+
+        if (isCancelled) return;
+
+        if (result.status === "skipped") {
+          lastPulledUserIdRef.current = userId;
+
+          if (result.reason === "remote_snapshot_missing") {
+            const syncedAt = Date.now();
+            setSyncStatus((prev) => ({
+              ...prev,
+              state: "success",
+              provider: result.provider,
+              lastAttemptAt: syncedAt,
+              lastSuccessAt: syncedAt,
+              reason: null,
+              errorMessage: null,
+            }));
+
+            trackClientEvent("sync_pull_success", {
+              provider: result.provider,
+              reason: result.reason,
+              mergedSavedInvoices: savedInvoices.length,
+              mergedCustomerTemplates: customerTemplates.length,
+              conflicts: 0,
+            });
+            return;
+          }
+
+          setSyncStatus((prev) => ({
+            ...prev,
+            state: "skipped",
+            provider: result.provider,
+            lastAttemptAt: Date.now(),
+            reason: result.reason,
+            errorMessage: null,
+          }));
+
+          trackClientEvent(
+            "sync_pull_skipped",
+            {
+              provider: result.provider,
+              reason: result.reason,
+            },
+            "warn"
+          );
+
+          return;
+        }
+
+        const mergedResult = mergeRemoteSnapshotWithLocal({
+          localSavedInvoices: savedInvoices,
+          remoteSavedInvoices: result.snapshot.savedInvoices,
+          localCustomerTemplates: customerTemplates,
+          remoteCustomerTemplates: result.snapshot.customerTemplates,
+        });
+
+        setSavedInvoices(mergedResult.savedInvoices);
+        const invoicesPersisted = writeSavedInvoices(mergedResult.savedInvoices);
+        if (!invoicesPersisted) {
+          captureClientError(
+            "app_error",
+            new Error("Failed to persist merged invoices"),
+            {
+              action: "sync_pull_merge",
+            }
+          );
+        }
+
+        setCustomerTemplates(mergedResult.customerTemplates);
+        const templatesPersisted = writeCustomerTemplates(
+          mergedResult.customerTemplates
+        );
+        if (!templatesPersisted) {
+          captureClientError(
+            "app_error",
+            new Error("Failed to persist merged customer templates"),
+            {
+              action: "sync_pull_merge",
+            }
+          );
+        }
+
+        updateConflictState(mergedResult.conflicts);
+        lastSyncSignatureRef.current = "";
+        lastPulledUserIdRef.current = userId;
+
+        const syncedAt = Date.now();
+        setSyncStatus((prev) => ({
+          ...prev,
+          state: "success",
+          provider: result.provider,
+          lastAttemptAt: syncedAt,
+          lastSuccessAt: syncedAt,
+          reason: mergedResult.conflicts.length > 0 ? "conflict_detected" : null,
+          errorMessage: null,
+        }));
+
+        trackClientEvent("sync_pull_success", {
+          provider: result.provider,
+          remoteUpdatedAt: result.remoteUpdatedAt,
+          mergedSavedInvoices: mergedResult.savedInvoices.length,
+          mergedCustomerTemplates: mergedResult.customerTemplates.length,
+          conflicts: mergedResult.conflicts.length,
+        });
+
+        if (mergedResult.conflicts.length > 0) {
+          trackClientEvent(
+            "sync_conflict_detected",
+            {
+              provider: result.provider,
+              conflicts: mergedResult.conflicts.length,
+            },
+            "warn"
+          );
+        }
+
+        setSyncScheduleVersion((version) => version + 1);
+      } catch (error) {
+        if (isCancelled) return;
+
+        captureClientError("sync_pull_failure", error, {
+          provider: syncProvider.name,
+        });
+
+        setSyncStatus((prev) => ({
+          ...prev,
+          state: "error",
+          provider: syncProvider.name,
+          lastAttemptAt: Date.now(),
+          reason: null,
+          errorMessage:
+            error instanceof Error ? error.message : "Failed to pull sync snapshot",
+        }));
+      }
+    };
+
+    void pullSnapshotOnAuth();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [
+    accessToken,
+    customerTemplates,
+    isAuthenticated,
+    isStorageHydrated,
+    savedInvoices,
+    syncProvider,
+    updateConflictState,
+    user?.id,
+  ]);
 
   // Optional sync interface layer (local by default, cloud-ready abstraction).
   useEffect(() => {
@@ -996,6 +1372,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
         invoicePdfLoading,
         savedInvoices,
         customerTemplates,
+        syncConflicts,
         syncStatus,
         pdfUrl,
         onFormSubmit,
@@ -1019,6 +1396,8 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
         applyCustomerTemplate,
         renameCustomerTemplate,
         deleteCustomerTemplate,
+        resolveSyncConflict,
+        resolveSyncConflictsWithDefaults,
       }}
     >
       {children}

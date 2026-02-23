@@ -28,6 +28,20 @@ export type SyncStatus = {
     errorMessage: string | null;
 };
 
+export type SyncConflictChoice = "local" | "cloud";
+
+export type SyncConflictEntityType = "invoice" | "template";
+
+export type SyncConflictSummary = {
+    id: string;
+    entityType: SyncConflictEntityType;
+    key: string;
+    label: string;
+    localUpdatedAt: number;
+    cloudUpdatedAt: number;
+    defaultChoice: SyncConflictChoice;
+};
+
 export type SavedInvoiceRecord = {
     id: string;
     invoiceNumber: string;

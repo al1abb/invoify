@@ -15,6 +15,7 @@ import BaseButton from "@/app/components/reusables/BaseButton";
 import PdfViewer from "@/app/components/invoice/actions/PdfViewer";
 import SyncStatusIndicator from "@/app/components/invoice/actions/SyncStatusIndicator";
 import SyncDiagnosticsModal from "@/app/components/invoice/actions/SyncDiagnosticsModal";
+import SyncConflictsModal from "@/app/components/invoice/actions/SyncConflictsModal";
 
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
@@ -52,7 +53,8 @@ const InvoiceActions = () => {
 
         <div className="flex flex-col flex-wrap items-center gap-2">
           <SyncStatusIndicator />
-          <div className="w-full flex justify-end">
+          <div className="w-full flex justify-end gap-2">
+            <SyncConflictsModal />
             <SyncDiagnosticsModal />
           </div>
 

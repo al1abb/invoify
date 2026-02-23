@@ -26,4 +26,11 @@ export const noopCloudSyncProvider: InvoiceSyncProvider = {
       reason,
     };
   },
+  async pullSnapshot() {
+    return {
+      status: "skipped",
+      provider: "noop-cloud",
+      reason: "cloud_provider_not_configured",
+    };
+  },
 };
