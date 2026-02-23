@@ -89,6 +89,13 @@ const installDraft = async (invoiceNumber: string, page: Page) => {
   );
 };
 
+const waitForDraftHydration = async (page: Page) => {
+  await expect(page.getByPlaceholder("Your name")).toHaveValue("Alpha Sender");
+  await expect(page.getByPlaceholder("Receiver name")).toHaveValue(
+    "Beta Receiver"
+  );
+};
+
 test.describe("invoice workflow", () => {
   test("save/load/duplicate/status/cache-restore flow", async ({ page }) => {
     const invoiceNumber = "INV-1001";
@@ -130,6 +137,7 @@ test.describe("invoice workflow", () => {
     });
 
     await page.goto("/en");
+    await waitForDraftHydration(page);
 
     await page.getByRole("button", { name: /5\.\s*Summary/i }).click();
     await page.getByTestId("generate-pdf-btn").click();
@@ -187,6 +195,7 @@ test.describe("invoice workflow", () => {
     await installDraft(invoiceNumber, page);
 
     await page.goto("/en");
+    await waitForDraftHydration(page);
 
     const senderNameInput = page.getByPlaceholder("Your name");
     const receiverNameInput = page.getByPlaceholder("Receiver name");
