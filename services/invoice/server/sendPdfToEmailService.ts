@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 // Nodemailer
 import nodemailer, { SendMailOptions } from "nodemailer";
@@ -80,6 +81,11 @@ export async function sendPdfToEmailService(
         return true;
     } catch (error) {
         console.error("Error sending email", error);
+        Sentry.captureException(error, {
+            tags: {
+                service: "sendPdfToEmailService",
+            },
+        });
         return false;
     }
 }

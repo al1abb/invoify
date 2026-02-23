@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 // Services
 import { sendPdfToEmailService } from "@/services/invoice/server/sendPdfToEmailService";
@@ -18,6 +19,11 @@ export async function POST(req: NextRequest) {
         }
     } catch (err) {
         console.error("Email service error:", err);
+        Sentry.captureException(err, {
+            tags: {
+                route: "/api/invoice/send",
+            },
+        });
         const errorMessage = err instanceof Error ? err.message : "Failed to send email";
         return new NextResponse(errorMessage, { status: 500 });
     }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 
 // Chromium
 import chromium from "@sparticuz/chromium";
@@ -79,6 +80,11 @@ export async function generatePdfService(req: NextRequest) {
 		});
 	} catch (error: any) {
 		console.error("PDF Generation Error:", error);
+		Sentry.captureException(error, {
+			tags: {
+				service: "generatePdfService",
+			},
+		});
 		return new NextResponse(
 			JSON.stringify({ error: "Failed to generate PDF" }),
 			{

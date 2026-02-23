@@ -82,6 +82,42 @@ const normalizeErrorPayload = (error: unknown) => {
   }
 };
 
+const hasSentryClientDsn = () => {
+  return Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN);
+};
+
+const captureSentryClientError = (
+  name: ClientTelemetryEventName,
+  error: unknown,
+  payload?: Record<string, unknown>
+) => {
+  if (!isBrowser() || !hasSentryClientDsn()) return;
+
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      const exception =
+        error instanceof Error
+          ? error
+          : new Error(
+              typeof error === "string"
+                ? error
+                : payload?.message?.toString() || "Client telemetry error"
+            );
+
+      Sentry.withScope((scope) => {
+        scope.setTag("telemetry_event", name);
+        scope.setLevel("error");
+        if (payload && Object.keys(payload).length > 0) {
+          scope.setContext("telemetry_payload", payload);
+        }
+        Sentry.captureException(exception);
+      });
+    })
+    .catch(() => {
+      // no-op if sentry fails to load
+    });
+};
+
 export const trackClientEvent = (
   name: ClientTelemetryEventName,
   payload?: Record<string, unknown>,
@@ -121,15 +157,13 @@ export const captureClientError = (
   payload?: Record<string, unknown>
 ) => {
   const normalized = normalizeErrorPayload(error);
+  const mergedPayload = {
+    ...payload,
+    ...normalized,
+  };
 
-  trackClientEvent(
-    name,
-    {
-      ...payload,
-      ...normalized,
-    },
-    "error"
-  );
+  trackClientEvent(name, mergedPayload, "error");
+  captureSentryClientError(name, error, mergedPayload);
 };
 
 export const listClientTelemetryEvents = () => {

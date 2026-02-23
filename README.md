@@ -90,12 +90,20 @@ Follow these instructions to get Invoify up and running on your local machine.
    NEXT_PUBLIC_SYNC_MAX_PAYLOAD_BYTES=524288
    NEXT_PUBLIC_SYNC_RETRY_MAX_ATTEMPTS=3
    NEXT_PUBLIC_SYNC_RETRY_BASE_DELAY_MS=1000
+   NEXT_PUBLIC_SENTRY_DSN=
+   SENTRY_DSN=
+   NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=0.1
+   SENTRY_TRACES_SAMPLE_RATE=0.1
+   NEXT_PUBLIC_SENTRY_ENVIRONMENT=development
+   SENTRY_ENVIRONMENT=development
    ```
    `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
    PDF caching is browser-side only and does not require any environment variables.
    `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` and `supabase-rest` supported).
    For `supabase-rest`, also set:
    `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+   For Sentry source map uploads, also set:
+   `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, and `SENTRY_PROJECT`.
 4. Start development server
 
     ```bash
@@ -135,6 +143,10 @@ npx playwright install --with-deps chromium
 
 ## New in This Release
 
+- Production monitoring with Sentry:
+  - Captures App Router render crashes, API/service exceptions, and client telemetry errors.
+  - Uses `instrumentation.ts` / `instrumentation-client.ts` and `app/global-error.tsx`.
+  - Fully optional: if DSN variables are unset, Sentry stays disabled.
 - Faster startup optimizations:
   - Split shared helper module into client/server/currency helper files.
   - Lazy-loaded secondary action modals.
@@ -226,6 +238,9 @@ npx playwright install --with-deps chromium
   - `localStorage.removeItem('invoify:telemetry:v1')`
 - Full local reset:
   - Clear all related localStorage keys above and remove the IndexedDB database.
+- Sentry disabled unexpectedly:
+  - Verify `NEXT_PUBLIC_SENTRY_DSN` (browser) and/or `SENTRY_DSN` (server) are set.
+  - Rebuild after changing env variables (`npm run build`).
 
 <!-- LICENSE -->
 ## License
