@@ -91,9 +91,6 @@ import InvoiceLayout from "./templates/invoice-pdf/InvoiceLayout";
 import InvoiceTemplate1 from "./templates/invoice-pdf/InvoiceTemplate1";
 import InvoiceTemplate2 from "./templates/invoice-pdf/InvoiceTemplate2";
 
-// Email templates
-import SendPdfEmail from "./templates/email/SendPdfEmail";
-
 /* =========================
    ? DEV ONLY
    ========================= */
@@ -148,6 +145,5 @@ export {
     InvoiceLayout,
     InvoiceTemplate1,
     InvoiceTemplate2,
-    SendPdfEmail,
     DevDebug,
 };

@@ -121,12 +121,30 @@
         "updatedAt": "Updated",
         "cachedPdf": "Cached PDF",
         "cachedUpdatedAt": "Cache updated",
+        "searchPlaceholder": "Search by invoice #, sender, or receiver",
+        "filterStatus": "Filter status",
+        "filterAll": "All statuses",
+        "sortBy": "Sort by",
+        "sort": {
+            "updatedDesc": "Updated (newest first)",
+            "updatedAsc": "Updated (oldest first)",
+            "invoiceAsc": "Invoice # (A-Z)",
+            "invoiceDesc": "Invoice # (Z-A)",
+            "totalDesc": "Total (high to low)",
+            "totalAsc": "Total (low to high)"
+        },
+        "showing": "Showing",
         "load": "Load",
         "loadAndGenerate": "Load & Generate",
         "duplicate": "Duplicate",
         "markPaid": "Mark Paid",
         "delete": "Delete",
-        "empty": "No saved invoices yet."
+        "empty": "No saved invoices yet.",
+        "noResults": "No invoices match your filters.",
+        "prevPage": "Previous",
+        "nextPage": "Next",
+        "page": "Page",
+        "of": "of"
     },
     "auth": {
         "notConfigured": "Auth Off",

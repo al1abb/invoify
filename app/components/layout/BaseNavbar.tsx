@@ -9,12 +9,10 @@ import Logo from "@/public/assets/img/invoify-logo.svg";
 import { Card } from "@/components/ui/card";
 
 // Components
-import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
+import { LanguageSelector, ThemeSwitcher } from "@/app/components";
 import AuthControls from "@/app/components/reusables/AuthControls";
 
 const BaseNavbar = () => {
-    const devEnv = process.env.NODE_ENV === "development";
-
     return (
         <header className="lg:container z-[99]">
             <nav>
@@ -30,8 +28,6 @@ const BaseNavbar = () => {
                         />
                     </Link>
                     <div className="flex flex-wrap items-center gap-2">
-                        {/* ? DEV Only */}
-                        {devEnv && <DevDebug />}
                         <AuthControls />
                         <LanguageSelector />
                         <ThemeSwitcher />
