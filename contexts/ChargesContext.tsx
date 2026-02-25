@@ -39,6 +39,18 @@ const defaultChargesContext = {
     calculateTotal: () => {},
 };
 
+const normalizeChargeType = (value: unknown): "amount" | "percentage" => {
+    return value === "percentage" ? "percentage" : "amount";
+};
+
+const resolveNextChargeType = (
+    value: SetStateAction<string>,
+    current: "amount" | "percentage"
+): "amount" | "percentage" => {
+    const nextValue = typeof value === "function" ? value(current) : value;
+    return normalizeChargeType(nextValue);
+};
+
 export const ChargesContext = createContext(defaultChargesContext);
 
 export const useChargesContext = () => {
@@ -50,7 +62,7 @@ type ChargesContextProps = {
 };
 
 export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
-    const { control, setValue } = useFormContext<InvoiceType>();
+    const { control, getValues, setValue } = useFormContext<InvoiceType>();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -104,9 +116,40 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     const [totalAmount, setTotalAmount] = useState<number>(0);
 
     // Types for discount, tax, and shipping. Amount | Percentage
-    const [discountType, setDiscountType] = useState("amount");
-    const [taxType, setTaxType] = useState("amount");
-    const [shippingType, setShippingType] = useState("amount");
+    const discountType = normalizeChargeType(discount?.amountType);
+    const taxType = normalizeChargeType(tax?.amountType);
+    const shippingType = normalizeChargeType(shipping?.costType);
+
+    const setDiscountType = useCallback(
+        (newValue: SetStateAction<string>) => {
+            const current = normalizeChargeType(
+                getValues("details.discountDetails.amountType")
+            );
+            const next = resolveNextChargeType(newValue, current);
+            setValue("details.discountDetails.amountType", next);
+        },
+        [getValues, setValue]
+    );
+
+    const setTaxType = useCallback(
+        (newValue: SetStateAction<string>) => {
+            const current = normalizeChargeType(getValues("details.taxDetails.amountType"));
+            const next = resolveNextChargeType(newValue, current);
+            setValue("details.taxDetails.amountType", next);
+        },
+        [getValues, setValue]
+    );
+
+    const setShippingType = useCallback(
+        (newValue: SetStateAction<string>) => {
+            const current = normalizeChargeType(
+                getValues("details.shippingDetails.costType")
+            );
+            const next = resolveNextChargeType(newValue, current);
+            setValue("details.shippingDetails.costType", next);
+        },
+        [getValues, setValue]
+    );
 
     /**
      * Calculates the subtotal, total, and the total amount in words on the invoice.
@@ -130,19 +173,13 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         let shippingCost: number =
             parseFloat(shippingCostInput?.toString() ?? "0") ?? 0;
 
-        let discountAmountType: string = "amount";
-        let taxAmountType: string = "amount";
-        let shippingCostType: string = "amount";
-
         let total: number = totalSum;
 
         if (!isNaN(discountAmount)) {
             if (discountType == "amount") {
                 total -= discountAmount;
-                discountAmountType = "amount";
             } else {
                 total -= total * (discountAmount / 100);
-                discountAmountType = "percentage";
             }
             setValue("details.discountDetails.amount", discountAmount);
         }
@@ -150,10 +187,8 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         if (!isNaN(taxAmount)) {
             if (taxType == "amount") {
                 total += taxAmount;
-                taxAmountType = "amount";
             } else {
                 total += total * (taxAmount / 100);
-                taxAmountType = "percentage";
             }
             setValue("details.taxDetails.amount", taxAmount);
         }
@@ -161,19 +196,13 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         if (!isNaN(shippingCost)) {
             if (shippingType == "amount") {
                 total += shippingCost;
-                shippingCostType = "amount";
             } else {
                 total += total * (shippingCost / 100);
-                shippingCostType = "percentage";
             }
             setValue("details.shippingDetails.cost", shippingCost);
         }
 
         setTotalAmount(total);
-
-        setValue("details.discountDetails.amountType", discountAmountType);
-        setValue("details.taxDetails.amountType", taxAmountType);
-        setValue("details.shippingDetails.costType", shippingCostType);
 
         setValue("details.totalAmount", total);
         
@@ -195,45 +224,36 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
         totalInWordsSwitch,
     ]);
 
-    // When loading invoice, if received values, turn on the switches
+    // Normalize legacy or malformed charge type fields from persisted drafts.
     useEffect(() => {
-        if (discount?.amount) {
-            setDiscountSwitch(true);
+        const normalizedDiscountType = normalizeChargeType(discount?.amountType);
+        const normalizedTaxType = normalizeChargeType(tax?.amountType);
+        const normalizedShippingType = normalizeChargeType(shipping?.costType);
+
+        if (discount?.amountType !== normalizedDiscountType) {
+            setValue("details.discountDetails.amountType", normalizedDiscountType);
         }
 
-        if (tax?.amount) {
-            setTaxSwitch(true);
+        if (tax?.amountType !== normalizedTaxType) {
+            setValue("details.taxDetails.amountType", normalizedTaxType);
         }
 
-        if (shipping?.cost) {
-            setShippingSwitch(true);
-        }
-
-        if (discount?.amountType == "amount") {
-            setDiscountType("amount");
-        } else {
-            setDiscountType("percentage");
-        }
-
-        if (tax?.amountType == "amount") {
-            setTaxType("amount");
-        } else {
-            setTaxType("percentage");
-        }
-
-        if (shipping?.costType == "amount") {
-            setShippingType("amount");
-        } else {
-            setShippingType("percentage");
+        if (shipping?.costType !== normalizedShippingType) {
+            setValue("details.shippingDetails.costType", normalizedShippingType);
         }
     }, [
-        discount?.amount,
         discount?.amountType,
-        shipping?.cost,
         shipping?.costType,
-        tax?.amount,
         tax?.amountType,
+        setValue,
     ]);
+
+    // When loading invoice, if received values, turn on the switches.
+    useEffect(() => {
+        setDiscountSwitch(Boolean(discount?.amount));
+        setTaxSwitch(Boolean(tax?.amount));
+        setShippingSwitch(Boolean(shipping?.cost));
+    }, [discount?.amount, shipping?.cost, tax?.amount]);
 
     // Check switches, if off set values to zero
     useEffect(() => {

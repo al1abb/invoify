@@ -1,6 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const DRAFT_KEY = "invoify:invoiceDraft";
+const PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH = 48;
+const MOCK_PDF =
+  "%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF";
 
 const toTestId = (invoiceNumber: string) =>
   invoiceNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -74,8 +77,34 @@ type DraftInitPayload = {
   draftKey: string;
 };
 
-const installDraft = async (invoiceNumber: string, page: Page) => {
-  const draft = createDraft(invoiceNumber);
+const createLegacyDraftMissingChargeTypes = (invoiceNumber: string) => {
+  const draft = JSON.parse(JSON.stringify(createDraft(invoiceNumber))) as {
+    details?: {
+      discountDetails?: Record<string, unknown>;
+      taxDetails?: Record<string, unknown>;
+      shippingDetails?: Record<string, unknown>;
+    };
+  };
+
+  if (draft.details?.discountDetails) {
+    delete draft.details.discountDetails.amountType;
+  }
+
+  if (draft.details?.taxDetails) {
+    delete draft.details.taxDetails.amountType;
+  }
+
+  if (draft.details?.shippingDetails) {
+    delete draft.details.shippingDetails.costType;
+  }
+
+  return draft as ReturnType<typeof createDraft>;
+};
+
+const installDraftPayload = async (
+  draft: ReturnType<typeof createDraft>,
+  page: Page
+) => {
   await page.addInitScript(
     ({ draftValue, draftKey }: DraftInitPayload) => {
       if (!window.localStorage.getItem(draftKey)) {
@@ -87,6 +116,11 @@ const installDraft = async (invoiceNumber: string, page: Page) => {
       draftKey: DRAFT_KEY,
     }
   );
+};
+
+const installDraft = async (invoiceNumber: string, page: Page) => {
+  const draft = createDraft(invoiceNumber);
+  await installDraftPayload(draft, page);
 };
 
 const waitForDraftHydration = async (page: Page) => {
@@ -119,10 +153,9 @@ test.describe("invoice workflow", () => {
         return;
       }
 
-      const mockPdf = "%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF";
       await route.fulfill({
         status: 200,
-        body: mockPdf,
+        body: MOCK_PDF,
         headers: {
           "content-type": "application/pdf",
         },
@@ -206,6 +239,84 @@ test.describe("invoice workflow", () => {
 
     await expect(page.getByText("Final PDF:")).toBeVisible();
     expect(generateCallCount).toBe(1);
+  });
+
+  test("legacy draft missing charge amount types does not crash on startup", async ({
+    page,
+  }) => {
+    await installDraftPayload(
+      createLegacyDraftMissingChargeTypes("INV-LEGACY-CHARGES"),
+      page
+    );
+
+    const pageErrors: string[] = [];
+    page.on("pageerror", (error) => {
+      pageErrors.push(error.message);
+    });
+
+    await page.goto("/en");
+    await waitForDraftHydration(page);
+
+    await page.waitForTimeout(1200);
+    expect(
+      pageErrors.some((message) =>
+        message.includes("Maximum update depth exceeded")
+      )
+    ).toBeFalsy();
+  });
+
+  test("download filename is tied to generated PDF and truncates long parts", async ({
+    page,
+  }) => {
+    await installDraft("INV-FILENAME-1", page);
+
+    await page.route("**/api/invoice/generate", async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: MOCK_PDF,
+        headers: {
+          "content-type": "application/pdf",
+        },
+      });
+    });
+
+    await page.goto("/en");
+    await waitForDraftHydration(page);
+
+    const generatedRecipientName = "Acme Receiver";
+    const generatedInvoiceNumber = `INV-${"9".repeat(70)}`;
+    const expectedRecipientName = "AcmeReceiver";
+    const expectedInvoiceNumber = generatedInvoiceNumber.slice(
+      0,
+      PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH
+    );
+
+    await page.getByRole("button", { name: /^1\./ }).click();
+    await page.getByPlaceholder("Receiver name").fill(generatedRecipientName);
+
+    await page.getByRole("button", { name: /^2\./ }).click();
+    await page.getByPlaceholder("Invoice number").fill(generatedInvoiceNumber);
+
+    await page.getByRole("button", { name: /5\.\s*Summary/i }).click();
+    await page.getByTestId("generate-pdf-btn").click();
+    await expect(page.getByText("Final PDF:")).toBeVisible();
+
+    await page.getByRole("button", { name: /^1\./ }).click();
+    await page.getByPlaceholder("Receiver name").fill("Mutated Receiver");
+
+    await page.getByRole("button", { name: /^2\./ }).click();
+    await page.getByPlaceholder("Invoice number").fill("MUTATED-INV-999");
+
+    await page.getByRole("button", { name: /5\.\s*Summary/i }).click();
+
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.getByTestId("download-pdf-btn").click(),
+    ]);
+
+    expect(download.suggestedFilename()).toBe(
+      `${expectedRecipientName}_${expectedInvoiceNumber}.pdf`
+    );
   });
 
   test("customer template save/apply/rename/delete flow", async ({ page }) => {

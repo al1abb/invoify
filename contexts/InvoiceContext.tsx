@@ -168,7 +168,28 @@ const toSavedInvoiceKey = (record: SavedInvoiceRecord) => {
   return record.id;
 };
 
-const toSafeFilenamePart = (value: string, removeSpaces = false) => {
+const PDF_FILENAME_RECIPIENT_MAX_LENGTH = 64;
+const PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH = 48;
+
+type PdfFilenameMeta = {
+  recipientName: string;
+  invoiceNumber: string;
+};
+
+type PdfFilenameSource = {
+  receiver?: {
+    name?: string | null;
+  } | null;
+  details?: {
+    invoiceNumber?: string | null;
+  } | null;
+};
+
+const toSafeFilenamePart = (
+  value: string,
+  removeSpaces = false,
+  maxLength = 80
+) => {
   const normalized = value
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -178,9 +199,33 @@ const toSafeFilenamePart = (value: string, removeSpaces = false) => {
     ? normalized.replace(/\s+/g, "")
     : normalized.replace(/\s+/g, "_");
 
-  return withSpacesHandled
+  const safePart = withSpacesHandled
     .replace(/[^a-zA-Z0-9_-]/g, "")
     .replace(/^[-_]+|[-_]+$/g, "");
+
+  return safePart.slice(0, maxLength).replace(/^[-_]+|[-_]+$/g, "");
+};
+
+const toPdfFilenameMeta = (source: PdfFilenameSource): PdfFilenameMeta => {
+  return {
+    recipientName: source.receiver?.name ?? "",
+    invoiceNumber: source.details?.invoiceNumber ?? "",
+  };
+};
+
+const toPdfFilename = (meta: PdfFilenameMeta) => {
+  const invoiceToName = toSafeFilenamePart(
+    meta.recipientName,
+    true,
+    PDF_FILENAME_RECIPIENT_MAX_LENGTH
+  );
+  const invoiceNumber = toSafeFilenamePart(
+    meta.invoiceNumber,
+    false,
+    PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH
+  );
+
+  return `${invoiceToName || "Invoice"}_${invoiceNumber || "invoice"}.pdf`;
 };
 
 const replaceSavedInvoiceByKey = (
@@ -244,6 +289,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   // Variables
   const [invoicePdf, setInvoicePdf] = useState<Blob>(new Blob());
   const [invoicePdfLoading, setInvoicePdfLoading] = useState<boolean>(false);
+  const lastGeneratedPdfMetaRef = useRef<PdfFilenameMeta | null>(null);
 
   const [savedInvoices, setSavedInvoices] = useState<SavedInvoiceRecord[]>([]);
   const [customerTemplates, setCustomerTemplates] = useState<
@@ -956,6 +1002,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   const newInvoice = () => {
     reset(FORM_DEFAULT_VALUES);
     setInvoicePdf(new Blob());
+    lastGeneratedPdfMetaRef.current = null;
 
     if (typeof window !== "undefined") {
       try {
@@ -978,6 +1025,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       try {
         const result = await generatePdfBlob(data);
         setInvoicePdf(result);
+        lastGeneratedPdfMetaRef.current = toPdfFilenameMeta(data);
 
         if (result.size > 0) {
           pdfGenerationSuccess();
@@ -1015,6 +1063,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const removeFinalPdf = () => {
     setInvoicePdf(new Blob());
+    lastGeneratedPdfMetaRef.current = null;
   };
 
   /**
@@ -1031,17 +1080,9 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const downloadPdf = () => {
     if (invoicePdf instanceof Blob && invoicePdf.size > 0) {
-      const formValues = getValues();
-      const invoiceToName = toSafeFilenamePart(
-        formValues.receiver?.name ?? "",
-        true
-      );
-      const invoiceNumber = toSafeFilenamePart(
-        formValues.details?.invoiceNumber ?? ""
-      );
-      const fileName = `${invoiceToName || "Invoice"}_${
-        invoiceNumber || "invoice"
-      }.pdf`;
+      const filenameMeta =
+        lastGeneratedPdfMetaRef.current ?? toPdfFilenameMeta(getValues());
+      const fileName = toPdfFilename(filenameMeta);
 
       const url = window.URL.createObjectURL(invoicePdf);
       const a = document.createElement("a");
@@ -1201,6 +1242,11 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       if (!cached) return false;
 
       setInvoicePdf(cached.pdfBlob);
+      const cachedFilenameMeta = toPdfFilenameMeta(getValues());
+      lastGeneratedPdfMetaRef.current = {
+        ...cachedFilenameMeta,
+        invoiceNumber,
+      };
 
       try {
         await upsertCachedPdf(invoiceNumber, cached.pdfBlob);
