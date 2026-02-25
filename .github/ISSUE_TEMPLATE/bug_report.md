@@ -1,54 +1,51 @@
 ---
 name: Bug Report
-about: Create a bug report to help us improve
+about: Report a reproducible bug
 title: "[BUG] - "
+labels: ["bug"]
 ---
 
-#### Issue Summary
+## Summary
 
-[Concise description of the issue]
+Provide a concise description of the bug.
 
-#### Environment
+## Release And Environment
 
-- **Browser/Platform:** [Insert Browser/Platform Name and Version]
+- Release/tag tested:
+- Environment: local / beta / production
+- Browser + version:
+- OS:
 
-#### Steps to Reproduce
+## Steps To Reproduce
 
-1. [First step to reproduce the issue]
-2. [Second step to reproduce the issue]
-3. [And so on...]
+1. First step
+2. Second step
+3. Third step
 
-#### Expected Behavior
+## Expected Behavior
 
-[What you expected to happen]
+What did you expect to happen?
 
-#### Actual Behavior
+## Actual Behavior
 
-[What actually happened]
+What actually happened?
 
-#### Screenshots/Logs
+## Severity
 
-[If applicable, include relevant screenshots or error logs]
+- [ ] Blocker (cannot continue)
+- [ ] Major (core flow broken)
+- [ ] Minor (workaround exists)
 
-#### Additional Information
+## Logs, Screenshots, Or Video
 
-[Include any additional information that may help in diagnosing the issue]
+Paste any relevant logs and attach screenshots/video if available.
 
-#### Possible Solutions
+## Additional Context
 
-[If you have suggestions for how to fix the issue, provide them here]
+Anything else that helps us triage quickly.
 
----
+## Checklist
 
-#### Acceptance Criteria
-
-- [ ] The issue is confirmed and reproducible.
-- [ ] Relevant details about the environment are provided.
-- [ ] Steps to reproduce are clear and concise.
-- [ ] Expected and actual behavior are described.
-- [ ] Screenshots/logs (if applicable) are attached.
-- [ ] Any additional relevant information is included.
-
----
-
-[Note: Please replace the placeholders in square brackets with specific information related to your bug report.]
+- [ ] I searched existing issues first.
+- [ ] I included release/tag and environment details.
+- [ ] I included clear repro steps.
