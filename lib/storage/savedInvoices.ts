@@ -6,9 +6,20 @@ import {
   RecurringFrequency,
   SavedInvoiceRecord,
 } from "@/types";
+import { trackClientEvent } from "@/lib/telemetry/clientTelemetry";
+import { normalizeInvoiceDraft } from "@/lib/storage/normalizeInvoice";
+import {
+  backupCorruptedLocalStorage,
+  safeParseJson,
+  safeReadLocalStorage,
+  safeRemoveLocalStorage,
+  safeWriteLocalStorage,
+} from "@/lib/storage/localStorage";
+import { SavedInvoicesEnvelopeV3 } from "@/lib/storage/types";
 
 export const LEGACY_SAVED_INVOICES_KEY = "savedInvoices";
 export const SAVED_INVOICES_KEY_V2 = "invoify:savedInvoices:v2";
+export const SAVED_INVOICES_KEY_V3 = "invoify:savedInvoices:v3";
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -84,59 +95,56 @@ const appendTimelineEvent = (
   };
 };
 
-const isRecordArray = (value: unknown): value is SavedInvoiceRecord[] => {
-  if (!Array.isArray(value)) return false;
+type UnknownRecord = Record<string, unknown>;
 
-  return value.every((record) => {
-    return (
-      typeof record === "object" &&
-      record !== null &&
-      typeof (record as SavedInvoiceRecord).id === "string" &&
-      typeof (record as SavedInvoiceRecord).invoiceNumber === "string" &&
-      typeof (record as SavedInvoiceRecord).status === "string" &&
-      typeof (record as SavedInvoiceRecord).createdAt === "number" &&
-      typeof (record as SavedInvoiceRecord).updatedAt === "number" &&
-      typeof (record as SavedInvoiceRecord).data === "object"
-    );
-  });
+const isRecord = (value: unknown): value is UnknownRecord => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const isStatus = (value: unknown): value is InvoiceStatus => {
+  return value === "draft" || value === "sent" || value === "paid";
+};
+
+const toNumber = (value: unknown, fallback: number) => {
+  const parsed =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+      ? Number(value)
+      : fallback;
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const toNullableNumber = (value: unknown): number | null => {
+  if (value === null || typeof value === "undefined") return null;
+
+  const parsed =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+      ? Number(value)
+      : NaN;
+
+  return Number.isFinite(parsed) ? parsed : null;
 };
 
 const sortByUpdatedAt = (records: SavedInvoiceRecord[]) => {
   return [...records].sort((a, b) => b.updatedAt - a.updatedAt);
 };
 
-const safeRead = (key: string) => {
-  if (typeof window === "undefined") return null;
-
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
-
-const safeWrite = (key: string, value: string) => {
-  if (typeof window === "undefined") return false;
-
-  try {
-    window.localStorage.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 const readLegacyInvoices = (): InvoiceType[] => {
-  const raw = safeRead(LEGACY_SAVED_INVOICES_KEY);
+  const raw = safeReadLocalStorage(LEGACY_SAVED_INVOICES_KEY);
 
   if (!raw) return [];
 
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as InvoiceType[]) : [];
-  } catch {
+  const parsed = safeParseJson(raw);
+  if (!parsed.ok || !Array.isArray(parsed.data)) {
     return [];
   }
+
+  return parsed.data
+    .map((entry) => normalizeInvoiceDraft(entry))
+    .filter((entry): entry is InvoiceType => Boolean(entry));
 };
 
 const toDefaultRecurring = (invoiceNumber: string) => {
@@ -164,6 +172,106 @@ const toDefaultReminder = () => {
     sendCount: 0,
     nextReminderAt: null,
   };
+};
+
+const coerceTimeline = (value: unknown, createdAt: number): InvoiceTimelineEvent[] => {
+  if (!Array.isArray(value) || value.length === 0) {
+    return [createTimelineEvent("created", createdAt)];
+  }
+
+  const timeline: InvoiceTimelineEvent[] = value
+    .filter((entry) => isRecord(entry))
+    .map((entry) => {
+      const typeValue = entry.type;
+      const type: InvoiceTimelineEventType =
+        typeValue === "status_changed" ||
+        typeValue === "payment_recorded" ||
+        typeValue === "reminder_sent" ||
+        typeValue === "duplicated" ||
+        typeValue === "recurring_enabled" ||
+        typeValue === "recurring_disabled" ||
+        typeValue === "recurring_generated" ||
+        typeValue === "created"
+          ? typeValue
+          : "created";
+
+      return {
+        id:
+          typeof entry.id === "string" && entry.id.trim()
+            ? entry.id
+            : createId(),
+        type,
+        at: toNumber(entry.at, createdAt),
+        ...(typeof entry.note === "string" ? { note: entry.note } : {}),
+        ...(typeof entry.amount === "number" ? { amount: entry.amount } : {}),
+      };
+    })
+    .sort((a, b) => b.at - a.at)
+    .slice(0, 50);
+
+  return timeline.length > 0 ? timeline : [createTimelineEvent("created", createdAt)];
+};
+
+const coerceRecord = (value: unknown): SavedInvoiceRecord | null => {
+  if (!isRecord(value)) return null;
+
+  const now = Date.now();
+  const invoiceData = normalizeInvoiceDraft(value.data);
+  if (!invoiceData) return null;
+
+  const fallbackInvoiceNumber = invoiceData.details.invoiceNumber?.trim();
+  const invoiceNumber =
+    typeof value.invoiceNumber === "string" && value.invoiceNumber.trim()
+      ? value.invoiceNumber.trim()
+      : fallbackInvoiceNumber || `invoice-${now}`;
+
+  const createdAt = toNumber(value.createdAt, now);
+  const updatedAt = toNumber(value.updatedAt, createdAt);
+  const recurringSource = isRecord(value.recurring) ? value.recurring : {};
+  const paymentSource = isRecord(value.payment) ? value.payment : {};
+  const reminderSource = isRecord(value.reminder) ? value.reminder : {};
+  const recurringFrequency =
+    recurringSource.frequency === "weekly" || recurringSource.frequency === "monthly"
+      ? recurringSource.frequency
+      : null;
+
+  invoiceData.details.invoiceNumber = invoiceNumber;
+
+  return normalizeRecord({
+    id: typeof value.id === "string" && value.id.trim() ? value.id : createId(),
+    invoiceNumber,
+    status: isStatus(value.status) ? value.status : "draft",
+    createdAt,
+    updatedAt,
+    data: invoiceData,
+    recurring: {
+      ...toDefaultRecurring(invoiceNumber),
+      enabled: Boolean(recurringSource.enabled && recurringFrequency),
+      frequency: recurringFrequency,
+      baseInvoiceNumber:
+        typeof recurringSource.baseInvoiceNumber === "string" &&
+        recurringSource.baseInvoiceNumber.trim()
+          ? recurringSource.baseInvoiceNumber
+          : toBaseInvoiceNumber(invoiceNumber),
+      counter: Math.max(0, toNumber(recurringSource.counter, 0)),
+      lastIssuedAt: toNullableNumber(recurringSource.lastIssuedAt),
+      nextIssueAt: toNullableNumber(recurringSource.nextIssueAt),
+    },
+    payment: {
+      amountPaid: Math.max(0, toNumber(paymentSource.amountPaid, 0)),
+      lastPaymentAt: toNullableNumber(paymentSource.lastPaymentAt),
+    },
+    reminder: {
+      enabled:
+        typeof reminderSource.enabled === "boolean"
+          ? reminderSource.enabled
+          : true,
+      lastSentAt: toNullableNumber(reminderSource.lastSentAt),
+      sendCount: Math.max(0, toNumber(reminderSource.sendCount, 0)),
+      nextReminderAt: toNullableNumber(reminderSource.nextReminderAt),
+    },
+    timeline: coerceTimeline(value.timeline, createdAt),
+  });
 };
 
 const normalizeRecord = (record: SavedInvoiceRecord): SavedInvoiceRecord => {
@@ -259,21 +367,108 @@ const toRecord = (
   };
 };
 
-export const readSavedInvoices = (): SavedInvoiceRecord[] => {
-  const raw = safeRead(SAVED_INVOICES_KEY_V2);
+const toEnvelope = (records: SavedInvoiceRecord[]): SavedInvoicesEnvelopeV3 => {
+  return {
+    version: 3,
+    updatedAt: Date.now(),
+    records: sortByUpdatedAt(records.map(normalizeRecord)),
+  };
+};
 
-  if (raw) {
-    try {
-      const parsed = JSON.parse(raw);
-      if (isRecordArray(parsed)) {
-        const normalized = sortByUpdatedAt(parsed.map(normalizeRecord));
-        safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(normalized));
-        return normalized;
-      }
-    } catch {
-      // fallback to legacy migration
-    }
+const isSavedInvoicesEnvelopeV3 = (value: unknown): value is SavedInvoicesEnvelopeV3 => {
+  return (
+    isRecord(value) &&
+    value.version === 3 &&
+    typeof value.updatedAt === "number" &&
+    Array.isArray(value.records)
+  );
+};
+
+const persistEnvelope = (records: SavedInvoiceRecord[]) => {
+  return safeWriteLocalStorage(
+    SAVED_INVOICES_KEY_V3,
+    JSON.stringify(toEnvelope(records))
+  );
+};
+
+const recoverCorruptedStorage = (key: string, raw: string, reason: string) => {
+  const backupKey = backupCorruptedLocalStorage(key, "saved_invoices", raw);
+  trackClientEvent(
+    "storage_corruption_recovered",
+    {
+      storageArea: "saved_invoices",
+      storageKey: key,
+      backupKey,
+      reason,
+    },
+    "warn"
+  );
+};
+
+const readFromEnvelope = (): SavedInvoiceRecord[] | null => {
+  const raw = safeReadLocalStorage(SAVED_INVOICES_KEY_V3);
+  if (!raw) return null;
+
+  const parsed = safeParseJson(raw);
+  if (!parsed.ok) {
+    recoverCorruptedStorage(SAVED_INVOICES_KEY_V3, raw, "invalid_json");
+    return [];
   }
+
+  if (!isSavedInvoicesEnvelopeV3(parsed.data)) {
+    recoverCorruptedStorage(SAVED_INVOICES_KEY_V3, raw, "invalid_envelope_shape");
+    return [];
+  }
+
+  const normalized = parsed.data.records
+    .map(coerceRecord)
+    .filter((record): record is SavedInvoiceRecord => Boolean(record));
+
+  const sorted = sortByUpdatedAt(normalized);
+  persistEnvelope(sorted);
+  return sorted;
+};
+
+const migrateFromV2Array = (): SavedInvoiceRecord[] | null => {
+  const raw = safeReadLocalStorage(SAVED_INVOICES_KEY_V2);
+  if (!raw) return null;
+
+  const parsed = safeParseJson(raw);
+  if (!parsed.ok) {
+    recoverCorruptedStorage(SAVED_INVOICES_KEY_V2, raw, "invalid_json");
+    return [];
+  }
+
+  if (!Array.isArray(parsed.data)) {
+    recoverCorruptedStorage(SAVED_INVOICES_KEY_V2, raw, "invalid_v2_shape");
+    return [];
+  }
+
+  const migrated = parsed.data
+    .map(coerceRecord)
+    .filter((record): record is SavedInvoiceRecord => Boolean(record));
+  const sorted = sortByUpdatedAt(migrated);
+  persistEnvelope(sorted);
+  safeRemoveLocalStorage(SAVED_INVOICES_KEY_V2);
+
+  trackClientEvent("storage_migration_applied", {
+    storageArea: "saved_invoices",
+    fromKey: SAVED_INVOICES_KEY_V2,
+    fromVersion: 2,
+    toKey: SAVED_INVOICES_KEY_V3,
+    toVersion: 3,
+    records: sorted.length,
+  });
+
+  return sorted;
+};
+
+export const readSavedInvoices = (): SavedInvoiceRecord[] => {
+  const fromV3 = readFromEnvelope();
+  if (fromV3) return fromV3;
+
+  const fromV2 = migrateFromV2Array();
+  if (fromV2) return fromV2;
 
   const legacyInvoices = readLegacyInvoices();
   if (!legacyInvoices.length) return [];
@@ -282,15 +477,21 @@ export const readSavedInvoices = (): SavedInvoiceRecord[] => {
     legacyInvoices.map((invoice) => toRecord(invoice, "draft"))
   );
 
-  safeWrite(SAVED_INVOICES_KEY_V2, JSON.stringify(migrated));
+  persistEnvelope(migrated);
+  safeRemoveLocalStorage(LEGACY_SAVED_INVOICES_KEY);
+  trackClientEvent("storage_migration_applied", {
+    storageArea: "saved_invoices",
+    fromKey: LEGACY_SAVED_INVOICES_KEY,
+    fromVersion: 1,
+    toKey: SAVED_INVOICES_KEY_V3,
+    toVersion: 3,
+    records: migrated.length,
+  });
   return migrated;
 };
 
 export const writeSavedInvoices = (records: SavedInvoiceRecord[]) => {
-  return safeWrite(
-    SAVED_INVOICES_KEY_V2,
-    JSON.stringify(sortByUpdatedAt(records.map(normalizeRecord)))
-  );
+  return persistEnvelope(records);
 };
 
 export const upsertSavedInvoiceRecord = (

@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { useFormContext, useWatch } from "react-hook-form";
+
 // Components
 import {
     CurrencySelector,
@@ -12,9 +16,23 @@ import {
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import { updateUserPreferences } from "@/lib/storage/userPreferences";
+import { InvoiceType } from "@/types";
 
 const InvoiceDetails = () => {
     const { _t } = useTranslationContext();
+    const { control } = useFormContext<InvoiceType>();
+    const currency = useWatch({
+        control,
+        name: "details.currency",
+    });
+
+    useEffect(() => {
+        if (!currency) return;
+        updateUserPreferences({
+            defaultCurrency: currency,
+        });
+    }, [currency]);
 
     return (
         <section className="flex flex-col flex-wrap gap-5">

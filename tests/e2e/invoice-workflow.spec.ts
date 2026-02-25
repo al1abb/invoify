@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const DRAFT_KEY = "invoify:invoiceDraft";
-const PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH = 48;
+const DRAFT_KEY_V2 = "invoify:invoiceDraft:v2";
 const MOCK_PDF =
   "%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF";
 
@@ -265,7 +265,38 @@ test.describe("invoice workflow", () => {
     ).toBeFalsy();
   });
 
-  test("download filename is tied to generated PDF and truncates long parts", async ({
+  test("corrupted v2 draft payload is recovered without startup crash", async ({
+    page,
+  }) => {
+    await page.addInitScript((draftKeyV2: string) => {
+      window.localStorage.setItem(draftKeyV2, "{bad-json");
+    }, DRAFT_KEY_V2);
+
+    const pageErrors: string[] = [];
+    page.on("pageerror", (error) => {
+      pageErrors.push(error.message);
+    });
+
+    await page.goto("/en");
+    await expect(page.getByPlaceholder("Your name")).toBeVisible();
+    await page.waitForTimeout(1200);
+
+    expect(
+      pageErrors.some((message) =>
+        message.includes("Maximum update depth exceeded")
+      )
+    ).toBeFalsy();
+
+    const hasDraftBackup = await page.evaluate(() =>
+      Object.keys(window.localStorage).some((key) =>
+        key.startsWith("invoify:backup:invoice_draft:")
+      )
+    );
+
+    expect(hasDraftBackup).toBe(true);
+  });
+
+  test("download filename is tied to generated PDF and uses client_name_invoice format", async ({
     page,
   }) => {
     await installDraft("INV-FILENAME-1", page);
@@ -285,11 +316,8 @@ test.describe("invoice workflow", () => {
 
     const generatedRecipientName = "Acme Receiver";
     const generatedInvoiceNumber = `INV-${"9".repeat(70)}`;
-    const expectedRecipientName = "AcmeReceiver";
-    const expectedInvoiceNumber = generatedInvoiceNumber.slice(
-      0,
-      PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH
-    );
+    const expectedRecipientName = "Acme_Receiver";
+    const expectedInvoiceNumber = generatedInvoiceNumber.slice(0, 48);
 
     await page.getByRole("button", { name: /^1\./ }).click();
     await page.getByPlaceholder("Receiver name").fill(generatedRecipientName);
@@ -315,7 +343,7 @@ test.describe("invoice workflow", () => {
     ]);
 
     expect(download.suggestedFilename()).toBe(
-      `${expectedRecipientName}_${expectedInvoiceNumber}.pdf`
+      `${expectedRecipientName}_Invoice_${expectedInvoiceNumber}.pdf`
     );
   });
 

@@ -110,6 +110,11 @@
         "title": "Saved Invoices",
         "descriptionPrefix": "You have",
         "descriptionSuffix": "saved invoices",
+        "insights": {
+            "totalOutstanding": "Total Outstanding",
+            "overdueCount": "Overdue Invoices",
+            "sentUnpaidCount": "Sent but Unpaid"
+        },
         "status": {
             "draft": "Draft",
             "sent": "Sent",

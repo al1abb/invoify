@@ -24,6 +24,20 @@ const toErrorMessage = (error: unknown) => {
   return String(error);
 };
 
+const toApiErrorMessage = (payload: unknown, fallback: string) => {
+  if (
+    payload &&
+    typeof payload === "object" &&
+    "error" in payload &&
+    typeof (payload as { error?: { message?: unknown } }).error?.message ===
+      "string"
+  ) {
+    return (payload as { error: { message: string } }).error.message;
+  }
+
+  return fallback;
+};
+
 self.onmessage = async (event: MessageEvent<GeneratePdfRequest>) => {
   const message = event.data;
   if (!message || message.type !== "generate-pdf") return;
@@ -38,7 +52,15 @@ self.onmessage = async (event: MessageEvent<GeneratePdfRequest>) => {
     });
 
     if (!response.ok) {
-      throw new Error(`PDF generation failed (${response.status})`);
+      let errorPayload: unknown = null;
+      try {
+        errorPayload = await response.json();
+      } catch {
+        // no-op
+      }
+      throw new Error(
+        toApiErrorMessage(errorPayload, `PDF generation failed (${response.status})`)
+      );
     }
 
     const arrayBuffer = await response.arrayBuffer();

@@ -1,6 +1,23 @@
+import { trackClientEvent } from "@/lib/telemetry/clientTelemetry";
+import { normalizeInvoiceParty } from "@/lib/storage/normalizeInvoice";
+import {
+  backupCorruptedLocalStorage,
+  safeParseJson,
+  safeReadLocalStorage,
+  safeRemoveLocalStorage,
+  safeWriteLocalStorage,
+} from "@/lib/storage/localStorage";
+import { TemplatesEnvelopeV2 } from "@/lib/storage/types";
 import { CustomerTemplateRecord, InvoiceType } from "@/types";
 
 export const CUSTOMER_TEMPLATES_KEY_V1 = "invoify:customerTemplates:v1";
+export const CUSTOMER_TEMPLATES_KEY_V2 = "invoify:customerTemplates:v2";
+
+type UnknownRecord = Record<string, unknown>;
+
+const isRecord = (value: unknown): value is UnknownRecord => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
 
 const createId = () => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -10,65 +27,151 @@ const createId = () => {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
-const safeRead = (key: string) => {
-  if (typeof window === "undefined") return null;
-
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
+const toNumber = (value: unknown, fallback: number) => {
+  const parsed =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+      ? Number(value)
+      : fallback;
+  return Number.isFinite(parsed) ? parsed : fallback;
 };
 
-const safeWrite = (key: string, value: string) => {
-  if (typeof window === "undefined") return false;
-
-  try {
-    window.localStorage.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const isTemplateArray = (value: unknown): value is CustomerTemplateRecord[] => {
-  if (!Array.isArray(value)) return false;
-
-  return value.every((record) => {
-    return (
-      typeof record === "object" &&
-      record !== null &&
-      typeof (record as CustomerTemplateRecord).id === "string" &&
-      typeof (record as CustomerTemplateRecord).name === "string" &&
-      typeof (record as CustomerTemplateRecord).createdAt === "number" &&
-      typeof (record as CustomerTemplateRecord).updatedAt === "number" &&
-      typeof (record as CustomerTemplateRecord).sender === "object" &&
-      typeof (record as CustomerTemplateRecord).receiver === "object"
-    );
-  });
+const sortByUpdatedAt = (records: CustomerTemplateRecord[]) => {
+  return [...records].sort((a, b) => b.updatedAt - a.updatedAt);
 };
 
 const cloneParty = <T>(value: T): T => {
   return JSON.parse(JSON.stringify(value)) as T;
 };
 
-export const readCustomerTemplates = (): CustomerTemplateRecord[] => {
-  const raw = safeRead(CUSTOMER_TEMPLATES_KEY_V1);
-  if (!raw) return [];
+const coerceTemplate = (value: unknown): CustomerTemplateRecord | null => {
+  if (!isRecord(value)) return null;
 
-  try {
-    const parsed = JSON.parse(raw);
-    if (!isTemplateArray(parsed)) return [];
+  const now = Date.now();
+  const name =
+    typeof value.name === "string" && value.name.trim()
+      ? value.name.trim()
+      : "Saved Template";
 
-    return [...parsed].sort((a, b) => b.updatedAt - a.updatedAt);
-  } catch {
+  return {
+    id: typeof value.id === "string" && value.id.trim() ? value.id : createId(),
+    name,
+    sender: normalizeInvoiceParty(value.sender),
+    receiver: normalizeInvoiceParty(value.receiver),
+    createdAt: toNumber(value.createdAt, now),
+    updatedAt: toNumber(value.updatedAt, now),
+  };
+};
+
+const toEnvelope = (records: CustomerTemplateRecord[]): TemplatesEnvelopeV2 => {
+  return {
+    version: 2,
+    updatedAt: Date.now(),
+    records: sortByUpdatedAt(records),
+  };
+};
+
+const isEnvelopeV2 = (value: unknown): value is TemplatesEnvelopeV2 => {
+  return (
+    isRecord(value) &&
+    value.version === 2 &&
+    typeof value.updatedAt === "number" &&
+    Array.isArray(value.records)
+  );
+};
+
+const persistEnvelope = (records: CustomerTemplateRecord[]) => {
+  return safeWriteLocalStorage(
+    CUSTOMER_TEMPLATES_KEY_V2,
+    JSON.stringify(toEnvelope(records))
+  );
+};
+
+const recoverCorrupted = (key: string, raw: string, reason: string) => {
+  const backupKey = backupCorruptedLocalStorage(key, "customer_templates", raw);
+  trackClientEvent(
+    "storage_corruption_recovered",
+    {
+      storageArea: "customer_templates",
+      storageKey: key,
+      backupKey,
+      reason,
+    },
+    "warn"
+  );
+};
+
+const readFromV2Envelope = (): CustomerTemplateRecord[] | null => {
+  const raw = safeReadLocalStorage(CUSTOMER_TEMPLATES_KEY_V2);
+  if (!raw) return null;
+
+  const parsed = safeParseJson(raw);
+  if (!parsed.ok) {
+    recoverCorrupted(CUSTOMER_TEMPLATES_KEY_V2, raw, "invalid_json");
     return [];
   }
+
+  if (!isEnvelopeV2(parsed.data)) {
+    recoverCorrupted(CUSTOMER_TEMPLATES_KEY_V2, raw, "invalid_envelope_shape");
+    return [];
+  }
+
+  const normalized = parsed.data.records
+    .map(coerceTemplate)
+    .filter((record): record is CustomerTemplateRecord => Boolean(record));
+
+  const sorted = sortByUpdatedAt(normalized);
+  persistEnvelope(sorted);
+  return sorted;
+};
+
+const migrateFromV1Array = (): CustomerTemplateRecord[] | null => {
+  const raw = safeReadLocalStorage(CUSTOMER_TEMPLATES_KEY_V1);
+  if (!raw) return null;
+
+  const parsed = safeParseJson(raw);
+  if (!parsed.ok) {
+    recoverCorrupted(CUSTOMER_TEMPLATES_KEY_V1, raw, "invalid_json");
+    return [];
+  }
+
+  if (!Array.isArray(parsed.data)) {
+    recoverCorrupted(CUSTOMER_TEMPLATES_KEY_V1, raw, "invalid_v1_shape");
+    return [];
+  }
+
+  const migrated = parsed.data
+    .map(coerceTemplate)
+    .filter((record): record is CustomerTemplateRecord => Boolean(record));
+  const sorted = sortByUpdatedAt(migrated);
+  persistEnvelope(sorted);
+  safeRemoveLocalStorage(CUSTOMER_TEMPLATES_KEY_V1);
+
+  trackClientEvent("storage_migration_applied", {
+    storageArea: "customer_templates",
+    fromKey: CUSTOMER_TEMPLATES_KEY_V1,
+    fromVersion: 1,
+    toKey: CUSTOMER_TEMPLATES_KEY_V2,
+    toVersion: 2,
+    records: sorted.length,
+  });
+
+  return sorted;
+};
+
+export const readCustomerTemplates = (): CustomerTemplateRecord[] => {
+  const fromV2 = readFromV2Envelope();
+  if (fromV2) return fromV2;
+
+  const fromV1 = migrateFromV1Array();
+  if (fromV1) return fromV1;
+
+  return [];
 };
 
 export const writeCustomerTemplates = (records: CustomerTemplateRecord[]) => {
-  const sorted = [...records].sort((a, b) => b.updatedAt - a.updatedAt);
-  return safeWrite(CUSTOMER_TEMPLATES_KEY_V1, JSON.stringify(sorted));
+  return persistEnvelope(sortByUpdatedAt(records));
 };
 
 export const createCustomerTemplate = (

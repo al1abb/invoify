@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { useParams } from "next/navigation";
 
 // Next Intl
@@ -19,17 +21,45 @@ import { Badge } from "@/components/ui/badge";
 
 // Variables
 import { LOCALES } from "@/lib/variables";
+import {
+    readUserPreferences,
+    updateUserPreferences,
+    USER_PREFERENCES_KEY_V1,
+} from "@/lib/storage/userPreferences";
 
 const LanguageSelector = () => {
     const router = useRouter();
     const params = useParams();
+    const hasAppliedPreferredLocaleRef = useRef(false);
+    const localeParam = params.locale;
+    const currentLocale = Array.isArray(localeParam)
+        ? localeParam[0]
+        : localeParam?.toString() || LOCALES[0].code;
+
+    useEffect(() => {
+        if (hasAppliedPreferredLocaleRef.current) return;
+        hasAppliedPreferredLocaleRef.current = true;
+        if (!window.localStorage.getItem(USER_PREFERENCES_KEY_V1)) return;
+
+        const preferredLocale = readUserPreferences().defaultLocale;
+        const isSupported = LOCALES.some(
+            (locale) => locale.code === preferredLocale
+        );
+        if (!isSupported) return;
+        if (preferredLocale === currentLocale) return;
+
+        router.push("/", { locale: preferredLocale });
+    }, [currentLocale, router]);
 
     const handleLanguageChange = (lang: string) => {
+        updateUserPreferences({
+            defaultLocale: lang,
+        });
         router.push("/", { locale: lang });
     };
     return (
         <Select
-            value={params.locale!.toLocaleString()}
+            value={currentLocale}
             onValueChange={(lang) => handleLanguageChange(lang)}
         >
             <SelectTrigger

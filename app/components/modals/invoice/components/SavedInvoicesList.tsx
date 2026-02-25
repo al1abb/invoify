@@ -182,6 +182,37 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
   );
 
   const query = searchQuery.trim().toLowerCase();
+  const insights = useMemo(() => {
+    const now = Date.now();
+
+    return savedInvoices.reduce(
+      (acc, record) => {
+        const total = toAmountNumber(record.data.details.totalAmount);
+        const paid = toAmountNumber(record.payment.amountPaid);
+        const balance = Math.max(0, total - paid);
+
+        if (balance > 0) {
+          acc.totalOutstanding += balance;
+        }
+
+        const dueAt = toTimestamp(record.data.details.dueDate);
+        if (record.status !== "paid" && balance > 0 && dueAt && dueAt < now) {
+          acc.overdueCount += 1;
+        }
+
+        if (record.status === "sent" && balance > 0) {
+          acc.sentButUnpaidCount += 1;
+        }
+
+        return acc;
+      },
+      {
+        totalOutstanding: 0,
+        overdueCount: 0,
+        sentButUnpaidCount: 0,
+      }
+    );
+  }, [savedInvoices]);
 
   const filteredAndSortedInvoices = useMemo(() => {
     const filtered = savedInvoices.filter((record) => {
@@ -294,6 +325,41 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
   return (
     <div className="flex flex-col gap-5 overflow-y-auto max-h-72">
       <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <Card>
+            <CardContent className="py-3">
+              <p className="text-xs text-muted-foreground">
+                {_t("savedInvoices.insights.totalOutstanding")}
+              </p>
+              <p className="text-base font-semibold">
+                {formatNumberWithCommas(
+                  Number(insights.totalOutstanding.toFixed(2))
+                )}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="py-3">
+              <p className="text-xs text-muted-foreground">
+                {_t("savedInvoices.insights.overdueCount")}
+              </p>
+              <p className="text-base font-semibold">{insights.overdueCount}</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="py-3">
+              <p className="text-xs text-muted-foreground">
+                {_t("savedInvoices.insights.sentUnpaidCount")}
+              </p>
+              <p className="text-base font-semibold">
+                {insights.sentButUnpaidCount}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         <Input
           placeholder={_t("savedInvoices.searchPlaceholder")}
           value={searchQuery}

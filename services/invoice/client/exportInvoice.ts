@@ -1,5 +1,6 @@
 // Variables
 import { EXPORT_INVOICE_API } from "@/lib/variables";
+import { toApiErrorMessage } from "@/lib/contracts/invoiceApi";
 
 // Types
 import { ExportTypes, InvoiceType } from "@/types";
@@ -13,26 +14,35 @@ import { ExportTypes, InvoiceType } from "@/types";
  * @returns {Promise<void>} A promise that resolves when the export is completed.
  */
 export const exportInvoice = async (
-    exportAs: ExportTypes,
-    formValues: InvoiceType
+  exportAs: ExportTypes,
+  formValues: InvoiceType
 ) => {
-    return fetch(`${EXPORT_INVOICE_API}?format=${exportAs}`, {
-        method: "POST",
-        body: JSON.stringify(formValues),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-        .then((res) => res.blob())
-        .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `invoice.${exportAs.toLowerCase()}`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch((error) => {
-            console.error("Error downloading:", error);
-        });
+  const response = await fetch(`${EXPORT_INVOICE_API}?format=${exportAs}`, {
+    method: "POST",
+    body: JSON.stringify(formValues),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    let errorPayload: unknown = null;
+    try {
+      errorPayload = await response.json();
+    } catch {
+      // no-op
+    }
+
+    throw new Error(
+      toApiErrorMessage(errorPayload, `Failed to export invoice (${response.status})`)
+    );
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `invoice.${exportAs.toLowerCase()}`;
+  a.click();
+  window.URL.revokeObjectURL(url);
 };

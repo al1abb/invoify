@@ -1,4 +1,5 @@
 import { GENERATE_PDF_API } from "@/lib/variables";
+import { toApiErrorMessage } from "@/lib/contracts/invoiceApi";
 import { InvoiceType } from "@/types";
 
 type GeneratePdfRequestMessage = {
@@ -45,10 +46,21 @@ const directGeneratePdf = async (
   const response = await fetch(endpoint, {
     method: "POST",
     body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {
-    throw new Error(`PDF generation failed (${response.status})`);
+    let errorPayload: unknown = null;
+    try {
+      errorPayload = await response.json();
+    } catch {
+      // no-op
+    }
+    throw new Error(
+      toApiErrorMessage(errorPayload, `PDF generation failed (${response.status})`)
+    );
   }
 
   return response.blob();

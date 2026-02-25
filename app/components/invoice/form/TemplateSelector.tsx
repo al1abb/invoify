@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Image from "next/image";
 
 // RHF
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // ShadCn
 import {
@@ -15,11 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 
 // Components
-import {
-    BaseButton,
-    InvoiceTemplate1,
-    InvoiceTemplate2,
-} from "@/app/components";
+import { BaseButton } from "@/app/components";
 
 // Template images
 import template1 from "@/public/assets/img/invoice-1-example.png";
@@ -30,24 +28,34 @@ import { Check } from "lucide-react";
 
 // Types
 import { InvoiceType } from "@/types";
+import { updateUserPreferences } from "@/lib/storage/userPreferences";
 
 const TemplateSelector = () => {
-    const { watch, setValue } = useFormContext<InvoiceType>();
-    const formValues = watch();
+    const { control, setValue } = useFormContext<InvoiceType>();
+    const selectedTemplateId = useWatch({
+        control,
+        name: "details.pdfTemplate",
+    });
+
+    useEffect(() => {
+        if (!selectedTemplateId) return;
+        updateUserPreferences({
+            defaultTemplateId: selectedTemplateId,
+        });
+    }, [selectedTemplateId]);
+
     const templates = [
         {
             id: 1,
             name: "Template 1",
             description: "Template 1 description",
             img: template1,
-            component: <InvoiceTemplate1 {...formValues} />,
         },
         {
             id: 2,
             name: "Template 2",
             description: "Second template",
             img: template2,
-            component: <InvoiceTemplate2 {...formValues} />,
         },
     ];
     return (
@@ -73,8 +81,7 @@ const TemplateSelector = () => {
                                         <p>{template.name}</p>
 
                                         <div className="relative">
-                                            {formValues.details.pdfTemplate ===
-                                                template.id && (
+                                            {selectedTemplateId === template.id && (
                                                 <div className="shadow-lg absolute right-2 top-2 rounded-full bg-blue-300 dark:bg-blue-600">
                                                     <Check />
                                                 </div>

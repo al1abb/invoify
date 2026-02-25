@@ -22,36 +22,30 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { InvoiceType } from "@/types";
 
 // Variables
-import {
-  FORM_DEFAULT_VALUES,
-  LOCAL_STORAGE_INVOICE_DRAFT_KEY,
-} from "@/lib/variables";
+import { FORM_DEFAULT_VALUES } from "@/lib/variables";
 
 // Telemetry
 import { captureClientError } from "@/lib/telemetry/clientTelemetry";
-
-// Helpers
-const readDraftFromLocalStorage = (): InvoiceType | null => {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(LOCAL_STORAGE_INVOICE_DRAFT_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    // revive dates
-    if (parsed?.details) {
-      if (parsed.details.invoiceDate)
-        parsed.details.invoiceDate = new Date(parsed.details.invoiceDate);
-      if (parsed.details.dueDate)
-        parsed.details.dueDate = new Date(parsed.details.dueDate);
-    }
-    return parsed;
-  } catch {
-    return null;
-  }
-};
+import { readInvoiceDraft } from "@/lib/storage/invoiceDraft";
+import {
+  applyUserPreferencesToInvoice,
+  readUserPreferences,
+} from "@/lib/storage/userPreferences";
 
 type ProvidersProps = {
   children: React.ReactNode;
+};
+
+const toDateIfValid = (value: unknown) => {
+  const parsed = Date.parse(String(value ?? ""));
+  return Number.isFinite(parsed) ? new Date(parsed) : value;
+};
+
+const toHydratedDraftForForm = (draft: InvoiceType): InvoiceType => {
+  const next = JSON.parse(JSON.stringify(draft)) as InvoiceType;
+  next.details.invoiceDate = toDateIfValid(next.details.invoiceDate) as never;
+  next.details.dueDate = toDateIfValid(next.details.dueDate) as never;
+  return next;
 };
 
 const Providers = ({ children }: ProvidersProps) => {
@@ -62,9 +56,20 @@ const Providers = ({ children }: ProvidersProps) => {
 
   // Hydrate once on mount
   useEffect(() => {
-    const draft = readDraftFromLocalStorage();
-    if (draft) {
-      form.reset(draft, { keepDefaultValues: false });
+    const preferences = readUserPreferences();
+    const draftRead = readInvoiceDraft();
+    if (draftRead.draft) {
+      form.reset(toHydratedDraftForForm(draftRead.draft), {
+        keepDefaultValues: false,
+      });
+    } else {
+      form.reset(
+        applyUserPreferencesToInvoice(
+          FORM_DEFAULT_VALUES as unknown as InvoiceType,
+          preferences
+        ),
+        { keepDefaultValues: false }
+      );
     }
 
     const handleWindowError = (event: ErrorEvent) => {

@@ -116,6 +116,18 @@ export type CachedPdfRecord = {
 
 export type CachedPdfMeta = Omit<CachedPdfRecord, "pdfBlob" | "mimeType">;
 
+export type UserPreferences = {
+    defaultCurrency: string;
+    defaultTemplateId: number;
+    defaultLocale: string;
+};
+
+export type EmailMessageOptions = {
+    subject?: string;
+    body?: string;
+    footer?: string;
+};
+
 export type CurrencyType = {
     [currencyCode: string]: string;
 };

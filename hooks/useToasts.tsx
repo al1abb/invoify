@@ -1,11 +1,16 @@
 // ShadCn
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
+import { EmailMessageOptions } from "@/types";
 
 const useToasts = () => {
     type SendErrorType = {
         email: string;
-        sendPdfToMail: (email: string) => Promise<void>;
+        sendPdfToMail: (
+            email: string,
+            messageOptions?: EmailMessageOptions
+        ) => Promise<void>;
+        messageOptions?: EmailMessageOptions;
         reason?: string;
     };
 
@@ -50,7 +55,12 @@ const useToasts = () => {
         });
     };
 
-    const sendPdfError = ({ email, sendPdfToMail, reason }: SendErrorType) => {
+    const sendPdfError = ({
+        email,
+        sendPdfToMail,
+        messageOptions,
+        reason,
+    }: SendErrorType) => {
         const isEmailConfigError =
             reason?.toLowerCase().includes("email service not configured") ??
             false;
@@ -59,11 +69,11 @@ const useToasts = () => {
             variant: "destructive",
             title: isEmailConfigError ? "Email is not configured" : "Error",
             description: isEmailConfigError
-                ? "Set NODEMAILER_EMAIL and NODEMAILER_PW in .env.local, then restart the dev server."
+                ? "Set SMTP_URL or SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS in .env.local, then restart the dev server."
                 : reason || "Something went wrong. Try again in a moment",
             action: isEmailConfigError ? undefined : (
                 <ToastAction
-                    onClick={() => sendPdfToMail(email)}
+                    onClick={() => sendPdfToMail(email, messageOptions)}
                     altText="Try again"
                 >
                     Try again

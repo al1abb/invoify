@@ -3,6 +3,7 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    allowedDevOrigins: ["localhost", "127.0.0.1", "::1"],
     serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
     experimental: {
         clientTraceMetadata: ["sentry-trace", "baggage"],

@@ -23,7 +23,6 @@ import { exportInvoice } from "@/services/invoice/client/exportInvoice";
 // Variables
 import {
   FORM_DEFAULT_VALUES,
-  LOCAL_STORAGE_INVOICE_DRAFT_KEY,
   SEND_PDF_API,
   SHORT_DATE_OPTIONS,
 } from "@/lib/variables";
@@ -37,6 +36,11 @@ import {
   removeCustomerTemplate,
   writeCustomerTemplates,
 } from "@/lib/storage/customerTemplates";
+import { clearInvoiceDraft, writeInvoiceDraft } from "@/lib/storage/invoiceDraft";
+import {
+  applyUserPreferencesToInvoice,
+  readUserPreferences,
+} from "@/lib/storage/userPreferences";
 import {
   cleanupPdfCache,
   getCachedPdf,
@@ -80,9 +84,16 @@ import {
   captureClientError,
   trackClientEvent,
 } from "@/lib/telemetry/clientTelemetry";
+import { toApiErrorMessage } from "@/lib/contracts/invoiceApi";
+import {
+  PdfFilenameMeta,
+  toPdfFilename,
+  toPdfFilenameMeta,
+} from "@/lib/invoice/pdfFilename";
 
 // Types
 import {
+  EmailMessageOptions,
   CachedPdfMeta,
   CustomerTemplateRecord,
   ExportTypes,
@@ -126,7 +137,10 @@ const defaultInvoiceContext = {
   setInvoiceRecurring: (_id: string, _frequency: RecurringFrequency | null) =>
     false,
   generateRecurringInvoice: (_id: string) => false,
-  sendPdfToMail: (_email: string): Promise<void> => Promise.resolve(),
+  sendPdfToMail: (
+    _email: string,
+    _messageOptions?: EmailMessageOptions
+  ): Promise<void> => Promise.resolve(),
   exportInvoiceAs: (_exportAs: ExportTypes) => {},
   importInvoice: (_file: File) => {},
   restorePdfFromCache: async (_invoiceNumber: string) => false,
@@ -166,66 +180,6 @@ const toSavedInvoiceKey = (record: SavedInvoiceRecord) => {
   if (invoiceNumber) return invoiceNumber;
 
   return record.id;
-};
-
-const PDF_FILENAME_RECIPIENT_MAX_LENGTH = 64;
-const PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH = 48;
-
-type PdfFilenameMeta = {
-  recipientName: string;
-  invoiceNumber: string;
-};
-
-type PdfFilenameSource = {
-  receiver?: {
-    name?: string | null;
-  } | null;
-  details?: {
-    invoiceNumber?: string | null;
-  } | null;
-};
-
-const toSafeFilenamePart = (
-  value: string,
-  removeSpaces = false,
-  maxLength = 80
-) => {
-  const normalized = value
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-
-  const withSpacesHandled = removeSpaces
-    ? normalized.replace(/\s+/g, "")
-    : normalized.replace(/\s+/g, "_");
-
-  const safePart = withSpacesHandled
-    .replace(/[^a-zA-Z0-9_-]/g, "")
-    .replace(/^[-_]+|[-_]+$/g, "");
-
-  return safePart.slice(0, maxLength).replace(/^[-_]+|[-_]+$/g, "");
-};
-
-const toPdfFilenameMeta = (source: PdfFilenameSource): PdfFilenameMeta => {
-  return {
-    recipientName: source.receiver?.name ?? "",
-    invoiceNumber: source.details?.invoiceNumber ?? "",
-  };
-};
-
-const toPdfFilename = (meta: PdfFilenameMeta) => {
-  const invoiceToName = toSafeFilenamePart(
-    meta.recipientName,
-    true,
-    PDF_FILENAME_RECIPIENT_MAX_LENGTH
-  );
-  const invoiceNumber = toSafeFilenamePart(
-    meta.invoiceNumber,
-    false,
-    PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH
-  );
-
-  return `${invoiceToName || "Invoice"}_${invoiceNumber || "invoice"}.pdf`;
 };
 
 const replaceSavedInvoiceByKey = (
@@ -312,6 +266,24 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   const [syncConflicts, setSyncConflicts] = useState<SyncConflictSummary[]>([]);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(() =>
     createInitialSyncStatus(syncProvider.name)
+  );
+
+  const resolvePdfFilenameMeta = useCallback(
+    (source?: InvoiceType): PdfFilenameMeta => {
+      const currentMeta = toPdfFilenameMeta(source ?? getValues());
+      const snapshotMeta = lastGeneratedPdfMetaRef.current;
+
+      if (!snapshotMeta) return currentMeta;
+
+      const snapshotRecipientName = snapshotMeta.recipientName?.trim();
+      const snapshotInvoiceNumber = snapshotMeta.invoiceNumber?.trim();
+
+      return {
+        recipientName: snapshotRecipientName || currentMeta.recipientName,
+        invoiceNumber: snapshotInvoiceNumber || currentMeta.invoiceNumber,
+      };
+    },
+    [getValues]
   );
 
   const refreshCachedPdfMetadata = useCallback(async () => {
@@ -509,14 +481,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
       }
 
       draftPersistTimeoutRef.current = window.setTimeout(() => {
-        try {
-          window.localStorage.setItem(
-            LOCAL_STORAGE_INVOICE_DRAFT_KEY,
-            JSON.stringify(value)
-          );
-        } catch {
-          // no-op: local storage may be unavailable
-        }
+        writeInvoiceDraft(value);
       }, 300);
     });
 
@@ -1000,17 +965,16 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    * Generate a clean invoice and clear draft/pdf state.
    */
   const newInvoice = () => {
-    reset(FORM_DEFAULT_VALUES);
+    const preferences = readUserPreferences();
+    reset(
+      applyUserPreferencesToInvoice(
+        FORM_DEFAULT_VALUES as unknown as InvoiceType,
+        preferences
+      )
+    );
     setInvoicePdf(new Blob());
     lastGeneratedPdfMetaRef.current = null;
-
-    if (typeof window !== "undefined") {
-      try {
-        window.localStorage.removeItem(LOCAL_STORAGE_INVOICE_DRAFT_KEY);
-      } catch {
-        // no-op
-      }
-    }
+    clearInvoiceDraft();
 
     newInvoiceSuccess();
   };
@@ -1080,8 +1044,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const downloadPdf = () => {
     if (invoicePdf instanceof Blob && invoicePdf.size > 0) {
-      const filenameMeta =
-        lastGeneratedPdfMetaRef.current ?? toPdfFilenameMeta(getValues());
+      const filenameMeta = resolvePdfFilenameMeta();
       const fileName = toPdfFilename(filenameMeta);
 
       const url = window.URL.createObjectURL(invoicePdf);
@@ -1278,13 +1241,28 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
   /**
    * Send generated PDF to recipient email.
    */
-  const sendPdfToMail = (email: string) => {
-    const invoiceNumber = getValues().details.invoiceNumber;
+  const sendPdfToMail = (
+    email: string,
+    messageOptions?: EmailMessageOptions
+  ) => {
+    const currentFormValues = getValues();
+    const invoiceNumber = currentFormValues.details.invoiceNumber;
+    const filenameMeta = resolvePdfFilenameMeta(currentFormValues);
+    const attachmentFilename = toPdfFilename(filenameMeta);
 
     const fd = new FormData();
     fd.append("email", email);
-    fd.append("invoicePdf", invoicePdf, "invoice.pdf");
+    fd.append("invoicePdf", invoicePdf, attachmentFilename);
     fd.append("invoiceNumber", invoiceNumber);
+    if (messageOptions?.subject?.trim()) {
+      fd.append("subject", messageOptions.subject.trim());
+    }
+    if (messageOptions?.body?.trim()) {
+      fd.append("body", messageOptions.body.trim());
+    }
+    if (messageOptions?.footer?.trim()) {
+      fd.append("footer", messageOptions.footer.trim());
+    }
 
     return fetch(SEND_PDF_API, {
       method: "POST",
@@ -1309,7 +1287,16 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
             });
           }
         } else {
-          const errorMessage = (await res.text()).trim();
+          let errorPayload: unknown = null;
+          try {
+            errorPayload = await res.json();
+          } catch {
+            // no-op
+          }
+          const errorMessage = toApiErrorMessage(
+            errorPayload,
+            `Failed to send email (${res.status})`
+          );
           captureClientError(
             "email_send_failure",
             new Error(errorMessage || "Failed to send email"),
@@ -1323,6 +1310,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
           sendPdfError({
             email,
             sendPdfToMail,
+            messageOptions,
             reason: errorMessage || "Failed to send email",
           });
         }
@@ -1337,6 +1325,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
         sendPdfError({
           email,
           sendPdfToMail,
+          messageOptions,
           reason: error instanceof Error ? error.message : "Failed to send email",
         });
       });
@@ -1347,7 +1336,12 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
    */
   const exportInvoiceAs = (exportAs: ExportTypes) => {
     const formValues = getValues();
-    exportInvoice(exportAs, formValues);
+    exportInvoice(exportAs, formValues).catch((error) => {
+      captureClientError("app_error", error, {
+        area: "invoice_export",
+        exportAs,
+      });
+    });
   };
 
   /**

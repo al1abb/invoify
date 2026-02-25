@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 
 // Nodemailer
@@ -14,78 +13,139 @@ import SendPdfEmail from "@/app/components/templates/email/SendPdfEmail";
 import { fileToBuffer } from "@/lib/helpers/server";
 
 // Variables
-import { NODEMAILER_EMAIL, NODEMAILER_PW } from "@/lib/variables";
+import {
+  SMTP_FROM,
+  SMTP_FROM_EMAIL,
+  SMTP_FROM_NAME,
+  SMTP_HOST,
+  SMTP_PASS,
+  SMTP_PORT,
+  SMTP_SECURE,
+  SMTP_URL,
+  SMTP_USER,
+} from "@/lib/variables";
+import { HttpError } from "@/lib/server/httpError";
 
-// Nodemailer transporter
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: NODEMAILER_EMAIL,
-        pass: NODEMAILER_PW,
-    },
-});
+const toBoolean = (value: string | undefined) => {
+  if (!value) return false;
+  const normalized = value.trim().toLowerCase();
+  return normalized === "1" || normalized === "true" || normalized === "yes";
+};
 
-// Check if email credentials are configured
+const getSmtpPort = () => {
+  const parsed = Number(SMTP_PORT);
+  if (Number.isInteger(parsed) && parsed > 0) return parsed;
+  return null;
+};
+
+const getTransporter = () => {
+  if (SMTP_URL) {
+    return nodemailer.createTransport(SMTP_URL);
+  }
+
+  const smtpPort = getSmtpPort();
+  if (SMTP_HOST && smtpPort && SMTP_USER && SMTP_PASS) {
+    return nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: smtpPort,
+      secure: toBoolean(SMTP_SECURE),
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASS,
+      },
+    });
+  }
+
+  return null;
+};
+
+const resolveFromAddress = () => {
+  if (SMTP_FROM) return SMTP_FROM;
+  if (SMTP_FROM_NAME && SMTP_FROM_EMAIL) {
+    return `${SMTP_FROM_NAME} <${SMTP_FROM_EMAIL}>`;
+  }
+  if (SMTP_FROM_EMAIL) return SMTP_FROM_EMAIL;
+  return SMTP_USER || "Invoify";
+};
+
+const transporter = getTransporter();
+
 const isEmailConfigured = () => {
-    return !!(NODEMAILER_EMAIL && NODEMAILER_PW);
+  return Boolean(transporter);
+};
+
+const EMAIL_CONFIGURATION_ERROR_MESSAGE =
+  "Email service not configured. Provide SMTP_URL, or SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS.";
+
+type SendPdfToEmailArgs = {
+  email: string;
+  invoicePdf: File;
+  invoiceNumber: string;
+  subject?: string;
+  body?: string;
+  footer?: string;
 };
 
 /**
  * Send a PDF as an email attachment.
- *
- * @param {NextRequest} req - The Next.js request object.
- * @returns {Promise<boolean>} A Promise that resolves to a boolean, indicating whether the email was sent successfully.
- * @throws {Error} Throws an error if there is an issue with sending the email.
  */
-export async function sendPdfToEmailService(
-    req: NextRequest
-): Promise<boolean> {
-    // Check if email service is configured
-    if (!isEmailConfigured()) {
-        console.error(
-            "Email service not configured. Please set NODEMAILER_EMAIL and NODEMAILER_PW environment variables."
-        );
-        throw new Error(
-            "Email service not configured. Please contact the administrator."
-        );
-    }
+export async function sendPdfToEmailService({
+  email,
+  invoicePdf,
+  invoiceNumber,
+  subject,
+  body,
+  footer,
+}: SendPdfToEmailArgs): Promise<void> {
+  if (!isEmailConfigured() || !transporter) {
+    console.error(EMAIL_CONFIGURATION_ERROR_MESSAGE);
+    throw new HttpError({
+      status: 500,
+      code: "email_not_configured",
+      message: EMAIL_CONFIGURATION_ERROR_MESSAGE,
+    });
+  }
 
-    const fd = await req.formData();
+  const emailHTML = await render(
+    SendPdfEmail({
+      invoiceNumber,
+      body,
+      footer,
+    })
+  );
+  const invoiceBuffer = await fileToBuffer(invoicePdf);
 
-    // Get form data values
-    const email = fd.get("email") as string;
-    const invoicePdf = fd.get("invoicePdf") as File;
-    const invoiceNumber = fd.get("invoiceNumber") as string;
+  try {
+    const attachmentFilename =
+      typeof invoicePdf.name === "string" && invoicePdf.name.trim()
+        ? invoicePdf.name.trim()
+        : "invoice.pdf";
 
-    // Get email html content
-    const emailHTML = await render(SendPdfEmail({ invoiceNumber }));
+    const mailOptions: SendMailOptions = {
+      from: resolveFromAddress(),
+      to: email,
+      subject: subject?.trim() || `Invoice Ready: #${invoiceNumber}`,
+      html: emailHTML,
+      attachments: [
+        {
+          filename: attachmentFilename,
+          content: invoiceBuffer,
+        },
+      ],
+    };
 
-    // Convert file to buffer
-    const invoiceBuffer = await fileToBuffer(invoicePdf);
-
-    try {
-        const mailOptions: SendMailOptions = {
-            from: "Invoify",
-            to: email,
-            subject: `Invoice Ready: #${invoiceNumber}`,
-            html: emailHTML,
-            attachments: [
-                {
-                    filename: "invoice.pdf",
-                    content: invoiceBuffer,
-                },
-            ],
-        };
-
-        await transporter.sendMail(mailOptions);
-        return true;
-    } catch (error) {
-        console.error("Error sending email", error);
-        Sentry.captureException(error, {
-            tags: {
-                service: "sendPdfToEmailService",
-            },
-        });
-        return false;
-    }
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error sending email", error);
+    Sentry.captureException(error, {
+      tags: {
+        service: "sendPdfToEmailService",
+      },
+    });
+    throw new HttpError({
+      status: 500,
+      code: "email_send_failed",
+      message: "Failed to send email",
+    });
+  }
 }

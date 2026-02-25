@@ -1,6 +1,6 @@
 # Invoify
 
-Invoify is a web-based invoice generator application built with Next.js 13, TypeScript, React, and the Shadcn UI library. It provides an easy way to create and manage professional invoices.
+Invoify is a local-first invoice generator built with Next.js App Router, TypeScript, React, and Shadcn UI. It helps users create, save, export, and send invoices with optional cloud sync.
 
 ![Invoify Website image](/public/assets/img/invoify-web-app.png)
 
@@ -9,32 +9,51 @@ Invoify is a web-based invoice generator application built with Next.js 13, Type
 - [Invoify](#invoify)
   - [Table of Contents](#table-of-contents)
   - [Technologies](#technologies)
-    - [Core Technologies](#core-technologies)
-    - [Additional Dependencies](#additional-dependencies)
-  - [Roadmap](#roadmap)
-  - [Demo](#demo)
+  - [Architecture](#architecture)
+  - [Sync Behavior](#sync-behavior)
+  - [Storage and Migration Notes](#storage-and-migration-notes)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+  - [Quality Checks](#quality-checks)
+  - [Test Matrix](#test-matrix)
+  - [Known Limits](#known-limits)
   - [License](#license)
 
 
 ## Technologies
 
-### Core Technologies
-
-- **Next.js:** React framework for SSR and client-side navigation.
+- **Next.js 15 (App Router):** SSR + client navigation.
 - **TypeScript:** JavaScript superset with static typing.
-- **Shadcn-UI:** UI library for enhanced visuals.
-- **Tailwind:** Utility-first CSS framework.
-- **React Hook Form:** Form management for React.
-- **Zod:** TypeScript-first schema validation.
-- **Puppeteer:** PDF generation with headless browsers.
+- **React + React Hook Form + Zod:** Form state and validation.
+- **Shadcn UI + Tailwind CSS:** UI primitives and styling.
+- **Puppeteer / Chromium:** Server-side PDF rendering.
+- **Nodemailer:** Email delivery for generated PDFs.
+- **Vitest + Playwright:** Unit/integration and end-to-end testing.
 
-### Additional Dependencies
+## Architecture
 
-- **Nodemailer:** Node.js module for sending emails.
-- **Lucide Icons:** Collection of customizable SVG icons.
+- `contexts/InvoiceContext.tsx`: top-level invoice orchestration (PDF actions, saved invoices, sync, export/email).
+- `lib/storage/*`: browser persistence adapters with versioned envelopes and migration/corruption recovery paths.
+- `app/api/invoice/*`: API route layer with shared request validation and normalized error payloads.
+- `services/invoice/server/*`: route-independent business logic for PDF generation/export/email.
+- `lib/sync/*`: optional cloud snapshot merge/push/pull logic and conflict resolution.
+
+## Sync Behavior
+
+- Local-first by default (`NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=local`).
+- Cloud sync is optional and auth-gated (for cloud providers).
+- Sync snapshots are capped by record counts and payload size to reduce failures.
+- Merge strategy is deterministic by `updatedAt` with conflict records surfaced in-app.
+
+## Storage and Migration Notes
+
+- Draft envelope: `invoify:invoiceDraft:v2` (legacy `invoify:invoiceDraft` auto-migrates).
+- Saved invoices envelope: `invoify:savedInvoices:v3` (legacy `invoify:savedInvoices:v2` and `savedInvoices` auto-migrate).
+- Customer templates envelope: `invoify:customerTemplates:v2` (legacy `invoify:customerTemplates:v1` auto-migrates).
+- User preferences: `invoify:userPreferences:v1`.
+- Migration/corruption telemetry events are emitted client-side.
+- On unrecoverable JSON/shape corruption, the app stores a backup key (`invoify:backup:*`) and resets safely.
 
 ## Getting Started
 
@@ -59,8 +78,17 @@ Follow these instructions to get Invoify up and running on your local machine.
    ```
 3. Create an `.env.local` file with this content (required only for "Send PDF to Email"):
    ```env
-   NODEMAILER_EMAIL=your_email@example.com
-   NODEMAILER_PW=your_gmail_app_password
+   # Option A: full SMTP URL
+   SMTP_URL=
+   # Option B: explicit SMTP settings
+   SMTP_HOST=
+   SMTP_PORT=587
+   SMTP_SECURE=false
+   SMTP_USER=
+   SMTP_PASS=
+   SMTP_FROM="Invoify <no-reply@example.com>"
+   SMTP_FROM_NAME=
+   SMTP_FROM_EMAIL=
    NEXT_PUBLIC_INVOICE_SYNC_PROVIDER=local
    NEXT_PUBLIC_SYNC_DEBOUNCE_MS=5000
    NEXT_PUBLIC_SYNC_MAX_INVOICES=250
@@ -75,7 +103,8 @@ Follow these instructions to get Invoify up and running on your local machine.
    NEXT_PUBLIC_SENTRY_ENVIRONMENT=development
    SENTRY_ENVIRONMENT=development
    ```
-   `NODEMAILER_PW` should be a Gmail App Password, not your normal account password.
+   Use either `SMTP_URL` or `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`.
+   `SMTP_FROM` is optional. You can also set `SMTP_FROM_NAME` + `SMTP_FROM_EMAIL`.
    PDF caching is browser-side only and does not require any environment variables.
    `NEXT_PUBLIC_INVOICE_SYNC_PROVIDER` is optional (`local` default, `noop-cloud` and `supabase-rest` supported).
    For `supabase-rest`, also set:
@@ -98,9 +127,10 @@ npm run dev:raw
 
 ### Quality Checks
 
-Run lint/build/e2e locally:
+Run unit/lint/build/e2e locally:
 
 ```bash
+npm run test:unit
 npm run lint
 npm run build
 npm run test:e2e
@@ -118,6 +148,27 @@ Before first e2e run, install Playwright browser binaries:
 ```bash
 npx playwright install --with-deps chromium
 ```
+
+### Test Matrix
+
+- `npm run test:unit`
+  - Storage migration/corruption recovery (draft, saved invoices, templates)
+  - API contract validation and normalized error payloads
+  - PDF filename sanitization/meta helpers
+  - Sync merge/conflict default behavior
+- `npm run lint`
+  - ESLint checks for TS/React codebase
+- `npm run build`
+  - Next.js production build validation
+- `npm run test:e2e`
+  - Core user workflows and browser integration checks
+
+## Known Limits
+
+- The app is local-first; cloud sync is optional and currently snapshot-based.
+- PDF cache is browser-local (IndexedDB) and is not synced to cloud providers.
+- Email delivery requires valid SMTP configuration (`SMTP_URL` or host/port/user/pass).
+- Aggregated saved-invoice insights are numeric totals and do not currently split by currency.
 
 ## New in This Release
 
@@ -186,16 +237,23 @@ npx playwright install --with-deps chromium
 
 ## Local Data and Migration
 
-- Draft key:
-  - `invoify:invoiceDraft`
+- Draft:
+  - Current key: `invoify:invoiceDraft:v2`
+  - Legacy key: `invoify:invoiceDraft`
 - Saved invoices:
   - Legacy key: `savedInvoices`
-  - Current key: `invoify:savedInvoices:v2`
+  - Mid key: `invoify:savedInvoices:v2`
+  - Current key: `invoify:savedInvoices:v3`
   - Migration runs automatically on read and is idempotent.
 - Customer templates:
-  - `invoify:customerTemplates:v1`
+  - Legacy key: `invoify:customerTemplates:v1`
+  - Current key: `invoify:customerTemplates:v2`
+- User preferences:
+  - `invoify:userPreferences:v1`
 - Client telemetry:
   - `invoify:telemetry:v1`
+- Corruption backups:
+  - `invoify:backup:*`
 - PDF cache (IndexedDB):
   - DB: `invoify-client-cache-v1`
   - Store: `pdfs`
@@ -204,11 +262,13 @@ npx playwright install --with-deps chromium
 
 - Clear only saved invoices:
   - Open browser devtools console and run:
-  - `localStorage.removeItem('invoify:savedInvoices:v2')`
+  - `localStorage.removeItem('invoify:savedInvoices:v3')`
 - Clear customer templates:
-  - `localStorage.removeItem('invoify:customerTemplates:v1')`
+  - `localStorage.removeItem('invoify:customerTemplates:v2')`
 - Clear draft form:
-  - `localStorage.removeItem('invoify:invoiceDraft')`
+  - `localStorage.removeItem('invoify:invoiceDraft:v2')`
+- Clear user preferences:
+  - `localStorage.removeItem('invoify:userPreferences:v1')`
 - Clear legacy invoices key:
   - `localStorage.removeItem('savedInvoices')`
 - Clear PDF cache:

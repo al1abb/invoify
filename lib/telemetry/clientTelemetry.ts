@@ -3,6 +3,8 @@ export type ClientTelemetryLevel = "info" | "warn" | "error";
 export type ClientTelemetryEventName =
   | "app_error"
   | "app_unhandled_rejection"
+  | "storage_migration_applied"
+  | "storage_corruption_recovered"
   | "sync_provider_unavailable"
   | "sync_push_failure"
   | "sync_push_retry"

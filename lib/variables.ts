@@ -43,10 +43,17 @@ export const TAILWIND_CDN =
 export const GOOGLE_SC_VERIFICATION = process.env.GOOGLE_SC_VERIFICATION;
 
 /**
- * Nodemailer
+ * Email transport
  */
-export const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
-export const NODEMAILER_PW = process.env.NODEMAILER_PW;
+export const SMTP_URL = process.env.SMTP_URL;
+export const SMTP_HOST = process.env.SMTP_HOST;
+export const SMTP_PORT = process.env.SMTP_PORT;
+export const SMTP_SECURE = process.env.SMTP_SECURE;
+export const SMTP_USER = process.env.SMTP_USER;
+export const SMTP_PASS = process.env.SMTP_PASS;
+export const SMTP_FROM = process.env.SMTP_FROM;
+export const SMTP_FROM_NAME = process.env.SMTP_FROM_NAME;
+export const SMTP_FROM_EMAIL = process.env.SMTP_FROM_EMAIL;
 
 /**
  * I18N
