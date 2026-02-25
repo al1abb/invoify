@@ -11,6 +11,75 @@ vi.mock("@/services/invoice/server/generatePdfService", () => ({
 
 import { POST } from "@/app/api/invoice/generate/route";
 
+const createValidInvoicePayload = () => ({
+  sender: {
+    name: "Sender",
+    address: "Address",
+    zipCode: "12345",
+    city: "City",
+    country: "Country",
+    email: "sender@example.com",
+    phone: "123",
+    customInputs: [],
+  },
+  receiver: {
+    name: "Receiver",
+    address: "Address",
+    zipCode: "54321",
+    city: "City",
+    country: "Country",
+    email: "receiver@example.com",
+    phone: "456",
+    customInputs: [],
+  },
+  details: {
+    invoiceLogo: "",
+    invoiceNumber: "INV-001",
+    invoiceDate: new Date().toISOString(),
+    dueDate: new Date().toISOString(),
+    purchaseOrderNumber: "",
+    currency: "USD",
+    language: "en",
+    items: [
+      {
+        name: "Item",
+        description: "Desc",
+        quantity: 1,
+        unitPrice: 10,
+        total: 10,
+      },
+    ],
+    paymentInformation: {
+      bankName: "Bank",
+      accountName: "Account",
+      accountNumber: "123",
+    },
+    taxDetails: {
+      amount: 0,
+      taxID: "",
+      amountType: "amount",
+    },
+    discountDetails: {
+      amount: 0,
+      amountType: "amount",
+    },
+    shippingDetails: {
+      cost: 0,
+      costType: "amount",
+    },
+    subTotal: 10,
+    totalAmount: 10,
+    totalAmountInWords: "ten",
+    additionalNotes: "",
+    paymentTerms: "Due now",
+    signature: {
+      data: "",
+    },
+    updatedAt: "",
+    pdfTemplate: 1,
+  },
+});
+
 describe("/api/invoice/generate", () => {
   beforeEach(() => {
     generatePdfServiceMock.mockReset();
@@ -61,74 +130,7 @@ describe("/api/invoice/generate", () => {
       NextResponse.json({ ok: true }, { status: 200 })
     );
 
-    const validPayload = {
-      sender: {
-        name: "Sender",
-        address: "Address",
-        zipCode: "12345",
-        city: "City",
-        country: "Country",
-        email: "sender@example.com",
-        phone: "123",
-        customInputs: [],
-      },
-      receiver: {
-        name: "Receiver",
-        address: "Address",
-        zipCode: "54321",
-        city: "City",
-        country: "Country",
-        email: "receiver@example.com",
-        phone: "456",
-        customInputs: [],
-      },
-      details: {
-        invoiceLogo: "",
-        invoiceNumber: "INV-001",
-        invoiceDate: new Date().toISOString(),
-        dueDate: new Date().toISOString(),
-        purchaseOrderNumber: "",
-        currency: "USD",
-        language: "en",
-        items: [
-          {
-            name: "Item",
-            description: "Desc",
-            quantity: 1,
-            unitPrice: 10,
-            total: 10,
-          },
-        ],
-        paymentInformation: {
-          bankName: "Bank",
-          accountName: "Account",
-          accountNumber: "123",
-        },
-        taxDetails: {
-          amount: 0,
-          taxID: "",
-          amountType: "amount",
-        },
-        discountDetails: {
-          amount: 0,
-          amountType: "amount",
-        },
-        shippingDetails: {
-          cost: 0,
-          costType: "amount",
-        },
-        subTotal: 10,
-        totalAmount: 10,
-        totalAmountInWords: "ten",
-        additionalNotes: "",
-        paymentTerms: "Due now",
-        signature: {
-          data: "",
-        },
-        updatedAt: "",
-        pdfTemplate: 1,
-      },
-    };
+    const validPayload = createValidInvoicePayload();
 
     const req = new NextRequest("http://localhost/api/invoice/generate", {
       method: "POST",
@@ -142,5 +144,34 @@ describe("/api/invoice/generate", () => {
 
     expect(res.status).toBe(200);
     expect(generatePdfServiceMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("defaults missing sender/receiver country fields to empty string", async () => {
+    generatePdfServiceMock.mockResolvedValueOnce(
+      NextResponse.json({ ok: true }, { status: 200 })
+    );
+
+    const payloadWithoutCountry = createValidInvoicePayload();
+    delete (payloadWithoutCountry.sender as Record<string, unknown>).country;
+    delete (payloadWithoutCountry.receiver as Record<string, unknown>).country;
+
+    const req = new NextRequest("http://localhost/api/invoice/generate", {
+      method: "POST",
+      body: JSON.stringify(payloadWithoutCountry),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    expect(generatePdfServiceMock).toHaveBeenCalledTimes(1);
+    expect(generatePdfServiceMock.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        sender: expect.objectContaining({ country: "" }),
+        receiver: expect.objectContaining({ country: "" }),
+      })
+    );
   });
 });
