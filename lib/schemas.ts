@@ -27,7 +27,8 @@ const fieldValidators = {
         .max(50, { message: "Must be between 1 and 50 characters" }),
     country: z
         .string()
-        .max(70, { message: "Must be between 1 and 70 characters" }),
+        .max(70, { message: "Must be at most 70 characters" })
+        .default(""),
     email: z
         .string()
         .email({ message: "Email must be a valid email" })
