@@ -100,8 +100,11 @@ Follow these instructions to get Invoify up and running on your local machine.
    SENTRY_DSN=
    NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=0.1
    SENTRY_TRACES_SAMPLE_RATE=0.1
+   # development locally, beta for beta deployments, production for production
    NEXT_PUBLIC_SENTRY_ENVIRONMENT=development
    SENTRY_ENVIRONMENT=development
+   # optional release identifier in Sentry
+   SENTRY_RELEASE=
    ```
    Use either `SMTP_URL` or `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`.
    `SMTP_FROM` is optional. You can also set `SMTP_FROM_NAME` + `SMTP_FROM_EMAIL`.
@@ -111,6 +114,10 @@ Follow these instructions to get Invoify up and running on your local machine.
    `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
    For Sentry source map uploads, also set:
    `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, and `SENTRY_PROJECT`.
+   Recommended Sentry environment mapping:
+   local `.env.local` => `development`,
+   beta deployment => `beta` (for example `SENTRY_RELEASE=v0.3.0-beta.1`),
+   production deployment => `production`.
 4. Start development server
 
     ```bash
