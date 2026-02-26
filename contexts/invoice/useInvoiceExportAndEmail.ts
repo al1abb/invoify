@@ -33,6 +33,12 @@ type SendPdfErrorArgs = {
   reason?: string;
 };
 
+type ExportInvoiceErrorArgs = {
+  exportAs: ExportTypes;
+  exportInvoiceAs: (exportAs: ExportTypes) => void;
+  reason?: string;
+};
+
 type UseInvoiceExportAndEmailArgs = {
   getValues: UseFormGetValues<InvoiceType>;
   reset: UseFormReset<InvoiceType>;
@@ -43,6 +49,7 @@ type UseInvoiceExportAndEmailArgs = {
   sendPdfSuccess: () => void;
   sendPdfError: (args: SendPdfErrorArgs) => void;
   importInvoiceError: () => void;
+  exportInvoiceError: (args: ExportInvoiceErrorArgs) => void;
 };
 
 export const useInvoiceExportAndEmail = ({
@@ -55,6 +62,7 @@ export const useInvoiceExportAndEmail = ({
   sendPdfSuccess,
   sendPdfError,
   importInvoiceError,
+  exportInvoiceError,
 }: UseInvoiceExportAndEmailArgs) => {
   const sendPdfToMail = useCallback(
     (email: string, messageOptions?: EmailMessageOptions) => {
@@ -158,13 +166,23 @@ export const useInvoiceExportAndEmail = ({
     (exportAs: ExportTypes) => {
       const formValues = getValues();
       exportInvoice(exportAs, formValues).catch((error) => {
+        const reason =
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while exporting the invoice";
         captureClientError("app_error", error, {
           area: "invoice_export",
           exportAs,
         });
+
+        exportInvoiceError({
+          exportAs,
+          exportInvoiceAs,
+          reason,
+        });
       });
     },
-    [getValues]
+    [exportInvoiceError, getValues]
   );
 
   const importInvoice = useCallback(

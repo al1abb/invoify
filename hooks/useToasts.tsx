@@ -1,7 +1,7 @@
 // ShadCn
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
-import { EmailMessageOptions } from "@/types";
+import { EmailMessageOptions, ExportTypes } from "@/types";
 
 const useToasts = () => {
     type SendErrorType = {
@@ -11,6 +11,12 @@ const useToasts = () => {
             messageOptions?: EmailMessageOptions
         ) => Promise<void>;
         messageOptions?: EmailMessageOptions;
+        reason?: string;
+    };
+
+    type ExportErrorType = {
+        exportAs: ExportTypes;
+        exportInvoiceAs: (exportAs: ExportTypes) => void;
         reason?: string;
     };
 
@@ -90,6 +96,26 @@ const useToasts = () => {
         });
     };
 
+    const exportInvoiceError = ({
+        exportAs,
+        exportInvoiceAs,
+        reason,
+    }: ExportErrorType) => {
+        toast({
+            variant: "destructive",
+            title: "Export failed",
+            description: reason || "Something went wrong while exporting the invoice",
+            action: (
+                <ToastAction
+                    onClick={() => exportInvoiceAs(exportAs)}
+                    altText="Try again"
+                >
+                    Try again
+                </ToastAction>
+            ),
+        });
+    };
+
     return {
         newInvoiceSuccess,
         pdfGenerationSuccess,
@@ -98,6 +124,7 @@ const useToasts = () => {
         sendPdfSuccess,
         sendPdfError,
         importInvoiceError,
+        exportInvoiceError,
     };
 };
 

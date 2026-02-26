@@ -94,6 +94,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     sendPdfSuccess,
     sendPdfError,
     importInvoiceError,
+    exportInvoiceError,
   } = useToasts();
 
   const { getValues, reset, setValue, watch } = useFormContext<InvoiceType>();
@@ -140,6 +141,7 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     sendPdfSuccess,
     sendPdfError,
     importInvoiceError,
+    exportInvoiceError,
   });
 
   useEffect(() => {

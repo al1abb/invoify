@@ -241,6 +241,80 @@ test.describe("invoice workflow", () => {
     expect(generateCallCount).toBe(1);
   });
 
+  test("send email error shows actionable API message", async ({ page }) => {
+    await installDraft("INV-SEND-ERROR-1", page);
+
+    await page.route("**/api/invoice/generate", async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: MOCK_PDF,
+        headers: {
+          "content-type": "application/pdf",
+        },
+      });
+    });
+
+    await page.route("**/api/invoice/send", async (route) => {
+      await route.fulfill({
+        status: 400,
+        body: JSON.stringify({
+          error: {
+            code: "validation_error",
+            message: "Recipient mailbox rejected by test",
+          },
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    });
+
+    await page.goto("/en");
+    await waitForDraftHydration(page);
+
+    await page.getByRole("button", { name: /5\.\s*Summary/i }).click();
+    await page.getByTestId("generate-pdf-btn").click();
+    await expect(page.getByText("Final PDF:")).toBeVisible();
+
+    await page.getByTestId("send-to-mail-btn").click();
+    await page.getByTestId("send-email-input").fill("client@example.com");
+    await page.getByTestId("confirm-send-email-btn").click();
+
+    await expect(
+      page.getByText("Recipient mailbox rejected by test", { exact: true })
+    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
+  });
+
+  test("export error shows actionable API message", async ({ page }) => {
+    await installDraft("INV-EXPORT-ERROR-1", page);
+
+    await page.route("**/api/invoice/export**", async (route) => {
+      await route.fulfill({
+        status: 400,
+        body: JSON.stringify({
+          error: {
+            code: "validation_error",
+            message: "Export payload invalid in test",
+          },
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    });
+
+    await page.goto("/en");
+    await waitForDraftHydration(page);
+
+    await page.getByTestId("export-invoice-btn").click();
+    await page.getByRole("button", { name: "Export as JSON" }).click();
+
+    await expect(
+      page.getByText("Export payload invalid in test", { exact: true })
+    ).toBeVisible();
+  });
+
   test("legacy draft missing charge amount types does not crash on startup", async ({
     page,
   }) => {
