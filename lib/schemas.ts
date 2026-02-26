@@ -68,7 +68,7 @@ const fieldValidators = {
     stringOptional: z.string().optional(),
 
     nonNegativeNumber: z.coerce.number().nonnegative({
-        message: "Must be a positive number",
+        message: "Must be a non-negative number",
     }),
     // ! This is unused
     numWithCommas: z.coerce
