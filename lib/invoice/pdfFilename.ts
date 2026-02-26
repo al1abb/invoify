@@ -1,9 +1,15 @@
+import {
+  normalizeDocumentType,
+  toDocumentTypeLabel,
+} from "@/lib/invoice/documentType";
+
 export const PDF_FILENAME_RECIPIENT_MAX_LENGTH = 64;
 export const PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH = 48;
 
 export type PdfFilenameMeta = {
   recipientName: string;
   invoiceNumber: string;
+  documentType?: string | null;
 };
 
 export type PdfFilenameSource = {
@@ -12,6 +18,7 @@ export type PdfFilenameSource = {
   } | null;
   details?: {
     invoiceNumber?: string | null;
+    documentType?: string | null;
   } | null;
 };
 
@@ -40,10 +47,12 @@ export const toPdfFilenameMeta = (source: PdfFilenameSource): PdfFilenameMeta =>
   return {
     recipientName: source.receiver?.name ?? "",
     invoiceNumber: source.details?.invoiceNumber ?? "",
+    documentType: normalizeDocumentType(source.details?.documentType),
   };
 };
 
 export const toPdfFilename = (meta: PdfFilenameMeta) => {
+  const documentLabel = toDocumentTypeLabel(meta.documentType);
   const invoiceToName = toSafeFilenamePart(
     meta.recipientName,
     false,
@@ -55,7 +64,7 @@ export const toPdfFilename = (meta: PdfFilenameMeta) => {
     PDF_FILENAME_INVOICE_NUMBER_MAX_LENGTH
   );
 
-  return `${invoiceToName || "Client"}_Invoice${
+  return `${invoiceToName || "Client"}_${documentLabel}${
     invoiceNumber ? `_${invoiceNumber}` : ""
   }.pdf`;
 };

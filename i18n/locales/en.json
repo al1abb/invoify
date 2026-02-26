@@ -2,7 +2,10 @@
     "form": {
         "title": "Invoice",
         "description": "Generate Invoice",
+        "quoteTitle": "Quote",
+        "quoteDescription": "Generate Quote",
         "newInvBadge": "New Invoice",
+        "newQuoteBadge": "New Quote",
         "wizard": {
             "fromAndTo": "From & To",
             "invoiceDetails": "Invoice Details",
@@ -49,6 +52,13 @@
                     "placeholder": "Click to upload image"
                 },
                 "invoiceNumber": "Invoice Number",
+                "documentType": {
+                    "label": "Document Type",
+                    "options": {
+                        "invoice": "Invoice",
+                        "quote": "Quote"
+                    }
+                },
                 "issuedDate": "Issue Date",
                 "dueDate": "Due Date",
                 "currency": "Currency"
@@ -99,6 +109,7 @@
         "loadInvoice": "Load Invoice",
         "exportInvoice": "Export Invoice",
         "newInvoice": "New Invoice",
+        "convertToInvoice": "Convert to Invoice",
         "resetForm": "Reset Form",
         "resetFormTitle": "Reset form?",
         "resetFormDescription": "This will clear all fields and the saved draft.",
@@ -110,6 +121,10 @@
         "title": "Saved Invoices",
         "descriptionPrefix": "You have",
         "descriptionSuffix": "saved invoices",
+        "documentType": {
+            "invoice": "Invoice",
+            "quote": "Quote"
+        },
         "insights": {
             "totalOutstanding": "Total Outstanding",
             "overdueCount": "Overdue Invoices",

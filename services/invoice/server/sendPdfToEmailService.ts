@@ -8,6 +8,7 @@ import { render } from "@react-email/render";
 
 // Templates
 import SendPdfEmail from "@/app/components/templates/email/SendPdfEmail";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 
 // Helpers
 import { fileToBuffer } from "@/lib/helpers/server";
@@ -81,6 +82,7 @@ type SendPdfToEmailArgs = {
   email: string;
   invoicePdf: File;
   invoiceNumber: string;
+  documentType?: string;
   subject?: string;
   body?: string;
   footer?: string;
@@ -93,6 +95,7 @@ export async function sendPdfToEmailService({
   email,
   invoicePdf,
   invoiceNumber,
+  documentType,
   subject,
   body,
   footer,
@@ -106,9 +109,14 @@ export async function sendPdfToEmailService({
     });
   }
 
+  const normalizedDocumentType = normalizeDocumentType(documentType);
+  const documentLabel =
+    normalizedDocumentType === "quote" ? "Quote" : "Invoice";
+
   const emailHTML = await render(
     SendPdfEmail({
       invoiceNumber,
+      documentType: normalizedDocumentType,
       body,
       footer,
     })
@@ -119,12 +127,12 @@ export async function sendPdfToEmailService({
     const attachmentFilename =
       typeof invoicePdf.name === "string" && invoicePdf.name.trim()
         ? invoicePdf.name.trim()
-        : "invoice.pdf";
+        : `${documentLabel.toLowerCase()}.pdf`;
 
     const mailOptions: SendMailOptions = {
       from: resolveFromAddress(),
       to: email,
-      subject: subject?.trim() || `Invoice Ready: #${invoiceNumber}`,
+      subject: subject?.trim() || `${documentLabel} Ready: #${invoiceNumber}`,
       html: emailHTML,
       attachments: [
         {

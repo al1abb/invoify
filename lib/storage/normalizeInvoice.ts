@@ -1,4 +1,5 @@
 import { FORM_DEFAULT_VALUES } from "@/lib/variables";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 import { InvoiceType } from "@/types";
 
 type UnknownRecord = Record<string, unknown>;
@@ -162,6 +163,7 @@ const normalizeInvoiceDetails = (
   return {
     ...fallback,
     invoiceLogo: toStringValue(source.invoiceLogo, fallback.invoiceLogo || ""),
+    documentType: normalizeDocumentType(source.documentType),
     invoiceNumber: toStringValue(source.invoiceNumber, fallback.invoiceNumber),
     invoiceDate: toDateLikeValue(source.invoiceDate, fallback.invoiceDate),
     dueDate: toDateLikeValue(source.dueDate, fallback.dueDate),

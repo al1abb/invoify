@@ -36,7 +36,7 @@ type UseInvoicePdfActionsArgs = {
   getValues: UseFormGetValues<InvoiceType>;
   reset: UseFormReset<InvoiceType>;
   newInvoiceSuccess: () => void;
-  pdfGenerationSuccess: () => void;
+  pdfGenerationSuccess: (documentType?: unknown) => void;
 };
 
 export const useInvoicePdfActions = ({
@@ -88,10 +88,13 @@ export const useInvoicePdfActions = ({
 
       const snapshotRecipientName = snapshotMeta.recipientName?.trim();
       const snapshotInvoiceNumber = snapshotMeta.invoiceNumber?.trim();
+      const snapshotDocumentType = snapshotMeta.documentType?.trim();
+      const currentDocumentType = currentMeta.documentType?.trim();
 
       return {
         recipientName: snapshotRecipientName || currentMeta.recipientName,
         invoiceNumber: snapshotInvoiceNumber || currentMeta.invoiceNumber,
+        documentType: snapshotDocumentType || currentDocumentType,
       };
     },
     [getValues]
@@ -107,7 +110,7 @@ export const useInvoicePdfActions = ({
         lastGeneratedPdfMetaRef.current = toPdfFilenameMeta(data);
 
         if (result.size > 0) {
-          pdfGenerationSuccess();
+          pdfGenerationSuccess(data.details.documentType);
           trackClientEvent("pdf_generate_success", {
             invoiceNumber: data.details.invoiceNumber,
             sizeBytes: result.size,

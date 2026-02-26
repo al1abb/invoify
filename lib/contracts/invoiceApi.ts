@@ -50,6 +50,7 @@ export const invoiceExportQuerySchema = z.object({
 export const invoiceSendRequestSchema = z.object({
   email: z.string().trim().email(),
   invoiceNumber: z.string().trim().min(1),
+  documentType: z.enum(["invoice", "quote"]).optional(),
   subject: z.string().trim().max(160).optional(),
   body: z.string().trim().max(5000).optional(),
   footer: z.string().trim().max(500).optional(),

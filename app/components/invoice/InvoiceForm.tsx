@@ -32,6 +32,7 @@ import {
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 
 const InvoiceForm = () => {
     const { _t } = useTranslationContext();
@@ -43,14 +44,19 @@ const InvoiceForm = () => {
         name: "details.invoiceNumber",
         control,
     });
+    const documentType = useWatch({
+        name: "details.documentType",
+        control,
+    });
+    const isQuote = normalizeDocumentType(documentType) === "quote";
 
     const invoiceNumberLabel = useMemo(() => {
         if (invoiceNumber) {
             return `#${invoiceNumber}`;
         } else {
-            return _t("form.newInvBadge");
+            return isQuote ? _t("form.newQuoteBadge") : _t("form.newInvBadge");
         }
-    }, [invoiceNumber, _t]);
+    }, [invoiceNumber, isQuote, _t]);
 
     return (
         <div className={`xl:w-[55%]`}>
@@ -59,7 +65,7 @@ const InvoiceForm = () => {
                     <div className="flex gap-3">
                         <CardTitle className="flex items-center gap-3">
                             <span className="uppercase">
-                                {_t("form.title")}
+                                {isQuote ? _t("form.quoteTitle") : _t("form.title")}
                             </span>
                         </CardTitle>
                         <Badge variant="secondary" className="w-fit">
@@ -68,7 +74,11 @@ const InvoiceForm = () => {
                             </p>
                         </Badge>
                     </div>
-                    <CardDescription>{_t("form.description")}</CardDescription>
+                    <CardDescription>
+                        {isQuote
+                            ? _t("form.quoteDescription")
+                            : _t("form.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-8">

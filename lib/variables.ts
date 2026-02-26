@@ -146,6 +146,7 @@ export const FORM_DEFAULT_VALUES = {
   },
   details: {
     invoiceLogo: "",
+    documentType: "invoice" as const,
     invoiceNumber: "",
     invoiceDate: "",
     dueDate: "",
@@ -210,6 +211,7 @@ export const FORM_FILL_VALUES = {
   },
   details: {
     invoiceLogo: "",
+    documentType: "invoice" as const,
     invoiceNumber: "INV0001",
     invoiceDate: new Date(),
     dueDate: new Date(),
