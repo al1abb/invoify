@@ -9,7 +9,7 @@
 			"lineItems": "Items",
 			"paymentInfo": "Informació de Pagament",
 			"summary": "Sumari",
-			"next": "Sigüent",
+			"next": "Següent",
 			"back": "Enrere"
 		},
 		"steps": {
@@ -20,59 +20,59 @@
 				"address": "Direcció",
 				"zipCode": "Codi postal",
 				"city": "Ciutat",
-				"country": "Païs",
+				"country": "País",
 				"email": "Email",
-				"phone": "Teléfon",
-				"addCustomInput": "Afegir entrada personalizada",
+				"phone": "Telèfon",
+				"addCustomInput": "Afegir entrada personalitzada",
 				"sender": "Remitent",
-				"receiver": "Receptor"
+				"receiver": "Destinatari"
 			},
 			"invoiceDetails": {
 				"heading": "Detalls de factura",
 				"invoiceLogo": {
 					"label": "Logo de factura",
-					"placeholder": "Click para pujar una imagen"
+					"placeholder": "Selecciona una imatge"
 				},
 				"invoiceNumber": "Número de factura",
-				"issuedDate": "Data d’emisión",
-				"dueDate": "Data de vencimient",
+				"issuedDate": "Data d’emissió",
+			"dueDate": "Data de venciment",
 				"currency": "Divisa"
 			},
 			"lineItems": {
-				"heading": "Items",
-				"item": "Item",
+				"heading": "Ítems",
+				"item": "Ítem",
 				"name": "Nom",
 				"quantity": "Quantitat",
 				"rate": "Tarifa",
 				"total": "Total",
 				"description": "Descripció",
-				"addNewItem": "Afegir nou item",
-				"removeItem": "Eliminar item"
+				"addNewItem": "Afegir nou ítem",
+				"removeItem": "Eliminar ítem"
 			},
 			"paymentInfo": {
 				"heading": "Informació de pagament",
 				"bankName": "Nom del banc",
-				"accountName": "Nom del compte",
-				"accountNumber": "Número del compte"
+				"accountName": "Titular del compte",
+				"accountNumber": "Número de compte"
 			},
 			"summary": {
 				"heading": "Sumari",
 				"signature": {
-					"heading": "Firma",
-					"placeholder": "Click para afegir una firma",
-					"description": "Tria un mètode per afegir la teva firma a la factura",
+					"heading": "Signatura",
+					"placeholder": "Clic per afegir una signatura",
+					"description": "Tria un mètode per afegir la teva signatura a la factura",
 					"draw": "Dibuixar",
 					"type": "Escriure",
 					"upload": "Pujar"
 				},
-				"additionalNotes": "Notes adicionals",
+				"additionalNotes": "Notes addicionals",
 				"paymentTerms": "Condicions de pagament",
 				"discount": "Descompte",
 				"tax": "Impost",
 				"shipping": "Enviament",
 				"subTotal": "Subtotal",
 				"totalAmount": "Import total",
-				"includeTotalInWords": "Incluir el total en paraules?",
+				"includeTotalInWords": "Incloure el total en paraules?",
 				"yes": "Sí",
 				"no": "No"
 			}
