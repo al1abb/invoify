@@ -6,40 +6,72 @@ import { formatNumberWithCommas } from "@/lib/helpers/client";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 
-// TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
+type StringLengthOptions = {
+    min?: number;
+    max?: number;
+    minMessage?: string;
+    maxMessage?: string;
+};
+
+const withStringLength = (
+    schema: z.ZodString,
+    { min, max, minMessage, maxMessage }: StringLengthOptions
+) => {
+    let value = schema;
+
+    if (typeof min === "number") {
+        value = value.min(min, {
+            message: minMessage ?? `Must be at least ${min} characters`,
+        });
+    }
+
+    if (typeof max === "number") {
+        value = value.max(max, {
+            message: maxMessage ?? `Must be at most ${max} characters`,
+        });
+    }
+
+    return value;
+};
+
 // Field Validators
 const fieldValidators = {
-    name: z
-        .string()
-        .min(2, { message: "Must be at least 2 characters" })
-        .max(50, { message: "Must be at most 50 characters" }),
-    address: z
-        .string()
-        .min(2, { message: "Must be at least 2 characters" })
-        .max(70, { message: "Must be between 2 and 70 characters" }),
-    zipCode: z
-        .string()
-        .min(2, { message: "Must be between 2 and 20 characters" })
-        .max(20, { message: "Must be between 2 and 20 characters" }),
-    city: z
-        .string()
-        .min(1, { message: "Must be between 1 and 50 characters" })
-        .max(50, { message: "Must be between 1 and 50 characters" }),
-    country: z
-        .string()
-        .max(70, { message: "Must be at most 70 characters" })
-        .default(""),
-    email: z
-        .string()
-        .email({ message: "Email must be a valid email" })
-        .min(5, { message: "Must be between 5 and 30 characters" })
-        .max(30, { message: "Must be between 5 and 30 characters" }),
-    phone: z
-        .string()
-        .min(1, { message: "Must be between 1 and 50 characters" })
-        .max(50, {
-            message: "Must be between 1 and 50 characters",
-        }),
+    name: withStringLength(z.string(), { min: 2, max: 50 }),
+    address: withStringLength(z.string(), {
+        min: 2,
+        max: 70,
+        maxMessage: "Must be between 2 and 70 characters",
+    }),
+    zipCode: withStringLength(z.string(), {
+        min: 2,
+        max: 20,
+        minMessage: "Must be between 2 and 20 characters",
+        maxMessage: "Must be between 2 and 20 characters",
+    }),
+    city: withStringLength(z.string(), {
+        min: 1,
+        max: 50,
+        minMessage: "Must be between 1 and 50 characters",
+        maxMessage: "Must be between 1 and 50 characters",
+    }),
+    country: withStringLength(z.string(), {
+        max: 70,
+    }).default(""),
+    email: withStringLength(
+        z.string().email({ message: "Email must be a valid email" }),
+        {
+            min: 5,
+            max: 30,
+            minMessage: "Must be between 5 and 30 characters",
+            maxMessage: "Must be between 5 and 30 characters",
+        }
+    ),
+    phone: withStringLength(z.string(), {
+        min: 1,
+        max: 50,
+        minMessage: "Must be between 1 and 50 characters",
+        maxMessage: "Must be between 1 and 50 characters",
+    }),
 
     // Dates
     date: z
@@ -59,7 +91,7 @@ const fieldValidators = {
 
     // Strings
     string: z.string(),
-    stringMin1: z.string().min(1, { message: "Must be at least 1 character" }),
+    stringMin1: withStringLength(z.string(), { min: 1 }),
     stringToNumber: z.coerce.number(),
 
     // Charges

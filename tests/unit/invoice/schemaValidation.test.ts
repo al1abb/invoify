@@ -95,4 +95,38 @@ describe("InvoiceSchema", () => {
 
     expect(parsed.error.issues[0]?.message).toBe("Must be a non-negative number");
   });
+
+  it("keeps zip code length validation wording", () => {
+    const payload = createValidInvoicePayload();
+    payload.sender.zipCode = "1";
+
+    const parsed = InvoiceSchema.safeParse(payload);
+
+    expect(parsed.success).toBe(false);
+    if (parsed.success) {
+      return;
+    }
+
+    const zipIssue = parsed.error.issues.find(
+      (issue) => issue.path.join(".") === "sender.zipCode"
+    );
+
+    expect(zipIssue?.message).toBe("Must be between 2 and 20 characters");
+  });
+
+  it("applies country defaults when fields are omitted", () => {
+    const payload = createValidInvoicePayload();
+    delete payload.sender.country;
+    delete payload.receiver.country;
+
+    const parsed = InvoiceSchema.safeParse(payload);
+
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) {
+      return;
+    }
+
+    expect(parsed.data.sender.country).toBe("");
+    expect(parsed.data.receiver.country).toBe("");
+  });
 });
