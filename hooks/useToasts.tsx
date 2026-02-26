@@ -1,6 +1,7 @@
 // ShadCn
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 import { EmailMessageOptions, ExportTypes } from "@/types";
 
 const useToasts = () => {
@@ -28,10 +29,14 @@ const useToasts = () => {
         });
     };
 
-    const pdfGenerationSuccess = () => {
+    const pdfGenerationSuccess = (documentType?: unknown) => {
+        const normalizedDocumentType = normalizeDocumentType(documentType);
+        const documentLabel =
+            normalizedDocumentType === "quote" ? "quote" : "invoice";
+
         toast({
             variant: "default",
-            title: "Your invoice has been generated!",
+            title: `Your ${documentLabel} has been generated!`,
             description:
                 "You can preview, download, or save it from the actions tab",
         });

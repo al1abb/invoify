@@ -20,6 +20,7 @@ describe("pdf filename helpers", () => {
       toPdfFilename({
         recipientName: "***",
         invoiceNumber: "###",
+        documentType: "invoice",
       })
     ).toBe("Client_Invoice.pdf");
   });
@@ -29,8 +30,19 @@ describe("pdf filename helpers", () => {
       toPdfFilename({
         recipientName: "Client Name",
         invoiceNumber: "INV-101",
+        documentType: "invoice",
       })
     ).toBe("Client_Name_Invoice_INV-101.pdf");
+  });
+
+  it("uses quote label for quote documents", () => {
+    expect(
+      toPdfFilename({
+        recipientName: "Client Name",
+        invoiceNumber: "QTE-42",
+        documentType: "quote",
+      })
+    ).toBe("Client_Name_Quote_QTE-42.pdf");
   });
 
   it("handles whitespace policy by flag", () => {
@@ -42,11 +54,12 @@ describe("pdf filename helpers", () => {
     expect(
       toPdfFilenameMeta({
         receiver: { name: "Client Name" },
-        details: { invoiceNumber: "INV-101" },
+        details: { invoiceNumber: "INV-101", documentType: "invoice" },
       })
     ).toEqual({
       recipientName: "Client Name",
       invoiceNumber: "INV-101",
+      documentType: "invoice",
     });
   });
 });

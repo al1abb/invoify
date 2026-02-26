@@ -10,15 +10,17 @@ import {
     Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 
 type SendPdfEmailProps = {
     invoiceNumber: string;
+    documentType?: string;
     body?: string;
     footer?: string;
 };
 
-const defaultBody = (invoiceNumber: string) =>
-    `Please find your invoice #${invoiceNumber} attached.`;
+const defaultBody = (invoiceNumber: string, documentLabel: string) =>
+    `Please find your ${documentLabel.toLowerCase()} #${invoiceNumber} attached.`;
 
 const toParagraphLines = (value: string) => {
     return value
@@ -29,16 +31,22 @@ const toParagraphLines = (value: string) => {
 
 export default function SendPdfEmail({
     invoiceNumber,
+    documentType,
     body,
     footer,
 }: SendPdfEmailProps) {
-    const bodyLines = toParagraphLines(body?.trim() || defaultBody(invoiceNumber));
+    const normalizedDocumentType = normalizeDocumentType(documentType);
+    const documentLabel = normalizedDocumentType === "quote" ? "Quote" : "Invoice";
+    const bodyLines = toParagraphLines(
+        body?.trim() || defaultBody(invoiceNumber, documentLabel)
+    );
     const footerLines = toParagraphLines(footer?.trim() || "");
     return (
         <Html>
             <Head />
             <Preview>
-                Your invoice #{invoiceNumber} is ready for download
+                Your {documentLabel.toLowerCase()} #{invoiceNumber} is ready for
+                download
             </Preview>
             <Tailwind>
                 <Body className="bg-gray-100">

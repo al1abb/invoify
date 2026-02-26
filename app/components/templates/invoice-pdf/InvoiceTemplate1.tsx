@@ -5,6 +5,10 @@ import { InvoiceLayout } from "@/app/components";
 
 // Helpers
 import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers/client";
+import {
+	toDocumentTypeLabel,
+	normalizeDocumentType,
+} from "@/lib/invoice/documentType";
 
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
@@ -14,6 +18,16 @@ import { InvoiceType } from "@/types";
 
 const InvoiceTemplate = (data: InvoiceType) => {
 	const { sender, receiver, details } = data;
+	const documentType = normalizeDocumentType(details.documentType);
+	const documentLabel = toDocumentTypeLabel(documentType);
+	const documentLabelLower = documentLabel.toLowerCase();
+	const issueDateLabel = documentType === "quote" ? "Quote date:" : "Invoice date:";
+	const dueDateLabel = documentType === "quote" ? "Valid until:" : "Due date:";
+	const paymentAddressLabel =
+		documentType === "quote"
+			? "If accepted, payment can be sent to this address"
+			: "Please send the payment to this address";
+	const supportLabel = `If you have any questions concerning this ${documentLabelLower}, use the following contact information:`;
 
 	return (
 		<InvoiceLayout data={data}>
@@ -30,7 +44,7 @@ const InvoiceTemplate = (data: InvoiceType) => {
 					<h1 className='mt-2 text-lg md:text-xl font-semibold text-blue-600'>{sender.name}</h1>
 				</div>
 				<div className='text-right'>
-					<h2 className='text-2xl md:text-3xl font-semibold text-gray-800'>Invoice #</h2>
+					<h2 className='text-2xl md:text-3xl font-semibold text-gray-800'>{documentLabel} #</h2>
 					<span className='mt-1 block text-gray-500'>{details.invoiceNumber}</span>
 					<address className='mt-4 not-italic text-gray-800'>
 						{sender.address}
@@ -58,13 +72,13 @@ const InvoiceTemplate = (data: InvoiceType) => {
 				<div className='sm:text-right space-y-2'>
 					<div className='grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2'>
 						<dl className='grid sm:grid-cols-6 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Invoice date:</dt>
+							<dt className='col-span-3 font-semibold text-gray-800'>{issueDateLabel}</dt>
 							<dd className='col-span-3 text-gray-500'>
 								{new Date(details.invoiceDate).toLocaleDateString("en-US", DATE_OPTIONS)}
 							</dd>
 						</dl>
 						<dl className='grid sm:grid-cols-6 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Due date:</dt>
+							<dt className='col-span-3 font-semibold text-gray-800'>{dueDateLabel}</dt>
 							<dd className='col-span-3 text-gray-500'>
 								{new Date(details.dueDate).toLocaleDateString("en-US", DATE_OPTIONS)}
 							</dd>
@@ -171,16 +185,14 @@ const InvoiceTemplate = (data: InvoiceType) => {
 					</div>
 					<div className='my-2'>
 						<span className='font-semibold text-md text-gray-800'>
-							Please send the payment to this address
+							{paymentAddressLabel}
 							<p className='text-sm'>Bank: {details.paymentInformation?.bankName}</p>
 							<p className='text-sm'>Account name: {details.paymentInformation?.accountName}</p>
 							<p className='text-sm'>Account no: {details.paymentInformation?.accountNumber}</p>
 						</span>
 					</div>
 				</div>
-				<p className='text-gray-500 text-sm'>
-					If you have any questions concerning this invoice, use the following contact information:
-				</p>
+				<p className='text-gray-500 text-sm'>{supportLabel}</p>
 				<div>
 					<p className='block text-sm font-medium text-gray-800'>{sender.email}</p>
 					<p className='block text-sm font-medium text-gray-800'>{sender.phone}</p>

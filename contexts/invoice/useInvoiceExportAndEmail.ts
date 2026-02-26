@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { UseFormGetValues, UseFormReset } from "react-hook-form";
 
 import { toApiErrorMessage } from "@/lib/contracts/invoiceApi";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 import { PdfFilenameMeta, toPdfFilename } from "@/lib/invoice/pdfFilename";
 import {
   captureClientError,
@@ -68,6 +69,9 @@ export const useInvoiceExportAndEmail = ({
     (email: string, messageOptions?: EmailMessageOptions) => {
       const currentFormValues = getValues();
       const invoiceNumber = currentFormValues.details.invoiceNumber;
+      const documentType = normalizeDocumentType(
+        currentFormValues.details.documentType
+      );
       const filenameMeta = resolvePdfFilenameMeta(currentFormValues);
       const attachmentFilename = toPdfFilename(filenameMeta);
 
@@ -75,6 +79,7 @@ export const useInvoiceExportAndEmail = ({
       fd.append("email", email);
       fd.append("invoicePdf", invoicePdf, attachmentFilename);
       fd.append("invoiceNumber", invoiceNumber);
+      fd.append("documentType", documentType);
       if (messageOptions?.subject?.trim()) {
         fd.append("subject", messageOptions.subject.trim());
       }
@@ -95,6 +100,7 @@ export const useInvoiceExportAndEmail = ({
             trackClientEvent("email_send_success", {
               email,
               invoiceNumber,
+              documentType,
             });
 
             if (invoiceNumber) {
@@ -125,6 +131,7 @@ export const useInvoiceExportAndEmail = ({
                 email,
                 invoiceNumber,
                 status: res.status,
+                documentType,
               }
             );
 
@@ -141,6 +148,7 @@ export const useInvoiceExportAndEmail = ({
           captureClientError("email_send_failure", error, {
             email,
             invoiceNumber,
+            documentType,
           });
 
           sendPdfError({

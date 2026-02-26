@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useFormContext, useWatch } from "react-hook-form";
 
 // ShadCn
 import {
@@ -20,9 +21,21 @@ import SyncConflictsModal from "@/app/components/invoice/actions/SyncConflictsMo
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import {
+  normalizeDocumentType,
+  toInvoiceNumberFromQuote,
+} from "@/lib/invoice/documentType";
+import { InvoiceType } from "@/types";
 
 // Icons
-import { FileInput, FolderUp, Import, Plus, RotateCcw } from "lucide-react";
+import {
+  FileInput,
+  FolderUp,
+  Import,
+  Plus,
+  RefreshCcw,
+  RotateCcw,
+} from "lucide-react";
 
 const NewInvoiceAlert = dynamic(
   () => import("@/app/components/modals/alerts/NewInvoiceAlert"),
@@ -40,9 +53,34 @@ const InvoiceExportModal = dynamic(
 );
 
 const InvoiceActions = () => {
-  const { invoicePdfLoading, newInvoice } = useInvoiceContext();
-
+  const { invoicePdfLoading, newInvoice, removeFinalPdf } = useInvoiceContext();
   const { _t } = useTranslationContext();
+  const { control, getValues, setValue } = useFormContext<InvoiceType>();
+  const documentType = useWatch({
+    control,
+    name: "details.documentType",
+  });
+  const isQuote = normalizeDocumentType(documentType) === "quote";
+
+  const convertToInvoice = () => {
+    const invoiceNumber = getValues("details.invoiceNumber") || "";
+    const convertedInvoiceNumber = toInvoiceNumberFromQuote(invoiceNumber);
+
+    setValue("details.documentType", "invoice", {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    if (convertedInvoiceNumber !== invoiceNumber) {
+      setValue("details.invoiceNumber", convertedInvoiceNumber, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    }
+
+    removeFinalPdf();
+  };
+
   return (
     <div className={`xl:w-[45%]`}>
       <Card className="h-auto sticky top-0 px-2">
@@ -100,6 +138,19 @@ const InvoiceActions = () => {
               </BaseButton>
             </NewInvoiceAlert>
 
+            {isQuote ? (
+              <BaseButton
+                variant="outline"
+                tooltipLabel="Convert quote to invoice"
+                disabled={invoicePdfLoading}
+                onClick={convertToInvoice}
+                data-testid="convert-to-invoice-btn"
+              >
+                <RefreshCcw />
+                {_t("actions.convertToInvoice")}
+              </BaseButton>
+            ) : null}
+
             {/* Reset form button */}
             <NewInvoiceAlert
               title={_t("actions.resetFormTitle")}
@@ -121,9 +172,13 @@ const InvoiceActions = () => {
             {/* Generate pdf button */}
             <BaseButton
               type="submit"
-              tooltipLabel="Generate your invoice"
+              tooltipLabel={
+                isQuote ? "Generate your quote" : "Generate your invoice"
+              }
               loading={invoicePdfLoading}
-              loadingText="Generating your invoice"
+              loadingText={
+                isQuote ? "Generating your quote" : "Generating your invoice"
+              }
               data-testid="generate-pdf-btn"
             >
               <FileInput />

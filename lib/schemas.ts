@@ -180,6 +180,7 @@ const SignatureSchema = z.object({
 
 const InvoiceDetailsSchema = z.object({
     invoiceLogo: fieldValidators.stringOptional,
+    documentType: z.enum(["invoice", "quote"]).optional(),
     invoiceNumber: fieldValidators.stringMin1,
     invoiceDate: fieldValidators.date,
     dueDate: fieldValidators.date,

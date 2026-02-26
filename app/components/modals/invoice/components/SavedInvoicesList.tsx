@@ -26,6 +26,7 @@ import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers/client";
+import { normalizeDocumentType } from "@/lib/invoice/documentType";
 
 // Types
 import {
@@ -429,6 +430,11 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
       </div>
 
       {paginatedInvoices.map((record) => {
+        const documentType = normalizeDocumentType(record.data.details.documentType);
+        const documentLabel =
+          documentType === "quote"
+            ? _t("savedInvoices.documentType.quote")
+            : _t("savedInvoices.documentType.invoice");
         const status = toDisplayStatus(record.status);
         const cacheMeta = getCachedPdfMeta(record.invoiceNumber);
         const testId = toInvoiceTestId(record.invoiceNumber);
@@ -464,7 +470,9 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
             <CardContent className="flex flex-col gap-4 md:flex-row md:justify-between">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-semibold">Invoice #{record.invoiceNumber}</p>
+                  <p className="font-semibold">
+                    {documentLabel} #{record.invoiceNumber}
+                  </p>
                   <Badge variant={status.variant}>{_t(status.labelKey)}</Badge>
                   {isOverdue && (
                     <Badge variant="destructive">{_t("savedInvoices.overdue")}</Badge>
