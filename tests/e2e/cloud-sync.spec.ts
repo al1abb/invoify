@@ -82,7 +82,9 @@ const installDraft = async (invoiceNumber: string, page: Page) => {
 };
 
 test.describe("cloud sync", () => {
-  test("sign in and reach up-to-date sync status", async ({ page }) => {
+  test("unauthenticated sync is skipped, then sign in reaches up-to-date status", async ({
+    page,
+  }) => {
     const email = process.env.E2E_SUPABASE_EMAIL || "";
     const password = process.env.E2E_SUPABASE_PASSWORD || "";
     test.skip(
@@ -97,6 +99,15 @@ test.describe("cloud sync", () => {
     if (await signOutButton.isVisible()) {
       await signOutButton.click();
     }
+
+    await expect(page.getByTestId("sync-status-badge")).toHaveText("Skipped", {
+      timeout: 45_000,
+    });
+    await expect(
+      page.getByText("Reason: No access token in session")
+    ).toBeVisible({
+      timeout: 45_000,
+    });
 
     await page.getByTestId("auth-open-btn").click();
     await page.getByLabel("Email").fill(email);
