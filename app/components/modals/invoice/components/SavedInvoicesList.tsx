@@ -21,7 +21,7 @@ import {
 import { BaseButton } from "@/app/components";
 
 // Contexts
-import { useInvoiceContext } from "@/contexts/InvoiceContext";
+import { useSavedInvoicesListContext } from "@/contexts/InvoiceContext";
 import { useTranslationContext } from "@/contexts/TranslationContext";
 
 // Helpers
@@ -168,7 +168,7 @@ const SavedInvoicesList = ({ setModalState }: SavedInvoicesListProps) => {
     generateRecurringInvoice,
     restorePdfFromCache,
     getCachedPdfMeta,
-  } = useInvoiceContext();
+  } = useSavedInvoicesListContext();
 
   const { reset } = useFormContext<InvoiceType>();
   const { _t } = useTranslationContext();

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -77,8 +77,56 @@ const defaultInvoiceContext = {
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
 
+type InvoiceContextValue = typeof defaultInvoiceContext;
+
+type PdfViewerContextValue = Pick<InvoiceContextValue, "invoicePdf">;
+
+type SavedInvoicesListContextValue = Pick<
+  InvoiceContextValue,
+  | "savedInvoices"
+  | "onFormSubmit"
+  | "deleteInvoice"
+  | "duplicateInvoice"
+  | "updateSavedInvoiceStatus"
+  | "recordInvoicePayment"
+  | "markInvoiceReminderSent"
+  | "setInvoiceRecurring"
+  | "generateRecurringInvoice"
+  | "restorePdfFromCache"
+  | "getCachedPdfMeta"
+>;
+
+const defaultPdfViewerContext: PdfViewerContextValue = {
+  invoicePdf: defaultInvoiceContext.invoicePdf,
+};
+
+const defaultSavedInvoicesListContext: SavedInvoicesListContextValue = {
+  savedInvoices: defaultInvoiceContext.savedInvoices,
+  onFormSubmit: defaultInvoiceContext.onFormSubmit,
+  deleteInvoice: defaultInvoiceContext.deleteInvoice,
+  duplicateInvoice: defaultInvoiceContext.duplicateInvoice,
+  updateSavedInvoiceStatus: defaultInvoiceContext.updateSavedInvoiceStatus,
+  recordInvoicePayment: defaultInvoiceContext.recordInvoicePayment,
+  markInvoiceReminderSent: defaultInvoiceContext.markInvoiceReminderSent,
+  setInvoiceRecurring: defaultInvoiceContext.setInvoiceRecurring,
+  generateRecurringInvoice: defaultInvoiceContext.generateRecurringInvoice,
+  restorePdfFromCache: defaultInvoiceContext.restorePdfFromCache,
+  getCachedPdfMeta: defaultInvoiceContext.getCachedPdfMeta,
+};
+
+const InvoicePdfViewerContext = createContext(defaultPdfViewerContext);
+const SavedInvoicesListContext = createContext(defaultSavedInvoicesListContext);
+
 export const useInvoiceContext = () => {
   return useContext(InvoiceContext);
+};
+
+export const useInvoicePdfViewerContext = () => {
+  return useContext(InvoicePdfViewerContext);
+};
+
+export const useSavedInvoicesListContext = () => {
+  return useContext(SavedInvoicesListContext);
 };
 
 type InvoiceContextProviderProps = {
@@ -166,46 +214,124 @@ export const InvoiceContextProvider = ({ children }: InvoiceContextProviderProps
     };
   }, [watch]);
 
+  const contextValue = useMemo(
+    () => ({
+      invoicePdf: pdfActions.invoicePdf,
+      invoicePdfLoading: pdfActions.invoicePdfLoading,
+      savedInvoices: savedState.savedInvoices,
+      customerTemplates: savedState.customerTemplates,
+      syncConflicts: syncState.syncConflicts,
+      syncStatus: syncState.syncStatus,
+      pdfUrl: pdfActions.pdfUrl,
+      onFormSubmit: pdfActions.onFormSubmit,
+      newInvoice: pdfActions.newInvoice,
+      generatePdf: pdfActions.generatePdf,
+      removeFinalPdf: pdfActions.removeFinalPdf,
+      downloadPdf: pdfActions.downloadPdf,
+      printPdf: pdfActions.printPdf,
+      previewPdfInTab: pdfActions.previewPdfInTab,
+      saveInvoice: savedState.saveInvoice,
+      deleteInvoice: savedState.deleteInvoice,
+      duplicateInvoice: savedState.duplicateInvoice,
+      updateSavedInvoiceStatus: savedState.updateSavedInvoiceStatus,
+      recordInvoicePayment: savedState.recordInvoicePayment,
+      markInvoiceReminderSent: savedState.markInvoiceReminderSent,
+      setInvoiceRecurring: savedState.setInvoiceRecurring,
+      generateRecurringInvoice: savedState.generateRecurringInvoice,
+      sendPdfToMail: exportAndEmail.sendPdfToMail,
+      exportInvoiceAs: exportAndEmail.exportInvoiceAs,
+      importInvoice: exportAndEmail.importInvoice,
+      restorePdfFromCache: pdfActions.restorePdfFromCache,
+      getCachedPdfMeta: pdfActions.getCachedPdfMeta,
+      hasCachedPdf: pdfActions.hasCachedPdf,
+      saveCustomerTemplate: savedState.saveCustomerTemplate,
+      applyCustomerTemplate: savedState.applyCustomerTemplate,
+      renameCustomerTemplate: savedState.renameCustomerTemplate,
+      deleteCustomerTemplate: savedState.deleteCustomerTemplate,
+      resolveSyncConflict: syncState.resolveSyncConflict,
+      resolveSyncConflictsWithDefaults: syncState.resolveSyncConflictsWithDefaults,
+    }),
+    [
+      exportAndEmail.exportInvoiceAs,
+      exportAndEmail.importInvoice,
+      exportAndEmail.sendPdfToMail,
+      pdfActions.downloadPdf,
+      pdfActions.generatePdf,
+      pdfActions.getCachedPdfMeta,
+      pdfActions.hasCachedPdf,
+      pdfActions.invoicePdf,
+      pdfActions.invoicePdfLoading,
+      pdfActions.newInvoice,
+      pdfActions.onFormSubmit,
+      pdfActions.pdfUrl,
+      pdfActions.previewPdfInTab,
+      pdfActions.printPdf,
+      pdfActions.removeFinalPdf,
+      pdfActions.restorePdfFromCache,
+      savedState.applyCustomerTemplate,
+      savedState.customerTemplates,
+      savedState.deleteCustomerTemplate,
+      savedState.deleteInvoice,
+      savedState.duplicateInvoice,
+      savedState.generateRecurringInvoice,
+      savedState.markInvoiceReminderSent,
+      savedState.recordInvoicePayment,
+      savedState.renameCustomerTemplate,
+      savedState.saveCustomerTemplate,
+      savedState.saveInvoice,
+      savedState.savedInvoices,
+      savedState.setInvoiceRecurring,
+      savedState.updateSavedInvoiceStatus,
+      syncState.resolveSyncConflict,
+      syncState.resolveSyncConflictsWithDefaults,
+      syncState.syncConflicts,
+      syncState.syncStatus,
+    ]
+  );
+
+  const pdfViewerContextValue = useMemo(
+    () => ({
+      invoicePdf: pdfActions.invoicePdf,
+    }),
+    [pdfActions.invoicePdf]
+  );
+
+  const savedInvoicesListContextValue = useMemo(
+    () => ({
+      savedInvoices: savedState.savedInvoices,
+      onFormSubmit: pdfActions.onFormSubmit,
+      deleteInvoice: savedState.deleteInvoice,
+      duplicateInvoice: savedState.duplicateInvoice,
+      updateSavedInvoiceStatus: savedState.updateSavedInvoiceStatus,
+      recordInvoicePayment: savedState.recordInvoicePayment,
+      markInvoiceReminderSent: savedState.markInvoiceReminderSent,
+      setInvoiceRecurring: savedState.setInvoiceRecurring,
+      generateRecurringInvoice: savedState.generateRecurringInvoice,
+      restorePdfFromCache: pdfActions.restorePdfFromCache,
+      getCachedPdfMeta: pdfActions.getCachedPdfMeta,
+    }),
+    [
+      pdfActions.getCachedPdfMeta,
+      pdfActions.onFormSubmit,
+      pdfActions.restorePdfFromCache,
+      savedState.deleteInvoice,
+      savedState.duplicateInvoice,
+      savedState.generateRecurringInvoice,
+      savedState.markInvoiceReminderSent,
+      savedState.recordInvoicePayment,
+      savedState.savedInvoices,
+      savedState.setInvoiceRecurring,
+      savedState.updateSavedInvoiceStatus,
+    ]
+  );
+
   return (
-    <InvoiceContext.Provider
-      value={{
-        invoicePdf: pdfActions.invoicePdf,
-        invoicePdfLoading: pdfActions.invoicePdfLoading,
-        savedInvoices: savedState.savedInvoices,
-        customerTemplates: savedState.customerTemplates,
-        syncConflicts: syncState.syncConflicts,
-        syncStatus: syncState.syncStatus,
-        pdfUrl: pdfActions.pdfUrl,
-        onFormSubmit: pdfActions.onFormSubmit,
-        newInvoice: pdfActions.newInvoice,
-        generatePdf: pdfActions.generatePdf,
-        removeFinalPdf: pdfActions.removeFinalPdf,
-        downloadPdf: pdfActions.downloadPdf,
-        printPdf: pdfActions.printPdf,
-        previewPdfInTab: pdfActions.previewPdfInTab,
-        saveInvoice: savedState.saveInvoice,
-        deleteInvoice: savedState.deleteInvoice,
-        duplicateInvoice: savedState.duplicateInvoice,
-        updateSavedInvoiceStatus: savedState.updateSavedInvoiceStatus,
-        recordInvoicePayment: savedState.recordInvoicePayment,
-        markInvoiceReminderSent: savedState.markInvoiceReminderSent,
-        setInvoiceRecurring: savedState.setInvoiceRecurring,
-        generateRecurringInvoice: savedState.generateRecurringInvoice,
-        sendPdfToMail: exportAndEmail.sendPdfToMail,
-        exportInvoiceAs: exportAndEmail.exportInvoiceAs,
-        importInvoice: exportAndEmail.importInvoice,
-        restorePdfFromCache: pdfActions.restorePdfFromCache,
-        getCachedPdfMeta: pdfActions.getCachedPdfMeta,
-        hasCachedPdf: pdfActions.hasCachedPdf,
-        saveCustomerTemplate: savedState.saveCustomerTemplate,
-        applyCustomerTemplate: savedState.applyCustomerTemplate,
-        renameCustomerTemplate: savedState.renameCustomerTemplate,
-        deleteCustomerTemplate: savedState.deleteCustomerTemplate,
-        resolveSyncConflict: syncState.resolveSyncConflict,
-        resolveSyncConflictsWithDefaults: syncState.resolveSyncConflictsWithDefaults,
-      }}
-    >
-      {children}
+    <InvoiceContext.Provider value={contextValue}>
+      <InvoicePdfViewerContext.Provider value={pdfViewerContextValue}>
+        <SavedInvoicesListContext.Provider value={savedInvoicesListContextValue}>
+          {children}
+        </SavedInvoicesListContext.Provider>
+      </InvoicePdfViewerContext.Provider>
     </InvoiceContext.Provider>
   );
 };
