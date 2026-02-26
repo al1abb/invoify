@@ -114,10 +114,28 @@ describe("InvoiceSchema", () => {
     expect(zipIssue?.message).toBe("Must be between 2 and 20 characters");
   });
 
+  it("keeps 1-character minimum wording for required text fields", () => {
+    const payload = createValidInvoicePayload();
+    payload.details.invoiceNumber = "";
+
+    const parsed = InvoiceSchema.safeParse(payload);
+
+    expect(parsed.success).toBe(false);
+    if (parsed.success) {
+      return;
+    }
+
+    const invoiceNumberIssue = parsed.error.issues.find(
+      (issue) => issue.path.join(".") === "details.invoiceNumber"
+    );
+
+    expect(invoiceNumberIssue?.message).toBe("Must be at least 1 character");
+  });
+
   it("applies country defaults when fields are omitted", () => {
     const payload = createValidInvoicePayload();
-    delete payload.sender.country;
-    delete payload.receiver.country;
+    delete (payload.sender as Record<string, unknown>).country;
+    delete (payload.receiver as Record<string, unknown>).country;
 
     const parsed = InvoiceSchema.safeParse(payload);
 

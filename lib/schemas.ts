@@ -91,7 +91,10 @@ const fieldValidators = {
 
     // Strings
     string: z.string(),
-    stringMin1: withStringLength(z.string(), { min: 1 }),
+    stringMin1: withStringLength(z.string(), {
+        min: 1,
+        minMessage: "Must be at least 1 character",
+    }),
     stringToNumber: z.coerce.number(),
 
     // Charges
