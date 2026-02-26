@@ -22,8 +22,10 @@ export const toInvoiceNumberFromQuote = (invoiceNumber: string): string => {
     return trimmed.replace(/^quote[-_\s]?/i, "INV-");
   }
 
-  if (/^est(?:imate)?[-_\s]?/i.test(trimmed)) {
-    return trimmed.replace(/^est(?:imate)?[-_\s]?/i, "INV-");
+  // Only rewrite estimate-style prefixes when they are followed by
+  // an actual separator or a digit (e.g. EST-42, EST42), not words (ESTONIA-42).
+  if (/^est(?:imate)?(?=[-_\s\d])/i.test(trimmed)) {
+    return trimmed.replace(/^est(?:imate)?[-_\s]*/i, "INV-");
   }
 
   return trimmed;

@@ -23,9 +23,11 @@ describe("document type helpers", () => {
     expect(toInvoiceNumberFromQuote("QTE-1001")).toBe("INV-1001");
     expect(toInvoiceNumberFromQuote("quote_1002")).toBe("INV-1002");
     expect(toInvoiceNumberFromQuote("estimate 1003")).toBe("INV-1003");
+    expect(toInvoiceNumberFromQuote("EST42")).toBe("INV-42");
   });
 
   it("keeps invoice numbers unchanged when no quote prefix exists", () => {
     expect(toInvoiceNumberFromQuote("2026-03")).toBe("2026-03");
+    expect(toInvoiceNumberFromQuote("ESTONIA-42")).toBe("ESTONIA-42");
   });
 });

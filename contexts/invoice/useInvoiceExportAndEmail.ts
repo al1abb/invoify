@@ -69,10 +69,10 @@ export const useInvoiceExportAndEmail = ({
     (email: string, messageOptions?: EmailMessageOptions) => {
       const currentFormValues = getValues();
       const invoiceNumber = currentFormValues.details.invoiceNumber;
-      const documentType = normalizeDocumentType(
-        currentFormValues.details.documentType
-      );
       const filenameMeta = resolvePdfFilenameMeta(currentFormValues);
+      const documentType = normalizeDocumentType(
+        filenameMeta.documentType ?? currentFormValues.details.documentType
+      );
       const attachmentFilename = toPdfFilename(filenameMeta);
 
       const fd = new FormData();
