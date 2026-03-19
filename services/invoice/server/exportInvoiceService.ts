@@ -6,8 +6,9 @@ import { AsyncParser } from "@json2csv/node";
 // XML2JS
 import { Builder } from "xml2js";
 
-// XLSX
-import XLSX from "xlsx";
+// XLSX (require for CJS interop; xlsx has no ESM default export)
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- xlsx 0.18.5 CJS module
+const XLSX = require("xlsx");
 
 // Helpers
 import { flattenObject } from "@/lib/helpers";
@@ -59,31 +60,42 @@ export async function exportInvoiceService(req: NextRequest) {
                             "attachment; filename=invoice.xml",
                     },
                 });
-            // case ExportTypes.XLSX:
-            //     const flattenedData = flattenObject(body);
-
-            //     // Create a new worksheet and add the data
-            //     const worksheet = XLSX.utils.json_to_sheet([flattenedData]);
-            //     const workbook = XLSX.utils.book_new();
-            //     XLSX.utils.book_append_sheet(
-            //         workbook,
-            //         worksheet,
-            //         "invoice-worksheet"
-            //     );
-            //     // Generate the XLSX file as a buffer
-            //     const buffer = XLSX.write(workbook, {
-            //         bookType: "xlsx",
-            //         type: "buffer",
-            //     });
-
-            //     return new NextResponse(buffer, {
-            //         headers: {
-            //             "Content-Type":
-            //                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            //             "Content-Disposition":
-            //                 "attachment; filename=invoice.xlsx",
-            //         },
-            //     });
+            case ExportTypes.XLSX: {
+                const { sender, receiver, details } = body;
+                const { items, ...detailsWithoutItems } = details ?? {};
+                const metadataObj = {
+                    sender: sender ?? {},
+                    receiver: receiver ?? {},
+                    details: detailsWithoutItems ?? {},
+                };
+                const metadataRow = flattenObject(
+                    metadataObj as Record<string, unknown>
+                );
+                const invoiceSheet = XLSX.utils.json_to_sheet([metadataRow]);
+                const itemsSheet = XLSX.utils.json_to_sheet(
+                    Array.isArray(items) ? items : []
+                );
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, invoiceSheet, "Invoice");
+                XLSX.utils.book_append_sheet(workbook, itemsSheet, "Items");
+                const buffer = XLSX.write(workbook, {
+                    bookType: "xlsx",
+                    type: "buffer",
+                });
+                return new NextResponse(buffer, {
+                    headers: {
+                        "Content-Type":
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "Content-Disposition":
+                            "attachment; filename=invoice.xlsx",
+                    },
+                });
+            }
+            default:
+                return NextResponse.json(
+                    { error: "Unsupported export format" },
+                    { status: 400 }
+                );
         }
     } catch (error) {
         console.error(error);
