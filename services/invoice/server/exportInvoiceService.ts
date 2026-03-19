@@ -85,9 +85,9 @@ export async function exportInvoiceService(req: NextRequest) {
                 return new NextResponse(buffer, {
                     headers: {
                         "Content-Type":
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            "text/csv",
                         "Content-Disposition":
-                            "attachment; filename=invoice.xlsx",
+                            "attachment; filename=invoice.csv",
                     },
                 });
             }
