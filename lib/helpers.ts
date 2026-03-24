@@ -202,6 +202,31 @@ const fileToBuffer = async (file: File) => {
     return pdfBuffer;
 };
 
+/**
+ * Get currency symbol for a given currency code
+ * @param {string} currencyCode - Currency code (e.g., "USD", "EUR", "IDR")
+ * @returns {string} Currency symbol (e.g., "$", "€", "Rp.")
+ */
+const getCurrencySymbol = (currencyCode: string): string => {
+    try {
+        const formatter = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: currencyCode,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        });
+
+        // Format 0 to get the symbol
+        const formatted = formatter.format(0);
+        // Extract symbol from formatted string (e.g., "$0" -> "$")
+        const symbol = formatted.replace(/[\d.,\s]/g, "");
+        return symbol || currencyCode;
+    } catch (error) {
+        // Fallback to currency code if symbol extraction fails
+        return currencyCode;
+    }
+};
+
 export {
     formatNumberWithCommas,
     formatPriceToString,
@@ -210,4 +235,5 @@ export {
     isDataUrl,
     getInvoiceTemplate,
     fileToBuffer,
+    getCurrencySymbol,
 };

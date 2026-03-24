@@ -13,6 +13,7 @@ import { ChargeInput } from "@/app/components";
 // Contexts
 import { useChargesContext } from "@/contexts/ChargesContext";
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import { useSettings } from "@/contexts/SettingsContext";
 
 // Helpers
 import { formatNumberWithCommas } from "@/lib/helpers";
@@ -26,6 +27,7 @@ const Charges = () => {
     } = useFormContext<InvoiceType>();
 
     const { _t } = useTranslationContext();
+    const { settings } = useSettings();
 
     const {
         discountSwitch,
@@ -63,35 +65,39 @@ const Charges = () => {
             <div className="flex flex-col gap-3 min-w-[20rem]">
                 {/* Switches */}
                 <div className="flex justify-evenly pb-6">
-                    <div>
-                        <Label>{_t("form.steps.summary.discount")}</Label>
-
+                    {!settings.discountPerItem.enabled && (
                         <div>
+                            <Label>{_t("form.steps.summary.discount")}</Label>
+
                             <div>
-                                <Switch
-                                    checked={discountSwitch}
-                                    onCheckedChange={(value) => {
-                                        setDiscountSwitch(value);
-                                    }}
-                                />
+                                <div>
+                                    <Switch
+                                        checked={discountSwitch}
+                                        onCheckedChange={(value) => {
+                                            setDiscountSwitch(value);
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
-                    <div>
-                        <Label>{_t("form.steps.summary.tax")}</Label>
-
+                    {!settings.taxPerItem.enabled && (
                         <div>
+                            <Label>{_t("form.steps.summary.tax")}</Label>
+
                             <div>
-                                <Switch
-                                    checked={taxSwitch}
-                                    onCheckedChange={(value) => {
-                                        setTaxSwitch(value);
-                                    }}
-                                />
+                                <div>
+                                    <Switch
+                                        checked={taxSwitch}
+                                        onCheckedChange={(value) => {
+                                            setTaxSwitch(value);
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     <div>
                         <Label>{_t("form.steps.summary.shipping")}</Label>

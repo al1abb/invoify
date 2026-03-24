@@ -5,11 +5,11 @@ import { BaseButton } from '@/app/components';
 import { useInvoiceContext } from '@/contexts/InvoiceContext';
 import { Import } from 'lucide-react';
 
-type ImportJsonButtonType = {
+type ImportButtonType = {
     setOpen: (open: boolean) => void;
 }
 
-const ImportJsonButton = ({ setOpen }: ImportJsonButtonType) => {
+const ImportJsonButton = ({ setOpen }: ImportButtonType) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { importInvoice, invoicePdfLoading } = useInvoiceContext();
 
@@ -17,11 +17,18 @@ const ImportJsonButton = ({ setOpen }: ImportJsonButtonType) => {
         fileInputRef.current?.click();
     };
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file && file.type === 'application/json') {
-            importInvoice(file);
-            setOpen(false);
+        if (file) {
+            const fileName = file.name.toLowerCase();
+            const ext = fileName.split('.').pop() || '';
+
+            // Check if file extension is supported
+            const supportedFormats = ['json', 'csv', 'xml', 'xls', 'xlsx'];
+            if (supportedFormats.includes(ext)) {
+                await importInvoice(file);
+                setOpen(false);
+            }
         }
         // Reset input value to allow selecting the same file again
         if (fileInputRef.current) {
@@ -35,17 +42,17 @@ const ImportJsonButton = ({ setOpen }: ImportJsonButtonType) => {
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
-                accept=".json"
+                accept=".json,.csv,.xml,.xls,.xlsx"
                 style={{ display: 'none' }}
             />
             <BaseButton
                 variant="outline"
-                tooltipLabel="Import JSON invoice"
+                tooltipLabel="Import invoice (JSON, CSV, XML, XLS, XLSX)"
                 disabled={invoicePdfLoading}
                 onClick={handleClick}
             >
                 <Import />
-                Import JSON
+                Import Invoice
             </BaseButton>
         </>
     );

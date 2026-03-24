@@ -14,6 +14,13 @@ import { InvoiceType } from "@/types";
 
 const InvoiceTemplate2 = (data: InvoiceType) => {
     const { sender, receiver, details } = data;
+
+    // Check if discount and tax are used
+    const hasDiscount = details.items.some(item => item.discount && item.discount > 0);
+    const hasTax = details.items.some(item => item.tax && item.tax > 0);
+    const colCount = 5 + (hasDiscount ? 1 : 0) + (hasTax ? 1 : 0);
+    const gridClass = colCount === 5 ? 'sm:grid-cols-5' : colCount === 6 ? 'sm:grid-cols-6' : 'sm:grid-cols-7';
+
     return (
         <InvoiceLayout data={data}>
             <div className="flex justify-between">
@@ -38,13 +45,15 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                     </h1>
                 </div>
                 <div className="text-right">
-                    <address className="mt-4 not-italic text-gray-800">
-                        {sender.address}
-                        <br />
-                        {sender.zipCode}, {sender.city}
-                        <br />
-                        {sender.country}
-                        <br />
+                    <address className="mt-4 not-italic text-gray-800 text-sm">
+                        {[sender.address, sender.zipCode, sender.city, sender.country]
+                            .filter(Boolean)
+                            .map((part, index, arr) => (
+                                <React.Fragment key={index}>
+                                    {part}
+                                    {index < arr.length - 1 && <br />}
+                                </React.Fragment>
+                            ))}
                     </address>
                 </div>
             </div>
@@ -58,10 +67,14 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         {receiver.name}
                     </h3>
                     <address className="mt-2 not-italic text-gray-500">
-                        {receiver.address}, {receiver.zipCode}
-                        <br />
-                        {receiver.city}, {receiver.country}
-                        <br />
+                        {[receiver.address, receiver.zipCode, receiver.city, receiver.country]
+                            .filter(Boolean)
+                            .map((part, index, arr) => (
+                                <React.Fragment key={index}>
+                                    {part}
+                                    {index < arr.length - 1 && <br />}
+                                </React.Fragment>
+                            ))}
                     </address>
                 </div>
                 <div className="sm:text-right space-y-2">
@@ -93,7 +106,7 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
 
             <div className="mt-3">
                 <div className="border border-gray-200 p-1 rounded-lg space-y-1">
-                    <div className="hidden sm:grid sm:grid-cols-5">
+                    <div className={`hidden sm:grid ${gridClass} gap-x-2`}>
                         <div className="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">
                             Item
                         </div>
@@ -103,39 +116,72 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         <div className="text-left text-xs font-medium text-gray-500 uppercase">
                             Rate
                         </div>
+                        {hasDiscount && <div className="text-center text-xs font-medium text-gray-500 uppercase">Disc</div>}
+                        {hasTax && <div className="text-center text-xs font-medium text-gray-500 uppercase">Tax</div>}
                         <div className="text-right text-xs font-medium text-gray-500 uppercase">
                             Amount
                         </div>
                     </div>
                     <div className="hidden sm:block border-b border-gray-200"></div>
-                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-1">
-                        {details.items.map((item, index) => (
-                            <React.Fragment key={index}>
-                                <div className="col-span-full sm:col-span-2 border-b border-gray-300">
-                                    <p className="font-medium text-gray-800">
-                                        {item.name}
-                                    </p>
-                                    <p className="text-xs text-gray-600 whitespace-pre-line">
-                                        {item.description}
-                                    </p>
-                                </div>
-                                <div className="border-b border-gray-300">
-                                    <p className="text-gray-800">
-                                        {item.quantity}
-                                    </p>
-                                </div>
-                                <div className="border-b border-gray-300">
-                                    <p className="text-gray-800">
-                                        {item.unitPrice} {details.currency}
-                                    </p>
-                                </div>
-                                <div className="border-b border-gray-300">
-                                    <p className="sm:text-right text-gray-800">
-                                        {item.total} {details.currency}
-                                    </p>
-                                </div>
-                            </React.Fragment>
-                        ))}
+                    <div className={`grid grid-cols-3 ${gridClass} gap-y-1 gap-x-2`}>
+                        {details.items.map((item, index) => {
+                            const discountAmount = item.discount && item.discountType === 'percentage'
+                                ? (item.unitPrice * item.quantity * item.discount / 100)
+                                : (item.discount || 0);
+                            const taxAmount = item.tax && item.taxType === 'percentage'
+                                ? (item.unitPrice * item.quantity * item.tax / 100)
+                                : (item.tax || 0);
+                            return (
+                                <React.Fragment key={index}>
+                                    <div className="col-span-full sm:col-span-2 border-b border-gray-300">
+                                        <p className="font-medium text-gray-800">
+                                            {item.name}
+                                            {item.sku && <span> ({item.sku})</span>}
+                                        </p>
+                                        <p className="text-xs text-gray-600 whitespace-pre-line">
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                    <div className="border-b border-gray-300">
+                                        <p className="text-gray-800">
+                                            {item.quantity}
+                                        </p>
+                                    </div>
+                                    <div className="border-b border-gray-300">
+                                        <p className="text-gray-800">
+                                            {item.unitPrice} {details.currency}
+                                        </p>
+                                    </div>
+                                    {hasDiscount && (
+                                        <div className="border-b border-gray-300 text-center">
+                                            <p className="text-gray-800 text-sm">
+                                                {item.discount && item.discount > 0 ? (
+                                                    item.discountType === 'percentage'
+                                                        ? `${item.discount}% (${formatNumberWithCommas(discountAmount)})`
+                                                        : `${formatNumberWithCommas(discountAmount)}`
+                                                ) : '0'}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {hasTax && (
+                                        <div className="border-b border-gray-300 text-center">
+                                            <p className="text-gray-800 text-sm">
+                                                {item.tax && item.tax > 0 ? (
+                                                    item.taxType === 'percentage'
+                                                        ? `${item.tax}% (${formatNumberWithCommas(taxAmount)})`
+                                                        : `${formatNumberWithCommas(taxAmount)}`
+                                                ) : '0'}
+                                            </p>
+                                        </div>
+                                    )}
+                                    <div className="border-b border-gray-300">
+                                        <p className="sm:text-right text-gray-800">
+                                            {item.total} {details.currency}
+                                        </p>
+                                    </div>
+                                </React.Fragment>
+                            );
+                        })}
                     </div>
                     <div className="sm:hidden border-b border-gray-200"></div>
                 </div>
@@ -221,6 +267,14 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                                 </dd>
                             </dl>
                         )}
+                    {details.paymentInformation?.isCash && details.paymentInformation?.change && details.paymentInformation.change > 0 && (
+                        <dl className="grid sm:grid-cols-5 gap-x-3 mt-2">
+                            <dt className="col-span-3 text-gray-800">Change:</dt>
+                            <dd className="col-span-2 text-gray-500">
+                                {formatNumberWithCommas(details.paymentInformation.change)} {details.currency}
+                            </dd>
+                        </dl>
+                    )}
                     </div>
                 </div>
             </div>
@@ -244,20 +298,26 @@ const InvoiceTemplate2 = (data: InvoiceType) => {
                         </p>
                     </div>
                     <div className="my-2">
-                        <span className="font-semibold text-md text-gray-800">
-                            Please send the payment to this address
-                            <p className="text-sm">
-                                Bank: {details.paymentInformation?.bankName}
-                            </p>
-                            <p className="text-sm">
-                                Account name:{" "}
-                                {details.paymentInformation?.accountName}
-                            </p>
-                            <p className="text-sm">
-                                Account no:{" "}
-                                {details.paymentInformation?.accountNumber}
-                            </p>
-                        </span>
+                        {details.paymentInformation?.isCash ? (
+                            <span className="font-semibold text-md text-gray-800">
+                                Payment Method: Cash
+                            </span>
+                        ) : (
+                            <span className="font-semibold text-md text-gray-800">
+                                Please send the payment to this address
+                                <p className="text-sm">
+                                    Bank: {details.paymentInformation?.bankName}
+                                </p>
+                                <p className="text-sm">
+                                    Account name:{" "}
+                                    {details.paymentInformation?.accountName}
+                                </p>
+                                <p className="text-sm">
+                                    Account no:{" "}
+                                    {details.paymentInformation?.accountNumber}
+                                </p>
+                            </span>
+                        )}
                     </div>
                 </div>
                 <p className="text-gray-500 text-sm">

@@ -52,6 +52,11 @@ const Items = () => {
             quantity: 0,
             unitPrice: 0,
             total: 0,
+            sku: "",
+            discount: 0,
+            discountType: "",
+            tax: 0,
+            taxType: "",
         });
     };
 

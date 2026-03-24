@@ -27,6 +27,7 @@ const FormInput = ({
     labelHelper,
     placeholder,
     vertical = false,
+    defaultValue,
     ...props
 }: FormInputProps) => {
     const { control } = useFormContext();
@@ -46,6 +47,7 @@ const FormInput = ({
                     <FormControl>
                         <Input
                             {...field}
+                            value={field.value ?? defaultValue ?? ""}
                             placeholder={placeholder}
                             className="w-[13rem]"
                             {...props}
@@ -73,6 +75,7 @@ const FormInput = ({
                             <FormControl>
                                 <Input
                                     {...field}
+                                    value={field.value ?? defaultValue ?? ""}
                                     placeholder={placeholder}
                                     className="w-[13rem]"
                                     {...props}

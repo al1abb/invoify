@@ -14,10 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Components
-import { BaseButton, FormInput, FormTextarea } from "@/app/components";
+import { BaseButton, FormInput, FormSelect, FormTextarea } from "@/app/components";
 
 // Contexts
 import { useTranslationContext } from "@/contexts/TranslationContext";
+import { useSettings } from "@/contexts/SettingsContext";
 
 // Icons
 import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
@@ -45,6 +46,7 @@ const SingleItem = ({
     removeField,
 }: SingleItemProps) => {
     const { control, setValue } = useFormContext();
+    const { settings } = useSettings();
 
     const { _t } = useTranslationContext();
 
@@ -64,6 +66,26 @@ const SingleItem = ({
         control,
     });
 
+    const discount = useWatch({
+        name: `${name}[${index}].discount`,
+        control,
+    });
+
+    const discountType = useWatch({
+        name: `${name}[${index}].discountType`,
+        control,
+    });
+
+    const tax = useWatch({
+        name: `${name}[${index}].tax`,
+        control,
+    });
+
+    const taxType = useWatch({
+        name: `${name}[${index}].taxType`,
+        control,
+    });
+
     const total = useWatch({
         name: `${name}[${index}].total`,
         control,
@@ -76,12 +98,32 @@ const SingleItem = ({
     });
 
     useEffect(() => {
-        // Calculate total when rate or quantity changes
+        // Calculate total when rate, quantity, discount or tax changes
         if (rate != undefined && quantity != undefined) {
-            const calculatedTotal = (rate * quantity).toFixed(2);
+            const baseAmount = rate * quantity;
+            let discountValue = 0;
+            let taxValue = 0;
+
+            if (discount != undefined && !isNaN(discount)) {
+                if (discountType === "percentage") {
+                    discountValue = baseAmount * (discount / 100);
+                } else {
+                    discountValue = discount;
+                }
+            }
+
+            if (tax != undefined && !isNaN(tax)) {
+                if (taxType === "percentage") {
+                    taxValue = baseAmount * (tax / 100);
+                } else {
+                    taxValue = tax;
+                }
+            }
+
+            const calculatedTotal = (baseAmount - discountValue - taxValue).toFixed(2);
             setValue(`${name}[${index}].total`, calculatedTotal);
         }
-    }, [rate, quantity]);
+    }, [rate, quantity, discount, discountType, tax, taxType]);
 
     // DnD
     const {
@@ -110,66 +152,81 @@ const SingleItem = ({
         <div
             style={style}
             {...attributes}
-            className={`${boxDragClasses} group flex flex-col gap-y-5 p-3 my-2 cursor-default rounded-xl bg-gray-50 dark:bg-slate-800 dark:border-gray-600`}
+            className={`group flex flex-col gap-4 p-4 my-2 rounded-lg transition-all duration-200 ${
+                isDragging
+                    ? "bg-blue-50 border-2 border-blue-400 shadow-lg dark:bg-blue-900/20 dark:border-blue-500"
+                    : "border border-gray-200 bg-white dark:bg-slate-800 dark:border-gray-700 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600"
+            }`}
         >
-            {/* {isDragging && <div className="bg-blue-600 h-1 rounded-full"></div>} */}
-            <div className="flex flex-wrap justify-between">
-                {itemName != "" ? (
-                    <p className="font-medium">
-                        #{index + 1} - {itemName}
-                    </p>
-                ) : (
-                    <p className="font-medium">#{index + 1} - Empty name</p>
-                )}
-
-                <div className="flex gap-3">
-                    {/* Drag and Drop Button */}
+            {/* Header with Title & Controls */}
+            <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {/* Drag Handle */}
                     <div
-                        className={`${gripDragClasses} flex justify-center items-center`}
+                        className={`flex-shrink-0 p-1 rounded transition-all ${gripDragClasses}`}
                         ref={setNodeRef}
                         {...listeners}
+                        aria-label="Drag to reorder item"
                     >
-                        <GripVertical className="hover:text-blue-600" />
+                        <GripVertical size={18} className="text-gray-400 group-hover:text-blue-500 dark:text-gray-500" />
                     </div>
 
-                    {/* Up Button */}
+                    {/* Item Title */}
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            Item #{index + 1}
+                        </p>
+                        <p className="text-base font-medium text-gray-900 dark:text-gray-100 truncate">
+                            {itemName || "Untitled item"}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-1 flex-shrink-0">
                     <BaseButton
-                        size={"icon"}
-                        tooltipLabel="Move the item up"
+                        size="icon"
+                        variant="ghost"
+                        tooltipLabel="Move up"
                         onClick={() => moveFieldUp(index)}
                         disabled={index === 0}
+                        className="h-8 w-8"
                     >
-                        <ChevronUp />
+                        <ChevronUp size={16} />
                     </BaseButton>
 
-                    {/* Down Button */}
                     <BaseButton
-                        size={"icon"}
-                        tooltipLabel="Move the item down"
+                        size="icon"
+                        variant="ghost"
+                        tooltipLabel="Move down"
                         onClick={() => moveFieldDown(index)}
                         disabled={index === fields.length - 1}
+                        className="h-8 w-8"
                     >
-                        <ChevronDown />
+                        <ChevronDown size={16} />
                     </BaseButton>
                 </div>
             </div>
+
+            {/* Main Fields Grid */}
             <div
-                className="flex flex-wrap justify-between gap-y-5 gap-x-2"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
                 key={index}
             >
-                <FormInput
-                    name={`${name}[${index}].name`}
-                    label={_t("form.steps.lineItems.name")}
-                    placeholder="Item name"
-                    vertical
-                />
+                <div className="sm:col-span-2">
+                    <FormInput
+                        name={`${name}[${index}].name`}
+                        label={_t("form.steps.lineItems.name")}
+                        placeholder="Item name"
+                        vertical
+                    />
+                </div>
 
                 <FormInput
                     name={`${name}[${index}].quantity`}
                     type="number"
                     label={_t("form.steps.lineItems.quantity")}
-                    placeholder={_t("form.steps.lineItems.quantity")}
-                    className="w-[8rem]"
+                    placeholder="0"
                     vertical
                 />
 
@@ -178,41 +235,111 @@ const SingleItem = ({
                     type="number"
                     label={_t("form.steps.lineItems.rate")}
                     labelHelper={`(${currency})`}
-                    placeholder={_t("form.steps.lineItems.rate")}
-                    className="w-[8rem]"
+                    placeholder="0"
                     vertical
                 />
 
-                <div className="flex flex-col gap-2">
-                    <div>
-                        <Label>{_t("form.steps.lineItems.total")}</Label>
+                <div className="flex flex-col gap-2 pt-1">
+                    <Label className="text-sm font-medium">{_t("form.steps.lineItems.total")}</Label>
+                    <div className="px-3 py-2 rounded-md bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-gray-600">
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">
+                            {total} <span className="text-sm text-gray-600 dark:text-gray-400">{currency}</span>
+                        </p>
                     </div>
-                    <Input
-                        value={`${total} ${currency}`}
-                        readOnly
-                        placeholder="Item total"
-                        className="border-none font-medium text-lg bg-transparent"
-                        size={10}
-                    />
                 </div>
             </div>
+
+            {/* Description */}
             <FormTextarea
                 name={`${name}[${index}].description`}
                 label={_t("form.steps.lineItems.description")}
                 placeholder="Item description"
             />
-            <div>
-                {/* Not allowing deletion for first item when there is only 1 item */}
-                {fields.length > 1 && (
+
+            {/* Optional Fields Section */}
+            {(settings.skuColumn.enabled || settings.discountPerItem.enabled || settings.taxPerItem.enabled) && (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-3 space-y-3">
+                    {/* SKU Column - Conditional */}
+                    {settings.skuColumn.enabled && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2">
+                            <FormInput
+                                name={`${name}[${index}].sku`}
+                                label="SKU / Item Code"
+                                placeholder="SKU or item code"
+                                vertical
+                                defaultValue=""
+                            />
+                        </div>
+                    )}
+
+                    {/* Discount Per Item - Conditional */}
+                    {settings.discountPerItem.enabled && (
+                        <div className="grid grid-cols-2 gap-3">
+                            <FormInput
+                                name={`${name}[${index}].discount`}
+                                type="number"
+                                label="Discount"
+                                placeholder="0"
+                                vertical
+                                defaultValue={0}
+                                disabled={!rate}
+                            />
+                            <FormSelect
+                                name={`${name}[${index}].discountType`}
+                                label="Type"
+                                placeholder="Type"
+                                options={[
+                                    { label: "Amount", value: "amount" },
+                                    { label: "Percentage", value: "percentage" },
+                                ]}
+                                vertical
+                                defaultValue="amount"
+                            />
+                        </div>
+                    )}
+
+                    {/* Tax Per Item - Conditional */}
+                    {settings.taxPerItem.enabled && (
+                        <div className="grid grid-cols-2 gap-3">
+                            <FormInput
+                                name={`${name}[${index}].tax`}
+                                type="number"
+                                label="Tax"
+                                placeholder="0"
+                                vertical
+                                defaultValue={0}
+                                disabled={!rate}
+                            />
+                            <FormSelect
+                                name={`${name}[${index}].taxType`}
+                                label="Type"
+                                placeholder="Type"
+                                options={[
+                                    { label: "Amount", value: "amount" },
+                                    { label: "Percentage", value: "percentage" },
+                                ]}
+                                vertical
+                                defaultValue="amount"
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Delete Button */}
+            {fields.length > 1 && (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
                     <BaseButton
                         variant="destructive"
+                        size="sm"
                         onClick={() => removeField(index)}
+                        className="w-full"
                     >
-                        <Trash2 />
+                        <Trash2 size={16} />
                         {_t("form.steps.lineItems.removeItem")}
                     </BaseButton>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -19,6 +19,7 @@ import useToasts from "@/hooks/useToasts";
 
 // Services
 import { exportInvoice } from "@/services/invoice/client/exportInvoice";
+import { parseImportedFile } from "@/services/invoice/client/importInvoice";
 
 // Variables
 import {
@@ -356,38 +357,34 @@ export const InvoiceContextProvider = ({
   };
 
   /**
-   * Import an invoice from a JSON file.
+   * Import an invoice from a file (JSON, CSV, XML, XLS, XLSX).
    *
-   * @param {File} file - The JSON file to import.
+   * @param {File} file - The file to import.
    */
-  const importInvoice = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const importedData = JSON.parse(event.target?.result as string);
+  const importInvoice = async (file: File) => {
+    try {
+      const importedData = await parseImportedFile(file);
 
-        // Parse the dates
-        if (importedData.details) {
-          if (importedData.details.invoiceDate) {
-            importedData.details.invoiceDate = new Date(
-              importedData.details.invoiceDate
-            );
-          }
-          if (importedData.details.dueDate) {
-            importedData.details.dueDate = new Date(
-              importedData.details.dueDate
-            );
-          }
+      // Parse the dates
+      if (importedData.details) {
+        if (importedData.details.invoiceDate) {
+          importedData.details.invoiceDate = new Date(
+            importedData.details.invoiceDate
+          );
         }
-
-        // Reset form with imported data
-        reset(importedData);
-      } catch (error) {
-        console.error("Error parsing JSON file:", error);
-        importInvoiceError();
+        if (importedData.details.dueDate) {
+          importedData.details.dueDate = new Date(
+            importedData.details.dueDate
+          );
+        }
       }
-    };
-    reader.readAsText(file);
+
+      // Reset form with imported data
+      reset(importedData);
+    } catch (error) {
+      console.error("Error importing file:", error);
+      importInvoiceError();
+    }
   };
 
   return (

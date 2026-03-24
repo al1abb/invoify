@@ -9,11 +9,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema
-import { InvoiceSchema } from "@/lib/schemas";
+import { createInvoiceSchema } from "@/lib/schemas";
 
 // Context
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { TranslationProvider } from "@/contexts/TranslationContext";
+import { SettingsProvider, useSettings } from "@/contexts/SettingsContext";
 import { InvoiceContextProvider } from "@/contexts/InvoiceContext";
 import { ChargesContextProvider } from "@/contexts/ChargesContext";
 
@@ -50,9 +51,12 @@ type ProvidersProps = {
   children: React.ReactNode;
 };
 
-const Providers = ({ children }: ProvidersProps) => {
+// Inner component that uses settings
+const FormWithSettings = ({ children }: { children: React.ReactNode }) => {
+  const { settings } = useSettings();
+
   const form = useForm<InvoiceType>({
-    resolver: zodResolver(InvoiceSchema),
+    resolver: zodResolver(createInvoiceSchema(settings)),
     defaultValues: FORM_DEFAULT_VALUES,
   });
 
@@ -66,6 +70,16 @@ const Providers = ({ children }: ProvidersProps) => {
   }, []);
 
   return (
+    <FormProvider {...form}>
+      <InvoiceContextProvider>
+        <ChargesContextProvider>{children}</ChargesContextProvider>
+      </InvoiceContextProvider>
+    </FormProvider>
+  );
+};
+
+const Providers = ({ children }: ProvidersProps) => {
+  return (
     <ThemeProvider
       attribute="class"
       defaultTheme="system"
@@ -73,11 +87,9 @@ const Providers = ({ children }: ProvidersProps) => {
       disableTransitionOnChange
     >
       <TranslationProvider>
-        <FormProvider {...form}>
-          <InvoiceContextProvider>
-            <ChargesContextProvider>{children}</ChargesContextProvider>
-          </InvoiceContextProvider>
-        </FormProvider>
+        <SettingsProvider>
+          <FormWithSettings>{children}</FormWithSettings>
+        </SettingsProvider>
       </TranslationProvider>
     </ThemeProvider>
   );
