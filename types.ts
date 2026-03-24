@@ -58,7 +58,7 @@ export enum ExportTypes {
 }
 
 // Settings types
-export type FieldRequirementSetting = "required" | "optional";
+export type FieldRequirementSetting = "required" | "optional" | "hidden";
 
 export type SettingsType = {
     fieldRequirements: {

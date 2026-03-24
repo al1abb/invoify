@@ -14,6 +14,9 @@ import { useFormContext, useWatch } from "react-hook-form";
 // Helpers
 import { formatPriceToString } from "@/lib/helpers";
 
+// Contexts
+import { useSettings } from "./SettingsContext";
+
 // Types
 import { InvoiceType, ItemType } from "@/types";
 
@@ -50,6 +53,7 @@ type ChargesContextProps = {
 
 export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
     const { control, setValue, getValues } = useFormContext<InvoiceType>();
+    const { settings } = useSettings();
 
     // Form Fields
     const itemsArray = useWatch({
@@ -151,6 +155,18 @@ export const ChargesContextProvider = ({ children }: ChargesContextProps) => {
             setValue("details.shippingDetails.cost", 0);
         }
     }, [discountSwitch, taxSwitch, shippingSwitch]);
+
+    // Reset switches and values if per-item features are enabled
+    useEffect(() => {
+        if (settings.discountPerItem.enabled) {
+            setDiscountSwitch(false);
+            setValue("details.discountDetails.amount", 0);
+        }
+        if (settings.taxPerItem.enabled) {
+            setTaxSwitch(false);
+            setValue("details.taxDetails.amount", 0);
+        }
+    }, [settings.discountPerItem.enabled, settings.taxPerItem.enabled]);
 
     // Calculate total when values change
     useEffect(() => {

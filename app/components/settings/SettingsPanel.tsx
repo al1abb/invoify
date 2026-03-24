@@ -2,468 +2,299 @@
 
 import { useSettings } from "@/contexts/SettingsContext";
 import { useTranslations } from "next-intl";
-import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { X } from "lucide-react";
-import { InvoiceType } from "@/types";
+import { X, Settings } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface SettingsPanelProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-export const SettingsPanel = ({ isOpen, onClose }: SettingsPanelProps) => {
-    const { settings, updateSettings, resetSettings } = useSettings();
-    const { getValues, setValue } = useFormContext<InvoiceType>();
-    const t = useTranslations();
+export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
+    const { settings, updateSettings } = useSettings();
+    const t = useTranslations("settings");
+    const panelRef = useRef<HTMLDivElement>(null);
+
+    // Handle Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        if (isOpen) {
+            window.addEventListener("keydown", handleKeyDown);
+            // Simple focus trap
+            panelRef.current?.focus();
+        }
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, onClose]);
 
     if (!isOpen) return null;
 
-    // Clear discount values from all items when discount per item is disabled
-    const handleDiscountToggle = (enabled: boolean) => {
-        updateSettings({
-            discountPerItem: {
-                ...settings.discountPerItem,
-                enabled,
-            },
-        });
-
-        if (!enabled) {
-            const formValues = getValues();
-            const updatedItems = formValues.details.items.map(item => ({
-                ...item,
-                discount: undefined,
-                discountType: undefined,
-            }));
-            setValue("details.items", updatedItems);
-        }
-    };
-
-    // Clear tax values from all items when tax per item is disabled
-    const handleTaxToggle = (enabled: boolean) => {
-        updateSettings({
-            taxPerItem: {
-                ...settings.taxPerItem,
-                enabled,
-            },
-        });
-
-        if (!enabled) {
-            const formValues = getValues();
-            const updatedItems = formValues.details.items.map(item => ({
-                ...item,
-                tax: undefined,
-                taxType: undefined,
-            }));
-            setValue("details.items", updatedItems);
-        }
-    };
-
     return (
-        <>
-            {/* Backdrop */}
+        <div 
+            className="fixed inset-0 z-[100] bg-black/20 backdrop-blur-sm"
+            onClick={onClose}
+        >
             <div
-                className="fixed inset-0 z-40 bg-black/50"
-                onClick={onClose}
-            />
-
-            {/* Settings Panel */}
-            <div className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-2xl overflow-y-auto bg-white dark:bg-slate-950">
-                <div className="sticky top-0 border-b bg-white dark:bg-slate-950 p-4 flex justify-between items-center">
-                    <h2 className="text-lg font-semibold">Settings</h2>
+                ref={panelRef}
+                tabIndex={-1}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="settings-title"
+                className="absolute right-0 top-0 h-full w-full max-w-md bg-white p-6 shadow-2xl transition-transform dark:bg-slate-900 overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2">
+                        <Settings className="w-5 h-5 text-blue-600" />
+                        <h2 id="settings-title" className="text-xl font-bold uppercase tracking-tight dark:text-white">
+                            {t("title")}
+                        </h2>
+                    </div>
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={onClose}
+                        aria-label={t("close")}
+                        className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
                     >
-                        <X className="w-4 h-4" />
+                        <X className="w-5 h-5" />
                     </Button>
                 </div>
 
-                <div className="p-4">
-                    <Tabs defaultValue="fields" className="w-full">
-                        <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="fields">Fields</TabsTrigger>
-                            <TabsTrigger value="items">Items</TabsTrigger>
-                            <TabsTrigger value="payment">Payment</TabsTrigger>
-                        </TabsList>
+                <Tabs defaultValue="fields" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 mb-6 bg-slate-100 dark:bg-slate-800">
+                        <TabsTrigger value="fields" className="text-xs uppercase font-bold tracking-wider">
+                            {t("tabs.fields")}
+                        </TabsTrigger>
+                        <TabsTrigger value="items" className="text-xs uppercase font-bold tracking-wider">
+                            {t("tabs.items")}
+                        </TabsTrigger>
+                        <TabsTrigger value="payment" className="text-xs uppercase font-bold tracking-wider">
+                            {t("tabs.payment")}
+                        </TabsTrigger>
+                    </TabsList>
 
-                        {/* Fields Tab - Two Column Layout */}
-                        <TabsContent value="fields" className="mt-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* SENDER FIELDS SECTION */}
-                                <div className="space-y-6">
-                                    <div>
-                                        <h3 className="text-sm font-semibold uppercase tracking-wider opacity-80 mb-4">
-                                            Sender Fields
-                                        </h3>
-                                        <div className="space-y-4">
-                                            <FieldRequirementItem
-                                                label="Address"
-                                                value={settings.fieldRequirements.senderAddress}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderAddress: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="ZIP Code"
-                                                value={settings.fieldRequirements.senderZipCode}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderZipCode: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="City"
-                                                value={settings.fieldRequirements.senderCity}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderCity: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Country"
-                                                value={settings.fieldRequirements.senderCountry}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderCountry: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Email"
-                                                value={settings.fieldRequirements.senderEmail}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderEmail: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Phone"
-                                                value={settings.fieldRequirements.senderPhone}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            senderPhone: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                    <TabsContent value="fields" className="space-y-4">
+                        <SectionHeader 
+                            title={t("fieldRequirements.title")} 
+                            description={t("fieldRequirements.description")} 
+                        />
+                        <div className="space-y-3">
+                            {/* Sender Fields */}
+                            <FieldRequirementItem
+                                label={t("fields.senderAddress")}
+                                currentStatus={settings.fieldRequirements.senderAddress}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderAddress: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.senderZipCode")}
+                                currentStatus={settings.fieldRequirements.senderZipCode}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderZipCode: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.senderCity")}
+                                currentStatus={settings.fieldRequirements.senderCity}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderCity: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.senderCountry")}
+                                currentStatus={settings.fieldRequirements.senderCountry}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderCountry: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.senderEmail")}
+                                currentStatus={settings.fieldRequirements.senderEmail}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderEmail: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.senderPhone")}
+                                currentStatus={settings.fieldRequirements.senderPhone}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, senderPhone: status } })}
+                            />
+                            <div className="h-4 border-b border-slate-100 dark:border-slate-800 my-2" />
+                            {/* Receiver Fields */}
+                            <FieldRequirementItem
+                                label={t("fields.receiverAddress")}
+                                currentStatus={settings.fieldRequirements.receiverAddress}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverAddress: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.receiverZipCode")}
+                                currentStatus={settings.fieldRequirements.receiverZipCode}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverZipCode: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.receiverCity")}
+                                currentStatus={settings.fieldRequirements.receiverCity}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverCity: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.receiverCountry")}
+                                currentStatus={settings.fieldRequirements.receiverCountry}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverCountry: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.receiverEmail")}
+                                currentStatus={settings.fieldRequirements.receiverEmail}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverEmail: status } })}
+                            />
+                            <FieldRequirementItem
+                                label={t("fields.receiverPhone")}
+                                currentStatus={settings.fieldRequirements.receiverPhone}
+                                updateStatus={(status) => updateSettings({ fieldRequirements: { ...settings.fieldRequirements, receiverPhone: status } })}
+                            />
+                        </div>
+                    </TabsContent>
 
-                                {/* RECEIVER FIELDS SECTION */}
-                                <div className="space-y-6">
-                                    <div>
-                                        <h3 className="text-sm font-semibold uppercase tracking-wider opacity-80 mb-4">
-                                            Receiver Fields
-                                        </h3>
-                                        <div className="space-y-4">
-                                            <FieldRequirementItem
-                                                label="Address"
-                                                value={settings.fieldRequirements.receiverAddress}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverAddress: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="ZIP Code"
-                                                value={settings.fieldRequirements.receiverZipCode}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverZipCode: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="City"
-                                                value={settings.fieldRequirements.receiverCity}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverCity: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Country"
-                                                value={settings.fieldRequirements.receiverCountry}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverCountry: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Email"
-                                                value={settings.fieldRequirements.receiverEmail}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverEmail: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                            <FieldRequirementItem
-                                                label="Phone"
-                                                value={settings.fieldRequirements.receiverPhone}
-                                                onChange={(value) =>
-                                                    updateSettings({
-                                                        fieldRequirements: {
-                                                            ...settings.fieldRequirements,
-                                                            receiverPhone: value,
-                                                        },
-                                                    })
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <TabsContent value="items" className="space-y-4">
+                        <SectionHeader 
+                            title={t("itemFeatures.title")} 
+                            description={t("itemFeatures.description")} 
+                        />
+                        <div className="space-y-3">
+                            <ToggleItem
+                                label={t("items.skuColumn")}
+                                isEnabled={settings.skuColumn.enabled}
+                                onToggle={(enabled) => updateSettings({ skuColumn: { ...settings.skuColumn, enabled } })}
+                                isRequired={settings.skuColumn.required}
+                                onToggleRequired={(required) => updateSettings({ skuColumn: { ...settings.skuColumn, required } })}
+                            />
+                            <ToggleItem
+                                label={t("items.discountPerItem")}
+                                isEnabled={settings.discountPerItem.enabled}
+                                onToggle={(enabled) => updateSettings({ discountPerItem: { ...settings.discountPerItem, enabled } })}
+                                isRequired={settings.discountPerItem.required}
+                                onToggleRequired={(required) => updateSettings({ discountPerItem: { ...settings.discountPerItem, required } })}
+                            />
+                            <ToggleItem
+                                label={t("items.taxPerItem")}
+                                isEnabled={settings.taxPerItem.enabled}
+                                onToggle={(enabled) => updateSettings({ taxPerItem: { ...settings.taxPerItem, enabled } })}
+                                isRequired={settings.taxPerItem.required}
+                                onToggleRequired={(required) => updateSettings({ taxPerItem: { ...settings.taxPerItem, required } })}
+                            />
+                        </div>
+                    </TabsContent>
 
-                            {/* Currency Display - Full Width */}
-                            <div className="mt-8 pt-8 border-t">
-                                <h3 className="text-sm font-semibold uppercase tracking-wider opacity-80 mb-4">
-                                    Currency Display
-                                </h3>
-                                <FieldRequirementItem
-                                    label="Currency Display"
-                                    value={settings.currencyDisplay === "symbolAndCode" ? "required" : "optional"}
-                                    onChange={(value) =>
-                                        updateSettings({
-                                            currencyDisplay:
-                                                value === "required"
-                                                    ? "symbolAndCode"
-                                                    : "symbolOnly",
-                                        })
-                                    }
-                                    optionLabels={{ required: "Symbol + Code", optional: "Symbol Only" }}
+                    <TabsContent value="payment" className="space-y-4">
+                        <SectionHeader 
+                            title={t("paymentModes.title")} 
+                            description={t("paymentModes.description")} 
+                        />
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all hover:shadow-md">
+                                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                                    {t("payment.cashPaymentMode")}
+                                </span>
+                                <Switch
+                                    checked={settings.cashPaymentMode.enabled}
+                                    onCheckedChange={(enabled) => updateSettings({ cashPaymentMode: { enabled } })}
                                 />
                             </div>
-                        </TabsContent>
-
-                        {/* Items Tab */}
-                        <TabsContent value="items" className="mt-6 space-y-6">
-                            <ToggleSettingWithRequired
-                                label="SKU / Item Code Column"
-                                enabled={settings.skuColumn.enabled}
-                                required={settings.skuColumn.required}
-                                onEnabledChange={(enabled) =>
-                                    updateSettings({
-                                        skuColumn: {
-                                            ...settings.skuColumn,
-                                            enabled,
-                                        },
-                                    })
-                                }
-                                onRequiredChange={(required) =>
-                                    updateSettings({
-                                        skuColumn: {
-                                            ...settings.skuColumn,
-                                            required,
-                                        },
-                                    })
-                                }
-                            />
-
-                            <ToggleSettingWithRequired
-                                label="Discount Per Item"
-                                enabled={settings.discountPerItem.enabled}
-                                required={settings.discountPerItem.required}
-                                onEnabledChange={handleDiscountToggle}
-                                onRequiredChange={(required) =>
-                                    updateSettings({
-                                        discountPerItem: {
-                                            ...settings.discountPerItem,
-                                            required,
-                                        },
-                                    })
-                                }
-                            />
-
-                            <ToggleSettingWithRequired
-                                label="Tax Per Item"
-                                enabled={settings.taxPerItem.enabled}
-                                required={settings.taxPerItem.required}
-                                onEnabledChange={handleTaxToggle}
-                                onRequiredChange={(required) =>
-                                    updateSettings({
-                                        taxPerItem: {
-                                            ...settings.taxPerItem,
-                                            required,
-                                        },
-                                    })
-                                }
-                            />
-                        </TabsContent>
-
-                        {/* Payment Tab */}
-                        <TabsContent value="payment" className="mt-6 space-y-6">
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="cash-mode">Cash Payment Mode</Label>
-                                    <Switch
-                                        id="cash-mode"
-                                        checked={settings.cashPaymentMode.enabled}
-                                        onCheckedChange={(enabled) =>
-                                            updateSettings({
-                                                cashPaymentMode: { enabled },
-                                            })
-                                        }
-                                    />
-                                </div>
-                                {settings.cashPaymentMode.enabled && (
-                                    <p className="text-xs text-slate-500">
-                                        When enabled, bank details become optional and a "Change" field appears
-                                    </p>
-                                )}
-                            </div>
-                        </TabsContent>
-                    </Tabs>
-
-                    {/* Reset Button - Always at bottom */}
-                    <div className="mt-8 pt-6 border-t">
-                        <Button
-                            variant="outline"
-                            className="w-full"
-                            onClick={() => {
-                                resetSettings();
-                            }}
-                        >
-                            Reset to Defaults
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-};
-
-interface FieldRequirementItemProps {
-    label: string;
-    value: "required" | "optional";
-    onChange: (value: "required" | "optional") => void;
-    optionLabels?: { required: string; optional: string };
-}
-
-function FieldRequirementItem({
-    label,
-    value,
-    onChange,
-    optionLabels,
-}: FieldRequirementItemProps) {
-    return (
-        <div className="flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-800 last:border-b-0">
-            <Label className="text-sm font-medium">{label}</Label>
-            <div className="flex gap-2">
-                <Button
-                    size="sm"
-                    variant={value === "required" ? "default" : "outline"}
-                    onClick={() => onChange("required")}
-                    className="text-xs min-w-[90px]"
-                >
-                    {optionLabels?.required || "Required"}
-                </Button>
-                <Button
-                    size="sm"
-                    variant={value === "optional" ? "default" : "outline"}
-                    onClick={() => onChange("optional")}
-                    className="text-xs min-w-[90px]"
-                >
-                    {optionLabels?.optional || "Optional"}
-                </Button>
+                        </div>
+                    </TabsContent>
+                </Tabs>
             </div>
         </div>
     );
 }
 
-interface ToggleSettingWithRequiredProps {
-    label: string;
-    enabled: boolean;
-    required: boolean;
-    onEnabledChange: (enabled: boolean) => void;
-    onRequiredChange: (required: boolean) => void;
+function SectionHeader({ title, description }: { title: string; description: string }) {
+    return (
+        <div className="mb-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 flex items-center gap-2">
+                {title}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic">
+                {description}
+            </p>
+        </div>
+    );
 }
 
-function ToggleSettingWithRequired({
-    label,
-    enabled,
-    required,
-    onEnabledChange,
-    onRequiredChange,
-}: ToggleSettingWithRequiredProps) {
+function FieldRequirementItem({ 
+    label, 
+    currentStatus, 
+    updateStatus 
+}: { 
+    label: string; 
+    currentStatus: "required" | "optional" | "hidden";
+    updateStatus: (status: "required" | "optional" | "hidden") => void;
+}) {
+    const t = useTranslations("settings.status");
     return (
-        <Card className="p-4">
-            <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium">{label}</Label>
-                    <Switch checked={enabled} onCheckedChange={onEnabledChange} />
-                </div>
-                {enabled && (
-                    <div className="flex items-center justify-between pl-2">
-                        <Label className="text-xs text-slate-500">Field Requirement</Label>
-                        <div className="flex gap-2">
+        <Card className="p-4 flex flex-col gap-3 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 transition-all hover:shadow-md">
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
+            <div className="flex gap-2">
+                {(["required", "optional", "hidden"] as const).map((status) => (
+                    <Button
+                        key={status}
+                        size="sm"
+                        variant={currentStatus === status ? "default" : "outline"}
+                        onClick={() => updateStatus(status)}
+                        className="flex-1 text-[10px] uppercase font-bold tracking-widest h-8"
+                    >
+                        {t(status)}
+                    </Button>
+                ))}
+            </div>
+        </Card>
+    );
+}
+
+function ToggleItem({ 
+    label, 
+    isEnabled, 
+    onToggle, 
+    isRequired, 
+    onToggleRequired 
+}: { 
+    label: string; 
+    isEnabled: boolean; 
+    onToggle: (enabled: boolean) => void;
+    isRequired: boolean;
+    onToggleRequired: (required: boolean) => void;
+}) {
+    const t = useTranslations("settings.status");
+    return (
+        <Card className="p-4 flex flex-col gap-4 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 transition-all hover:shadow-md">
+            <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
+                <Switch
+                    checked={isEnabled}
+                    onCheckedChange={onToggle}
+                />
+            </div>
+            {isEnabled && (
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-top-1">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Requirement</span>
+                        <div className="flex gap-2 w-48">
                             <Button
                                 size="sm"
-                                variant={required ? "default" : "outline"}
-                                onClick={() => onRequiredChange(true)}
-                                className="text-xs"
+                                variant={isRequired ? "default" : "outline"}
+                                onClick={() => onToggleRequired(true)}
+                                className="flex-1 text-[10px] uppercase font-bold tracking-widest h-7"
                             >
-                                Required
+                                {t("required")}
                             </Button>
                             <Button
                                 size="sm"
-                                variant={!required ? "default" : "outline"}
-                                onClick={() => onRequiredChange(false)}
-                                className="text-xs"
+                                variant={!isRequired ? "default" : "outline"}
+                                onClick={() => onToggleRequired(false)}
+                                className="flex-1 text-[10px] uppercase font-bold tracking-widest h-7"
                             >
-                                Optional
+                                {t("optional")}
                             </Button>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </Card>
     );
 }

@@ -5,13 +5,17 @@ import { BaseButton } from '@/app/components';
 import { useInvoiceContext } from '@/contexts/InvoiceContext';
 import { Import } from 'lucide-react';
 
+// Hooks
+import useToasts from '@/hooks/useToasts';
+
 type ImportButtonType = {
     setOpen: (open: boolean) => void;
 }
 
-const ImportJsonButton = ({ setOpen }: ImportButtonType) => {
+const ImportInvoiceButton = ({ setOpen }: ImportButtonType) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { importInvoice, invoicePdfLoading } = useInvoiceContext();
+    const { importInvoiceError } = useToasts();
 
     const handleClick = () => {
         fileInputRef.current?.click();
@@ -28,6 +32,8 @@ const ImportJsonButton = ({ setOpen }: ImportButtonType) => {
             if (supportedFormats.includes(ext)) {
                 await importInvoice(file);
                 setOpen(false);
+            } else {
+                importInvoiceError();
             }
         }
         // Reset input value to allow selecting the same file again
@@ -58,4 +64,4 @@ const ImportJsonButton = ({ setOpen }: ImportButtonType) => {
     );
 };
 
-export default ImportJsonButton;
+export default ImportInvoiceButton;

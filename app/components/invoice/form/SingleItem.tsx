@@ -99,31 +99,34 @@ const SingleItem = ({
 
     useEffect(() => {
         // Calculate total when rate, quantity, discount or tax changes
-        if (rate != undefined && quantity != undefined) {
-            const baseAmount = rate * quantity;
+        if (rate !== undefined && quantity !== undefined) {
+            const baseAmount = Number(rate) * Number(quantity);
             let discountValue = 0;
             let taxValue = 0;
 
-            if (discount != undefined && !isNaN(discount)) {
+            // Calculate discount if enabled
+            if (settings.discountPerItem.enabled && discount !== undefined && !isNaN(Number(discount))) {
                 if (discountType === "percentage") {
-                    discountValue = baseAmount * (discount / 100);
+                    discountValue = baseAmount * (Number(discount) / 100);
                 } else {
-                    discountValue = discount;
+                    discountValue = Number(discount);
                 }
             }
 
-            if (tax != undefined && !isNaN(tax)) {
+            // Calculate tax if enabled - applied on post-discount amount if percentage
+            if (settings.taxPerItem.enabled && tax !== undefined && !isNaN(Number(tax))) {
+                const amountAfterDiscount = baseAmount - discountValue;
                 if (taxType === "percentage") {
-                    taxValue = baseAmount * (tax / 100);
+                    taxValue = amountAfterDiscount * (Number(tax) / 100);
                 } else {
-                    taxValue = tax;
+                    taxValue = Number(tax);
                 }
             }
 
-            const calculatedTotal = (baseAmount - discountValue - taxValue).toFixed(2);
+            const calculatedTotal = (baseAmount - discountValue + taxValue).toFixed(2);
             setValue(`${name}[${index}].total`, calculatedTotal);
         }
-    }, [rate, quantity, discount, discountType, tax, taxType]);
+    }, [rate, quantity, discount, discountType, tax, taxType, settings.discountPerItem.enabled, settings.taxPerItem.enabled]);
 
     // DnD
     const {
@@ -285,7 +288,7 @@ const SingleItem = ({
                                 disabled={!rate}
                             />
                             <FormSelect
-                                name={`${name}[${index}].discountType`}
+                                name={`${name}[${index}].discountType` as NameType}
                                 label="Type"
                                 placeholder="Type"
                                 options={[
@@ -311,7 +314,7 @@ const SingleItem = ({
                                 disabled={!rate}
                             />
                             <FormSelect
-                                name={`${name}[${index}].taxType`}
+                                name={`${name}[${index}].taxType` as NameType}
                                 label="Type"
                                 placeholder="Type"
                                 options={[

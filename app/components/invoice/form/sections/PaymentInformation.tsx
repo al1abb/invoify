@@ -48,8 +48,8 @@ const PaymentInformation = () => {
                 />
             )}
 
-            {/* Bank Details - Hidden when cash mode is enabled */}
-            {!isCash && (
+            {/* Bank Details - Hidden when cash mode is enabled and is cash payment */}
+            {!(isCash && settings.cashPaymentMode.enabled) && (
                 <div className="flex flex-wrap gap-10 mt-5">
                     <FormInput
                         name="details.paymentInformation.bankName"

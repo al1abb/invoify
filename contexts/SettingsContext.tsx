@@ -21,8 +21,33 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         try {
             const stored = localStorage.getItem(LOCAL_STORAGE_SETTINGS_KEY);
             if (stored) {
-                const parsed = JSON.parse(stored) as SettingsType;
-                setSettings(parsed);
+                const parsed = JSON.parse(stored);
+                // Deep merge with default settings to handle missing properties
+                const merged: SettingsType = {
+                    ...DEFAULT_SETTINGS,
+                    ...parsed,
+                    fieldRequirements: {
+                        ...DEFAULT_SETTINGS.fieldRequirements,
+                        ...parsed.fieldRequirements,
+                    },
+                    skuColumn: {
+                        ...DEFAULT_SETTINGS.skuColumn,
+                        ...parsed.skuColumn,
+                    },
+                    discountPerItem: {
+                        ...DEFAULT_SETTINGS.discountPerItem,
+                        ...parsed.discountPerItem,
+                    },
+                    taxPerItem: {
+                        ...DEFAULT_SETTINGS.taxPerItem,
+                        ...parsed.taxPerItem,
+                    },
+                    cashPaymentMode: {
+                        ...DEFAULT_SETTINGS.cashPaymentMode,
+                        ...parsed.cashPaymentMode,
+                    },
+                };
+                setSettings(merged);
             }
         } catch (error) {
             console.error("Failed to load settings from localStorage:", error);

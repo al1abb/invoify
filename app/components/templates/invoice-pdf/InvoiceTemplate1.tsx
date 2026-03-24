@@ -235,16 +235,16 @@ const InvoiceTemplate = (data: InvoiceType) => {
 					</div>
 					<div className='my-2'>
 						{details.paymentInformation?.isCash ? (
-							<span className='font-semibold text-md text-gray-800'>
+							<div className='font-semibold text-md text-gray-800'>
 								Payment Method: Cash
-							</span>
+							</div>
 						) : (
-							<span className='font-semibold text-md text-gray-800'>
+							<div className='font-semibold text-md text-gray-800'>
 								Please send the payment to this address
 								<p className='text-sm'>Bank: {details.paymentInformation?.bankName}</p>
 								<p className='text-sm'>Account name: {details.paymentInformation?.accountName}</p>
 								<p className='text-sm'>Account no: {details.paymentInformation?.accountNumber}</p>
-							</span>
+							</div>
 						)}
 					</div>
 				</div>

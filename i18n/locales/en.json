@@ -89,5 +89,56 @@
     },
     "footer": {
         "developedBy": "Developed by"
+    },
+    "settings": {
+        "title": "Settings",
+        "description": "Configure your invoice settings",
+        "close": "Close settings",
+        "tabs": {
+            "fields": "Fields",
+            "items": "Items",
+            "payment": "Payment"
+        },
+        "fieldRequirements": {
+            "title": "Field Requirements",
+            "description": "Select which fields are required, optional, or hidden in the form."
+        },
+        "itemFeatures": {
+            "title": "Item Features",
+            "description": "Enable or disable specific features for invoice items."
+        },
+        "paymentModes": {
+            "title": "Payment Modes",
+            "description": "Configure payment methods and options."
+        },
+        "fields": {
+            "senderAddress": "Sender Address",
+            "senderZipCode": "Sender Zip Code",
+            "senderCity": "Sender City",
+            "senderCountry": "Sender Country",
+            "senderEmail": "Sender Email",
+            "senderPhone": "Sender Phone",
+            "receiverAddress": "Receiver Address",
+            "receiverZipCode": "Receiver Zip Code",
+            "receiverCity": "Receiver City",
+            "receiverCountry": "Receiver Country",
+            "receiverEmail": "Receiver Email",
+            "receiverPhone": "Receiver Phone"
+        },
+        "items": {
+            "skuColumn": "SKU Column",
+            "discountPerItem": "Discount Per Item",
+            "taxPerItem": "Tax Per Item"
+        },
+        "payment": {
+            "cashPaymentMode": "Cash Payment Mode"
+        },
+        "status": {
+            "required": "Required",
+            "optional": "Optional",
+            "hidden": "Hidden",
+            "enabled": "Enabled",
+            "disabled": "Disabled"
+        }
     }
 }

@@ -216,15 +216,34 @@ const getCurrencySymbol = (currencyCode: string): string => {
             maximumFractionDigits: 0,
         });
 
-        // Format 0 to get the symbol
-        const formatted = formatter.format(0);
-        // Extract symbol from formatted string (e.g., "$0" -> "$")
-        const symbol = formatted.replace(/[\d.,\s]/g, "");
-        return symbol || currencyCode;
+        const parts = formatter.formatToParts(0);
+        const currencyPart = parts.find((part) => part.type === "currency");
+        return currencyPart ? currencyPart.value : currencyCode;
     } catch (error) {
         // Fallback to currency code if symbol extraction fails
         return currencyCode;
     }
+};
+
+/**
+ * Clean invoice items based on settings - remove discount/tax if settings are disabled
+ * @param {any[]} items - Array of invoice items
+ * @param {any} settings - Settings object
+ * @returns {any[]} Cleaned items
+ */
+const cleanInvoiceItemsForSettings = (items: any[], settings: any) => {
+    return items.map((item) => {
+        const cleanedItem = { ...item };
+        if (!settings.discountPerItem.enabled) {
+            cleanedItem.discount = undefined;
+            cleanedItem.discountType = undefined;
+        }
+        if (!settings.taxPerItem.enabled) {
+            cleanedItem.tax = undefined;
+            cleanedItem.taxType = undefined;
+        }
+        return cleanedItem;
+    });
 };
 
 export {
@@ -236,4 +255,5 @@ export {
     getInvoiceTemplate,
     fileToBuffer,
     getCurrencySymbol,
+    cleanInvoiceItemsForSettings,
 };

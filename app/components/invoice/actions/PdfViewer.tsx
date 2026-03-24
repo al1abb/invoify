@@ -9,6 +9,9 @@ import { useFormContext } from "react-hook-form";
 // Components
 import { FinalPdf, LivePreview } from "@/app/components";
 
+// Helpers
+import { cleanInvoiceItemsForSettings } from "@/lib/helpers";
+
 // Contexts
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
 import { useSettings } from "@/contexts/SettingsContext";
@@ -30,19 +33,8 @@ const PdfViewer = () => {
         ...formValues,
         details: {
             ...formValues.details,
-            items: formValues.details.items.map(item => {
-                const cleanedItem = { ...item };
-                if (!settings.discountPerItem.enabled) {
-                    cleanedItem.discount = undefined;
-                    cleanedItem.discountType = undefined;
-                }
-                if (!settings.taxPerItem.enabled) {
-                    cleanedItem.tax = undefined;
-                    cleanedItem.taxType = undefined;
-                }
-                return cleanedItem;
-            })
-        }
+            items: cleanInvoiceItemsForSettings(formValues.details.items, settings),
+        },
     };
 
     return (

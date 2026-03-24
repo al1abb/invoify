@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import { parseStringPromise } from "xml2js";
 
 /**
- * Unflatten an object that was flattened with dot notation
+ * Unflatten an object that was flattened with underscore notation
  * Example: { "sender_name": "John", "sender_email": "john@example.com" }
  * becomes: { sender: { name: "John", email: "john@example.com" } }
  */
@@ -52,7 +52,10 @@ async function parseJsonFile(file: File): Promise<InvoiceType> {
  * Handles quoted values and commas within quotes
  */
 function parseCSV(csvText: string): Record<string, any> {
-    const lines = csvText.split("\n");
+    // Normalize line endings to handle CRLF
+    const normalizedText = csvText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    const lines = normalizedText.split("\n").filter((line) => line.trim() !== "");
+
     if (lines.length < 2) {
         throw new Error("CSV file must have at least headers and one data row");
     }
@@ -69,7 +72,7 @@ function parseCSV(csvText: string): Record<string, any> {
 }
 
 /**
- * Parse a single CSV line, handling quoted values
+ * Parse a single CSV line, handling quoted values and escaped quotes
  */
 function parseCSVLine(line: string): string[] {
     const result: string[] = [];
@@ -80,7 +83,13 @@ function parseCSVLine(line: string): string[] {
         const char = line[i];
 
         if (char === '"') {
-            insideQuotes = !insideQuotes;
+            // Handle escaped quotes (doubled quotes "")
+            if (insideQuotes && line[i + 1] === '"') {
+                current += '"';
+                i++; // Skip the next quote
+            } else {
+                insideQuotes = !insideQuotes;
+            }
         } else if (char === "," && !insideQuotes) {
             result.push(current.trim());
             current = "";

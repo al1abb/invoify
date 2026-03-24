@@ -14,7 +14,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 // Components
-// import { DevDebug, LanguageSelector, ThemeSwitcher } from "@/app/components";
 import { LanguageSelector, ThemeSwitcher } from "@/app/components";
 import { SettingsPanel } from "@/app/components/settings/SettingsPanel";
 
@@ -39,7 +38,6 @@ const BaseNavbar = () => {
                                 style={{ height: "auto" }}
                             />
                         </Link>
-                        {/* {devEnv && <DevDebug />} */}
                         <div className="flex items-center gap-2">
                             <Button
                                 variant="ghost"

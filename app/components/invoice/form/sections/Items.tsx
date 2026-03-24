@@ -54,9 +54,9 @@ const Items = () => {
             total: 0,
             sku: "",
             discount: 0,
-            discountType: "",
+            discountType: "amount",
             tax: 0,
-            taxType: "",
+            taxType: "amount",
         });
     };
 

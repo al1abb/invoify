@@ -190,47 +190,38 @@ const InvoiceSchema = z.object({
 
 // Factory function to create dynamic ItemSchema based on settings
 const createItemSchema = (settings: SettingsType) => {
-    let schema = z.object({
+    const shape: Record<string, z.ZodTypeAny> = {
         name: fieldValidators.stringMin1,
         description: fieldValidators.stringOptional,
         quantity: fieldValidators.quantity,
         unitPrice: fieldValidators.unitPrice,
         total: fieldValidators.stringToNumber,
-    });
+    };
 
     // Add SKU field if enabled
     if (settings.skuColumn.enabled) {
-        const skuValidator = settings.skuColumn.required
+        shape.sku = settings.skuColumn.required
             ? fieldValidators.stringMin1
             : fieldValidators.stringOptional;
-        schema = schema.extend({
-            sku: skuValidator,
-        });
     }
 
     // Add discount field if enabled
     if (settings.discountPerItem.enabled) {
-        const discountValidator = settings.discountPerItem.required
+        shape.discount = settings.discountPerItem.required
             ? fieldValidators.nonNegativeNumber
             : fieldValidators.nonNegativeNumber.optional();
-        schema = schema.extend({
-            discount: discountValidator,
-            discountType: fieldValidators.stringOptional,
-        });
+        shape.discountType = fieldValidators.stringOptional;
     }
 
     // Add tax field if enabled
     if (settings.taxPerItem.enabled) {
-        const taxValidator = settings.taxPerItem.required
+        shape.tax = settings.taxPerItem.required
             ? fieldValidators.nonNegativeNumber
             : fieldValidators.nonNegativeNumber.optional();
-        schema = schema.extend({
-            tax: taxValidator,
-            taxType: fieldValidators.stringOptional,
-        });
+        shape.taxType = fieldValidators.stringOptional;
     }
 
-    return schema;
+    return z.object(shape);
 };
 
 // Factory function to create dynamic PaymentInformationSchema based on settings
@@ -277,84 +268,37 @@ const createPaymentInformationSchema = (settings: SettingsType) => {
         bankName: fieldValidators.stringMin1,
         accountName: fieldValidators.stringMin1,
         accountNumber: fieldValidators.stringMin1,
+        isCash: z.boolean().optional(),
+        change: fieldValidators.nonNegativeNumber.optional(),
+    });
+};
+
+// Helper to create dynamic sender/receiver schema based on settings
+const createPartySchema = (settings: SettingsType, party: "sender" | "receiver") => {
+    const getValidator = (field: string, baseValidator: z.ZodTypeAny) => {
+        const key = `${party}${field.charAt(0).toUpperCase() + field.slice(1)}` as keyof typeof settings.fieldRequirements;
+        return settings.fieldRequirements[key] === "required"
+            ? baseValidator
+            : makeOptional(baseValidator);
+    };
+
+    return z.object({
+        name: fieldValidators.name,
+        address: getValidator("address", fieldValidators.address),
+        zipCode: getValidator("zipCode", fieldValidators.zipCode),
+        city: getValidator("city", fieldValidators.city),
+        country: getValidator("country", fieldValidators.country),
+        email: getValidator("email", fieldValidators.email),
+        phone: getValidator("phone", fieldValidators.phone),
+        customInputs: z.array(CustomInputSchema).optional(),
     });
 };
 
 // Factory function to create dynamic sender schema based on settings
-const createSenderSchema = (settings: SettingsType) => {
-    const emailValidator = settings.fieldRequirements.senderEmail === "required"
-        ? fieldValidators.email
-        : makeOptional(fieldValidators.email);
-
-    const phoneValidator = settings.fieldRequirements.senderPhone === "required"
-        ? fieldValidators.phone
-        : makeOptional(fieldValidators.phone);
-
-    const addressValidator = settings.fieldRequirements.senderAddress === "required"
-        ? fieldValidators.address
-        : makeOptional(fieldValidators.address);
-
-    const zipCodeValidator = settings.fieldRequirements.senderZipCode === "required"
-        ? fieldValidators.zipCode
-        : makeOptional(fieldValidators.zipCode);
-
-    const cityValidator = settings.fieldRequirements.senderCity === "required"
-        ? fieldValidators.city
-        : makeOptional(fieldValidators.city);
-
-    const countryValidator = settings.fieldRequirements.senderCountry === "required"
-        ? fieldValidators.country
-        : makeOptional(fieldValidators.country);
-
-    return z.object({
-        name: fieldValidators.name,
-        address: addressValidator,
-        zipCode: zipCodeValidator,
-        city: cityValidator,
-        country: countryValidator,
-        email: emailValidator,
-        phone: phoneValidator,
-        customInputs: z.array(CustomInputSchema).optional(),
-    });
-};
+const createSenderSchema = (settings: SettingsType) => createPartySchema(settings, "sender");
 
 // Factory function to create dynamic receiver schema based on settings
-const createReceiverSchema = (settings: SettingsType) => {
-    const emailValidator = settings.fieldRequirements.receiverEmail === "required"
-        ? fieldValidators.email
-        : makeOptional(fieldValidators.email);
-
-    const phoneValidator = settings.fieldRequirements.receiverPhone === "required"
-        ? fieldValidators.phone
-        : makeOptional(fieldValidators.phone);
-
-    const addressValidator = settings.fieldRequirements.receiverAddress === "required"
-        ? fieldValidators.address
-        : makeOptional(fieldValidators.address);
-
-    const zipCodeValidator = settings.fieldRequirements.receiverZipCode === "required"
-        ? fieldValidators.zipCode
-        : makeOptional(fieldValidators.zipCode);
-
-    const cityValidator = settings.fieldRequirements.receiverCity === "required"
-        ? fieldValidators.city
-        : makeOptional(fieldValidators.city);
-
-    const countryValidator = settings.fieldRequirements.receiverCountry === "required"
-        ? fieldValidators.country
-        : makeOptional(fieldValidators.country);
-
-    return z.object({
-        name: fieldValidators.name,
-        address: addressValidator,
-        zipCode: zipCodeValidator,
-        city: cityValidator,
-        country: countryValidator,
-        email: emailValidator,
-        phone: phoneValidator,
-        customInputs: z.array(CustomInputSchema).optional(),
-    });
-};
+const createReceiverSchema = (settings: SettingsType) => createPartySchema(settings, "receiver");
 
 // Factory function to create dynamic InvoiceDetailsSchema based on settings
 const createInvoiceDetailsSchema = (settings: SettingsType) => {

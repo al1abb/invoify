@@ -1,7 +1,7 @@
 "use client";
 
 // RHF
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Path, FieldValues } from "react-hook-form";
 
 // ShadCn
 import {
@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/select";
 
 
-type FormSelectProps = {
-    name: string;
+type FormSelectProps<T extends FieldValues> = {
+    name: Path<T>;
     label?: string;
     placeholder?: string;
     options: { label: string; value: string }[];
@@ -29,27 +29,26 @@ type FormSelectProps = {
     defaultValue?: string;
 };
 
-const FormSelect = ({
+const FormSelect = <T extends FieldValues>({
     name,
     label,
     placeholder,
     options,
     vertical = false,
     defaultValue,
-}: FormSelectProps) => {
+}: FormSelectProps<T>) => {
     const { control } = useFormContext();
 
     return (
         <FormField
             control={control}
-            name={name as any}
+            name={name}
             render={({ field }) => (
                 <FormItem className={vertical ? "flex flex-col gap-2" : ""}>
                     {label && <FormLabel>{label}</FormLabel>}
                     <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value || defaultValue}
-                        value={field.value || defaultValue || ""}
+                        value={field.value ?? defaultValue ?? ""}
                     >
                         <FormControl>
                             <SelectTrigger>
