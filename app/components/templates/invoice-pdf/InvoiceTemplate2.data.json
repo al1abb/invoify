@@ -1,0 +1,75 @@
+{
+    "sender": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "zipCode": "12345",
+        "city": "Anytown",
+        "country": "USA",
+        "email": "johndoe@example.com",
+        "phone": "123-456-7890"
+    },
+    "receiver": {
+        "name": "Jane Smith",
+        "address": "456 Elm St",
+        "zipCode": "54321",
+        "city": "Other Town",
+        "country": "Canada",
+        "email": "jane@example.com",
+        "phone": "555-987-6543"
+    },
+    "details": {
+        "invoiceLogo": "",
+        "invoiceNumber": "INV0001",
+        "invoiceDate": "March 24, 2026",
+        "dueDate": "March 24, 2026",
+        "currency": "USD",
+        "language": "English",
+        "items": [
+            {
+                "name": "Product 1",
+                "description": "Description of product 1",
+                "quantity": 4,
+                "unitPrice": 50,
+                "total": 200
+            },
+            {
+                "name": "Product 2",
+                "description": "Description of product 2",
+                "quantity": 5,
+                "unitPrice": 50,
+                "total": 250
+            },
+            {
+                "name": "Product 3",
+                "description": "Description of product 3",
+                "quantity": 5,
+                "unitPrice": 80,
+                "total": 400
+            }
+        ],
+        "paymentInformation": {
+            "bankName": "Bank Inc.",
+            "accountName": "John Doe",
+            "accountNumber": "445566998877"
+        },
+        "taxDetails": {
+            "amount": 15,
+            "taxID": "TAX-123",
+            "amountType": "percentage"
+        },
+        "discountDetails": {
+            "amount": 5,
+            "amountType": "percentage"
+        },
+        "shippingDetails": {
+            "cost": 5,
+            "costType": "amount"
+        },
+        "subTotal": 850,
+        "totalAmount": 975.06,
+        "totalAmountInWords": "Nine hundred seventy-five Dollar and six Cents",
+        "additionalNotes": "Thank you for your business",
+        "paymentTerms": "Net 30",
+        "pdfTemplate": 1
+    }
+}

@@ -12,22 +12,22 @@ const DynamicInvoiceTemplateSkeleton = () => {
 };
 
 const DynamicInvoiceTemplate = (props: InvoiceType) => {
-    // Dynamic template component name
-    const templateName = `InvoiceTemplate${props.details.pdfTemplate}`;
+    // Dynamic preview component name
+    const previewName = `InvoicePreview${props.details.pdfTemplate}`;
 
     const DynamicInvoice = useMemo(
         () =>
             dynamic<InvoiceType>(
                 () =>
                     import(
-                        `@/app/components/templates/invoice-pdf/${templateName}`
+                        `@/app/components/templates/invoice-pdf/${previewName}`
                     ),
                 {
                     loading: () => <DynamicInvoiceTemplateSkeleton />,
                     ssr: false,
                 }
             ),
-        [templateName]
+        [previewName]
     );
 
     return <DynamicInvoice {...props} />;

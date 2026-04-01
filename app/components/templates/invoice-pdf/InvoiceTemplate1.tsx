@@ -1,13 +1,10 @@
 import React from "react";
 
-// Components
-import { InvoiceLayout } from "@/app/components";
+import { Document, Page, View, Text, Image } from "@formepdf/react";
+import { tw } from "@formepdf/tailwind";
 
 // Helpers
-import { formatNumberWithCommas, isDataUrl } from "@/lib/helpers";
-
-// Variables
-import { DATE_OPTIONS } from "@/lib/variables";
+import { formatNumberWithCommas, isDataUrl } from "@/lib/pdf-helpers";
 
 // Types
 import { InvoiceType } from "@/types";
@@ -16,215 +13,216 @@ const InvoiceTemplate = (data: InvoiceType) => {
 	const { sender, receiver, details } = data;
 
 	return (
-		<InvoiceLayout data={data}>
-			<div className='flex justify-between'>
-				<div>
-					{details.invoiceLogo && (
-						<img
-							src={details.invoiceLogo}
-							width={140}
-							height={100}
-							alt={`Logo of ${sender.name}`}
-						/>
-					)}
-					<h1 className='mt-2 text-lg md:text-xl font-semibold text-blue-600'>{sender.name}</h1>
-				</div>
-				<div className='text-right'>
-					<h2 className='text-2xl md:text-3xl font-semibold text-gray-800'>Invoice #</h2>
-					<span className='mt-1 block text-gray-500'>{details.invoiceNumber}</span>
-					<address className='mt-4 not-italic text-gray-800'>
-						{sender.address}
-						<br />
-						{sender.zipCode}, {sender.city}
-						<br />
-						{sender.country}
-						<br />
-					</address>
-				</div>
-			</div>
+		<Document title={`Invoice ${details.invoiceNumber}`}>
+			<Page size="A4" margin={30}>
+				{/* Header */}
+				<View style={tw("flex-row justify-between")}>
+					<View>
+						{details.invoiceLogo && details.invoiceLogo !== "" && isDataUrl(details.invoiceLogo) ? (
+							<Image
+								src={details.invoiceLogo}
+								width={140}
+							/>
+						) : null}
+						<Text style={tw("mt-2 text-[14px] font-semibold text-blue-600")}>{sender.name}</Text>
+					</View>
+					<View style={tw("text-right")}>
+						<Text style={tw("text-xl font-semibold text-gray-800")}>Invoice #</Text>
+						<Text style={tw("mt-1 text-gray-500")}>{details.invoiceNumber}</Text>
+						<View style={tw("mt-4")}>
+							<Text style={tw("text-gray-800")}>{sender.address}</Text>
+							<Text style={tw("text-gray-800")}>{sender.zipCode}, {sender.city}</Text>
+							<Text style={tw("text-gray-800")}>{sender.country}</Text>
+						</View>
+					</View>
+				</View>
 
-			<div className='mt-6 grid sm:grid-cols-2 gap-3'>
-				<div>
-					<h3 className='text-lg font-semibold text-gray-800'>Bill to:</h3>
-					<h3 className='text-lg font-semibold text-gray-800'>{receiver.name}</h3>
-					{}
-					<address className='mt-2 not-italic text-gray-500'>
-						{receiver.address && receiver.address.length > 0 ? receiver.address : null}
-						{receiver.zipCode && receiver.zipCode.length > 0 ? `, ${receiver.zipCode}` : null}
-						<br />
-						{receiver.city}, {receiver.country}
-						<br />
-					</address>
-				</div>
-				<div className='sm:text-right space-y-2'>
-					<div className='grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2'>
-						<dl className='grid sm:grid-cols-6 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Invoice date:</dt>
-							<dd className='col-span-3 text-gray-500'>
-								{new Date(details.invoiceDate).toLocaleDateString("en-US", DATE_OPTIONS)}
-							</dd>
-						</dl>
-						<dl className='grid sm:grid-cols-6 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Due date:</dt>
-							<dd className='col-span-3 text-gray-500'>
-								{new Date(details.dueDate).toLocaleDateString("en-US", DATE_OPTIONS)}
-							</dd>
-						</dl>
-					</div>
-				</div>
-			</div>
+				{/* Bill To + Dates */}
+				<View style={tw("mt-4 flex-row gap-3")}>
+					<View style={{ flex: 1 }}>
+						<Text style={tw("text-md font-semibold text-gray-800")}>Bill to:</Text>
+						<Text style={tw("text-md font-semibold text-gray-800 mt-1")}>{receiver.name}</Text>
+						<View style={tw("mt-[12px]")}>
+							<Text style={tw("text-gray-500")}>
+								{[receiver.address, receiver.zipCode].filter(Boolean).join(", ")}
+							</Text>
+							<Text style={tw("text-gray-500 mt-[2px]")}>{receiver.city}, {receiver.country}</Text>
+						</View>
+					</View>
+					<View style={{ flex: 1, ...tw("gap-2") }}>
+						<View style={tw("flex-row gap-12")}>
+							<Text style={{ flex: 3, ...tw("font-semibold text-gray-800 text-right") }}>Invoice date:</Text>
+							<Text style={{ flex: 2, ...tw("text-gray-500 text-right") }}>
+								{details.invoiceDate}
+							</Text>
+						</View>
+						<View style={tw("flex-row gap-12")}>
+							<Text style={{ flex: 3, ...tw("font-semibold text-gray-800 text-right") }}>Due date:</Text>
+							<Text style={{ flex: 2, ...tw("text-gray-500 text-right") }}>
+								{details.dueDate}
+							</Text>
+						</View>
+					</View>
+				</View>
 
-			<div className='mt-3'>
-				<div className='border border-gray-200 p-1 rounded-lg space-y-1'>
-					<div className='hidden sm:grid sm:grid-cols-5'>
-						<div className='sm:col-span-2 text-xs font-medium text-gray-500 uppercase'>Item</div>
-						<div className='text-left text-xs font-medium text-gray-500 uppercase'>Qty</div>
-						<div className='text-left text-xs font-medium text-gray-500 uppercase'>Rate</div>
-						<div className='text-right text-xs font-medium text-gray-500 uppercase'>Amount</div>
-					</div>
-					<div className='hidden sm:block border-b border-gray-200'></div>
-					<div className='grid grid-cols-3 sm:grid-cols-5 gap-y-1'>
-						{details.items.map((item, index) => (
-							<React.Fragment key={index}>
-								<div className='col-span-full sm:col-span-2 border-b border-gray-300'>
-									<p className='font-medium text-gray-800'>{item.name}</p>
-									<p className='text-xs text-gray-600 whitespace-pre-line'>{item.description}</p>
-								</div>
-								<div className='border-b border-gray-300'>
-									<p className='text-gray-800'>{item.quantity}</p>
-								</div>
-								<div className='border-b border-gray-300'>
-									<p className='text-gray-800'>
-										{item.unitPrice} {details.currency}
-									</p>
-								</div>
-								<div className='border-b border-gray-300'>
-									<p className='sm:text-right text-gray-800'>
-										{item.total} {details.currency}
-									</p>
-								</div>
-							</React.Fragment>
-						))}
-					</div>
-					<div className='sm:hidden border-b border-gray-200'></div>
-				</div>
-			</div>
+				{/* Items Table */}
+				<View style={tw("mt-2 border border-gray-200 p-1 rounded-lg")}>
+					{/* Header Row */}
+					<View style={tw("flex-row")}>
+						<View style={{ flex: 2 }}>
+							<Text style={tw("text-[8px] font-medium text-gray-500 uppercase")}>Item</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={tw("text-[8px] font-medium text-gray-500 uppercase")}>Qty</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={tw("text-[8px] font-medium text-gray-500 uppercase")}>Rate</Text>
+						</View>
+						<View style={{ flex: 1 }}>
+							<Text style={tw("text-[8px] font-medium text-gray-500 uppercase text-right")}>Amount</Text>
+						</View>
+					</View>
+					<View style={tw("border-b border-gray-200 mt-1 mb-1")} />
 
-			<div className='mt-2 flex sm:justify-end'>
-				<div className='sm:text-right space-y-2'>
-					<div className='grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2'>
-						<dl className='grid sm:grid-cols-5 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Subtotal:</dt>
-							<dd className='col-span-2 text-gray-500'>
-								{formatNumberWithCommas(Number(details.subTotal))} {details.currency}
-							</dd>
-						</dl>
-						{details.discountDetails?.amount != undefined &&
-							details.discountDetails?.amount > 0 && (
-								<dl className='grid sm:grid-cols-5 gap-x-3'>
-									<dt className='col-span-3 font-semibold text-gray-800'>Discount:</dt>
-									<dd className='col-span-2 text-gray-500'>
+					{/* Item Rows */}
+					{details.items.map((item, index) => (
+						<View key={index} style={tw("flex-row border-b border-gray-300 pt-[2px] pb-[2px]")}>
+							<View style={{ flex: 2 }}>
+								<Text style={tw("text-[11px] font-bold text-gray-800")}>{item.name}</Text>
+								<Text style={tw("text-[9px] text-gray-600")}>{item.description}</Text>
+							</View>
+							<View style={{ flex: 1 }}>
+								<Text style={tw("text-gray-800")}>{item.quantity}</Text>
+							</View>
+							<View style={{ flex: 1 }}>
+								<Text style={tw("text-gray-800")}>{item.unitPrice} {details.currency}</Text>
+							</View>
+							<View style={{ flex: 1 }}>
+								<Text style={tw("text-right text-gray-800")}>{item.total} {details.currency}</Text>
+							</View>
+						</View>
+					))}
+				</View>
+
+				{/* Totals */}
+				<View style={tw("mt-1 flex-row justify-end")}>
+					<View style={{ width: 350, ...tw("gap-[7px]") }}>
+						<View style={tw("flex-row")}>
+							<View style={{ flex: 4 }}>
+								<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Subtotal:</Text>
+							</View>
+							<View style={{ flex: 5 }}>
+								<Text style={tw("text-gray-500 text-right")}>{formatNumberWithCommas(Number(details.subTotal))} {details.currency}</Text>
+							</View>
+						</View>
+						{details.discountDetails?.amount != undefined && details.discountDetails?.amount > 0 && (
+							<View style={tw("flex-row")}>
+								<View style={{ flex: 4 }}>
+									<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Discount:</Text>
+								</View>
+								<View style={{ flex: 5 }}>
+									<Text style={tw("text-gray-500 text-right")}>
 										{details.discountDetails.amountType === "amount"
 											? `- ${details.discountDetails.amount} ${details.currency}`
 											: `- ${details.discountDetails.amount}%`}
-									</dd>
-								</dl>
-							)}
+									</Text>
+								</View>
+							</View>
+						)}
 						{details.taxDetails?.amount != undefined && details.taxDetails?.amount > 0 && (
-							<dl className='grid sm:grid-cols-5 gap-x-3'>
-								<dt className='col-span-3 font-semibold text-gray-800'>Tax:</dt>
-								<dd className='col-span-2 text-gray-500'>
-									{details.taxDetails.amountType === "amount"
-										? `+ ${details.taxDetails.amount} ${details.currency}`
-										: `+ ${details.taxDetails.amount}%`}
-								</dd>
-							</dl>
+							<View style={tw("flex-row")}>
+								<View style={{ flex: 4 }}>
+									<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Tax:</Text>
+								</View>
+								<View style={{ flex: 5 }}>
+									<Text style={tw("text-gray-500 text-right")}>
+										{details.taxDetails.amountType === "amount"
+											? `+ ${details.taxDetails.amount} ${details.currency}`
+											: `+ ${details.taxDetails.amount}%`}
+									</Text>
+								</View>
+							</View>
 						)}
 						{details.shippingDetails?.cost != undefined && details.shippingDetails?.cost > 0 && (
-							<dl className='grid sm:grid-cols-5 gap-x-3'>
-								<dt className='col-span-3 font-semibold text-gray-800'>Shipping:</dt>
-								<dd className='col-span-2 text-gray-500'>
-									{details.shippingDetails.costType === "amount"
-										? `+ ${details.shippingDetails.cost} ${details.currency}`
-										: `+ ${details.shippingDetails.cost}%`}
-								</dd>
-							</dl>
+							<View style={tw("flex-row")}>
+								<View style={{ flex: 4 }}>
+									<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Shipping:</Text>
+								</View>
+								<View style={{ flex: 5 }}>
+									<Text style={tw("text-gray-500 text-right")}>
+										{details.shippingDetails.costType === "amount"
+											? `+ ${details.shippingDetails.cost} ${details.currency}`
+											: `+ ${details.shippingDetails.cost}%`}
+									</Text>
+								</View>
+							</View>
 						)}
-						<dl className='grid sm:grid-cols-5 gap-x-3'>
-							<dt className='col-span-3 font-semibold text-gray-800'>Total:</dt>
-							<dd className='col-span-2 text-gray-500'>
-								{formatNumberWithCommas(Number(details.totalAmount))} {details.currency}
-							</dd>
-						</dl>
+						<View style={tw("flex-row")}>
+							<View style={{ flex: 4 }}>
+								<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Total:</Text>
+							</View>
+							<View style={{ flex: 5 }}>
+								<Text style={tw("text-gray-500 text-right")}>{formatNumberWithCommas(Number(details.totalAmount))} {details.currency}</Text>
+							</View>
+						</View>
 						{details.totalAmountInWords && (
-							<dl className='grid sm:grid-cols-5 gap-x-3'>
-								<dt className='col-span-3 font-semibold text-gray-800'>Total in words:</dt>
-								<dd className='col-span-2 text-gray-500'>
-									<em>
-										{details.totalAmountInWords} {details.currency}
-									</em>
-								</dd>
-							</dl>
+							<View style={tw("flex-row")}>
+								<View style={{ flex: 4 }}>
+									<Text style={tw("font-semibold text-gray-800 text-right mr-5")}>Total in words:</Text>
+								</View>
+								<View style={{ flex: 5 }}>
+									<Text style={tw("italic text-gray-500 text-right")}>{details.totalAmountInWords} {details.currency}</Text>
+								</View>
+							</View>
 						)}
-					</div>
-				</div>
-			</div>
+					</View>
+				</View>
 
-			<div>
-				<div className='my-4'>
-					<div className='my-2'>
-						<p className='font-semibold text-blue-600'>Additional notes:</p>
-						<p className='font-regular text-gray-800'>{details.additionalNotes}</p>
-					</div>
-					<div className='my-2'>
-						<p className='font-semibold text-blue-600'>Payment terms:</p>
-						<p className='font-regular text-gray-800'>{details.paymentTerms}</p>
-					</div>
-					<div className='my-2'>
-						<span className='font-semibold text-md text-gray-800'>
-							Please send the payment to this address
-							<p className='text-sm'>Bank: {details.paymentInformation?.bankName}</p>
-							<p className='text-sm'>Account name: {details.paymentInformation?.accountName}</p>
-							<p className='text-sm'>Account no: {details.paymentInformation?.accountNumber}</p>
-						</span>
-					</div>
-				</div>
-				<p className='text-gray-500 text-sm'>
-					If you have any questions concerning this invoice, use the following contact information:
-				</p>
-				<div>
-					<p className='block text-sm font-medium text-gray-800'>{sender.email}</p>
-					<p className='block text-sm font-medium text-gray-800'>{sender.phone}</p>
-				</div>
-			</div>
+				{/* Notes & Payment */}
+				<View style={tw("mt-2")}>
+					<View style={tw("mt-2")}>
+						<Text style={tw("font-semibold text-blue-600")}>Additional notes:</Text>
+						<Text style={tw("text-gray-800")}>{details.additionalNotes}</Text>
+					</View>
+					<View style={tw("mt-2")}>
+						<Text style={tw("font-semibold text-blue-600")}>Payment terms:</Text>
+						<Text style={tw("text-gray-800")}>{details.paymentTerms}</Text>
+					</View>
+					<View style={tw("mt-2")}>
+						<Text style={tw("font-semibold text-gray-800")}>Please send the payment to this address</Text>
+						<Text style={tw("text-[10px] font-bold text-gray-800")}>Bank: {details.paymentInformation?.bankName}</Text>
+						<Text style={tw("text-[10px] font-bold text-gray-800")}>Account name: {details.paymentInformation?.accountName}</Text>
+						<Text style={tw("text-[10px] font-bold text-gray-800")}>Account no: {details.paymentInformation?.accountNumber}</Text>
+					</View>
+				</View>
 
-			{/* Signature */}
-			{details?.signature?.data && isDataUrl(details?.signature?.data) ? (
-				<div className='mt-6'>
-					<p className='font-semibold text-gray-800'>Signature:</p>
-					<img
-						src={details.signature.data}
-						width={120}
-						height={60}
-						alt={`Signature of ${sender.name}`}
-					/>
-				</div>
-			) : details.signature?.data ? (
-				<div className='mt-6'>
-					<p className='text-gray-800'>Signature:</p>
-					<p
-						style={{
-							fontSize: 30,
-							fontWeight: 400,
-							fontFamily: `${details.signature.fontFamily}, cursive`,
-							color: "black",
-						}}
-					>
-						{details.signature.data}
-					</p>
-				</div>
-			) : null}
-		</InvoiceLayout>
+				<View style={{marginTop: 14}}>
+					<Text style={tw("text-gray-500 text-[10px]")}>
+						If you have any questions concerning this invoice, use the following contact information:
+					</Text>
+					<Text style={tw("text-[10px] font-bold text-gray-800")}>{sender.email}</Text>
+					<Text style={tw("text-[10px] font-bold text-gray-800")}>{sender.phone}</Text>
+				</View>
+
+				{/* Signature */}
+				{details?.signature?.data && isDataUrl(details?.signature?.data) ? (
+					<View style={tw("mt-6")}>
+						<Text style={tw("font-semibold text-gray-800")}>Signature:</Text>
+						<Image
+							src={details.signature.data}
+							width={120}
+						/>
+					</View>
+				) : details?.signature?.data ? (
+					<View style={tw("mt-6")}>
+						<Text style={tw("text-gray-800")}>Signature:</Text>
+						<Text style={{ fontSize: 30, fontWeight: 400, color: tw("text-black").color }}>
+							{details.signature.data}
+						</Text>
+					</View>
+				) : null}
+			</Page>
+		</Document>
 	);
 };
 
