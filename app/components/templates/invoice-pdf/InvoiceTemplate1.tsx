@@ -2,6 +2,8 @@ import React from "react";
 
 import { Document, Page, View, Text, Image } from "@formepdf/react";
 import { tw } from "@formepdf/tailwind";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 // Helpers
 import { formatNumberWithCommas, isDataUrl } from "@/lib/pdf-helpers";
@@ -9,12 +11,35 @@ import { formatNumberWithCommas, isDataUrl } from "@/lib/pdf-helpers";
 // Types
 import { InvoiceType } from "@/types";
 
+// Load Outfit font family.
+// In Next.js, process.cwd() is the project root so readFileSync works.
+// In VS Code preview, cwd differs so readFileSync throws ENOENT — fall back
+// to a relative path string which the renderer resolves from this file's dir.
+const fontsDir = join(process.cwd(), "fonts");
+const fontFiles = ["Outfit-Regular.ttf", "Outfit-Medium.ttf", "Outfit-SemiBold.ttf", "Outfit-Bold.ttf"] as const;
+const fontWeights = [400, 500, 600, 700] as const;
+
+function loadFont(file: string): string | Buffer {
+	try {
+		return readFileSync(join(fontsDir, file));
+	} catch {
+		// VS Code preview: fs unavailable or wrong cwd — use relative path
+		return join("../../../../fonts", file);
+	}
+}
+
+const outfitFonts = fontFiles.map((file, i) => ({
+	family: "Outfit" as const,
+	src: loadFont(file),
+	fontWeight: fontWeights[i],
+}));
+
 const InvoiceTemplate = (data: InvoiceType) => {
 	const { sender, receiver, details } = data;
 
 	return (
-		<Document title={`Invoice ${details.invoiceNumber}`}>
-			<Page size="A4" margin={30}>
+		<Document title={`Invoice ${details.invoiceNumber}`} fonts={outfitFonts}>
+			<Page size="A4" margin={30} style={{ fontFamily: "Outfit" }}>
 				{/* Header */}
 				<View style={tw("flex-row justify-between")}>
 					<View>
