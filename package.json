@@ -47,7 +47,6 @@
     "nodemailer": "^6.9.7",
     "number-to-words": "^1.2.4",
     "postcss": "8.4.31",
-    "puppeteer": "^24.40.0",
     "react": "18.2.0",
     "react-day-picker": "^8.8.2",
     "react-dom": "18.2.0",
