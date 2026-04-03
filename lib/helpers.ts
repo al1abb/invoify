@@ -202,6 +202,50 @@ const fileToBuffer = async (file: File) => {
     return pdfBuffer;
 };
 
+/**
+ * Get currency symbol for a given currency code
+ * @param {string} currencyCode - Currency code (e.g., "USD", "EUR", "IDR")
+ * @returns {string} Currency symbol (e.g., "$", "€", "Rp.")
+ */
+const getCurrencySymbol = (currencyCode: string): string => {
+    try {
+        const formatter = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: currencyCode,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        });
+
+        const parts = formatter.formatToParts(0);
+        const currencyPart = parts.find((part) => part.type === "currency");
+        return currencyPart ? currencyPart.value : currencyCode;
+    } catch (error) {
+        // Fallback to currency code if symbol extraction fails
+        return currencyCode;
+    }
+};
+
+/**
+ * Clean invoice items based on settings - remove discount/tax if settings are disabled
+ * @param {any[]} items - Array of invoice items
+ * @param {any} settings - Settings object
+ * @returns {any[]} Cleaned items
+ */
+const cleanInvoiceItemsForSettings = (items: any[], settings: any) => {
+    return items.map((item) => {
+        const cleanedItem = { ...item };
+        if (!settings.discountPerItem.enabled) {
+            cleanedItem.discount = undefined;
+            cleanedItem.discountType = undefined;
+        }
+        if (!settings.taxPerItem.enabled) {
+            cleanedItem.tax = undefined;
+            cleanedItem.taxType = undefined;
+        }
+        return cleanedItem;
+    });
+};
+
 export {
     formatNumberWithCommas,
     formatPriceToString,
@@ -210,4 +254,6 @@ export {
     isDataUrl,
     getInvoiceTemplate,
     fileToBuffer,
+    getCurrencySymbol,
+    cleanInvoiceItemsForSettings,
 };

@@ -5,6 +5,11 @@ import BaseNavbar from "./layout/BaseNavbar";
 import BaseFooter from "./layout/BaseFooter";
 
 /* =========================
+   * Settings
+   ========================= */
+import { SettingsPanel } from "./settings/SettingsPanel";
+
+/* =========================
    * Invoice
    ========================= */
 import InvoiceMain from "./invoice/InvoiceMain";
@@ -32,7 +37,7 @@ import InvoiceDetails from "./invoice/form/sections/InvoiceDetails";
 import Items from "./invoice/form/sections/Items";
 import PaymentInformation from "./invoice/form/sections/PaymentInformation";
 import InvoiceSummary from "./invoice/form/sections/InvoiceSummary";
-import ImportJsonButton from "./invoice/form/sections/ImportJsonButton";
+import ImportInvoiceButton from "./invoice/form/sections/ImportJsonButton";
 
 // * Actions
 import PdfViewer from "./invoice/actions/PdfViewer";
@@ -44,6 +49,7 @@ import FinalPdf from "./invoice/actions/FinalPdf";
 import CurrencySelector from "./reusables/form-fields/CurrencySelector";
 import FormInput from "./reusables/form-fields/FormInput";
 import FormTextarea from "./reusables/form-fields/FormTextarea";
+import FormSelect from "./reusables/form-fields/FormSelect";
 import DatePickerFormField from "./reusables/form-fields/DatePickerFormField";
 import FormFile from "./reusables/form-fields/FormFile";
 import ChargeInput from "./reusables/form-fields/ChargeInput";
@@ -101,6 +107,7 @@ import DevDebug from "./dev/DevDebug";
 export {
     BaseNavbar,
     BaseFooter,
+    SettingsPanel,
     InvoiceMain,
     InvoiceForm,
     InvoiceActions,
@@ -123,6 +130,7 @@ export {
     FinalPdf,
     FormInput,
     FormTextarea,
+    FormSelect,
     DatePickerFormField,
     FormFile,
     ChargeInput,
@@ -134,7 +142,7 @@ export {
     SendPdfToEmailModal,
     InvoiceLoaderModal,
     InvoiceExportModal,
-    ImportJsonButton,
+    ImportInvoiceButton,
     SignatureModal,
     DrawSignature,
     TypeSignature,

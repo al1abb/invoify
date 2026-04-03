@@ -1,5 +1,5 @@
 // Types
-import { SignatureColor, SignatureFont } from "@/types";
+import { SignatureColor, SignatureFont, SettingsType } from "@/types";
 
 /**
  * Environment
@@ -30,6 +30,7 @@ export const CURRENCIES_API =
  * Local storage
  */
 export const LOCAL_STORAGE_INVOICE_DRAFT_KEY = "invoify:invoiceDraft";
+export const LOCAL_STORAGE_SETTINGS_KEY = "invoify:settings";
 
 /**
  * Tailwind
@@ -66,8 +67,45 @@ export const LOCALES = [
   { code: "ja", name: "日本語" },
   { code: "nb-NO", name: "Norwegian (bokmål)" },
   { code: "nn-NO", name: "Norwegian (nynorsk)" },
+  { code: "id", name: "Bahasa Indonesia" },
 ];
 export const DEFAULT_LOCALE = LOCALES[0].code;
+
+/**
+ * Settings
+ */
+export const DEFAULT_SETTINGS: SettingsType = {
+  fieldRequirements: {
+    senderEmail: "required",
+    senderPhone: "required",
+    senderAddress: "required",
+    senderZipCode: "required",
+    senderCity: "required",
+    senderCountry: "required",
+    receiverEmail: "required",
+    receiverPhone: "required",
+    receiverAddress: "required",
+    receiverZipCode: "required",
+    receiverCity: "required",
+    receiverCountry: "required",
+  },
+  discountPerItem: {
+    enabled: false,
+    required: false,
+  },
+  taxPerItem: {
+    enabled: false,
+    required: false,
+  },
+  skuColumn: {
+    enabled: false,
+    required: false,
+  },
+  cashPaymentMode: {
+    enabled: false,
+  },
+  currencyDisplay: "symbolOnly",
+};
 
 /**
  * Signature variables
@@ -149,6 +187,11 @@ export const FORM_DEFAULT_VALUES = {
         quantity: 0,
         unitPrice: 0,
         total: 0,
+        sku: "",
+        discount: 0,
+        discountType: "amount",
+        tax: 0,
+        taxType: "amount",
       },
     ],
     currency: "USD",
@@ -213,6 +256,11 @@ export const FORM_FILL_VALUES = {
         quantity: 4,
         unitPrice: 50,
         total: 200,
+        sku: "",
+        discount: 0,
+        discountType: "amount",
+        tax: 0,
+        taxType: "amount",
       },
       {
         name: "Product 2",
@@ -220,6 +268,11 @@ export const FORM_FILL_VALUES = {
         quantity: 5,
         unitPrice: 50,
         total: 250,
+        sku: "",
+        discount: 0,
+        discountType: "amount",
+        tax: 0,
+        taxType: "amount",
       },
       {
         name: "Product 3",
@@ -227,6 +280,11 @@ export const FORM_FILL_VALUES = {
         quantity: 5,
         unitPrice: 80,
         total: 400,
+        sku: "",
+        discount: 0,
+        discountType: "amount",
+        tax: 0,
+        taxType: "amount",
       },
     ],
     currency: "USD",

@@ -56,3 +56,39 @@ export enum ExportTypes {
     XLSX = "XLSX",
     DOCX = "DOCX",
 }
+
+// Settings types
+export type FieldRequirementSetting = "required" | "optional" | "hidden";
+
+export type SettingsType = {
+    fieldRequirements: {
+        senderEmail: FieldRequirementSetting;
+        senderPhone: FieldRequirementSetting;
+        senderAddress: FieldRequirementSetting;
+        senderZipCode: FieldRequirementSetting;
+        senderCity: FieldRequirementSetting;
+        senderCountry: FieldRequirementSetting;
+        receiverEmail: FieldRequirementSetting;
+        receiverPhone: FieldRequirementSetting;
+        receiverAddress: FieldRequirementSetting;
+        receiverZipCode: FieldRequirementSetting;
+        receiverCity: FieldRequirementSetting;
+        receiverCountry: FieldRequirementSetting;
+    };
+    discountPerItem: {
+        enabled: boolean;
+        required: boolean;
+    };
+    taxPerItem: {
+        enabled: boolean;
+        required: boolean;
+    };
+    skuColumn: {
+        enabled: boolean;
+        required: boolean;
+    };
+    cashPaymentMode: {
+        enabled: boolean;
+    };
+    currencyDisplay: "symbolOnly" | "symbolAndCode";
+};

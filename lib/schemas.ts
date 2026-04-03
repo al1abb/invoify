@@ -6,6 +6,9 @@ import { formatNumberWithCommas } from "@/lib/helpers";
 // Variables
 import { DATE_OPTIONS } from "@/lib/variables";
 
+// Types
+import { SettingsType } from "@/types";
+
 // TODO: Refactor some of the validators. Ex: name and zipCode or address and country have same rules
 // Field Validators
 const fieldValidators = {
@@ -81,6 +84,10 @@ const fieldValidators = {
         }),
 };
 
+// Helper: converts empty string to undefined so optional validators pass
+const makeOptional = (validator: z.ZodTypeAny) =>
+    z.preprocess((v) => (v === "" ? undefined : v), validator.optional());
+
 const CustomInputSchema = z.object({
     key: z.string(),
     value: z.string(),
@@ -114,12 +121,21 @@ const ItemSchema = z.object({
     quantity: fieldValidators.quantity,
     unitPrice: fieldValidators.unitPrice,
     total: fieldValidators.stringToNumber,
+    // Optional fields that may be enabled via settings
+    sku: fieldValidators.stringOptional,
+    discount: fieldValidators.nonNegativeNumber.optional(),
+    discountType: fieldValidators.stringOptional,
+    tax: fieldValidators.nonNegativeNumber.optional(),
+    taxType: fieldValidators.stringOptional,
 });
 
 const PaymentInformationSchema = z.object({
-    bankName: fieldValidators.stringMin1,
-    accountName: fieldValidators.stringMin1,
-    accountNumber: fieldValidators.stringMin1,
+    bankName: fieldValidators.stringMin1.optional(),
+    accountName: fieldValidators.stringMin1.optional(),
+    accountNumber: fieldValidators.stringMin1.optional(),
+    // Optional fields for cash payment mode
+    isCash: z.boolean().optional(),
+    change: fieldValidators.nonNegativeNumber.optional(),
 });
 
 const DiscountDetailsSchema = z.object({
@@ -172,4 +188,151 @@ const InvoiceSchema = z.object({
     details: InvoiceDetailsSchema,
 });
 
-export { InvoiceSchema, ItemSchema };
+// Factory function to create dynamic ItemSchema based on settings
+const createItemSchema = (settings: SettingsType) => {
+    const shape: Record<string, z.ZodTypeAny> = {
+        name: fieldValidators.stringMin1,
+        description: fieldValidators.stringOptional,
+        quantity: fieldValidators.quantity,
+        unitPrice: fieldValidators.unitPrice,
+        total: fieldValidators.stringToNumber,
+    };
+
+    // Add SKU field if enabled
+    if (settings.skuColumn.enabled) {
+        shape.sku = settings.skuColumn.required
+            ? fieldValidators.stringMin1
+            : fieldValidators.stringOptional;
+    }
+
+    // Add discount field if enabled
+    if (settings.discountPerItem.enabled) {
+        shape.discount = settings.discountPerItem.required
+            ? fieldValidators.nonNegativeNumber
+            : fieldValidators.nonNegativeNumber.optional();
+        shape.discountType = fieldValidators.stringOptional;
+    }
+
+    // Add tax field if enabled
+    if (settings.taxPerItem.enabled) {
+        shape.tax = settings.taxPerItem.required
+            ? fieldValidators.nonNegativeNumber
+            : fieldValidators.nonNegativeNumber.optional();
+        shape.taxType = fieldValidators.stringOptional;
+    }
+
+    return z.object(shape);
+};
+
+// Factory function to create dynamic PaymentInformationSchema based on settings
+const createPaymentInformationSchema = (settings: SettingsType) => {
+    if (settings.cashPaymentMode.enabled) {
+        return z
+            .object({
+                // Use makeOptional so empty strings "" become undefined and pass when cash is ON
+                bankName: makeOptional(fieldValidators.stringMin1),
+                accountName: makeOptional(fieldValidators.stringMin1),
+                accountNumber: makeOptional(fieldValidators.stringMin1),
+                isCash: z.boolean().optional(),
+                change: fieldValidators.nonNegativeNumber.optional(),
+            })
+            .superRefine((data, ctx) => {
+                // Only validate bank fields when NOT using cash payment
+                if (!data.isCash) {
+                    if (!data.bankName) {
+                        ctx.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            message: "Bank name required when not using cash payment",
+                            path: ["bankName"],
+                        });
+                    }
+                    if (!data.accountName) {
+                        ctx.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            message: "Account name required when not using cash payment",
+                            path: ["accountName"],
+                        });
+                    }
+                    if (!data.accountNumber) {
+                        ctx.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            message: "Account number required when not using cash payment",
+                            path: ["accountNumber"],
+                        });
+                    }
+                }
+            });
+    }
+
+    return z.object({
+        bankName: fieldValidators.stringMin1,
+        accountName: fieldValidators.stringMin1,
+        accountNumber: fieldValidators.stringMin1,
+        isCash: z.boolean().optional(),
+        change: fieldValidators.nonNegativeNumber.optional(),
+    });
+};
+
+// Helper to create dynamic sender/receiver schema based on settings
+const createPartySchema = (settings: SettingsType, party: "sender" | "receiver") => {
+    const getValidator = (field: string, baseValidator: z.ZodTypeAny) => {
+        const key = `${party}${field.charAt(0).toUpperCase() + field.slice(1)}` as keyof typeof settings.fieldRequirements;
+        return settings.fieldRequirements[key] === "required"
+            ? baseValidator
+            : makeOptional(baseValidator);
+    };
+
+    return z.object({
+        name: fieldValidators.name,
+        address: getValidator("address", fieldValidators.address),
+        zipCode: getValidator("zipCode", fieldValidators.zipCode),
+        city: getValidator("city", fieldValidators.city),
+        country: getValidator("country", fieldValidators.country),
+        email: getValidator("email", fieldValidators.email),
+        phone: getValidator("phone", fieldValidators.phone),
+        customInputs: z.array(CustomInputSchema).optional(),
+    });
+};
+
+// Factory function to create dynamic sender schema based on settings
+const createSenderSchema = (settings: SettingsType) => createPartySchema(settings, "sender");
+
+// Factory function to create dynamic receiver schema based on settings
+const createReceiverSchema = (settings: SettingsType) => createPartySchema(settings, "receiver");
+
+// Factory function to create dynamic InvoiceDetailsSchema based on settings
+const createInvoiceDetailsSchema = (settings: SettingsType) => {
+    return z.object({
+        invoiceLogo: fieldValidators.stringOptional,
+        invoiceNumber: fieldValidators.stringMin1,
+        invoiceDate: fieldValidators.date,
+        dueDate: fieldValidators.date,
+        purchaseOrderNumber: fieldValidators.stringOptional,
+        currency: fieldValidators.string,
+        language: fieldValidators.string,
+        items: z.array(createItemSchema(settings)),
+        paymentInformation: createPaymentInformationSchema(settings).optional(),
+        taxDetails: TaxDetailsSchema.optional(),
+        discountDetails: DiscountDetailsSchema.optional(),
+        shippingDetails: ShippingDetailsSchema.optional(),
+        subTotal: fieldValidators.nonNegativeNumber,
+        totalAmount: fieldValidators.nonNegativeNumber,
+        totalAmountInWords: fieldValidators.string,
+        additionalNotes: fieldValidators.stringOptional,
+        paymentTerms: fieldValidators.stringMin1,
+        signature: SignatureSchema.optional(),
+        updatedAt: fieldValidators.stringOptional,
+        pdfTemplate: z.number(),
+    });
+};
+
+// Factory function to create dynamic InvoiceSchema based on settings
+const createInvoiceSchema = (settings: SettingsType) => {
+    return z.object({
+        sender: createSenderSchema(settings),
+        receiver: createReceiverSchema(settings),
+        details: createInvoiceDetailsSchema(settings),
+    });
+};
+
+export { InvoiceSchema, ItemSchema, createInvoiceSchema, createItemSchema, createPaymentInformationSchema, createSenderSchema, createReceiverSchema, createInvoiceDetailsSchema };

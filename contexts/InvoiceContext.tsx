@@ -19,6 +19,8 @@ import useToasts from "@/hooks/useToasts";
 
 // Services
 import { exportInvoice } from "@/services/invoice/client/exportInvoice";
+import { parseImportedFile } from "@/services/invoice/client/importInvoice";
+import { cleanInvoiceItemsForSettings } from "@/lib/helpers";
 
 // Variables
 import {
@@ -48,7 +50,7 @@ const defaultInvoiceContext = {
   deleteInvoice: (index: number) => {},
   sendPdfToMail: (email: string): Promise<void> => Promise.resolve(),
   exportInvoiceAs: (exportAs: ExportTypes) => {},
-  importInvoice: (file: File) => {},
+  importInvoice: async (file: File): Promise<void> => Promise.resolve(),
 };
 
 export const InvoiceContext = createContext(defaultInvoiceContext);
@@ -56,6 +58,9 @@ export const InvoiceContext = createContext(defaultInvoiceContext);
 export const useInvoiceContext = () => {
   return useContext(InvoiceContext);
 };
+
+// Contexts
+import { useSettings } from "./SettingsContext";
 
 type InvoiceContextProviderProps = {
   children: React.ReactNode;
@@ -65,6 +70,7 @@ export const InvoiceContextProvider = ({
   children,
 }: InvoiceContextProviderProps) => {
   const router = useRouter();
+  const { settings } = useSettings();
 
   // Toasts
   const {
@@ -161,28 +167,40 @@ export const InvoiceContextProvider = ({
    * @returns {Promise<void>} - A promise that resolves when the PDF is successfully generated.
    * @throws {Error} - If an error occurs during the PDF generation process.
    */
-  const generatePdf = useCallback(async (data: InvoiceType) => {
-    setInvoicePdfLoading(true);
+  const generatePdf = useCallback(
+    async (data: InvoiceType) => {
+      setInvoicePdfLoading(true);
 
-    try {
-      const response = await fetch(GENERATE_PDF_API, {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      try {
+        // Clean data based on settings
+        const cleanedData = {
+          ...data,
+          details: {
+            ...data.details,
+            items: cleanInvoiceItemsForSettings(data.details.items, settings),
+          },
+        };
 
-      const result = await response.blob();
-      setInvoicePdf(result);
+        const response = await fetch(GENERATE_PDF_API, {
+          method: "POST",
+          body: JSON.stringify(cleanedData),
+        });
 
-      if (result.size > 0) {
-        // Toast
-        pdfGenerationSuccess();
+        const result = await response.blob();
+        setInvoicePdf(result);
+
+        if (result.size > 0) {
+          // Toast
+          pdfGenerationSuccess();
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setInvoicePdfLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setInvoicePdfLoading(false);
-    }
-  }, []);
+    },
+    [settings]
+  );
 
   /**
    * Removes the final PDF file and switches to Live Preview
@@ -351,43 +369,48 @@ export const InvoiceContextProvider = ({
   const exportInvoiceAs = (exportAs: ExportTypes) => {
     const formValues = getValues();
 
+    // Clean data based on settings
+    const cleanedData = {
+      ...formValues,
+      details: {
+        ...formValues.details,
+        items: cleanInvoiceItemsForSettings(formValues.details.items, settings),
+      },
+    };
+
     // Service to export invoice with given parameters
-    exportInvoice(exportAs, formValues);
+    exportInvoice(exportAs, cleanedData);
   };
 
   /**
-   * Import an invoice from a JSON file.
+   * Import an invoice from a file (JSON, CSV, XML, XLS, XLSX).
    *
-   * @param {File} file - The JSON file to import.
+   * @param {File} file - The file to import.
    */
-  const importInvoice = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const importedData = JSON.parse(event.target?.result as string);
+  const importInvoice = async (file: File) => {
+    try {
+      const importedData = await parseImportedFile(file);
 
-        // Parse the dates
-        if (importedData.details) {
-          if (importedData.details.invoiceDate) {
-            importedData.details.invoiceDate = new Date(
-              importedData.details.invoiceDate
-            );
-          }
-          if (importedData.details.dueDate) {
-            importedData.details.dueDate = new Date(
-              importedData.details.dueDate
-            );
-          }
+      // Parse the dates
+      if (importedData.details) {
+        if (importedData.details.invoiceDate) {
+          importedData.details.invoiceDate = new Date(
+            importedData.details.invoiceDate
+          ) as unknown as string;
         }
-
-        // Reset form with imported data
-        reset(importedData);
-      } catch (error) {
-        console.error("Error parsing JSON file:", error);
-        importInvoiceError();
+        if (importedData.details.dueDate) {
+          importedData.details.dueDate = new Date(
+            importedData.details.dueDate
+          ) as unknown as string;
+        }
       }
-    };
-    reader.readAsText(file);
+
+      // Reset form with imported data
+      reset(importedData);
+    } catch (error) {
+      console.error("Error importing file:", error);
+      importInvoiceError();
+    }
   };
 
   return (

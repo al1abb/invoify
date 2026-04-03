@@ -14,7 +14,7 @@ import {
 
 // Components
 import { SavedInvoicesList } from "@/app/components";
-import { ImportJsonButton } from "@/app/components";
+import { ImportInvoiceButton } from "@/app/components";
 
 // Context
 import { useInvoiceContext } from "@/contexts/InvoiceContext";
@@ -38,7 +38,7 @@ const InvoiceLoaderModal = ({ children }: InvoiceLoaderModalType) => {
           <DialogDescription>
             <div className="space-y-2">
               <p>You have {savedInvoices.length} saved invoices</p>
-              <ImportJsonButton setOpen={setOpen}/>
+              <ImportInvoiceButton setOpen={setOpen}/>
             </div>
           </DialogDescription>
         </DialogHeader>

@@ -89,5 +89,56 @@
   },
   "footer": {
     "developedBy": "Dikembangkan oleh"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "description": "Atur pengaturan faktur Anda",
+    "close": "Tutup pengaturan",
+    "tabs": {
+      "fields": "Kolom",
+      "items": "Barang",
+      "payment": "Pembayaran"
+    },
+    "fieldRequirements": {
+      "title": "Kebutuhan Kolom",
+      "description": "Pilih kolom mana yang diperlukan, opsional, atau disembunyikan dalam formulir."
+    },
+    "itemFeatures": {
+      "title": "Fitur Barang",
+      "description": "Aktifkan atau nonaktifkan fitur spesifik untuk barang faktur."
+    },
+    "paymentModes": {
+      "title": "Metode Pembayaran",
+      "description": "Atur metode dan opsi pembayaran."
+    },
+    "fields": {
+      "senderAddress": "Alamat Pengirim",
+      "senderZipCode": "Kode Pos Pengirim",
+      "senderCity": "Kota Pengirim",
+      "senderCountry": "Negara Pengirim",
+      "senderEmail": "Email Pengirim",
+      "senderPhone": "Telepon Pengirim",
+      "receiverAddress": "Alamat Penerima",
+      "receiverZipCode": "Kode Pos Penerima",
+      "receiverCity": "Kota Penerima",
+      "receiverCountry": "Negara Penerima",
+      "receiverEmail": "Email Penerima",
+      "receiverPhone": "Telepon Penerima"
+    },
+    "items": {
+      "skuColumn": "Kolom SKU",
+      "discountPerItem": "Diskon per Barang",
+      "taxPerItem": "Pajak per Barang"
+    },
+    "payment": {
+      "cashPaymentMode": "Metode Pembayaran Tunai"
+    },
+    "status": {
+      "required": "Diperlukan",
+      "optional": "Opsional",
+      "hidden": "Sembunyikan",
+      "enabled": "Aktif",
+      "disabled": "Nonaktif"
+    }
   }
 }
