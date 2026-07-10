@@ -88,7 +88,7 @@
         "pdfView": "PDF 보기"
     },
     "footer": {
-        "developedBy": "개발자"
+        "developedBy": "제작:"
     },
     "voiceInput": {
         "voiceInput": "음성 입력",
@@ -116,6 +116,6 @@
         "parsedItems": "분석 결과",
         "item": "항목",
         "cancel": "취소",
-        "confirm": "추가 확인"
+        "confirm": "추가하기"
     }
 }
