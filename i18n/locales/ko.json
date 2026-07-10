@@ -1,0 +1,121 @@
+{
+    "form": {
+        "title": "인보이스",
+        "description": "인보이스 생성",
+        "newInvBadge": "새 인보이스",
+        "wizard": {
+            "fromAndTo": "보내는 사람 & 받는 사람",
+            "invoiceDetails": "인보이스 정보",
+            "lineItems": "항목",
+            "paymentInfo": "결제 정보",
+            "summary": "요약",
+            "next": "다음",
+            "back": "이전"
+        },
+        "steps": {
+            "fromAndTo": {
+                "billFrom": "보내는 사람",
+                "billTo": "받는 사람",
+                "name": "이름",
+                "address": "주소",
+                "zipCode": "우편번호",
+                "city": "도시",
+                "country": "국가",
+                "email": "이메일",
+                "phone": "전화번호",
+                "addCustomInput": "사용자 지정 항목 추가",
+                "sender": "발신자",
+                "receiver": "수신자"
+            },
+            "invoiceDetails": {
+                "heading": "인보이스 정보",
+                "invoiceLogo": {
+                    "label": "인보이스 로고",
+                    "placeholder": "클릭하여 이미지 업로드"
+                },
+                "invoiceNumber": "인보이스 번호",
+                "issuedDate": "발행일",
+                "dueDate": "만기일",
+                "currency": "통화"
+            },
+            "lineItems": {
+                "heading": "항목",
+                "item": "항목",
+                "name": "이름",
+                "quantity": "수량",
+                "rate": "단가",
+                "total": "합계",
+                "description": "설명",
+                "addNewItem": "새 항목 추가",
+                "removeItem": "항목 삭제"
+            },
+            "paymentInfo": {
+                "heading": "결제 정보",
+                "bankName": "은행명",
+                "accountName": "예금주",
+                "accountNumber": "계좌번호"
+            },
+            "summary": {
+                "heading": "요약",
+                "signature": {
+                    "heading": "서명",
+                    "placeholder": "클릭하여 서명 추가",
+                    "description": "인보이스에 추가할 서명 방식을 선택하세요",
+                    "draw": "직접 그리기",
+                    "type": "입력",
+                    "upload": "업로드"
+                },
+                "additionalNotes": "추가 메모",
+                "paymentTerms": "결제 조건",
+                "discount": "할인",
+                "tax": "세금",
+                "shipping": "배송비",
+                "subTotal": "소계",
+                "totalAmount": "총액",
+                "includeTotalInWords": "총액을 문자로 표기하시겠습니까?",
+                "yes": "예",
+                "no": "아니오"
+            }
+        }
+    },
+    "actions": {
+        "title": "작업",
+        "description": "작업 및 미리보기",
+        "loadInvoice": "인보이스 불러오기",
+        "exportInvoice": "인보이스 내보내기",
+        "newInvoice": "새 인보이스",
+        "generatePdf": "PDF 생성",
+        "pdfView": "PDF 보기"
+    },
+    "footer": {
+        "developedBy": "개발자"
+    },
+    "voiceInput": {
+        "voiceInput": "음성 입력",
+        "tooltip": "음성 인식을 사용하여 항목을 빠르게 추가하세요",
+        "title": "항목 음성 입력",
+        "description": "마이크 버튼을 클릭하고 말씀해 주세요. 시스템이 자동으로 항목 정보를 인식하고 분석합니다.",
+        "notSupported": "브라우저가 음성 인식을 지원하지 않습니다. Chrome 브라우저를 사용해 주세요.",
+        "error": "음성 인식 오류",
+        "microphoneDenied": "마이크 권한을 허용한 후 다시 시도해 주세요",
+        "noMicrophone": "마이크 장치를 찾을 수 없습니다",
+        "networkError": "네트워크 연결 오류입니다. 네트워크 상태를 확인해 주세요",
+        "initFailed": "음성 인식 초기화에 실패했습니다",
+        "startFailed": "음성 인식을 시작하지 못했습니다. 다시 시도해 주세요",
+        "emptyText": "먼저 음성을 녹음해 주세요",
+        "noItemsParsed": "인식된 항목 정보가 없습니다. 다시 시도해 주세요.",
+        "browserHint": "브라우저가 음성 인식을 지원하지 않습니다",
+        "useChrome": "음성 인식을 사용하려면 Chrome 브라우저를 이용하시거나, 아래에 텍스트를 직접 입력하여 분석해 주세요.",
+        "manualInput": "텍스트 직접 입력",
+        "manualPlaceholder": "예: 사과 3개 개당 5달러, 노트북 2개 개당 8000달러",
+        "listening": "듣는 중...",
+        "transcript": "인식된 텍스트",
+        "clear": "지우기",
+        "continueRecording": "녹음 계속하기",
+        "parse": "항목 분석",
+        "parsedItems": "분석 결과",
+        "item": "항목",
+        "cancel": "취소",
+        "confirm": "추가 확인"
+    }
+}
