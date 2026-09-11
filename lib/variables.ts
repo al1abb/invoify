@@ -95,6 +95,7 @@ const LOCALE_CATALOGUE = [
   { code: "id", name: "Bahasa Indonesia" },
   { code: "sr", name: "Српски" },
   { code: "he", name: "עברית" },
+  { code: "ko", name: "한국어" },
 ];
 
 /**
