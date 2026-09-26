@@ -527,7 +527,7 @@ export const InvoiceContextProvider = ({
     // Service to export invoice with given parameters
     exportInvoice(exportAs, formValues).catch((error) => {
       console.error("Error exporting invoice:", error);
-      exportInvoiceError();
+      exportInvoiceError(error instanceof Error ? error.message : undefined);
     });
   };
 

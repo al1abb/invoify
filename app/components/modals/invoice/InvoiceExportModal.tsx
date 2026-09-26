@@ -48,7 +48,7 @@ const InvoiceExportModal = ({ children }: InvoiceExportModalType) => {
                  * been commented out, so the button only ever produced an
                  * error. See the note in exportInvoiceService.
                  */}
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
                     <BaseButton
                         tooltipLabel="Export Invoice as JSON"
                         variant="outline"
@@ -76,6 +76,16 @@ const InvoiceExportModal = ({ children }: InvoiceExportModalType) => {
                         onClick={() => exportInvoiceAs(ExportTypes.XML)}
                     >
                         XML
+                    </BaseButton>
+
+                    <BaseButton
+                        tooltipLabel="Export as XRechnung (German B2G e-invoice, UBL syntax)"
+                        variant="outline"
+                        className="w-full"
+                        disabled={invoicePdfLoading}
+                        onClick={() => exportInvoiceAs(ExportTypes.XRECHNUNG)}
+                    >
+                        XRechnung
                     </BaseButton>
                 </div>
             </DialogContent>

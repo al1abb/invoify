@@ -48,4 +48,5 @@ export enum ExportTypes {
     XML = "XML",
     XLSX = "XLSX",
     DOCX = "DOCX",
+    XRECHNUNG = "XRECHNUNG",
 }

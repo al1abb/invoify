@@ -10,6 +10,14 @@ import { Builder } from "xml2js";
 import { InvoiceSchema } from "@/lib/schemas";
 import { parseJsonBody } from "@/lib/server/validateRequest";
 
+// XRechnung
+import {
+    buildXRechnungUBL,
+    XRechnungError,
+    InvoiceInputError,
+} from "@conformo/formats";
+import { toConformoInvoice, XRechnungMappingError } from "./xrechnungMapper";
+
 // Types
 import { ExportTypes } from "@/types";
 
@@ -68,6 +76,41 @@ export async function exportInvoiceService(req: NextRequest) {
                             "attachment; filename=invoice.xml",
                     },
                 });
+            }
+            case ExportTypes.XRECHNUNG: {
+                /*
+                 * XRechnung 3.0, UBL syntax — the German B2G e-invoice
+                 * standard (see @conformo/formats on npm). This is a
+                 * best-effort mapping from invoify's existing fields (see
+                 * xrechnungMapper.ts for exactly what's assumed and what's
+                 * not collected yet, e.g. a seller VAT ID). Both mapping
+                 * gaps and XRechnung's own mandatory-field checks come back
+                 * as a normal 400 with the specific missing term named,
+                 * not a generic failure.
+                 */
+                try {
+                    const invoice = toConformoInvoice(body);
+                    const ubl = buildXRechnungUBL(invoice);
+                    return new NextResponse(ubl, {
+                        headers: {
+                            "Content-Type": "application/xml",
+                            "Content-Disposition":
+                                "attachment; filename=invoice-xrechnung.xml",
+                        },
+                    });
+                } catch (error) {
+                    if (
+                        error instanceof XRechnungError ||
+                        error instanceof XRechnungMappingError ||
+                        error instanceof InvoiceInputError
+                    ) {
+                        return NextResponse.json(
+                            { error: error.message },
+                            { status: 400 }
+                        );
+                    }
+                    throw error;
+                }
             }
             /*
              * ExportTypes.XLSX is intentionally unimplemented. The original

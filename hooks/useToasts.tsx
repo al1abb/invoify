@@ -94,11 +94,11 @@ const useToasts = () => {
      * apart from a console.log, and on mobile the invalid field is usually on
      * a wizard step that is not currently visible.
      */
-    const exportInvoiceError = () => {
+    const exportInvoiceError = (description?: string) => {
         toast({
             variant: "destructive",
             title: "Could not export the invoice",
-            description: "Something went wrong. Try again in a moment.",
+            description: description || "Something went wrong. Try again in a moment.",
         });
     };
 

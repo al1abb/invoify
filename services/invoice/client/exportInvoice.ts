@@ -27,10 +27,16 @@ export const exportInvoice = async (
     /*
      * Without this check an error response was still passed to `.blob()` and
      * downloaded as `invoice.<format>`, so the user got a file containing the
-     * server's error text instead of being told the export failed.
+     * server's error text instead of being told the export failed. The
+     * server's JSON error body (e.g. exportInvoiceService's XRechnung case
+     * names the exact missing field) is surfaced here too, rather than a
+     * generic status-code message that can't be acted on.
      */
     if (!response.ok) {
-        throw new Error(`Export failed with status ${response.status}`);
+        const body = await response.json().catch(() => null);
+        throw new Error(
+            body?.error || `Export failed with status ${response.status}`
+        );
     }
 
     const blob = await response.blob();
@@ -39,9 +45,14 @@ export const exportInvoice = async (
     try {
         const a = document.createElement("a");
         a.href = url;
-        a.download = `invoice.${exportAs.toLowerCase()}`;
+        a.download = `invoice.${EXPORT_FILE_EXTENSIONS[exportAs] ?? exportAs.toLowerCase()}`;
         a.click();
     } finally {
         window.URL.revokeObjectURL(url);
     }
+};
+
+/** Format names that aren't already a valid, sensible file extension. */
+const EXPORT_FILE_EXTENSIONS: Partial<Record<ExportTypes, string>> = {
+    [ExportTypes.XRECHNUNG]: "xrechnung.xml",
 };
